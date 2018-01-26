@@ -1,4 +1,6 @@
-﻿@{
+﻿@*model iterator used to make example table of students*@
+@model IEnumerable<Fitness.Models.Student>
+@{
     ViewBag.Title = "Home Page";
 }
 
@@ -11,4 +13,32 @@
 
 
 <p>Instert table somewhere around here. Or anywhere. Idk</p>
+
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.StudentID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Lastname)
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Lastname)
+            </td>
+        </tr>
+    }
+</table>
 

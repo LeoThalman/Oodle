@@ -1,4 +1,6 @@
 ﻿using System;
+using Fitness.DAL;
+using Fitness.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,9 +10,13 @@ namespace Fitness.Controllers
 {
     public class HomeController : Controller
     {
+        //initialize db connection
+        private RunContext db = new RunContext();
+
         public ActionResult Index()
         {
-            return View();
+            //pass a list of students to the view
+            return View(db.Students.ToList());
         }
 
         public ActionResult About()
