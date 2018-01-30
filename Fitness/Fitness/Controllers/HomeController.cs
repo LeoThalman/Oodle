@@ -9,6 +9,7 @@ using System.Web;
 using FastFitParser.Core;
 using System.Web.Mvc;
 using System.Diagnostics;
+using Dynastream;
 
 namespace Fitness.Controllers
 {
@@ -27,64 +28,78 @@ namespace Fitness.Controllers
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
-            ParseFit();
+
+            //Absolute path to test file
+            FileStream fitFile = new FileStream("C:/Users/pocke/Desktop/school-work/cs46X/cs461/fit-test/81PD5011.FIT", FileMode.Open);
+            ParseFastFit(fitFile);
+            fitFile.Close();
 
             return View();
         }
 
         /// <summary>
-        /// Parses  a .fit file and retrieves the heart rate
+        /// Parses  a .fit file and retrieves the data
+        /// parses using FastFitParser
         /// </summary>
-        public void ParseFit()
+        public void ParseFastFit(FileStream fitFile)
         {
-            //Absolute path to test file
-            FileStream fitFile = new FileStream("C:/Users/pocke/Desktop/school-work/cs46X/cs461/fit-test/7CMA3933.FIT", FileMode.Open);
+            
 
             //init parser and list of temp files
             FastParser parser = new FastParser(fitFile);
-            List<DataRecord> temp = null;
             if (parser.IsFileValid())
             {
                 //init fields for data
-                temp = parser.GetDataRecords().ToList();
-                double recordCount = 0;
-                double tDistance = 0;
-                double tSpeed = 0;
-                double tCadence = 0;
-                double tHeartRate = 0;
+                Double tD = 0;
+                Double aS = 0;
+                Double aC = 0;
+                Double aHR = 0;
+                Boolean sR = false;
 
                 //go through DataRecord and retrieve relevant data
-                foreach(DataRecord d in temp)
+                foreach (DataRecord d in parser.GetDataRecords())
                 {
-                    recordCount+= 1;
-                    if (d.TryGetField(RecordDef.Distance, out double distance))
+                    if (d.GlobalMessageNumber == GlobalMessageDecls.Record)
                     {
-                        if (distance > tDistance)
+                        if (d.TryGetField(RecordDef.Distance, out Double distance))
                         {
-                            tDistance = distance;
+                            if (distance > tD)
+                            {
+                                tD = distance;
+                            }
+                        }
+                        if (d.TryGetField(RecordDef.Speed, out double speed))
+                        {
+                            aS += speed;
+                        }
+                        if (d.TryGetField(RecordDef.Cadence, out double cadence))
+                        {
+                            aC += cadence;
+                        }
+                        if (d.TryGetField(RecordDef.HeartRate, out double heartRate))
+                        {
+                            aHR = heartRate;
+                        }
+                        //after first run through start finding the average of the data
+                        if (sR)
+                        {
+                            aS = Math.Round(aS / 2, 2);
+                            aC = Math.Round(aC / 2, 2);
+                            aHR = Math.Round(aHR / 2, 2);
+                        }
+                        else
+                        {
+                            sR = true;
                         }
                     }
-                    if (d.TryGetField(RecordDef.Speed, out double speed))
-                    {
-                        tSpeed += (speed/1000);
-                    }
-                    if (d.TryGetField(RecordDef.Cadence, out double cadence))
-                    {
-                        tCadence += (cadence/1000);
-                    }
-                    if (d.TryGetField(RecordDef.HeartRate, out double heartRate))
-                    {
-                        tHeartRate += heartRate;
-                    }
                 }
-                //find average heart rate, speed and cadence
-                tHeartRate = tHeartRate / recordCount;
-                tSpeed = tSpeed / recordCount;
-                tCadence = tCadence / recordCount;
-                Debug.WriteLine("Distance: " + tDistance);
-                Debug.WriteLine("Speed: " + tSpeed);
-                Debug.WriteLine("Cadence: " + tCadence);
-                Debug.WriteLine("Heart Rate: " + tHeartRate);
+                //convert speed and distance to meters and write to Debug.
+                aS = Math.Round(aS /1000, 2);
+                tD = Math.Round(tD / 1000, 2); ;
+                Debug.WriteLine("Distance: " + tD + " m");
+                Debug.WriteLine("Speed: " + aS + " m/s");
+                Debug.WriteLine("Cadence: " + aC);
+                Debug.WriteLine("Heart Rate: " + aHR);
             }
             
         }
