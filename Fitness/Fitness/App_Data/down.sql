@@ -1,7 +1,1 @@
-﻿DROP TABLE IF EXISTS dbo.Athlete;
-
-DROP TABLE IF EXISTS dbo.Coach;
-
-DROP TABLE IF EXISTS dbo.PlannedRun;
-
-DROP TABLE IF EXISTS dbo.Run;
+﻿DROP TABLE IF EXISTS dbo.Students;
