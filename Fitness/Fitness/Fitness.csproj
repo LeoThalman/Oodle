@@ -60,9 +60,6 @@
     <Reference Include="FastFitParser.Core, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FastFitParser.Core.0.3.0.0\lib\portable-net45+sl50+win+WindowsPhoneApp81+wp80\FastFitParser.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Fit">
-      <HintPath>..\..\..\..\FitSDKRelease_20.56.00\cs\Fit.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
     </Reference>

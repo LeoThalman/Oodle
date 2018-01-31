@@ -9,7 +9,6 @@ using System.Web;
 using FastFitParser.Core;
 using System.Web.Mvc;
 using System.Diagnostics;
-using Dynastream;
 
 namespace Fitness.Controllers
 {
@@ -20,8 +19,6 @@ namespace Fitness.Controllers
 
         public ActionResult Index()
         {
-            //pass a list of students to the view
-            //ParseFit("");
             return View(db.Students.ToList());
         }
 
