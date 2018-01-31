@@ -28,13 +28,18 @@ namespace Fitness.Controllers
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
+            return View();
+        }
 
-            //Absolute path to test file
-            FileStream fitFile = new FileStream("C:/Users/pocke/Desktop/school-work/cs46X/cs461/fit-test/81PD5011.FIT", FileMode.Open);
+        public void ParserTest()
+        {
+            //Absolute path to test file            
+            FileStream fitFile = new FileStream(Server.MapPath("~/App_Data/7CMA3933.FIT"), FileMode.Open);
             ParseFastFit(fitFile);
             fitFile.Close();
-
-            return View();
+            FileStream fitFile2 = new FileStream(Server.MapPath("~/App_Data/81PD5011.FIT"), FileMode.Open);
+            ParseFastFit(fitFile2);
+            fitFile2.Close();
         }
 
         /// <summary>
