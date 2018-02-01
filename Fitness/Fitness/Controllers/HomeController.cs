@@ -117,14 +117,23 @@ namespace Fitness.Controllers
         {
             if (file.ContentLength > 0)
             {
-                string _FileName = Path.GetFileName(file.FileName);
-                string _path = Path.Combine(Server.MapPath("~/UploadedFiles"), _FileName);
-                file.SaveAs(_path);
-                    FileStream fitFile = new FileStream(Server.MapPath("~/UploadedFiles/"+ _FileName), FileMode.Open);
+                    if (Path.GetExtension(file.FileName) == ".fit" || Path.GetExtension(file.FileName) == ".FIT")
+                    {
+                        string _FileName = Path.GetFileName(file.FileName);
+                        string _path = Path.Combine(Server.MapPath("~/UploadedFiles"), _FileName);
+                        file.SaveAs(_path);
+                        FileStream fitFile = new FileStream(Server.MapPath("~/UploadedFiles/" + _FileName), FileMode.Open);
 
-                    ParseFastFit(fitFile);
-            }
-            ViewBag.Message = "File Uploaded Successfully!!";
+                        ParseFastFit(fitFile);
+                        ViewBag.Message = "File Uploaded Successfully.";
+                    }
+                    else
+                    {
+                        ViewBag.Message = "You can only upload .FIT files.";
+                        
+
+                    }
+                }
             
             
             
@@ -132,7 +141,7 @@ namespace Fitness.Controllers
         }
         catch
         {
-            ViewBag.Message = "File upload failed!!";
+            ViewBag.Message = "File upload failed.";
             return View();
         }
     }
