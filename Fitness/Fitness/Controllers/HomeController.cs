@@ -45,8 +45,6 @@ namespace Fitness.Controllers
         /// </summary>
         public void ParseFastFit(FileStream fitFile)
         {
-            
-
             //init parser and list of temp files
             FastParser parser = new FastParser(fitFile);
             if (parser.IsFileValid())
@@ -105,6 +103,39 @@ namespace Fitness.Controllers
             }
             
         }
+
+    [HttpGet]
+    public ActionResult Upload()
+    {
+            return View();
+    }
+
+    [HttpPost]
+    public ActionResult Upload(HttpPostedFileBase file)
+    {
+        try
+        {
+            if (file.ContentLength > 0)
+            {
+                string _FileName = Path.GetFileName(file.FileName);
+                string _path = Path.Combine(Server.MapPath("~/UploadedFiles"), _FileName);
+                file.SaveAs(_path);
+                    FileStream fitFile = new FileStream(Server.MapPath("~/UploadedFiles/"+ _FileName), FileMode.Open);
+
+                    ParseFastFit(fitFile);
+            }
+            ViewBag.Message = "File Uploaded Successfully!!";
+            
+            
+            
+            return View();
+        }
+        catch
+        {
+            ViewBag.Message = "File upload failed!!";
+            return View();
+        }
+    }
 
         public ActionResult Contact()
         {
