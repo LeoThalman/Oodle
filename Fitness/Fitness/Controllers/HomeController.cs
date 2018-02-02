@@ -128,7 +128,7 @@ namespace Fitness.Controllers
 
 
 
-                        ParseFastFit(fitFile);
+                        //ParseFastFit(fitFile);
                         ViewBag.Message = "File Uploaded Successfully.";
                     }
                     else
