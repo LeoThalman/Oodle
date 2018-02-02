@@ -100,6 +100,13 @@ namespace Fitness.Controllers
                 Debug.WriteLine("Speed: " + aS + " m/s");
                 Debug.WriteLine("Cadence: " + aC);
                 Debug.WriteLine("Heart Rate: " + aHR);
+
+                Console.WriteLine("Distance: " + tD + " m");
+                Console.WriteLine("Speed: " + aS + " m/s");
+                Console.WriteLine("Cadence: " + aC);
+                Console.WriteLine("Heart Rate: " + aHR);
+
+                fitFile.Close();
             }
             
         }
@@ -128,6 +135,11 @@ namespace Fitness.Controllers
                         System.IO.Directory.CreateDirectory(path);
                     }
 
+
+                    if (System.IO.File.Exists(Path.Combine(Server.MapPath("~/UploadedFiles"), Path.GetFileName(file.FileName))))
+                    {
+                        System.IO.File.Delete(Path.Combine(Server.MapPath("~/UploadedFiles"), Path.GetFileName(file.FileName)));
+                    }
 
                     if (Path.GetExtension(file.FileName) == ".fit" || Path.GetExtension(file.FileName) == ".FIT")
                         {
