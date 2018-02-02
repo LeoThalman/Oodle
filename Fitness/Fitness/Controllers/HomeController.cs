@@ -120,11 +120,10 @@ namespace Fitness.Controllers
                     if (Path.GetExtension(file.FileName) == ".fit" || Path.GetExtension(file.FileName) == ".FIT")
                     {
                         string _FileName = Path.GetFileName(file.FileName);
-                        //string _path = Path.Combine(Server.MapPath("~/UploadedFiles"), _FileName);
-                        //file.SaveAs(_path);
+                        string _path = Path.Combine(Server.MapPath("~/UploadedFiles"), _FileName);
+                        file.SaveAs(_path);
                         //FileStream fitFile = new FileStream(Server.MapPath("~/UploadedFiles/" + _FileName), FileMode.Open);
 
-                        FileStream fitFile = new FileStream(Path.GetFullPath(file.FileName), FileMode.Open);
 
 
 
