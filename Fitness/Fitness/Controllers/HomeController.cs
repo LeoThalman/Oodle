@@ -121,7 +121,15 @@ namespace Fitness.Controllers
             {
                 if (file.ContentLength > 0)
                 {
-                        if (Path.GetExtension(file.FileName) == ".fit" || Path.GetExtension(file.FileName) == ".FIT")
+                    var path = Server.MapPath("~/UploadedFiles");
+
+                    if (!System.IO.Directory.Exists(path))
+                    {
+                        System.IO.Directory.CreateDirectory(path);
+                    }
+
+
+                    if (Path.GetExtension(file.FileName) == ".fit" || Path.GetExtension(file.FileName) == ".FIT")
                         {
                             string _FileName = Path.GetFileName(file.FileName);
                             string _path = Path.Combine(Server.MapPath("~/UploadedFiles"), _FileName);
