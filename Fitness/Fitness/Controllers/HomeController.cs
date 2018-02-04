@@ -101,6 +101,11 @@ namespace Fitness.Controllers
                 Debug.WriteLine("Cadence: " + aC);
                 Debug.WriteLine("Heart Rate: " + aHR);
 
+                ViewBag.distanceRan = tD;
+                ViewBag.runSpeed = aS;
+                ViewBag.Candence = aC;
+                ViewBag.heartRate = aHR;
+
                 Console.WriteLine("Distance: " + tD + " m");
                 Console.WriteLine("Speed: " + aS + " m/s");
                 Console.WriteLine("Cadence: " + aC);
