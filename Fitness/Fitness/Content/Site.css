@@ -22,3 +22,14 @@ select,
 textarea {
     max-width: 280px;
 }
+
+#main {
+    font-family: Impact, Charcoal, sans-serif;
+    font-size: 30px;
+    color: white;
+}
+
+#top {
+    color: white;
+    background-color: #688A84;
+}
