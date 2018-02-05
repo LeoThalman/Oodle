@@ -22,3 +22,44 @@ select,
 textarea {
     max-width: 280px;
 }
+
+#main {
+    font-family: Impact, Charcoal, sans-serif;
+    font-size: 30px;
+    color: white;
+}
+
+#top {
+    color: white;
+    background-color: #688A84;
+}
+
+/* Container holding the image and the text */
+.container {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+
+/* Top left text */
+.top-left {
+    text-shadow: -1px -1px 0 dimgray, 1px -1px 0 dimgray, -1px 1px 0 dimgray, 1px 1px 0 dimgray;
+    font-size: 500%;
+    top: 50px;
+    color: Black;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Centered text */
+.centered {
+    text-shadow: -1px -1px 0 dimgray, 1px -1px 0 dimgray, -1px 1px 0 dimgray, 1px 1px 0 dimgray;
+    font-size: 50px;
+    color: White;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
