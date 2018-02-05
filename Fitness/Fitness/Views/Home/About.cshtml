@@ -1,6 +1,46 @@
-﻿<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
+﻿@*model iterator used to make example table of students*@
+@model IEnumerable<Fitness.Models.Student>
 
-<p>Use this area to provide additional information.</p>
+<h2>Here you will find valuable information about runners!</h2>
+
+<h3>Currently in our database we have the following users signed up for our program:</h3>
+
+
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.StudentID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Lastname)
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Lastname)
+            </td>
+        </tr>
+    }
+</table>
+<!--
+<h2>Below you will see your uploaded fit file!</h2>
+
+<label>Distance Ran:</label>  @ViewBag.distanceRan
+<label>Speed of run:</label>  @ViewBag.runSpeed
+<label>Candence:</label>  @ViewBag.Canence
+<label>Heart rate:</label>  @ViewBag.heartRate
+
+-->
 
 

@@ -19,13 +19,13 @@ namespace Fitness.Controllers
 
         public ActionResult Index()
         {
-            return View(db.Students.ToList());
+            return View();
         }
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
-            return View();
+
+            return View(db.Students.ToList());
         }
 
         public void ParserTest()
@@ -100,6 +100,13 @@ namespace Fitness.Controllers
                 Debug.WriteLine("Speed: " + aS + " m/s");
                 Debug.WriteLine("Cadence: " + aC);
                 Debug.WriteLine("Heart Rate: " + aHR);
+
+                ViewBag.distanceRan = tD;
+                ViewBag.runSpeed = aS;
+                ViewBag.Candence = aC;
+                ViewBag.heartRate = aHR;
+
+      
 
                 Console.WriteLine("Distance: " + tD + " m");
                 Console.WriteLine("Speed: " + aS + " m/s");
