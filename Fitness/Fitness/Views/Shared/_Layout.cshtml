@@ -22,15 +22,15 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new { @id = "top" })</li>
-                    <li>@Html.ActionLink("Upload", "Upload", "Home", new { @id = "top" })</li>
-                    <li>@Html.ActionLink("About", "About", "Home", new { @id = "top" })</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home", new { @id = "top" })</li>
+                    <li>@Html.ActionLink("Home", "Index", "Home", new { @style = "color: white" })</li>
+                    <li>@Html.ActionLink("Upload", "Upload", "Home", new { @style = "color: white" })</li>
+                    <li>@Html.ActionLink("About", "About", "Home", new { @style = "color: white" })</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home", new { @style = "color: white" })</li>
                 </ul>
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    <div id="blk" class="container body-content">
         @RenderBody()
         <hr />
         <footer>
