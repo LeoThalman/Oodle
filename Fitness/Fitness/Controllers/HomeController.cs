@@ -24,27 +24,29 @@ namespace Fitness.Controllers
 
         public ActionResult About()
         {
+            FitnessViewModel VM = new FitnessViewModel();
+            VM.Students = db.Students.ToList();
 
-            return View(db.Students.ToList());
-        }
-
-        public void ParserTest()
-        {
-            //Absolute path to test file            
+            List<RunData> temp = new List<RunData>();
             FileStream fitFile = new FileStream(Server.MapPath("~/App_Data/7CMA3933.FIT"), FileMode.Open);
-            ParseFastFit(fitFile);
+            temp.Add(ParseFastFit(fitFile));
             fitFile.Close();
             FileStream fitFile2 = new FileStream(Server.MapPath("~/App_Data/81PD5011.FIT"), FileMode.Open);
-            ParseFastFit(fitFile2);
+            temp.Add(ParseFastFit(fitFile2));
             fitFile2.Close();
+
+            VM.RunInfo = temp;
+
+            return View(VM);
         }
 
         /// <summary>
         /// Parses  a .fit file and retrieves the data
         /// parses using FastFitParser
         /// </summary>
-        public void ParseFastFit(FileStream fitFile)
+        public RunData ParseFastFit(FileStream fitFile)
         {
+            RunData rtn = null;
             //init parser and list of temp files
             FastParser parser = new FastParser(fitFile);
             if (parser.IsFileValid())
@@ -101,10 +103,12 @@ namespace Fitness.Controllers
                 Debug.WriteLine("Cadence: " + aC);
                 Debug.WriteLine("Heart Rate: " + aHR);
 
-                ViewBag.distanceRan = tD;
-                ViewBag.runSpeed = aS;
-                ViewBag.Candence = aC;
-                ViewBag.heartRate = aHR;
+
+                rtn = new RunData();
+                rtn.DistanceRan = tD;
+                rtn.RunSpeed = aS;
+                rtn.Cadence = aC;
+                rtn.HeartRate = aHR;
 
       
 
@@ -112,10 +116,9 @@ namespace Fitness.Controllers
                 Console.WriteLine("Speed: " + aS + " m/s");
                 Console.WriteLine("Cadence: " + aC);
                 Console.WriteLine("Heart Rate: " + aHR);
-
                 fitFile.Close();
             }
-            
+            return rtn;            
         }
 
 
