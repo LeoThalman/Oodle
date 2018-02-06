@@ -6,16 +6,16 @@ another project known as Track Run.
 ## Index
 
 1. [Class Project](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-class-project)
-*. [Vision Statement](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-vision-statement)
+..* [Vision Statement](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-vision-statement)
 2. [Group Project](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-oodle)
 3. [Company Files](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-blackwood-Inc)
-*. [Who Are We?](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-who-are-we?)
-*. [What Do We Stand For?](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-what-do-we-stand-for?)
-*. [Learn More](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-learn-more)
+..* [Who Are We?](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-who-are-we?)
+..* [What Do We Stand For?](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-what-do-we-stand-for?)
+..* [Learn More](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-learn-more)
 5. [Contributing](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-contributing)
-*. [Getting Started](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-getting-started)
-*. [Programming Conventions](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-programming-conventions)
-*. [Tools and Packages](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-tools-and-packages)
+..* [Getting Started](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-getting-started)
+..* [Programming Conventions](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-programming-conventions)
+..* [Tools and Packages](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-tools-and-packages)
 
 
 ## Class Project 
@@ -28,7 +28,7 @@ The following is the vision statement for the project.
 
 ### Vision Statement
 
-> For Student athletes and their coaches who want to be able to visualize and better understand their own personal and group cross country workout plans as well as set goals, show health based statistics, and make comments on oneâ€™s progress, the Student Running System is an information system that will provide a clean user interface for coaches and students to view information such as time, distance, elevation changes and heart rate during a run. Students and coaches will also be able to set goals and view detailed schedules in a weekly or monthly format in order to help achieve goals created for students in order to help them become better runners. The System will save students and coaches time and effort by giving them an updated version of many of the current software or systems in place by giving more options in a single centralized location. Unlike the current sites and manual ways of planning and viewing running data, our product will show the information in a much cleaner way as well as give students and coaches more options than ever before to better help obtain goals, improve and monitor health, and collaborate with others.
+> For Student athletes and their coaches who want to be able to visualize and better understand their own personal and group cross country workout plans as well as set goals, show health based statistics, and make comments on one’s progress, the Student Running System is an information system that will provide a clean user interface for coaches and students to view information such as time, distance, elevation changes and heart rate during a run. Students and coaches will also be able to set goals and view detailed schedules in a weekly or monthly format in order to help achieve goals created for students in order to help them become better runners. The System will save students and coaches time and effort by giving them an updated version of many of the current software or systems in place by giving more options in a single centralized location. Unlike the current sites and manual ways of planning and viewing running data, our product will show the information in a much cleaner way as well as give students and coaches more options than ever before to better help obtain goals, improve and monitor health, and collaborate with others.
 
 Source: [TrackRun Bitbucket Repository](https://bitbucket.org/blackwood-incorporated/senior-project/src/a6d513c7e6982bcd95d264612207d86321121eec/Fitness/?at=master)
 
