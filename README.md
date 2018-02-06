@@ -6,9 +6,8 @@ another project known as Track Run.
 ## Index
 
 1. [Class Project](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-class-project)
-	* [Vision Statement](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-vision-statement)
 2. [Group Project](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-oodle)
-3. [Company Files](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-blackwood-Inc)
+3. [Company Files](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-blackwood-incorporated)
     * [Who Are We?](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-who-are-we?)
     * [What Do We Stand For?](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-what-do-we-stand-for?)
     * [Learn More](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-learn-more)
@@ -40,6 +39,26 @@ Web Page: [TrackRun Example Site](http://trackrun.azurewebsites.net/)
 Oodle is a learning management system that takes many of the features of already existing programs and offers them in an easier to use and cleaner manner. Oodle is still currently a work in progress, 
 but more will be added to this section as it is developed.
 
+### Vision Statement
+
+> For students and educators who want to be able to manage, learn, and teach in 
+online classrooms. Cleanliness and efficiency would be paramount vs current 
+solutions. Our system would not have to rely on the support of IT or outside 
+resources. The Oodle System is a web-based learning management system that can 
+provide a clean and simple user interface for students and educators to create 
+an online classroom quickly and easily. The system gives anyone the ability to 
+create a class hosted in thecloud that gives teachers of a class the ability to 
+provide quizzes, post andgrade assignments, communicate with students efficiently 
+all while providing a simple and clean user interface. The Oodle system will save 
+time and effort by setting up a more simplified, efficient, and user friendly 
+learning management system compared to the current software such as Blackboard or 
+Moodle. Unlike the current learning management systems, our product and its 
+classrooms are  hosted in the cloud and will give the ability to easily create 
+and enroll in a class. In addition, eliminates the need for an IT department
+or external set up and configuration. Oodle is not open to customization by end
+users and limits its core features to only the essentials to help give a more
+intuitive experience to the consumer.
+
 Source: NA
 
 Web Page: NA
@@ -64,17 +83,17 @@ Blackwood if a fictitious company created for CS46X, the Capstone Class at Weste
 
 #### Sam Wetzel
 
-Insert Bio.
+     Insert Bio.
 
 
 #### Koll Klienstuber
 
-Insert Bio.
+     Insert Bio.
 
 
 #### Leo Thalman
 
-Insert Bio.
+     Insert Bio.
 
 
 ### What Do We Stand For?
