@@ -6,16 +6,16 @@ another project known as Track Run.
 ## Index
 
 1. [Class Project](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-class-project)
-  * [Vision Statement](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-vision-statement)
+	* [Vision Statement](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-vision-statement)
 2. [Group Project](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-oodle)
 3. [Company Files](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-blackwood-Inc)
-  * [Who Are We?](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-who-are-we?)
-  * [What Do We Stand For?](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-what-do-we-stand-for?)
-  * [Learn More](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-learn-more)
+    * [Who Are We?](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-who-are-we?)
+    * [What Do We Stand For?](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-what-do-we-stand-for?)
+    * [Learn More](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-learn-more)
 5. [Contributing](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-contributing)
-  * [Getting Started](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-getting-started)
-  * [Programming Conventions](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-programming-conventions)
-  * [Tools and Packages](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-tools-and-packages)
+    * [Getting Started](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-getting-started)
+    * [Programming Conventions](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-programming-conventions)
+    * [Tools and Packages](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-tools-and-packages)
 
 
 ## Class Project 
@@ -54,12 +54,12 @@ Blackwood if a fictitious company created for CS46X, the Capstone Class at Weste
 
 #### William Leingang
 
-   William Leingang is a software engineer who works with companies to create web-based applications for their business. As both a programmer and repository manager, William knows the importance of communication
-   as a team and that an organized team produces the best results. 
+     William Leingang is a software engineer who works with companies to create web-based applications for their business. As both a programmer and repository manager, William knows the importance of communication
+     as a team and that an organized team produces the best results. 
    
-   Through an REU (Research Experience for Undergraduates) William became experienced in machine learning techniques. 
+     Through an REU (Research Experience for Undergraduates) William became experienced in machine learning techniques. 
    
-   William plans to graduate in Spring of 2018 with a Bachelors in Computer Science from Western Oregon University. 
+     William plans to graduate in Spring of 2018 with a Bachelors in Computer Science from Western Oregon University. 
 
 
 #### Sam Wetzel
