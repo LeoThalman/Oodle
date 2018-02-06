@@ -73,27 +73,27 @@ Blackwood if a fictitious company created for CS46X, the Capstone Class at Weste
 
 #### William Leingang
 
-     William Leingang is a software engineer who works with companies to create web-based applications for their business. As both a programmer and repository manager, William knows the importance of communication
-     as a team and that an organized team produces the best results. 
-   
-     Through an REU (Research Experience for Undergraduates) William became experienced in machine learning techniques. 
-   
-     William plans to graduate in Spring of 2018 with a Bachelors in Computer Science from Western Oregon University. 
+> William Leingang is a software engineer who works with companies to create web-based applications for their business. As both a programmer and repository manager, William knows the importance of communication
+> as a team and that an organized team produces the best results. 
+>  
+> Through an REU (Research Experience for Undergraduates) William became experienced in machine learning techniques. 
+> 
+> William plans to graduate in Spring of 2018 with a Bachelors in Computer Science from Western Oregon University. 
 
 
 #### Sam Wetzel
 
-     Insert Bio.
+>Insert Bio.
 
 
 #### Koll Klienstuber
 
-     Insert Bio.
+>Insert Bio.
 
 
 #### Leo Thalman
 
-     Insert Bio.
+>Insert Bio.
 
 
 ### What Do We Stand For?
