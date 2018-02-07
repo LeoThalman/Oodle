@@ -14,6 +14,7 @@ another project known as Track Run.
 5. [Contributing](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-contributing)
     * [Getting Started](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-getting-started)
     * [Programming Conventions](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-programming-conventions)
+    * [Software Development Process](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-software-development-process)
     * [Tools and Packages](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-tools-and-packages)
 
 
@@ -67,7 +68,7 @@ Web Page: NA
 ## Blackwood Incorporated
 
 Blackwood if a fictitious company created for CS46X, the Capstone Class at Western Oregon University. 
-
+Our company song is Crazy Train, by Ozzy Osbourne.
 
 ### Who Are We?
 
@@ -122,10 +123,70 @@ making your first pull request.
 
 ### Programming Conventions
 
-Right now, we haven't agreed upon any conventions we will be using, be it naming conventions of views or how comments should be formatted. However, this will be updated in the near future to include
-a fairly detailed description of how code needs to look before being accepted into this project. 
+When contributing to this project, you must follow these programming and stylistic 
+guidelines. 
+
+#### C# Coding Conventions
+
+The majority of code in this project is in C#. These guidelines outline how your code should
+be written with examples. They are based off of the guidelines written by Microsoft, which can be found 
+[here](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/inside-a-program/coding-conventions).
+
+
+* Semicolons belong on their own line. 
+
+```c#
+public static double Divide(double a, double b)
+{
+    return a / b;
+}
+```
+
+* Methods must have a short, one to two sentence description commented above them.
+
+```c#
+// Divides a double by another and returns the result
+public static double Divide(double a, double b)
+{
+    return a / b;
+}
+```
+
+
+#### C# Naming Conventions
+
+* PascalCasing should be used for all public member, type, and namespace names consisting of multiple words.
+
+```c#
+public class StreamReader 
+{
+    ... 
+}
+```
+
+* camelCasing should be used for parameter names.
+
+```c#
+public class Convert { 
+    public static int ToInt32(string value); 
+}
+```
+
+#### Git Procedure
+
+*Always have a seperate branch for each feature you are working on.
+*Tests commits before pushing updates. 
+*Commit messages should provide some useful insight into what changes were made, but should be short and simple.
+
+
+
+### Software Development Process
+
+This project is being developed using Scrum, which is an Agile Framework. We work
+in two week sprints. However, while we highly recommend using this process, you are
+not required to code this way to contribute to the project.
 
 
 ### Tools and Packages
 
-I honestly don't know for this section. I'll work on adding stuff here later. 
+This section is blank for now, but contents will be added to this as the information is learned.
