@@ -84,17 +84,33 @@ Our company song is Crazy Train, by Ozzy Osbourne.
 
 #### Sam Wetzel
 
->Insert Bio.
+> Sam Wetzel is a software engineer and Scrum master for Blackwood Incorporated. 
+> Through both his free time and education, he gained a sound understanding of a
+> variety of languages, and the programming process. 
+> 
+> Sam plans to graduate in Spring of 2018 with a Bachelors in Computer Science from Western Oregon University. 
 
 
 #### Koll Klienstuber
 
->Insert Bio.
+> Koll Klienstuber is a software engineer and a Visual Studio Team Services manager
+> 
+> Koll has experience in web design when he worked on the WOU website, redesigning it from 
+> its initial inception to published completion. He also has worked with Zapproved 
+> to help maintain scripts to audit and better secure the companies cloud based infrastructure.
+>
+>> Koll plans to graduate in Spring of 2018 with a Bachelors in Computer Science from Western Oregon University. 
+
 
 
 #### Leo Thalman
 
->Insert Bio.
+> Leo Thalman is a software engineer for Blackwood Incorporated. He is proficient in a variety of 
+> programming languages such as Java, HTML, CSS, and Bootstrap. 
+> 
+> Leo served in the United States Army from 2011 to 2014 where he gained experience as a team leader and learned important communication skills.
+> 
+> Leo plans to graduate in Spring of 2018 with a Bachelors in Computer Science from Western Oregon University.
 
 
 ### What Do We Stand For?
