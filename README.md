@@ -3,7 +3,7 @@
 Welcome to the Blackwood Repository. This repository primarily houses the code for our main project, Oodle, along with all the files created through out our planning, the company files, and the code from
 another project known as Track Run. 
 
-## Index
+# Index
 
 1. [Class Project](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-class-project)
 2. [Group Project](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-oodle)
@@ -18,7 +18,7 @@ another project known as Track Run.
     * [Tools and Packages](https://bitbucket.org/blackwood-incorporated/senior-project/overview#markdown-header-tools-and-packages)
 
 
-## Class Project 
+# Class Project 
 
 The class project was a team building exercise to help us strengthen our ability to develop software using an AGILE development process. While it was never completed (which was intentional) 
 The concept behind it was a website that could be used by a coach to track their athlete's workouts using data from a .FIT file. Only two weeks were spent working on it and only the landing page, 
@@ -35,7 +35,7 @@ Source: [TrackRun Bitbucket Repository](https://bitbucket.org/blackwood-incorpor
 Web Page: [TrackRun Example Site](http://trackrun.azurewebsites.net/)
 
 
-## Oodle 
+# Oodle 
 
 Oodle is a learning management system that takes many of the features of already existing programs and offers them in an easier to use and cleaner manner. Oodle is still currently a work in progress, 
 but more will be added to this section as it is developed.
@@ -65,7 +65,7 @@ Source: NA
 Web Page: NA
 
 
-## Blackwood Incorporated
+# Blackwood Incorporated
 
 Blackwood if a fictitious company created for CS46X, the Capstone Class at Western Oregon University. 
 Our company song is Crazy Train, by Ozzy Osbourne.
@@ -108,7 +108,7 @@ the development lifecycle and deliver a final product that has been influenced b
 If you have any questions about our company, email us at wleingang15@mail.wou.edu. 
 
 
-## Contributing
+# Contributing
 
 Oodle is an open source project, so anyone can contribute. However, we will not be accepting pull requests until after June 15th, 2018. At this point, the first full release of the website will be finished
 and the project opened to public contributions. If you want to help us by adding to our codebase or fixing bugs at this time, please feel free to. Once again, if you have any questions, send them wleingang15@mail.wou.edu.
