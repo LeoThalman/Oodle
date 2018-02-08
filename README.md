@@ -190,9 +190,9 @@ public class Convert {
 
 #### Git Procedure
 
-*Always have a seperate branch for each feature you are working on.
-*Tests commits before pushing updates. 
-*Commit messages should provide some useful insight into what changes were made, but should be short and simple.
+* Always have a seperate branch for each feature you are working on.
+* Tests commits before pushing updates. 
+* Commit messages should provide some useful insight into what changes were made, but should be short and simple.
 
 
 
