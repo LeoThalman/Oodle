@@ -151,7 +151,7 @@ be written with examples. They are based off of the guidelines written by Micros
 
 * Semicolons belong on their own line. 
 
-```c#
+```C
 public static double Divide(double a, double b)
 {
     return a / b;
@@ -160,7 +160,7 @@ public static double Divide(double a, double b)
 
 * Methods must have a short, one to two sentence description commented above them.
 
-```c#
+```C
 // Divides a double by another and returns the result
 public static double Divide(double a, double b)
 {
@@ -173,7 +173,7 @@ public static double Divide(double a, double b)
 
 * PascalCasing should be used for all public member, type, and namespace names consisting of multiple words.
 
-```c#
+```C
 public class StreamReader 
 {
     ... 
@@ -182,7 +182,7 @@ public class StreamReader
 
 * camelCasing should be used for parameter names.
 
-```c#
+```C
 public class Convert { 
     public static int ToInt32(string value); 
 }
