@@ -3,42 +3,17 @@
 @{
     ViewBag.Title = "Home Page";
 }
+<div style="color: black">
 
-<div class="jumbotron">
-    <h1>Runners World!</h1>
-    
-    <p class="lead">Runners world is your site to get up to date information on your cross country runs as well as training programs!</p>
-    <p>Below you will find information about some of our runners from our database!</p>
+    <h1>Runner's World</h1>
+    <div><p class="lead">Runners world is your site to get up to date information on your cross country runs as well as training programs!</p></div>
+
+    <hr />
+
+    <h2>Record your Runs</h2>
+    <p>
+        Upload your runs in the form of .fit files to keep track of your progress and have a personalized training
+        schedule created for you. Just click the Upload button on the navigation bar to get started.
+    </p>
 </div>
-
-
-<p>Instert table somewhere around here. Or anywhere. Idk</p>
-
-<table>
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.StudentID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Lastname)
-        </th>
-    </tr>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.StudentID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Lastname)
-            </td>
-        </tr>
-    }
-</table>
 
