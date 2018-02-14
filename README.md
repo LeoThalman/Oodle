@@ -129,6 +129,9 @@ If you have any questions about our company, email us at wleingang15@mail.wou.ed
 Oodle is an open source project, so anyone can contribute. However, we will not be accepting pull requests until after June 15th, 2018. At this point, the first full release of the website will be finished
 and the project opened to public contributions. If you want to help us by adding to our codebase or fixing bugs at this time, please feel free to. Once again, if you have any questions, send them wleingang15@mail.wou.edu.
 
+When contributing to this file, please add your name to the [contributors file](https://bitbucket.org/blackwood-incorporated/senior-project/src/c69b23fe0e2245d13c1e02c339ba6dbb7477c550/contributor.md?at=master&fileviewer=file-view-default).
+
+
 
 ### Getting Started
 
