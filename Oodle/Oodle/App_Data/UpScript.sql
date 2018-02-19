@@ -155,3 +155,90 @@ GO
 ALTER TABLE [dbo].[AspNetUserRoles] CHECK CONSTRAINT [FK_dbo.AspNetUserRoles_dbo.AspNetUsers_UserId]
 
 GO
+
+
+
+
+-- Users table
+CREATE TABLE dbo.Users
+(	
+	UsersID	INT IDENTITY (1,1) NOT NULL,
+	IdentityID [nvarchar](128) NOT NULL,
+	FirstName	NVARCHAR(64) NOT NULL,
+	Lastname NVARCHAR(128) NOT NULL,
+	Email NVARCHAR(128) NOT NULL,
+	Icon VARBINARY(MAX) NOT NULL,
+	Bio NVARCHAR(512)NOT NULL,
+	UserName NVARCHAR NOT NULL,
+	CONSTRAINT [PK_dbo.Users] PRIMARY KEY CLUSTERED (UsersID ASC),
+	CONSTRAINT [FK_dbo.Users_dbo.IdentityID] FOREIGN KEY ([IdentityID]) REFERENCES [dbo].[AspNetUsers] ([Id])
+);
+
+-- Class Table
+CREATE TABLE dbo.Class
+(	
+	ClassID	INT IDENTITY (1,1) NOT NULL,
+	UsersID INT NOT NULL,
+	Name	NVARCHAR(128) NOT NULL,
+	Description NVARCHAR(256) NOT NULL,
+	CONSTRAINT [PK_dbo.Class] PRIMARY KEY CLUSTERED (ClassID ASC),
+	CONSTRAINT [FK_dbo.Class_dbo.UsersID] FOREIGN KEY ([UsersID]) REFERENCES [dbo].[Users] ([UsersID])
+);
+
+--Role Table
+CREATE TABLE dbo.Role
+(	
+	RoleID	INT IDENTITY (1,1) NOT NULL, -- Is this key needed?
+	Role INT NOT NULL, -- do we want to represent Roles with INT?
+	CONSTRAINT [PK_dbo.Role] PRIMARY KEY CLUSTERED (RoleID ASC)
+);
+
+--User Role Class Table
+CREATE TABLE dbo.UserRoleClass
+(	
+	UserRoleClassID	INT IDENTITY (1,1) NOT NULL,
+	UsersID INT NOT NULL,
+	RoleID INT NOT NULL,
+	ClassID INT NOT NULL,
+	CONSTRAINT [PK_dbo.UserRoleClass] PRIMARY KEY CLUSTERED (UserRoleClassID ASC),
+	CONSTRAINT [FK_dbo.UserRoleClass_dbo.UserID] FOREIGN KEY ([UsersID]) REFERENCES [dbo].[Users] ([UsersID]),
+	CONSTRAINT [FK_dbo.UserRoleClass_dbo.RoleID] FOREIGN KEY ([RoleID]) REFERENCES [dbo].[Role] ([RoleID]),
+	CONSTRAINT [FK_dbo.UserRoleClass_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
+);
+
+-- Assignment Table
+CREATE TABLE dbo.Assignment
+(	
+	AssignmentID	INT IDENTITY (1,1) NOT NULL,
+	ClassID	INT NOT NULL,
+	Description NVARCHAR(512) NOT NULL,
+	CONSTRAINT [PK_dbo.Assignment] PRIMARY KEY CLUSTERED (AssignmentID ASC),
+	CONSTRAINT [FK_dbo.Assignment_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
+);
+
+-- Grades Table
+CREATE TABLE dbo.Grades
+(	
+	GradesID	INT IDENTITY (1,1) NOT NULL,
+	UsersID INT NOT NULL,
+	AssignmentID INT NOT NULL,
+	Grader NVARCHAR(64),
+	Comment NVARCHAR(256),
+	Grade	INT NOT NULL,
+	CONSTRAINT [PK_dbo.Grades] PRIMARY KEY CLUSTERED (GradesID ASC),
+	CONSTRAINT [FK_dbo.Grades_dbo.UserID] FOREIGN KEY ([UsersID]) REFERENCES [dbo].[Users] ([UsersID]),
+	CONSTRAINT [FK_dbo.Grades_dbo.AssignmentID] FOREIGN KEY ([AssignmentID]) REFERENCES [dbo].[Assignment] ([AssignmentID])
+);
+
+-- Questions Table
+CREATE TABLE dbo.Questions
+(	
+	QuestionsID	INT IDENTITY (1,1) NOT NULL,
+	AssignmentID INT NOT NULL,
+	Text	NVARCHAR(500) NOT NULL,
+	Weight INT NOT NULL,
+	Answer INT NOT NULL,
+	Flagged BIT NOT NULL,
+	CONSTRAINT [PK_dbo.Questions] PRIMARY KEY CLUSTERED (QuestionsID ASC),
+	CONSTRAINT [FK_dbo.Questions_dbo.AssignmentID] FOREIGN KEY ([AssignmentID]) REFERENCES [dbo].[Assignment] ([AssignmentID])
+);
