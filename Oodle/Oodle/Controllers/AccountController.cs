@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -17,6 +18,8 @@ namespace Oodle.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+
+        Model1 db = new Model1();
 
         public AccountController()
         {
@@ -156,7 +159,32 @@ namespace Oodle.Controllers
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+
+
+
+                    User u = new User
+                    {
+
+                        //UsersID = 1,
+                        Email = (string)model.Email,
+                        //Bio = model.Bio,
+                        UserName = (string)model.UserName,
+                        IdentityID = user.Id
+                      };
+
+                    Debug.WriteLine(u.UserName);
+                    Debug.WriteLine(u.UsersID);
+                    Debug.WriteLine(u.IdentityID);
+                    Debug.WriteLine(u.Email);
+
+
+
+                    db.Users.Add(u);
+                    db.SaveChanges();
+
+
+
+
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
