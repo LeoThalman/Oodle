@@ -23,11 +23,9 @@ namespace Oodle.Models
         [StringLength(128)]
         public string IdentityID { get; set; }
 
-        [Required]
         [StringLength(64)]
         public string FirstName { get; set; }
 
-        [Required]
         [StringLength(128)]
         public string Lastname { get; set; }
 
@@ -35,10 +33,9 @@ namespace Oodle.Models
         [StringLength(128)]
         public string Email { get; set; }
 
-        [Required]
+        
         public byte[] Icon { get; set; }
 
-        [Required]
         [StringLength(512)]
         public string Bio { get; set; }
 
