@@ -1,0 +1,21 @@
+﻿
+@model IEnumerable<Oodle.Models.Class>
+
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>List</h2>
+
+<a href="@Url.Action("Create", "Class", new { id = (i.ClassID) }, null)">
+    Create a Class
+</a>
+
+<div>
+    @foreach (var i in Model)
+    {
+        <a href="@Url.Action("Index", "Class", new { id = (i.ClassID) }, null)">
+            @Html.DisplayFor(Name => i.Name)
+        </a>
+    }
+</div>
