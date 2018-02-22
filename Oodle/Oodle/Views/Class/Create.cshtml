@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+<div>
+    <form method="post" action="CreateClass">
+        <div>
+            <label for="name">Name</label>
+            <input type="text" name="name" value="" />
+
+            <br />
+
+
+            <label for="description">Description</label>
+            <textarea name="description" placeholder="Enter comments here..."></textarea>
+        </div>
+        <div>
+            <input type="submit" name="submit" value="Submit" />
+        </div>
+    </form>
+</div>
