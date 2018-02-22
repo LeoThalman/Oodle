@@ -1,4 +1,21 @@
-﻿/****** Object:  Table [dbo].[AspNetRoles] ******/
+﻿
+DROP TABLE dbo.Questions;
+DROP TABLE dbo.Grades;
+DROP TABLE dbo.Assignment;
+DROP TABLE dbo.UserRoleClass;
+DROP TABLE dbo.Role;
+DROP TABLE dbo.Class;
+DROP TABLE dbo.Users;
+
+
+DROP TABLE [dbo].[AspNetUsers];
+DROP TABLE [dbo].[AspNetUserRoles];
+DROP TABLE [dbo].[AspNetUserLogins];
+DROP TABLE [dbo].[AspNetUserClaims];
+DROP TABLE [dbo].[AspNetRoles];
+
+
+/****** Object:  Table [dbo].[AspNetRoles] ******/
 
 SET ANSI_NULLS ON
 GO
@@ -170,7 +187,7 @@ CREATE TABLE dbo.Users
 	Email NVARCHAR(128) NOT NULL,
 	Icon VARBINARY(MAX)  NULL,
 	Bio NVARCHAR(512) NULL,
-	UserName NVARCHAR NOT NULL,
+	UserName NVARCHAR(128) NOT NULL,
 	CONSTRAINT [PK_dbo.Users] PRIMARY KEY CLUSTERED (UsersID ASC),
 	CONSTRAINT [FK_dbo.Users_dbo.IdentityID] FOREIGN KEY ([IdentityID]) REFERENCES [dbo].[AspNetUsers] ([Id])
 );
@@ -185,6 +202,7 @@ CREATE TABLE dbo.Class
 	CONSTRAINT [PK_dbo.Class] PRIMARY KEY CLUSTERED (ClassID ASC),
 	CONSTRAINT [FK_dbo.Class_dbo.UsersID] FOREIGN KEY ([UsersID]) REFERENCES [dbo].[Users] ([UsersID])
 );
+
 
 --Role Table
 CREATE TABLE dbo.Role
@@ -203,9 +221,10 @@ CREATE TABLE dbo.UserRoleClass
 	ClassID INT NOT NULL,
 	CONSTRAINT [PK_dbo.UserRoleClass] PRIMARY KEY CLUSTERED (UserRoleClassID ASC),
 	CONSTRAINT [FK_dbo.UserRoleClass_dbo.UserID] FOREIGN KEY ([UsersID]) REFERENCES [dbo].[Users] ([UsersID]),
-	CONSTRAINT [FK_dbo.UserRoleClass_dbo.RoleID] FOREIGN KEY ([RoleID]) REFERENCES [dbo].[Role] ([RoleID]),
+	--CONSTRAINT [FK_dbo.UserRoleClass_dbo.RoleID] FOREIGN KEY ([RoleID]) REFERENCES [dbo].[Role] ([RoleID]),
 	CONSTRAINT [FK_dbo.UserRoleClass_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
 );
+
 
 -- Assignment Table
 CREATE TABLE dbo.Assignment
@@ -243,3 +262,4 @@ CREATE TABLE dbo.Questions
 	CONSTRAINT [PK_dbo.Questions] PRIMARY KEY CLUSTERED (QuestionsID ASC),
 	CONSTRAINT [FK_dbo.Questions_dbo.AssignmentID] FOREIGN KEY ([AssignmentID]) REFERENCES [dbo].[Assignment] ([AssignmentID])
 );
+

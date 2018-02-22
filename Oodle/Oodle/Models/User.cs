@@ -40,7 +40,7 @@ namespace Oodle.Models
         public string Bio { get; set; }
 
         [Required]
-        [StringLength(1)]
+        [StringLength(128)]
         public string UserName { get; set; }
 
         public virtual AspNetUser AspNetUser { get; set; }

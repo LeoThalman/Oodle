@@ -1,0 +1,13 @@
+﻿@model Oodle.Models.Class
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h1>@Html.DisplayFor(Name => Model.Name)</h1>
+
+<h2>You have no access to this class.</h2>
+
+<a href="@Url.Action("Join", "Class", new { ClassID = (Model.ClassID) } )">
+    Join Class
+</a>
