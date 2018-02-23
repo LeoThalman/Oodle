@@ -6,12 +6,20 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Oodle.Models;
 using Oodle.Models.ViewModels;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System.Net;
+using System.IO;
+using System.Diagnostics;
 
 namespace Oodle.Controllers
 {
     public class ClassController : Controller
     {
         private Model1 db = new Model1();
+
+        //Slack token to allow creating and joining classes
+        private string SlackToken = System.Web.Configuration.WebConfigurationManager.AppSettings["SlackToken"];
 
 
         // GET: Class
@@ -181,9 +189,100 @@ namespace Oodle.Controllers
             db.UserRoleClasses.Add(urc);
             db.SaveChanges();
 
+            CreateChannel(name);
+            JoinChannel(user.Email, name);
             return RedirectToAction("List");
 
         }
+
+        private void CreateChannel(string className)
+        {
+            //url to query Slack to create a private channel. Slack Token authorizes method and identifies slack workspace.
+            //className is the name of the private channel
+            string surl = "https://slack.com/api/groups.create?token=" + SlackToken + "&name=" + className + "&pretty=1";
+            //Send method request to Slack
+            WebRequest request = WebRequest.Create(surl);
+            HttpWebResponse resp = (HttpWebResponse)request.GetResponse();
+            Stream dataStream = resp.GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+
+            //Convert Slack method response to readable string
+            string slackData = reader.ReadToEnd();
+            //print data to Debug
+            Debug.WriteLine(slackData);
+
+            //Close open requests
+            reader.Close();
+            resp.Close();
+            dataStream.Close();
+
+        }
+
+        private void JoinChannel(string email, string className)
+        {
+            String cid = GetChannelId(className);
+            String uid = GetSlackUserId(email);
+            string qurl = "https://slack.com/api/groups.invite?token=" + SlackToken + "&channel=" + cid + "&user=" + uid + "&pretty=1";
+            WebRequest request = WebRequest.Create(qurl);
+            HttpWebResponse resp = (HttpWebResponse)request.GetResponse();
+            Stream dataStream = resp.GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+            string slackData = reader.ReadToEnd();
+            Debug.WriteLine(slackData);
+            reader.Close();
+            resp.Close();
+            dataStream.Close();
+        }
+
+        private string GetSlackUserId(string email)
+        {
+            string surl = "https://slack.com/api/users.lookupByEmail?token=" + SlackToken + "&email=" + email+ "&pretty=1";
+            WebRequest request = WebRequest.Create(surl);
+            HttpWebResponse resp = (HttpWebResponse)request.GetResponse();
+            Stream dataStream = resp.GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+            string slackData = reader.ReadToEnd();
+            Debug.WriteLine(slackData);
+            reader.Close();
+            resp.Close();
+            dataStream.Close();
+
+            JObject userID = JObject.Parse(slackData);
+            string id = "";
+            id = userID["user"]["id"].ToString();
+            return id;
+        }
+
+        private string GetChannelId(string className)
+        {
+
+            string surl = "https://slack.com/api/groups.list?token=" + SlackToken + "&pretty=1";
+            WebRequest request = WebRequest.Create(surl);
+            HttpWebResponse resp = (HttpWebResponse)request.GetResponse();
+            Stream dataStream = resp.GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+            string slackData = reader.ReadToEnd();
+            Debug.WriteLine(slackData);
+            reader.Close();
+            resp.Close();
+            dataStream.Close();
+
+            string id = "";
+            JObject channels = JObject.Parse(slackData);
+            IList<JToken> cData = channels["groups"].Children().ToList();
+            foreach (JToken temp in cData)
+            {
+                ChannelID cTemp = temp.ToObject<ChannelID>();
+                if (cTemp.name.Equals(className.ToLower()))
+                {
+                    id = cTemp.id;
+                }
+            }
+            Debug.WriteLine("Channel test: " + id + " :end");
+            return id;
+        }
+    
+
 
         [Authorize]
         public ActionResult Join(int classID){

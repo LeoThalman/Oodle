@@ -205,6 +205,7 @@
     <Compile Include="Models\AspNetUserClaim.cs" />
     <Compile Include="Models\AspNetUserLogin.cs" />
     <Compile Include="Models\Assignment.cs" />
+    <Compile Include="Models\ChannelID.cs" />
     <Compile Include="Models\Class.cs" />
     <Compile Include="Models\C__MigrationHistory.cs" />
     <Compile Include="Models\Grade.cs" />
