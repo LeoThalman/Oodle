@@ -145,6 +145,12 @@ namespace Oodle.Controllers
             db.UserRoleClasses.Where(i => i.UsersID == userID & i.ClassID == classID).ToList().ForEach(x => x.RoleID = 2);
             db.SaveChanges();
 
+            //get user and class
+            User user = db.Users.Where(i => i.UsersID == userID).FirstOrDefault();
+            Class c = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
+            //Send request to slack for user to join the group
+            JoinChannel(user.Email, c.Name);
+
             return RedirectToAction("Teacher", new { classId = classID });
         }
 

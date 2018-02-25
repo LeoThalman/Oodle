@@ -8,11 +8,11 @@ DROP TABLE dbo.Class;
 DROP TABLE dbo.Users;
 
 
-DROP TABLE [dbo].[AspNetUsers];
 DROP TABLE [dbo].[AspNetUserRoles];
 DROP TABLE [dbo].[AspNetUserLogins];
 DROP TABLE [dbo].[AspNetUserClaims];
 DROP TABLE [dbo].[AspNetRoles];
+DROP TABLE [dbo].[AspNetUsers];
 
 
 /****** Object:  Table [dbo].[AspNetRoles] ******/
