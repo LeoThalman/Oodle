@@ -189,12 +189,19 @@ namespace Oodle.Controllers
             db.UserRoleClasses.Add(urc);
             db.SaveChanges();
 
+            //create a slack channel for this class
             CreateChannel(name);
+            //join created slack channel
             JoinChannel(user.Email, name);
             return RedirectToAction("List");
 
         }
 
+        /// <summary>
+        /// Sends an http reqeust to slack api to create a private channel in the slack work space
+        /// </summary>
+        /// <param name="className">Name of class/channel</param>
+        [Authorize]
         private void CreateChannel(string className)
         {
             //url to query Slack to create a private channel. Slack Token authorizes method and identifies slack workspace.
@@ -208,8 +215,6 @@ namespace Oodle.Controllers
 
             //Convert Slack method response to readable string
             string slackData = reader.ReadToEnd();
-            //print data to Debug
-            Debug.WriteLine(slackData);
 
             //Close open requests
             reader.Close();
@@ -218,6 +223,12 @@ namespace Oodle.Controllers
 
         }
 
+        /// <summary>
+        /// Sends an http reqeust to slack api to join a private channel in the slack work space
+        /// </summary>
+        /// <param name="email">email of user trying to join a slack private channel</param>
+        /// <param name="className">name of private to join</param>
+        [Authorize]
         private void JoinChannel(string email, string className)
         {
             String cid = GetChannelId(className);
@@ -228,12 +239,17 @@ namespace Oodle.Controllers
             Stream dataStream = resp.GetResponseStream();
             StreamReader reader = new StreamReader(dataStream);
             string slackData = reader.ReadToEnd();
-            Debug.WriteLine(slackData);
             reader.Close();
             resp.Close();
             dataStream.Close();
         }
 
+        /// <summary>
+        /// Sends an http reqeust to slack api to get a user ID based on email
+        /// </summary>
+        /// <param name="email">email of user</param>
+        /// <returns>the slack user ID</returns>
+        [Authorize]
         private string GetSlackUserId(string email)
         {
             string surl = "https://slack.com/api/users.lookupByEmail?token=" + SlackToken + "&email=" + email+ "&pretty=1";
@@ -242,7 +258,6 @@ namespace Oodle.Controllers
             Stream dataStream = resp.GetResponseStream();
             StreamReader reader = new StreamReader(dataStream);
             string slackData = reader.ReadToEnd();
-            Debug.WriteLine(slackData);
             reader.Close();
             resp.Close();
             dataStream.Close();
@@ -253,6 +268,12 @@ namespace Oodle.Controllers
             return id;
         }
 
+        /// <summary>
+        /// Sends an http reqeust to slack api to get channel ID based on class name
+        /// </summary>
+        /// <param name="className">name of class/channel</param>
+        /// <returns>ID of channel</returns>
+        [Authorize]
         private string GetChannelId(string className)
         {
 
@@ -262,7 +283,6 @@ namespace Oodle.Controllers
             Stream dataStream = resp.GetResponseStream();
             StreamReader reader = new StreamReader(dataStream);
             string slackData = reader.ReadToEnd();
-            Debug.WriteLine(slackData);
             reader.Close();
             resp.Close();
             dataStream.Close();
@@ -278,7 +298,6 @@ namespace Oodle.Controllers
                     id = cTemp.id;
                 }
             }
-            Debug.WriteLine("Channel test: " + id + " :end");
             return id;
         }
     
