@@ -68,7 +68,7 @@ namespace Oodle.Controllers
                 return RedirectToAction("Index", new { classId = classID });
             }
 
-            var urcL = db.UserRoleClasses.Where(i => i.RoleID == 3 && i.ClassID == classID));
+            var urcL = db.UserRoleClasses.Where(i => i.RoleID == 3 && i.ClassID == classID);
             var list = new List<int>();
 
             foreach (var i in urcL) 
