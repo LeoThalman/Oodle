@@ -149,7 +149,7 @@ namespace Oodle.Controllers
             User user = db.Users.Where(i => i.UsersID == userID).FirstOrDefault();
             Class c = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
             //Send request to slack for user to join the group
-            JoinChannel(user.Email, c.Name);
+            //JoinChannel(user.Email, c.Name);
 
             return RedirectToAction("Teacher", new { classId = classID });
         }
@@ -196,9 +196,9 @@ namespace Oodle.Controllers
             db.SaveChanges();
 
             //create a slack channel for this class
-            CreateChannel(name);
+            //CreateChannel(name);
             //join created slack channel
-            JoinChannel(user.Email, name);
+            //JoinChannel(user.Email, name);
             return RedirectToAction("List");
 
         }
