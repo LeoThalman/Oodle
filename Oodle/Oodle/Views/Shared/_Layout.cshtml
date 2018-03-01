@@ -1,16 +1,20 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-
+    <!--Jquery-->
+    <script src="jquery-3.3.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah|Ubuntu" rel="stylesheet">
+    <!-- Style sheets-->
     <link rel="stylesheet" type="text/css" href="/Scripts/stylesMain.css">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Oodle</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-
 </head>
-<body style="background-color:#3AAFA9; color:#17252A">
+<body id="bodyStyles" style="background-color:#3AAFA9; color:#17252A">
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -25,7 +29,6 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                     <li>@Html.ActionLink("Classes", "List", "Class")</li>
                     <li>@Html.ActionLink("Teachers", "Index", "Teachers")</li>
                     <li>@Html.ActionLink("Students", "Index", "Students")</li>
