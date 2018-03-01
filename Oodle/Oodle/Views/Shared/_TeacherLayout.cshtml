@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="/Scripts/stylesMain.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Oodle</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body style="background-color:#3AAFA9; color:#17252A">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Oodle", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse" style="color:#17252A">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Classes", "List", "Class")</li>
+                    <li>@Html.ActionLink("Teachers", "Index", "Teachers")</li>
+                    <li>@Html.ActionLink("Students", "Index", "Students")</li>
+                    <li>@Html.ActionLink("Graders", "Index", "Graders")</li>
+                    <li><a href="https://oodle-dev.slack.com/" target="_blank">Go to Slack</a></li>
+                    <li><a href="https://join.slack.com/t/oodle-dev/shared_invite/enQtMzE3ODM5NjI0NjQ2LTIwMzcwNjJiYmFjMTU0ZmNkYTEzZGM0ZGNiYmYxOTFlYzE0NzgwMmM1YmM2NDc2NjE5NmExOTVlMjRmMjk0OTg" target="_blank">Join Slack</a></li>
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+
+    <!--Local Nav bar for Teacher controller-->
+    <nav class="navbar" style="float:left;border-right:solid black 1px;font-size:22px;padding:10px;">
+        <br />
+        <ul>@Html.ActionLink("Home", "Index", "Teachers", new { @style = "color:#000aaa;" })</ul>
+        <ul>@Html.ActionLink("Assignments", "CreateAssignment", "Teachers", new { @style = "color:#000aaa;" })</ul>
+        <ul>@Html.ActionLink("Grades", "MakeGrade", "Teachers", new { @style = "color:#000aaa;" })</ul>
+        <ul>@Html.ActionLink("Roster", "ViewRoster", "Teachers", new { @style = "color:#000aaa;" })</ul>
+        <ul>@Html.ActionLink("Tasks", "CreateTask", "Teachers", new { @style = "color:#000aaa;" })</ul>
+        <ul>@Html.ActionLink("Slack", "CreateSlack", "Teachers", new { @style = "color:#000aaa;" })</ul>
+        <ul>@Html.ActionLink("Quizes", "CreateQuiz", "Teachers", new { @style = "color:#000aaa;" })</ul>
+    </nav><br />
+
+
+    <div class="container body-content">
+        @RenderBody()
+        
+        <footer style="position:absolute;bottom:0;">
+            <p>&copy; @DateTime.Now.Year - Oodle Incorporated</p>
+        </footer>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
