@@ -1,4 +1,22 @@
-﻿
+﻿/*Styling for non id and class elements*/
+p {
+    color: #FEFFFF;
+    font-size: 16px;
+}
+
+body {
+    padding: 0px;
+}
+
+/*applied font styles to specific places*/
+#bodyStyles {
+    font-family: 'Ubuntu', sans-serif;
+}
+
+#indexHeading {
+    font-family: 'Gloria Hallelujah', cursive;
+}
+/* button styling*/
 .button1 {
     display: block;
     width: 115px;
@@ -11,8 +29,12 @@
     font-weight: bold;
 }
 
+.test2 {
+color:red;
+font-size:23px;
+}
 
-
+/*HR (line) on main page*/
 hr.style1 {
     height: 30px;
     border-style: solid;
@@ -31,3 +53,52 @@ hr.style1 {
         border-width: 0 0 1px 0;
         border-radius: 20px;
     }
+
+
+
+
+
+
+/*Styles for FA*/
+* {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.slide-toggle {
+    background: #DEF2F1;
+}
+
+    .slide-toggle .box-toggle {
+        padding: 10px 0 39px;
+    }
+
+        .slide-toggle .box-toggle .contorol {
+            background: #17252A;
+            color: #fff;
+            overflow: hidden;
+            margin-top: 22px;
+        }
+
+            .slide-toggle .box-toggle .contorol h3 {
+                float: left;
+                padding-left: 29px;
+            }
+
+            .slide-toggle .box-toggle .contorol span {
+                float: right !important;
+                padding-right: 29px;
+                line-height: 65px;
+            }
+
+
+        .slide-toggle .box-toggle .content-box {
+            background: #17252A;
+            padding: 2px 2px 6px 13px;
+            text-align: center;
+        }
+
