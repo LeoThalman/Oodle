@@ -5,6 +5,12 @@
     ViewBag.Title = "List";
 }
 
+<head>
+    <link rel="stylesheet" href="~/Content/Site.css" />
+</head>
+
+
+
 <h2>List</h2>
 
 <a href="@Url.Action("Create", "Class")">
@@ -14,8 +20,17 @@
 <div>
     @foreach (var i in Model)
     {
-        <a href="@Url.Action("Index", "Class", new { ClassID = (i.ClassID) }, null)">
-            @Html.DisplayFor(Name => i.Name)
-        </a>
+        <div class="row, block">
+            <a href="@Url.Action("Index", "Class", new { ClassID = (i.ClassID) })">
+                <div class="classItem">
+                    <div class="title">
+                        @Html.DisplayFor(Name => i.Name)
+                    </div>
+                    <div class="description">
+                        @Html.DisplayFor(Description => i.Description)
+                    </div>
+                </div>
+            </a>
+        </div>
     }
 </div>

@@ -39,7 +39,7 @@ namespace Oodle.Controllers
             }
 
             else if (urc.RoleID == 0) {
-                return RedirectToAction("Teacher", new { classId = classID });
+                return RedirectToAction("Index", "Teacher", new { classId = classID });
             }
             else if (urc.RoleID == 1)
             {
