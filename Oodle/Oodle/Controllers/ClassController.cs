@@ -195,12 +195,31 @@ namespace Oodle.Controllers
             db.UserRoleClasses.Add(urc);
             db.SaveChanges();
 
+            IsOnSlack(user.Email);
             //create a slack channel for this class
             //CreateChannel(name);
             //join created slack channel
             //JoinChannel(user.Email, name);
             return RedirectToAction("List");
 
+        }
+
+        private Boolean IsOnSlack (string email)
+        {
+            string surl = "https://slack.com/api/users.lookupByEmail?token=" + SlackToken + "&email=" + email + "&pretty=1";
+            WebRequest request = WebRequest.Create(surl);
+            HttpWebResponse resp = (HttpWebResponse)request.GetResponse();
+            Stream dataStream = resp.GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+            string slackData = reader.ReadToEnd();
+            reader.Close();
+            resp.Close();
+            dataStream.Close();
+
+            JObject userID = JObject.Parse(slackData);
+            Boolean onSlack = Convert.ToBoolean(userID["ok"].ToString());
+            Debug.WriteLine("User Email is On Slack: " + onSlack);
+            return onSlack;
         }
 
         /// <summary>
