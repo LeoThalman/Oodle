@@ -148,8 +148,18 @@ namespace Oodle.Controllers
             //get user and class
             User user = db.Users.Where(i => i.UsersID == userID).FirstOrDefault();
             Class c = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
-            //Send request to slack for user to join the group
-            //JoinChannel(user.Email, c.Name);
+
+
+
+            if (IsOnSlack(user.Email) && !c.SlackName.Equals("%"))
+            {
+                //Send request to slack for user to join the group
+                JoinChannel(user.Email, c.Name);
+            }
+            else
+            {
+                Debug.WriteLine("User not on Slack / No Slack Channel");
+            }
 
             return RedirectToAction("Teacher", new { classId = classID });
         }
@@ -176,6 +186,33 @@ namespace Oodle.Controllers
             string name = Request.Form["name"];
             string desc = Request.Form["description"];
 
+            
+            //get the value of slackChoice
+            Boolean slackOption = Convert.ToBoolean(Request.Form["slackChoice"].ToString());
+            Debug.WriteLine("Does user want a slack channel: " + slackOption);
+
+            //slack channel name, if no channel/name is taken leave as "%"
+            //otherwise gets renamed to the new slackchannel name
+            string sName = "%";
+            //if user does want a slack channel, check to see if their email is on the slack workspace
+            //if so create a channel and put them in it, otherwise don't
+            if (slackOption)
+            {
+                if (IsOnSlack(user.Email))
+                {
+                    //create a slack channel for this class
+                    sName = CreateChannel(name);
+                    //join created slack channel
+                    if (!sName.Equals("%")) {
+                        JoinChannel(user.Email, sName);
+                    }
+                    else
+                    {
+                        Debug.WriteLine("Name already Taken/Invalid");
+                    }
+
+                }
+            }
 
 
             var cl = new Class();
@@ -183,6 +220,7 @@ namespace Oodle.Controllers
             cl.UsersID = user.UsersID;
             cl.Name = name;
             cl.Description = desc;
+            cl.SlackName = sName;
 
             var urc = new UserRoleClass();
 
@@ -197,21 +235,6 @@ namespace Oodle.Controllers
             db.UserRoleClasses.Add(urc);
             db.SaveChanges();
 
-            //get the value of slackChoice
-            Boolean slackOption = Convert.ToBoolean(Request.Form["slackChoice"].ToString());
-            Debug.WriteLine("Does user want a slack channel: " + slackOption);
-
-            //if user does want a slack channel, check to see if their email is on the slack workspace
-            //if so create a channel and put them in it, otherwise don't
-            if (slackOption)
-            {
-                if (IsOnSlack(user.Email)) {
-                    //create a slack channel for this class
-                    CreateChannel(name);
-                    //join created slack channel
-                    JoinChannel(user.Email, name);
-                }
-            }
             return RedirectToAction("List");
 
         }
@@ -244,7 +267,7 @@ namespace Oodle.Controllers
         /// </summary>
         /// <param name="className">Name of class/channel</param>
         [Authorize]
-        private void CreateChannel(string className)
+        private string CreateChannel(string className)
         {
             //url to query Slack to create a private channel. Slack Token authorizes method and identifies slack workspace.
             //className is the name of the private channel
@@ -257,11 +280,20 @@ namespace Oodle.Controllers
 
             //Convert Slack method response to readable string
             string slackData = reader.ReadToEnd();
-
             //Close open requests
             reader.Close();
             resp.Close();
             dataStream.Close();
+
+            Debug.WriteLine(slackData);
+            JObject channel = JObject.Parse(slackData);
+            string name = "%";
+            if (Convert.ToBoolean(channel["ok"].ToString()))
+            {
+                name = channel["group"]["name"].ToString();
+            }
+
+            return name;
 
         }
 
