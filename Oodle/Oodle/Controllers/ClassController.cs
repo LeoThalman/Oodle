@@ -150,17 +150,19 @@ namespace Oodle.Controllers
             Class c = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
 
 
-
-            if (IsOnSlack(user.Email) && !c.SlackName.Equals("%"))
+            //check if there is a slack token, if not don't run slack methods
+            if (!(SlackToken == null))
             {
-                //Send request to slack for user to join the group
-                JoinChannel(user.Email, c.Name);
+                if (IsOnSlack(user.Email) && !c.SlackName.Equals("%"))
+                {
+                    //Send request to slack for user to join the group
+                    JoinChannel(user.Email, c.Name);
+                }
+                else
+                {
+                    Debug.WriteLine("User not on Slack / No Slack Channel");
+                }
             }
-            else
-            {
-                Debug.WriteLine("User not on Slack / No Slack Channel");
-            }
-
             return RedirectToAction("Teacher", new { classId = classID });
         }
 
@@ -194,23 +196,29 @@ namespace Oodle.Controllers
             //slack channel name, if no channel/name is taken leave as "%"
             //otherwise gets renamed to the new slackchannel name
             string sName = "%";
-            //if user does want a slack channel, check to see if their email is on the slack workspace
-            //if so create a channel and put them in it, otherwise don't
-            if (slackOption)
+            
+            //check if there is a slack token, if not don't run slack methods
+            if (!(SlackToken == null))
             {
-                if (IsOnSlack(user.Email))
+                //if user does want a slack channel, check to see if their email is on the slack workspace
+                //if so create a channel and put them in it, otherwise don't
+                if (slackOption)
                 {
-                    //create a slack channel for this class
-                    sName = CreateChannel(name);
-                    //join created slack channel
-                    if (!sName.Equals("%")) {
-                        JoinChannel(user.Email, sName);
-                    }
-                    else
+                    if (IsOnSlack(user.Email))
                     {
-                        Debug.WriteLine("Name already Taken/Invalid");
-                    }
+                        //create a slack channel for this class
+                        sName = CreateChannel(name);
+                        //join created slack channel
+                        if (!sName.Equals("%"))
+                        {
+                            JoinChannel(user.Email, sName);
+                        }
+                        else
+                        {
+                            Debug.WriteLine("Name already Taken/Invalid");
+                        }
 
+                    }
                 }
             }
 
