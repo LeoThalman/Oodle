@@ -176,6 +176,8 @@ namespace Oodle.Controllers
             string name = Request.Form["name"];
             string desc = Request.Form["description"];
 
+
+
             var cl = new Class();
 
             cl.UsersID = user.UsersID;
@@ -195,15 +197,30 @@ namespace Oodle.Controllers
             db.UserRoleClasses.Add(urc);
             db.SaveChanges();
 
-            IsOnSlack(user.Email);
-            //create a slack channel for this class
-            //CreateChannel(name);
-            //join created slack channel
-            //JoinChannel(user.Email, name);
+            //get the value of slackChoice
+            Boolean slackOption = Convert.ToBoolean(Request.Form["slackChoice"].ToString());
+            Debug.WriteLine("Does user want a slack channel: " + slackOption);
+
+            //if user does want a slack channel, check to see if their email is on the slack workspace
+            //if so create a channel and put them in it, otherwise don't
+            if (slackOption)
+            {
+                if (IsOnSlack(user.Email)) {
+                    //create a slack channel for this class
+                    CreateChannel(name);
+                    //join created slack channel
+                    JoinChannel(user.Email, name);
+                }
+            }
             return RedirectToAction("List");
 
         }
 
+        /// <summary>
+        /// Checks if user is on slack
+        /// </summary>
+        /// <param name="email">email of user to check</param>
+        /// <returns>true if user is on slack, false if not</returns>
         private Boolean IsOnSlack (string email)
         {
             string surl = "https://slack.com/api/users.lookupByEmail?token=" + SlackToken + "&email=" + email + "&pretty=1";
