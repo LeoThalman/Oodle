@@ -327,6 +327,7 @@
     <Content Include="Views\Teachers\CreateQuiz.cshtml" />
     <Content Include="Views\Teachers\CreateTask.cshtml" />
     <Content Include="Views\Teachers\CreateSlack.cshtml" />
+    <Content Include="Views\Teachers\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

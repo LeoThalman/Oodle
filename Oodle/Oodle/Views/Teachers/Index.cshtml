@@ -6,6 +6,7 @@
     ViewBag.Title = "Index";
 }
 
+
 <h1>@Html.DisplayFor(Name => Model.cl.Name)</h1>
 
 <h2>Teacher</h2>
@@ -15,12 +16,12 @@
 </div>
 
 
-<a href="@Url.Action("Edit", "Class", new { ClassID = (Model.cl.ClassID) } )">
+<a href="@Url.Action("Edit", "Teachers", new { ClassID = (Model.cl.ClassID) } )">
     Edit Class
 </a>
 
 
-<a href="@Url.Action("Delete", "Class", new { ClassID = (Model.cl.ClassID) })">
+<a href="@Url.Action("Delete", "Teachers", new { ClassID = (Model.cl.ClassID) })">
     Delete Class
 </a>
 
@@ -33,10 +34,10 @@
     {
         var user = Model.users[i];
         @Html.DisplayFor(Name => user.UserName)
-        <a href="@Url.Action("Accept", "Class", new { ClassID = (Model.cl.ClassID), UserID = user.UsersID }, null)">
+        <a href="@Url.Action("Accept", "Teachers", new { ClassID = (Model.cl.ClassID), UserID = user.UsersID }, null)">
             Accept
         </a>
-        <a href="@Url.Action("Reject", "Class", new { ClassID = (Model.cl.ClassID), UserID = user.UsersID }, null)">
+        <a href="@Url.Action("Reject", "Teachers", new { ClassID = (Model.cl.ClassID), UserID = user.UsersID }, null)">
             Reject
         </a>
 

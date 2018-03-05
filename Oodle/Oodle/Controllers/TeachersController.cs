@@ -29,7 +29,7 @@ namespace Oodle.Controllers
 
             if (urc == null || urc.RoleID != 0)
             {
-                return RedirectToAction("Index", new { classId = classID });
+                return RedirectToAction("Index", "Class", new { classId = classID });
             }
 
             var urcL = db.UserRoleClasses.Where(i => i.RoleID == 3 && i.ClassID == classID);
@@ -44,8 +44,82 @@ namespace Oodle.Controllers
 
             var teacher = new TeacherVM(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault(), request);
 
-            return View(teacher);
+            return View("index", "_TeacherLayout", teacher);
         }
+
+
+        [Authorize]
+        public ActionResult Accept(int classID, int userID)
+        {
+            db.UserRoleClasses.Where(i => i.UsersID == userID & i.ClassID == classID).ToList().ForEach(x => x.RoleID = 2);
+            db.SaveChanges();
+
+            //get user and class
+            User user = db.Users.Where(i => i.UsersID == userID).FirstOrDefault();
+            Class c = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
+            //Send request to slack for user to join the group
+            //JoinChannel(user.Email, c.Name);
+
+            return RedirectToAction("Index", new { classId = classID });
+        }
+
+
+        [Authorize]
+        public ActionResult Reject(int classID, int userID)
+        {
+            db.UserRoleClasses.Remove(db.UserRoleClasses.Where(i => i.UsersID == userID & i.ClassID == classID).FirstOrDefault());
+            db.SaveChanges();
+
+            return RedirectToAction("Index", new { classId = classID });
+        }
+
+
+        [Authorize]
+        public ActionResult Edit(int classID)
+        {
+            ViewBag.id = classID;
+            return View("Edit", "_TeacherLayout");
+        }
+
+        [Authorize]
+        public ActionResult EditClass()
+        {
+            ViewBag.RequestMethod = "POST";
+
+            string name = Request.Form["name"];
+            string desc = Request.Form["description"];
+            int classID = int.Parse(Request.Form["classID"]);
+
+
+            db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Name = name);
+            db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Description = desc);
+
+            db.SaveChanges();
+
+            return RedirectToAction("Index", new { classId = classID });
+        }
+
+
+        [Authorize]
+        public ActionResult Delete(int classID)
+        {
+            var list = db.UserRoleClasses.Where(i => i.ClassID == classID);
+            foreach (var i in list)
+            {
+                db.UserRoleClasses.Remove(i);
+            }
+
+            db.Classes.Remove(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault());
+
+            db.SaveChanges();
+
+            return RedirectToAction("List", "Class");
+        }
+
+
+
+
+
 
 
 

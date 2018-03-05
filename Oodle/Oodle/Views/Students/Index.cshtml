@@ -1,7 +1,16 @@
-﻿
+﻿@model Oodle.Models.Class
+
 @{
     ViewBag.Title = "Index";
 }
 
-<center><h2>Home View for the Student Controller</h2></center>
+<h1>@Html.DisplayFor(Name => Model.Name)</h1>
+
+<h2>Student</h2>
+
+<div>
+    @Html.DisplayFor(Description => Model.Description)
+</div>
+
+
 
