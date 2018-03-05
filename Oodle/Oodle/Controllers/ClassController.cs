@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using System.Net;
 using System.IO;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace Oodle.Controllers
 {
@@ -196,6 +197,7 @@ namespace Oodle.Controllers
             //slack channel name, if no channel/name is taken leave as "%"
             //otherwise gets renamed to the new slackchannel name
             string sName = "%";
+            string tempName = Request.Form["slackName"];
             
             //check if there is a slack token, if not don't run slack methods
             if (!(SlackToken == null))
@@ -206,8 +208,12 @@ namespace Oodle.Controllers
                 {
                     if (IsOnSlack(user.Email))
                     {
+                        if (tempName.Equals(""))
+                        {
+                            tempName = name;
+                        }
                         //create a slack channel for this class
-                        sName = CreateChannel(name);
+                        sName = CreateChannel(tempName);
                         //join created slack channel
                         if (!sName.Equals("%"))
                         {
@@ -263,11 +269,20 @@ namespace Oodle.Controllers
             reader.Close();
             resp.Close();
             dataStream.Close();
-
             JObject userID = JObject.Parse(slackData);
             Boolean onSlack = Convert.ToBoolean(userID["ok"].ToString());
             Debug.WriteLine("User Email is On Slack: " + onSlack);
             return onSlack;
+        }
+
+        private string ValidateSlackName(string name)
+        {
+            string sName = name.ToLower();
+            sName = Regex.Replace(sName, @"[\s]+", "-");
+            sName = Regex.Replace(sName, @"[^a-z0-9-_]+", "_");
+            sName = sName.Remove(21);
+            Debug.WriteLine("New Slack Name: " + sName);
+            return sName;
         }
 
         /// <summary>
@@ -292,6 +307,8 @@ namespace Oodle.Controllers
             reader.Close();
             resp.Close();
             dataStream.Close();
+
+            ValidateSlackName(className);
 
             Debug.WriteLine(slackData);
             JObject channel = JObject.Parse(slackData);

@@ -16,6 +16,11 @@
 
             <label for="description">Description</label>
             <textarea name="description" placeholder="Enter comments here..."></textarea> <br />
+            Slack channel must be 21 characters or less and only allows lowercase, numbers and - _<br />
+            If channel name is blank class name will be used and will be formatted by slack to fit naming conventions<br />
+            <label for="slackName">Channel Name</label>
+            <input type="text" name="slackName" placeholder="If left blank will use class name" maxlength="21" oninput="this.value = this.value.replace(/[^a-z0-9-_]/, '')"></input> <br />
+
             <label for="slackChoice">Do you want a slack channel?</label>
             <input type="radio" name="slackChoice" value="true">Yes
             <input type="radio" name="slackChoice" value="false" checked>No <br />
