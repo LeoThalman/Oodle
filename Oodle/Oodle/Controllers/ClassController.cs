@@ -210,7 +210,8 @@ namespace Oodle.Controllers
                     {
                         if (tempName.Equals(""))
                         {
-                            tempName = name;
+                            //alter class name to match slack naming conventions
+                            tempName = ValidateSlackName(name);
                         }
                         //create a slack channel for this class
                         sName = CreateChannel(tempName);
@@ -280,8 +281,10 @@ namespace Oodle.Controllers
             string sName = name.ToLower();
             sName = Regex.Replace(sName, @"[\s]+", "-");
             sName = Regex.Replace(sName, @"[^a-z0-9-_]+", "_");
-            sName = sName.Remove(21);
-            Debug.WriteLine("New Slack Name: " + sName);
+            if ( sName.Length > 21)
+            {
+                sName = sName.Remove(21);
+            }
             return sName;
         }
 
