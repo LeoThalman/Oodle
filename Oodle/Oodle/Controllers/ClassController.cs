@@ -429,7 +429,8 @@ namespace Oodle.Controllers
         public ActionResult Edit(int classID)
         {
             ViewBag.id = classID;
-            return View();
+            Class temp = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
+            return View(temp);
         }
 
         [Authorize]
@@ -439,11 +440,13 @@ namespace Oodle.Controllers
 
             string name = Request.Form["name"];
             string desc = Request.Form["description"];
+            string notif = Request.Form["notification"];
             int classID = int.Parse(Request.Form["classID"]);
 
 
             db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Name = name);
             db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Description = desc);
+            db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Notification = notif);
 
             db.SaveChanges();
 

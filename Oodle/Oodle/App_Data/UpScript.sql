@@ -200,6 +200,7 @@ CREATE TABLE dbo.Class
 	Name	NVARCHAR(128) NOT NULL,
 	Description NVARCHAR(256) NOT NULL,
 	SlackName NVARCHAR(20) NULL,
+	Notification NVARCHAR(256) NULL,
 	CONSTRAINT [PK_dbo.Class] PRIMARY KEY CLUSTERED (ClassID ASC),
 	CONSTRAINT [FK_dbo.Class_dbo.UsersID] FOREIGN KEY ([UsersID]) REFERENCES [dbo].[Users] ([UsersID])
 );

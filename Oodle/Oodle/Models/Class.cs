@@ -31,6 +31,9 @@ namespace Oodle.Models
         [StringLength(20)]
         public string SlackName { get; set; }
 
+        [StringLength(256)]
+        public string Notification { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Assignment> Assignments { get; set; }
 
