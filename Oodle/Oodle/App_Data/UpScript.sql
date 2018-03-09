@@ -232,7 +232,10 @@ CREATE TABLE dbo.Assignment
 (	
 	AssignmentID	INT IDENTITY (1,1) NOT NULL,
 	ClassID	INT NOT NULL,
-	Description NVARCHAR(512) NOT NULL,
+	Name NVARCHAR(128) NOT NULL,
+	Description NVARCHAR(512),
+	StartDate DATETIME,
+	DueDate DATETIME,
 	CONSTRAINT [PK_dbo.Assignment] PRIMARY KEY CLUSTERED (AssignmentID ASC),
 	CONSTRAINT [FK_dbo.Assignment_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
 );

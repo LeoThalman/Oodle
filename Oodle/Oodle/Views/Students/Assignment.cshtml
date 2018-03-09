@@ -1,7 +1,35 @@
 ﻿
+@model Oodle.Models.ViewModels.TeacherVM
+
 @{
     ViewBag.Title = "Assignment";
 }
-
 <center><h2>Assignment View for Student Controller</h2></center>
 
+
+<div>
+    @for (int i = 0; i < Model.assignment.Count(); i++)
+    {
+
+        var assi = Model.assignment[i];
+        <div class="block">
+            <div class="classItem">
+                <div class="title">
+                    @Html.DisplayFor(Name => assi.Name)
+                </div>
+                <div class="description">
+                    @Html.DisplayFor(Desc => assi.Description)
+                </div>
+                <div class="dateLeft">
+                    Start Date: @Html.DisplayFor(Desc => assi.StartDate)
+                </div>
+                <div class="dateRight">
+                    Due Date: @Html.DisplayFor(Desc => assi.DueDate)
+                </div>
+            </div>
+        </div>
+        <br />
+        <br />
+
+    }
+</div>

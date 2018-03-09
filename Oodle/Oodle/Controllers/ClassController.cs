@@ -39,15 +39,15 @@ namespace Oodle.Controllers
             }
 
             else if (urc.RoleID == 0) {
-                return RedirectToAction("Teacher", new { classId = classID });
+                return RedirectToAction("Index", "Teachers", new { classId = classID });
             }
             else if (urc.RoleID == 1)
             {
-                return RedirectToAction("Grader", new { classId = classID });
+                return RedirectToAction("Index", "Graders", new { classId = classID });
             }
             else if (urc.RoleID == 2)
             {
-                return RedirectToAction("Student", new { classId = classID });
+                return RedirectToAction("Index", "Students", new { classId = classID });
             }
             else
             {
@@ -55,63 +55,7 @@ namespace Oodle.Controllers
             }
         }
 
-        [Authorize]
-        public ActionResult Teacher(int classID)
-        {
-            var idid = User.Identity.GetUserId();
 
-            User user = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault();
-            UserRoleClass urc = db.UserRoleClasses.Where(s => s.UsersID == user.UsersID && s.ClassID == classID).FirstOrDefault();
-
-            if (urc == null || urc.RoleID != 0)
-            {
-                return RedirectToAction("Index", new { classId = classID });
-            }
-
-            var urcL = db.UserRoleClasses.Where(i => i.RoleID == 3 && i.ClassID == classID);
-            var list = new List<int>();
-
-            foreach (var i in urcL) 
-            {
-                list.Add(i.UsersID);
-            }
-
-            var request = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
-
-            var teacher = new TeacherVM(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault(), request);
-            
-            return View(teacher);
-        }
-
-        [Authorize]
-        public ActionResult Grader(int classID)
-        {
-            var idid = User.Identity.GetUserId();
-
-            User user = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault();
-            UserRoleClass urc = db.UserRoleClasses.Where(s => s.UsersID == user.UsersID && s.ClassID == classID).FirstOrDefault();
-
-            if (urc == null || urc.RoleID != 1)
-            {
-                return RedirectToAction("Index", new { classId = classID });
-            }
-            return View(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault());
-        }
-
-        [Authorize]
-        public ActionResult Student(int classID)
-        {
-            var idid = User.Identity.GetUserId();
-
-            User user = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault();
-            UserRoleClass urc = db.UserRoleClasses.Where(s => s.UsersID == user.UsersID && s.ClassID == classID).FirstOrDefault();
-
-            if (urc == null || urc.RoleID != 2)
-            {
-                return RedirectToAction("Index", new { classId = classID });
-            }
-            return View(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault());
-        }
 
         [Authorize]
         public ActionResult Pending(int classID)
@@ -138,6 +82,7 @@ namespace Oodle.Controllers
         {
             return View();
         }
+
 
         [Authorize]
         public ActionResult Accept(int classID, int userID)
@@ -166,14 +111,7 @@ namespace Oodle.Controllers
             return RedirectToAction("Teacher", new { classId = classID });
         }
 
-        [Authorize]
-        public ActionResult Reject(int classID, int userID)
-        {
-            db.UserRoleClasses.Remove(db.UserRoleClasses.Where(i => i.UsersID == userID & i.ClassID == classID).FirstOrDefault());
-            db.SaveChanges();
 
-            return RedirectToAction("Teacher", new { classId = classID });
-        }
 
 
         [HttpPost]
@@ -230,11 +168,13 @@ namespace Oodle.Controllers
             cl.Description = desc;
             cl.SlackName = sName;
 
-            var urc = new UserRoleClass();
 
 
             db.Classes.Add(cl);
             db.SaveChanges();
+
+            var urc = new UserRoleClass();
+
 
             urc.UsersID = user.UsersID;
             urc.ClassID = cl.ClassID;
@@ -400,51 +340,6 @@ namespace Oodle.Controllers
             db.SaveChanges();
 
             return RedirectToAction("Pending", new { classId = classID });
-        }
-
-
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        [Authorize]
-        public ActionResult Edit(int classID)
-        {
-            ViewBag.id = classID;
-            return View();
-        }
-
-        [Authorize]
-        public ActionResult EditClass()
-        {
-            ViewBag.RequestMethod = "POST";
-
-            string name = Request.Form["name"];
-            string desc = Request.Form["description"];
-            int classID = int.Parse(Request.Form["classID"]);
-
-
-            db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Name = name);
-            db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Description = desc);
-
-            db.SaveChanges();
-
-            return RedirectToAction("Teacher", new { classId = classID });
-        }
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        [Authorize]
-        public ActionResult Delete(int classID)
-        {
-            var list = db.UserRoleClasses.Where(i => i.ClassID == classID);
-            foreach (var i in list)
-            {
-                db.UserRoleClasses.Remove(i);
-            }
-            
-            db.Classes.Remove(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault());
-
-            db.SaveChanges();
-
-            return RedirectToAction("List");
         }
     }
 }

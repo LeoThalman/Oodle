@@ -1,0 +1,36 @@
+﻿@model Oodle.Models.ViewModels.TeacherVM
+
+@{
+    ViewBag.Title = "EditAssignment";
+}
+
+<h2>Edit</h2>
+
+<div>
+    <form method="post" action="EditAssignmentAction">
+        <div>
+            <label for="name">Name</label>
+            <input type="text" name="name" value="@Model.assignment.FirstOrDefault().Name" />
+
+
+            <input type="hidden" name="assignmentID" value="@Model.assignment.FirstOrDefault().AssignmentID" />
+
+            <input type="hidden" name="classID" value="@Model.cl.ClassID" />
+            <br />
+
+
+            <label for="description">Description</label>
+            <textarea name="description">@Model.assignment.FirstOrDefault().Description</textarea>
+
+            <label for="startDate">Start Date</label>
+            <input type="datetime-local" name="startDate" value="@Model.assignment.FirstOrDefault().StartDate"/>
+
+            <label for="dueDate">Due Date</label>
+            <input type="datetime-local" name="dueDate" value="@Model.assignment.FirstOrDefault().DueDate"/>
+
+        </div>
+        <div>
+            <input type="submit" name="submit" value="Submit" />
+        </div>
+    </form>
+</div>

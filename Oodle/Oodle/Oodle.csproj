@@ -323,10 +323,13 @@
     <Content Include="Views\Teachers\Index.cshtml" />
     <Content Include="Views\Teachers\MakeGrade.cshtml" />
     <Content Include="Views\Teachers\ViewRoster.cshtml" />
-    <Content Include="Views\Teachers\CreateAssignment.cshtml" />
+    <Content Include="Views\Teachers\Assignment.cshtml" />
     <Content Include="Views\Teachers\CreateQuiz.cshtml" />
     <Content Include="Views\Teachers\CreateTask.cshtml" />
     <Content Include="Views\Teachers\CreateSlack.cshtml" />
+    <Content Include="Views\Teachers\Edit.cshtml" />
+    <Content Include="Views\Teachers\CreateAssignment.cshtml" />
+    <Content Include="Views\Teachers\EditAssignment.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
