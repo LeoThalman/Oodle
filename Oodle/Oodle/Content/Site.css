@@ -25,13 +25,16 @@ textarea {
 
 
 
-
 .classItem {
+    position: relative;
     background-color: #84CEEB;
 }
 
 
-
+.classItem:hover {
+    position: relative;
+    background-color: #94CEEB;
+}
 
 .title {
     color: black;
@@ -43,7 +46,7 @@ textarea {
 
 .block {
     width: 50%;
-    padding: 10px 10px 10px 10px;
+    height: 90px;
 }
 
 
@@ -54,3 +57,37 @@ textarea {
     height: 80px;
     font-size: small;
 }
+
+.dateLeft {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    text-align: left;
+    padding-left: 10px;
+    color: dimgrey;
+    font-size: small;
+    height: 10px;
+}
+
+.edit {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    text-align: right;
+    padding-left: 10px;
+    color: black;
+    font-size: medium;
+    height: 10px;
+}
+
+.dateRight {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    text-align: right;
+    padding-right: 10px;
+    color: dimgrey;
+    font-size: small;
+    height: 10px;
+}
+

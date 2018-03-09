@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using System.Net;
 using System.IO;
 using System.Diagnostics;
+using System.Collections;
 
 namespace Oodle.Controllers
 {
@@ -31,18 +32,7 @@ namespace Oodle.Controllers
             {
                 return RedirectToAction("Index", "Class", new { classId = classID });
             }
-
-            var urcL = db.UserRoleClasses.Where(i => i.RoleID == 3 && i.ClassID == classID);
-            var list = new List<int>();
-
-            foreach (var i in urcL)
-            {
-                list.Add(i.UsersID);
-            }
-
-            var request = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
-
-            var teacher = new TeacherVM(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault(), request);
+            var teacher = getTVM(classID);
 
             return View("index", "_TeacherLayout", teacher);
         }
@@ -78,7 +68,12 @@ namespace Oodle.Controllers
         public ActionResult Edit(int classID)
         {
             ViewBag.id = classID;
-            return View("Edit", "_TeacherLayout");
+
+
+
+            var teacher = getTVM(classID);
+
+            return View("Edit", "_TeacherLayout", teacher);
         }
 
         [Authorize]
@@ -109,20 +104,14 @@ namespace Oodle.Controllers
                 db.UserRoleClasses.Remove(i);
             }
 
+            classID = 1;
+
             db.Classes.Remove(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault());
 
             db.SaveChanges();
 
             return RedirectToAction("List", "Class");
         }
-
-
-
-
-
-
-
-
 
 
         public ActionResult MakeGrade()
@@ -135,10 +124,119 @@ namespace Oodle.Controllers
             return View("ViewRoster", "_TeacherLayout");
         }
 
-        public ActionResult CreateAssignment()
+        public ActionResult Assignment(int classID)
         {
-            return View("CreateAssignment", "_TeacherLayout");
+            var teacher = getTVM(classID);
+
+            return View("Assignment", "_TeacherLayout", teacher);
         }
+
+
+        public TeacherVM getTVM(int classID)
+        {
+            var urcL = db.UserRoleClasses.Where(i => i.RoleID == 3 && i.ClassID == classID);
+            var list = new List<int>();
+
+            foreach (var i in urcL)
+            {
+                list.Add(i.UsersID);
+            }
+            var request = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
+
+            var teacher = new TeacherVM(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault(), request);
+
+            teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).OrderBy(i => i.StartDate).ToList();
+
+            return teacher;
+        }
+
+
+
+        public ActionResult CreateAssignmentAction()
+        {
+            ViewBag.RequestMethod = "POST";
+
+            string name = Request.Form["name"];
+            string desc = Request.Form["description"];
+            string id = Request.Form["classID"];
+            string startDate = Request.Form["startDate"];
+            string dueDate = Request.Form["dueDate"];
+
+            int classID = int.Parse(id);
+
+
+            var assi = new Assignment();
+
+            assi.Name = name;
+            assi.Description = desc;
+            assi.ClassID = classID;
+            assi.StartDate = DateTime.Parse(startDate);
+            assi.DueDate = DateTime.Parse(dueDate);
+
+            db.Assignments.Add(assi);
+            db.SaveChanges();
+
+            var teacher = getTVM(classID);
+
+            return View("Assignment", "_TeacherLayout", teacher);
+        }
+
+
+        public ActionResult EditAssignment(int classID, int assignmentID)
+        {
+            var urcL = db.UserRoleClasses.Where(i => i.RoleID == 3 && i.ClassID == classID);
+            var list = new List<int>();
+
+            foreach (var i in urcL)
+            {
+                list.Add(i.UsersID);
+            }
+            var request = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
+
+            var teacher = new TeacherVM(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault(), request);
+
+            teacher.assignment = db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList();
+
+            return View("EditAssignment", "_TeacherLayout", teacher);
+        }
+
+        public ActionResult EditAssignmentAction()
+        {
+            ViewBag.RequestMethod = "POST";
+
+            string name = Request.Form["name"];
+            string desc = Request.Form["description"];
+            string id = Request.Form["classID"];
+            string startDate = Request.Form["startDate"];
+            string dueDate = Request.Form["dueDate"];
+            string assiID = Request.Form["assignmentID"];
+
+            int assignmentID = int.Parse(assiID);
+            int classID = int.Parse(id);
+
+
+            db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList().ForEach(x => x.Name = name);
+            db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList().ForEach(x => x.Description = desc);
+            db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList().ForEach(x => x.StartDate = DateTime.Parse(startDate));
+            db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList().ForEach(x => x.DueDate = DateTime.Parse(dueDate));
+
+            db.SaveChanges();
+
+            var teacher = getTVM(classID);
+
+            return View("Assignment", "_TeacherLayout", teacher);
+        }
+
+
+        public ActionResult CreateAssignment(int classID)
+        {
+            var teacher = getTVM(classID);
+
+
+            return View("CreateAssignment", teacher);
+        }
+
+
 
         public ActionResult CreateQuiz()
         {

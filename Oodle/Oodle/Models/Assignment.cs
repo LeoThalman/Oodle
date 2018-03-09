@@ -20,9 +20,17 @@ namespace Oodle.Models
 
         public int ClassID { get; set; }
 
+
         [Required]
+        [StringLength(128)]
+        public string Name { get; set; }
+
         [StringLength(512)]
         public string Description { get; set; }
+
+        public DateTime StartDate { get; set; }
+
+        public DateTime DueDate { get; set; }
 
         public virtual Class Class { get; set; }
 

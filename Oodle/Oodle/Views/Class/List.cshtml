@@ -5,17 +5,15 @@
     ViewBag.Title = "List";
 }
 
-<head>
-    <link rel="stylesheet" href="~/Content/Site.css" />
-</head>
 
 
 
-<h2>List</h2>
+<h2>Assignments</h2>
 
-<a href="@Url.Action("Create", "Class")">
+<a class="classItem" href="@Url.Action("Create", "Class")">
     Create a Class
 </a>
+<br />
 
 <div>
     @foreach (var i in Model)
@@ -32,5 +30,7 @@
                 </div>
             </a>
         </div>
+        <br />
+
     }
 </div>

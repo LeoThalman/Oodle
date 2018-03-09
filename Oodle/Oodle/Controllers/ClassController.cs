@@ -105,11 +105,13 @@ namespace Oodle.Controllers
             cl.Name = name;
             cl.Description = desc;
 
-            var urc = new UserRoleClass();
 
 
             db.Classes.Add(cl);
             db.SaveChanges();
+
+            var urc = new UserRoleClass();
+
 
             urc.UsersID = user.UsersID;
             urc.ClassID = cl.ClassID;

@@ -1,15 +1,15 @@
-﻿@model Oodle.Models.Class
+﻿@model Oodle.Models.ViewModels.TeacherVM
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h1>@Html.DisplayFor(Name => Model.Name)</h1>
+<h1>@Html.DisplayFor(Name => Model.cl.Name)</h1>
 
 <h2>Student</h2>
 
 <div>
-    @Html.DisplayFor(Description => Model.Description)
+    @Html.DisplayFor(Description => Model.cl.Description)
 </div>
 
 
