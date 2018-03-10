@@ -9,7 +9,9 @@ namespace Oodle.Models.ViewModels
     {
         public Class cl { get; set; }
         public List<Assignment> assignment { get; set; }
-        public List<User> users{ get; set;}
+        public List<User> users { get; set; }
+        public List<Document> documents {get; set;}
+
 
         public TeacherVM(Class classP, List<User> userP)
         {

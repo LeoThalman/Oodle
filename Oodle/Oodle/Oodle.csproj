@@ -211,6 +211,7 @@
     <Compile Include="Models\ChannelID.cs" />
     <Compile Include="Models\Class.cs" />
     <Compile Include="Models\C__MigrationHistory.cs" />
+    <Compile Include="Models\Document.cs" />
     <Compile Include="Models\Grade.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -330,8 +331,12 @@
     <Content Include="Views\Teachers\Edit.cshtml" />
     <Content Include="Views\Teachers\CreateAssignment.cshtml" />
     <Content Include="Views\Teachers\EditAssignment.cshtml" />
+    <Content Include="Views\Students\AssignmentTurnIn.cshtml" />
+    <Content Include="Views\Teachers\SubmissionView.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
   </ItemGroup>

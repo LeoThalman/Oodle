@@ -80,6 +80,17 @@ textarea {
     height: 10px;
 }
 
+.submissions {
+    position: absolute;
+    bottom: 30px;
+    right: 10px;
+    text-align: right;
+    padding-left: 10px;
+    color: black;
+    font-size: medium;
+    height: 10px;
+}
+
 .dateRight {
     position: absolute;
     bottom: 10px;
