@@ -22,3 +22,83 @@ select,
 textarea {
     max-width: 280px;
 }
+
+
+
+.classItem {
+    position: relative;
+    background-color: #84CEEB;
+}
+
+
+.classItem:hover {
+    position: relative;
+    background-color: #94CEEB;
+}
+
+.title {
+    color: black;
+    padding-left: 15px;
+    padding-right: 15px;
+    height: 30px;
+    font-size: x-large;
+}
+
+.block {
+    width: 50%;
+    height: 90px;
+}
+
+
+.description {
+    padding-left: 5px;
+    padding-right: 5px;
+    color: black;
+    height: 80px;
+    font-size: small;
+}
+
+.dateLeft {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    text-align: left;
+    padding-left: 10px;
+    color: dimgrey;
+    font-size: small;
+    height: 10px;
+}
+
+.edit {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    text-align: right;
+    padding-left: 10px;
+    color: black;
+    font-size: medium;
+    height: 10px;
+}
+
+.submissions {
+    position: absolute;
+    bottom: 30px;
+    right: 10px;
+    text-align: right;
+    padding-left: 10px;
+    color: black;
+    font-size: medium;
+    height: 10px;
+}
+
+.dateRight {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    text-align: right;
+    padding-right: 10px;
+    color: dimgrey;
+    font-size: small;
+    height: 10px;
+}
+

@@ -233,7 +233,10 @@ CREATE TABLE dbo.Assignment
 (	
 	AssignmentID	INT IDENTITY (1,1) NOT NULL,
 	ClassID	INT NOT NULL,
-	Description NVARCHAR(512) NOT NULL,
+	Name NVARCHAR(128) NOT NULL,
+	Description NVARCHAR(512),
+	StartDate DATETIME,
+	DueDate DATETIME,
 	CONSTRAINT [PK_dbo.Assignment] PRIMARY KEY CLUSTERED (AssignmentID ASC),
 	CONSTRAINT [FK_dbo.Assignment_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
 );
@@ -265,3 +268,20 @@ CREATE TABLE dbo.Questions
 	CONSTRAINT [FK_dbo.Questions_dbo.AssignmentID] FOREIGN KEY ([AssignmentID]) REFERENCES [dbo].[Assignment] ([AssignmentID])
 );
 
+
+DROP TABLE dbo.Documents;
+
+CREATE TABLE dbo.Documents(  
+    Id INT IDENTITY(1,1) NOT NULL,  
+    Name NVARCHAR(250) NOT NULL,  
+    ContentType NVARCHAR(250) NOT NULL,  
+	Data VARBINARY(MAX) NOT NULL,
+	ClassID INT NOT NULL,
+	AssignmentID INT NOT NULL,
+	UserID INT NOT NULL,
+	CONSTRAINT [PK_dbo.Documents] PRIMARY KEY CLUSTERED (Id ASC),
+	CONSTRAINT [FK_dbo.Documents_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID]),
+	CONSTRAINT [FK_dbo.Documents_dbo.UserID] FOREIGN KEY ([UserID]) REFERENCES [dbo].[Users] ([UsersID]),
+	CONSTRAINT [FK_dbo.Documents_dbo.AssignmentID] FOREIGN KEY ([AssignmentID]) REFERENCES [dbo].[Assignment] ([AssignmentID])
+);
+  
