@@ -523,7 +523,10 @@ namespace Oodle.Controllers
             Class hasSlack = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
             if (!hasSlack.SlackName.Equals("%"))
             {
-                SlackNotif(notif, hasSlack.SlackName);
+                if (!notif.Equals(hasSlack.Notification))
+                { 
+                    SlackNotif(notif, hasSlack.SlackName);
+                }
             }
 
 
