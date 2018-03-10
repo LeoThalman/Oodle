@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
+using Newtonsoft.Json.Linq;
 using Oodle.Models;
 using Oodle.Models.ViewModels;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using System.Net;
-using System.IO;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
+using System.Web.Mvc;
 
 namespace Oodle.Controllers
 {
@@ -21,6 +19,7 @@ namespace Oodle.Controllers
 
         //Slack token to allow creating and joining classes
         private string SlackToken = System.Web.Configuration.WebConfigurationManager.AppSettings["SlackToken"];
+        private string SlackBot = System.Web.Configuration.WebConfigurationManager.AppSettings["SlackBot"];
 
 
         // GET: Class
@@ -288,10 +287,43 @@ namespace Oodle.Controllers
             return sName;
         }
 
-        private Boolean SlackNotif(string notif, string sName)
+        private void SlackNotif(string notif, string sName)
         {
+            string cID = GetChannelId(sName);
+            notif = Regex.Replace(notif, @"[\s]+", "%20");
 
-            return false;
+            string surl = "https://slack.com/api/chat.postMessage?token=" + SlackBot +"&channel="+ cID +"&as_user=true"+ "&text=" + notif + "&pretty=1";
+            //Send method request to Slack
+            WebRequest request = WebRequest.Create(surl);
+            HttpWebResponse resp = (HttpWebResponse)request.GetResponse();
+            Stream dataStream = resp.GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+
+            //Convert Slack method response to readable string
+            string slackData = reader.ReadToEnd();
+            Debug.WriteLine(slackData);
+            //Close open requests
+            reader.Close();
+            resp.Close();
+            dataStream.Close();
+            JObject message = JObject.Parse(slackData);
+            PinMessage(message["ts"].ToString(), message["channel"].ToString());
+        }
+
+        private void PinMessage(string time, string channel)
+        {
+            string surl = "https://slack.com/api/pins.add?token=" + SlackBot + "&channel=" + channel + "&timestamp=" + time + "&pretty=1";
+            //Send method request to Slack
+            WebRequest request = WebRequest.Create(surl);
+            HttpWebResponse resp = (HttpWebResponse)request.GetResponse();
+            Stream dataStream = resp.GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+            string slackData = reader.ReadToEnd();
+            Debug.WriteLine(slackData);
+            //Close open requests
+            reader.Close();
+            resp.Close();
+            dataStream.Close();
         }
 
         /// <summary>
@@ -317,14 +349,13 @@ namespace Oodle.Controllers
             resp.Close();
             dataStream.Close();
 
-            ValidateSlackName(className);
-
             Debug.WriteLine(slackData);
             JObject channel = JObject.Parse(slackData);
             string name = "%";
             if (Convert.ToBoolean(channel["ok"].ToString()))
             {
                 name = channel["group"]["name"].ToString();
+                AddBot(name);
             }
 
             return name;
@@ -350,6 +381,48 @@ namespace Oodle.Controllers
             reader.Close();
             resp.Close();
             dataStream.Close();
+        }
+
+        private void AddBot(string className)
+        {
+            String cid = GetChannelId(className);
+            string uid = GetSlackBotID();
+            string qurl = "https://slack.com/api/groups.invite?token=" + SlackToken + "&channel=" + cid + "&user=" + uid + "&pretty=1";
+            WebRequest request = WebRequest.Create(qurl);
+            HttpWebResponse resp = (HttpWebResponse)request.GetResponse();
+            Stream dataStream = resp.GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+            string slackData = reader.ReadToEnd();
+            reader.Close();
+            resp.Close();
+            dataStream.Close();
+        }
+
+        private string GetSlackBotID()
+        {
+            string surl = "https://slack.com/api/users.list?token=" + SlackToken + "&pretty=1";
+            WebRequest request = WebRequest.Create(surl);
+            HttpWebResponse resp = (HttpWebResponse)request.GetResponse();
+            Stream dataStream = resp.GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+            string slackData = reader.ReadToEnd();
+            reader.Close();
+            resp.Close();
+            dataStream.Close();
+
+            string id = "";
+            JObject users = JObject.Parse(slackData);
+            IList<JToken> cData = users["members"].Children().ToList();
+            foreach (JToken temp in cData)
+            {
+                SlackBot bTemp = temp.ToObject<SlackBot>();
+                if (Convert.ToBoolean(bTemp.is_bot))
+                {
+                    id = bTemp.id;
+                    Debug.WriteLine(id);
+                }
+            }
+            return id;
         }
 
         /// <summary>
@@ -408,8 +481,6 @@ namespace Oodle.Controllers
             }
             return id;
         }
-    
-
 
         [Authorize]
         public ActionResult Join(int classID){
@@ -448,6 +519,12 @@ namespace Oodle.Controllers
             string desc = Request.Form["description"];
             string notif = Request.Form["notification"];
             int classID = int.Parse(Request.Form["classID"]);
+
+            Class hasSlack = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
+            if (!hasSlack.SlackName.Equals("%"))
+            {
+                SlackNotif(notif, hasSlack.SlackName);
+            }
 
 
             db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Name = name);
