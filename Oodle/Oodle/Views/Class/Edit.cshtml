@@ -9,17 +9,17 @@
     <form method="post" action="EditClass">
         <div>
             <label for="name">Name</label>
-            <input type="text" name="name" value="" />
+            <input type="text" name="name" value="@Model.Name" />
 
             <input type="hidden" name="classID" value=@Model.ClassID />
 
             <br />
 
             <label for="description">Description</label>
-            <textarea name="description" placeholder="Enter comments here..." value="@Model.Description"></textarea>
+            <textarea name="description" placeholder="Enter comments here..." value="">@Model.Description</textarea>
             <br />
             <label for="notification">Notification</label>
-            <textarea name="notification" placeholder="Enter notification here..." value="@Model.Notification"></textarea>
+            <textarea name="notification" placeholder="Enter notification here..." value="">@Model.Notification</textarea>
         </div>
         <div>
             <input type="submit" name="update" value="Submit" />
