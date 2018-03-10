@@ -288,6 +288,12 @@ namespace Oodle.Controllers
             return sName;
         }
 
+        private Boolean SlackNotif(string notif, string sName)
+        {
+
+            return false;
+        }
+
         /// <summary>
         /// Sends an http reqeust to slack api to create a private channel in the slack work space
         /// </summary>
