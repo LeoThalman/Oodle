@@ -10,17 +10,18 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Net;
 using System.IO;
+using System.Data.SqlClient;
+using System.Configuration;
 using System.Diagnostics;
-using System.Collections;
 
 namespace Oodle.Controllers
 {
+    [Authorize]
     public class TeachersController : Controller
     {
         // GET: Teachers
         private Model1 db = new Model1();
 
-        [Authorize]
         public ActionResult Index(int classID)
         {
             var idid = User.Identity.GetUserId();
@@ -37,8 +38,6 @@ namespace Oodle.Controllers
             return View("index", "_TeacherLayout", teacher);
         }
 
-
-        [Authorize]
         public ActionResult Accept(int classID, int userID)
         {
             db.UserRoleClasses.Where(i => i.UsersID == userID & i.ClassID == classID).ToList().ForEach(x => x.RoleID = 2);
@@ -53,8 +52,6 @@ namespace Oodle.Controllers
             return RedirectToAction("Index", new { classId = classID });
         }
 
-
-        [Authorize]
         public ActionResult Reject(int classID, int userID)
         {
             db.UserRoleClasses.Remove(db.UserRoleClasses.Where(i => i.UsersID == userID & i.ClassID == classID).FirstOrDefault());
@@ -63,8 +60,6 @@ namespace Oodle.Controllers
             return RedirectToAction("Index", new { classId = classID });
         }
 
-
-        [Authorize]
         public ActionResult Edit(int classID)
         {
             ViewBag.id = classID;
@@ -76,7 +71,6 @@ namespace Oodle.Controllers
             return View("Edit", "_TeacherLayout", teacher);
         }
 
-        [Authorize]
         public ActionResult EditClass()
         {
             ViewBag.RequestMethod = "POST";
@@ -95,7 +89,6 @@ namespace Oodle.Controllers
         }
 
 
-        [Authorize]
         public ActionResult Delete(int classID)
         {
             var list = db.UserRoleClasses.Where(i => i.ClassID == classID);
@@ -234,6 +227,112 @@ namespace Oodle.Controllers
 
 
             return View("CreateAssignment", teacher);
+        }
+
+
+
+        ////////////////////////////////////////////////////////////////
+
+
+        public ActionResult SubmissionView(int classID, int assignmentID)
+        {
+            var urcL = db.UserRoleClasses.Where(i => i.RoleID == 3 && i.ClassID == classID);
+            var list = new List<int>();
+
+            foreach (var i in urcL)
+            {
+                list.Add(i.UsersID);
+            }
+            var request = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
+
+            var teacher = new TeacherVM(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault(), request);
+
+            teacher.assignment = db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList();
+
+            teacher.documents = GetFiles(classID, assignmentID);
+
+            foreach (var s in teacher.documents)
+            {
+                Debug.WriteLine(s.UserID);
+            }
+
+            var students = db.Users.ToList();
+
+            students = students.Where(e => teacher.documents.Select(i => i.UserID).Contains(e.UsersID)).ToList();
+
+
+
+            foreach (var s in students)
+            {
+                Debug.WriteLine(s.UsersID);
+            }
+
+            teacher.users = students;
+
+            return View(teacher);
+        }
+        
+
+        [HttpPost]
+        public FileResult DownloadFile(int? fileId)
+        {
+            byte[] bytes;
+            string fileName, contentType;
+            string constr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                using (SqlCommand cmd = new SqlCommand())
+                {
+                    cmd.CommandText = "SELECT Name, Data, ContentType FROM Documents WHERE Id=@Id";
+                    cmd.Parameters.AddWithValue("@Id", fileId);
+                    cmd.Connection = con;
+                    con.Open();
+                    using (SqlDataReader sdr = cmd.ExecuteReader())
+                    {
+                        sdr.Read();
+                        bytes = (byte[])sdr["Data"];
+                        contentType = sdr["ContentType"].ToString();
+                        fileName = sdr["Name"].ToString();
+                    }
+                    con.Close();
+                }
+            }
+
+            return File(bytes, contentType, fileName);
+        }
+
+
+        private static List<Document> GetFiles(int classID, int assignmentID)
+        {
+            List<Document> files = new List<Document>();
+            string constr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                using (SqlCommand cmd = new SqlCommand())
+                {
+
+                    cmd.CommandText = "SELECT Id, Name, UserID FROM Documents WHERE ClassID=@classID AND AssignmentID=@assignmentID";
+                    cmd.Parameters.AddWithValue("@classID", classID);
+                    cmd.Parameters.AddWithValue("@assignmentID", assignmentID);
+
+                    cmd.Connection = con;
+                    con.Open();
+                    using (SqlDataReader sdr = cmd.ExecuteReader())
+                    {
+                        while (sdr.Read())
+                        {
+                            files.Add(new Document
+                            {
+                                Id = Convert.ToInt32(sdr["Id"]),
+                                Name = sdr["Name"].ToString(),
+                                UserID = Convert.ToInt32(sdr["UserID"])
+                            });
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return files;
         }
 
 
