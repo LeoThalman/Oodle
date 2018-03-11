@@ -1,6 +1,6 @@
-﻿
-DROP TABLE dbo.Questions;
+﻿DROP TABLE dbo.Questions;
 DROP TABLE dbo.Grades;
+DROP TABLE dbo.Documents;
 DROP TABLE dbo.Assignment;
 DROP TABLE dbo.UserRoleClass;
 DROP TABLE dbo.Role;
@@ -13,6 +13,7 @@ DROP TABLE [dbo].[AspNetUserLogins];
 DROP TABLE [dbo].[AspNetUserClaims];
 DROP TABLE [dbo].[AspNetRoles];
 DROP TABLE [dbo].[AspNetUsers];
+
 
 
 /****** Object:  Table [dbo].[AspNetRoles] ******/
@@ -200,6 +201,7 @@ CREATE TABLE dbo.Class
 	Name	NVARCHAR(128) NOT NULL,
 	Description NVARCHAR(256) NOT NULL,
 	SlackName NVARCHAR(20) NULL,
+	Notification NVARCHAR(256) NULL,
 	CONSTRAINT [PK_dbo.Class] PRIMARY KEY CLUSTERED (ClassID ASC),
 	CONSTRAINT [FK_dbo.Class_dbo.UsersID] FOREIGN KEY ([UsersID]) REFERENCES [dbo].[Users] ([UsersID])
 );
@@ -267,8 +269,6 @@ CREATE TABLE dbo.Questions
 	CONSTRAINT [FK_dbo.Questions_dbo.AssignmentID] FOREIGN KEY ([AssignmentID]) REFERENCES [dbo].[Assignment] ([AssignmentID])
 );
 
-
-DROP TABLE dbo.Documents;
 
 CREATE TABLE dbo.Documents(  
     Id INT IDENTITY(1,1) NOT NULL,  

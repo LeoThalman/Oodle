@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
+using Newtonsoft.Json.Linq;
 using Oodle.Models;
 using Oodle.Models.ViewModels;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using System.Net;
-using System.IO;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text.RegularExpressions;
+using System.Web.Mvc;
 
 namespace Oodle.Controllers
 {
@@ -20,6 +19,7 @@ namespace Oodle.Controllers
 
         //Slack token to allow creating and joining classes
         private string SlackToken = System.Web.Configuration.WebConfigurationManager.AppSettings["SlackToken"];
+        private string SlackBot = System.Web.Configuration.WebConfigurationManager.AppSettings["SlackBot"];
 
 
         // GET: Class
@@ -39,15 +39,15 @@ namespace Oodle.Controllers
             }
 
             else if (urc.RoleID == 0) {
-                return RedirectToAction("Index", "Teachers", new { classId = classID });
+                return RedirectToAction("Teacher", new { classId = classID });
             }
             else if (urc.RoleID == 1)
             {
-                return RedirectToAction("Index", "Graders", new { classId = classID });
+                return RedirectToAction("Grader", new { classId = classID });
             }
             else if (urc.RoleID == 2)
             {
-                return RedirectToAction("Index", "Students", new { classId = classID });
+                return RedirectToAction("Student", new { classId = classID });
             }
             else
             {
@@ -55,7 +55,63 @@ namespace Oodle.Controllers
             }
         }
 
+        [Authorize]
+        public ActionResult Teacher(int classID)
+        {
+            var idid = User.Identity.GetUserId();
 
+            User user = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault();
+            UserRoleClass urc = db.UserRoleClasses.Where(s => s.UsersID == user.UsersID && s.ClassID == classID).FirstOrDefault();
+
+            if (urc == null || urc.RoleID != 0)
+            {
+                return RedirectToAction("Index", new { classId = classID });
+            }
+
+            var urcL = db.UserRoleClasses.Where(i => i.RoleID == 3 && i.ClassID == classID);
+            var list = new List<int>();
+
+            foreach (var i in urcL) 
+            {
+                list.Add(i.UsersID);
+            }
+
+            var request = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
+
+            var teacher = new TeacherVM(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault(), request);
+            
+            return View(teacher);
+        }
+
+        [Authorize]
+        public ActionResult Grader(int classID)
+        {
+            var idid = User.Identity.GetUserId();
+
+            User user = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault();
+            UserRoleClass urc = db.UserRoleClasses.Where(s => s.UsersID == user.UsersID && s.ClassID == classID).FirstOrDefault();
+
+            if (urc == null || urc.RoleID != 1)
+            {
+                return RedirectToAction("Index", new { classId = classID });
+            }
+            return View(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault());
+        }
+
+        [Authorize]
+        public ActionResult Student(int classID)
+        {
+            var idid = User.Identity.GetUserId();
+
+            User user = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault();
+            UserRoleClass urc = db.UserRoleClasses.Where(s => s.UsersID == user.UsersID && s.ClassID == classID).FirstOrDefault();
+
+            if (urc == null || urc.RoleID != 2)
+            {
+                return RedirectToAction("Index", new { classId = classID });
+            }
+            return View(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault());
+        }
 
         [Authorize]
         public ActionResult Pending(int classID)
@@ -82,7 +138,6 @@ namespace Oodle.Controllers
         {
             return View();
         }
-
 
         [Authorize]
         public ActionResult Accept(int classID, int userID)
@@ -111,7 +166,14 @@ namespace Oodle.Controllers
             return RedirectToAction("Teacher", new { classId = classID });
         }
 
+        [Authorize]
+        public ActionResult Reject(int classID, int userID)
+        {
+            db.UserRoleClasses.Remove(db.UserRoleClasses.Where(i => i.UsersID == userID & i.ClassID == classID).FirstOrDefault());
+            db.SaveChanges();
 
+            return RedirectToAction("Teacher", new { classId = classID });
+        }
 
 
         [HttpPost]
@@ -134,6 +196,7 @@ namespace Oodle.Controllers
             //slack channel name, if no channel/name is taken leave as "%"
             //otherwise gets renamed to the new slackchannel name
             string sName = "%";
+            string tempName = Request.Form["slackName"];
             
             //check if there is a slack token, if not don't run slack methods
             if (!(SlackToken == null))
@@ -144,8 +207,13 @@ namespace Oodle.Controllers
                 {
                     if (IsOnSlack(user.Email))
                     {
+                        if (tempName.Equals(""))
+                        {
+                            //alter class name to match slack naming conventions
+                            tempName = ValidateSlackName(name);
+                        }
                         //create a slack channel for this class
-                        sName = CreateChannel(name);
+                        sName = CreateChannel(tempName);
                         //join created slack channel
                         if (!sName.Equals("%"))
                         {
@@ -168,13 +236,11 @@ namespace Oodle.Controllers
             cl.Description = desc;
             cl.SlackName = sName;
 
+            var urc = new UserRoleClass();
 
 
             db.Classes.Add(cl);
             db.SaveChanges();
-
-            var urc = new UserRoleClass();
-
 
             urc.UsersID = user.UsersID;
             urc.ClassID = cl.ClassID;
@@ -203,11 +269,61 @@ namespace Oodle.Controllers
             reader.Close();
             resp.Close();
             dataStream.Close();
-
             JObject userID = JObject.Parse(slackData);
             Boolean onSlack = Convert.ToBoolean(userID["ok"].ToString());
             Debug.WriteLine("User Email is On Slack: " + onSlack);
             return onSlack;
+        }
+
+        private string ValidateSlackName(string name)
+        {
+            string sName = name.ToLower();
+            sName = Regex.Replace(sName, @"[\s]+", "-");
+            sName = Regex.Replace(sName, @"[^a-z0-9-_]+", "_");
+            if ( sName.Length > 21)
+            {
+                sName = sName.Remove(21);
+            }
+            return sName;
+        }
+
+        private void SlackNotif(string notif, string sName)
+        {
+            string cID = GetChannelId(sName);
+            notif = Regex.Replace(notif, @"[\s]+", "%20");
+
+            string surl = "https://slack.com/api/chat.postMessage?token=" + SlackBot +"&channel="+ cID +"&as_user=true"+ "&text=" + notif + "&pretty=1";
+            //Send method request to Slack
+            WebRequest request = WebRequest.Create(surl);
+            HttpWebResponse resp = (HttpWebResponse)request.GetResponse();
+            Stream dataStream = resp.GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+
+            //Convert Slack method response to readable string
+            string slackData = reader.ReadToEnd();
+            Debug.WriteLine(slackData);
+            //Close open requests
+            reader.Close();
+            resp.Close();
+            dataStream.Close();
+            JObject message = JObject.Parse(slackData);
+            PinMessage(message["ts"].ToString(), message["channel"].ToString());
+        }
+
+        private void PinMessage(string time, string channel)
+        {
+            string surl = "https://slack.com/api/pins.add?token=" + SlackBot + "&channel=" + channel + "&timestamp=" + time + "&pretty=1";
+            //Send method request to Slack
+            WebRequest request = WebRequest.Create(surl);
+            HttpWebResponse resp = (HttpWebResponse)request.GetResponse();
+            Stream dataStream = resp.GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+            string slackData = reader.ReadToEnd();
+            Debug.WriteLine(slackData);
+            //Close open requests
+            reader.Close();
+            resp.Close();
+            dataStream.Close();
         }
 
         /// <summary>
@@ -239,6 +355,7 @@ namespace Oodle.Controllers
             if (Convert.ToBoolean(channel["ok"].ToString()))
             {
                 name = channel["group"]["name"].ToString();
+                AddBot(name);
             }
 
             return name;
@@ -264,6 +381,48 @@ namespace Oodle.Controllers
             reader.Close();
             resp.Close();
             dataStream.Close();
+        }
+
+        private void AddBot(string className)
+        {
+            String cid = GetChannelId(className);
+            string uid = GetSlackBotID();
+            string qurl = "https://slack.com/api/groups.invite?token=" + SlackToken + "&channel=" + cid + "&user=" + uid + "&pretty=1";
+            WebRequest request = WebRequest.Create(qurl);
+            HttpWebResponse resp = (HttpWebResponse)request.GetResponse();
+            Stream dataStream = resp.GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+            string slackData = reader.ReadToEnd();
+            reader.Close();
+            resp.Close();
+            dataStream.Close();
+        }
+
+        private string GetSlackBotID()
+        {
+            string surl = "https://slack.com/api/users.list?token=" + SlackToken + "&pretty=1";
+            WebRequest request = WebRequest.Create(surl);
+            HttpWebResponse resp = (HttpWebResponse)request.GetResponse();
+            Stream dataStream = resp.GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+            string slackData = reader.ReadToEnd();
+            reader.Close();
+            resp.Close();
+            dataStream.Close();
+
+            string id = "";
+            JObject users = JObject.Parse(slackData);
+            IList<JToken> cData = users["members"].Children().ToList();
+            foreach (JToken temp in cData)
+            {
+                SlackBot bTemp = temp.ToObject<SlackBot>();
+                if (Convert.ToBoolean(bTemp.is_bot))
+                {
+                    id = bTemp.id;
+                    Debug.WriteLine(id);
+                }
+            }
+            return id;
         }
 
         /// <summary>
@@ -322,8 +481,6 @@ namespace Oodle.Controllers
             }
             return id;
         }
-    
-
 
         [Authorize]
         public ActionResult Join(int classID){
@@ -340,6 +497,63 @@ namespace Oodle.Controllers
             db.SaveChanges();
 
             return RedirectToAction("Pending", new { classId = classID });
+        }
+
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        [Authorize]
+        public ActionResult Edit(int classID)
+        {
+            ViewBag.id = classID;
+            Class temp = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
+            return View(temp);
+        }
+
+        [Authorize]
+        public ActionResult EditClass()
+        {
+            ViewBag.RequestMethod = "POST";
+
+            string name = Request.Form["name"];
+            string desc = Request.Form["description"];
+            string notif = Request.Form["notification"];
+            int classID = int.Parse(Request.Form["classID"]);
+
+            Class hasSlack = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
+            if (!hasSlack.SlackName.Equals("%"))
+            {
+                if (!notif.Equals(hasSlack.Notification))
+                { 
+                    SlackNotif(notif, hasSlack.SlackName);
+                }
+            }
+
+
+            db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Name = name);
+            db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Description = desc);
+            db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Notification = notif);
+
+            db.SaveChanges();
+
+            return RedirectToAction("Teacher", new { classId = classID });
+        }
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        [Authorize]
+        public ActionResult Delete(int classID)
+        {
+            var list = db.UserRoleClasses.Where(i => i.ClassID == classID);
+            foreach (var i in list)
+            {
+                db.UserRoleClasses.Remove(i);
+            }
+            
+            db.Classes.Remove(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault());
+
+            db.SaveChanges();
+
+            return RedirectToAction("List");
         }
     }
 }
