@@ -11,19 +11,19 @@
     <form method="post" action="CreateAssignmentAction">
         <div>
             <label for="name">Name</label>
-            <input type="text" name="name" value="" />
+            <input type="text" name="name" value="" required />
             <input type="hidden" name="classID" value="@Model.cl.ClassID" />
             <br />
 
 
             <label for="description">Description</label>
-            <textarea name="description" placeholder="Enter comments here..."></textarea>
+            <textarea name="description" placeholder="Enter comments here..." required></textarea>
 
             <label for="startDate">Start Date</label>
-            <input type="datetime-local" name="startDate" />
+            <input type="datetime" name="startDate" value="@DateTime.Now" required />
 
             <label for="dueDate">Due Date</label>
-            <input type="datetime-local" name="dueDate" />
+            <input type="datetime" name="dueDate" value="@DateTime.Now" required />
             
         </div>
         <div>
