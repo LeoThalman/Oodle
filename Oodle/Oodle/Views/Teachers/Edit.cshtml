@@ -10,14 +10,17 @@
     <form method="post" action="EditClass">
         <div>
             <label for="name">Name</label>
-            <input type="text" name="name" value="" />
+            <input type="text" name="name" value="@Model.cl.Name" />
 
-            <input type="hidden" name="classID" value=@ViewBag.id />
+            <input type="hidden" name="classID" value=@Model.cl.ClassID />
 
             <br />
 
             <label for="description">Description</label>
-            <textarea name="description" placeholder="Enter comments here..."></textarea>
+            <textarea name="description" placeholder="Enter comments here..." value="">@Model.cl.Description</textarea>
+            <br />
+            <label for="notification">Notification</label>
+            <textarea name="notification" placeholder="Enter notification here..." value="">@Model.cl.Notification</textarea>
         </div>
         <div>
             <input type="submit" name="update" value="Submit" />
