@@ -32,7 +32,6 @@ namespace Oodle.Models
         [Required]
         [StringLength(128)]
         public string Email { get; set; }
-
         
         public byte[] Icon { get; set; }
 

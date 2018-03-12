@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using Oodle.Models;
 
 namespace Oodle.Controllers
@@ -17,7 +18,9 @@ namespace Oodle.Controllers
         // GET: Users
         public ActionResult Index()
         {
-            var users = db.Users.Include(u => u.AspNetUser);
+            var idid = User.Identity.GetUserId();
+            var users = db.Users.Where(a => a.IdentityID == idid);
+
             return View(users.ToList());
         }
 
@@ -33,6 +36,8 @@ namespace Oodle.Controllers
             {
                 return HttpNotFound();
             }
+
+
             return View(user);
         }
 
@@ -82,7 +87,7 @@ namespace Oodle.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "UsersID,IdentityID,FirstName,Lastname,Email,Icon,Bio,UserName")] User user)
+        public ActionResult Edit([Bind(Include = "UsersID,IdentityID,FirstName,Lastname,Email,Bio,UserName")] User user)
         {
             if (ModelState.IsValid)
             {

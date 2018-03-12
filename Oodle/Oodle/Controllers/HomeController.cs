@@ -20,6 +20,13 @@ namespace Oodle.Controllers
             return View();
         }
 
-  
+
+        public ActionResult Tools()
+        {
+
+            return View();
+        }
+
+
     }
 }
