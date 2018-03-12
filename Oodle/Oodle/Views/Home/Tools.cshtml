@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Oodle.Models.User>
+
+@{
+    ViewBag.Title = "Tools";
+}
+
+
+
+<link rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="/Scripts/stylestools.css" />
+
+
+
+<div class="wrapper">
+    <h1>Some tools for you to use!</h1>
+
+    <h3>Need to edit your information?</h3>
+    @Html.ActionLink("Edit your Info", "Index", "Users1", routeValues: null, htmlAttributes: new {@class = "btn btn-info" })
+
+    <hr />
+    <h1>Grade Calculator</h1>
+
+    <div class="directions">Input your grades that you expect to get separated by commas:</div>
+
+    <input id="yourgrades" type="text" />
+    <input id="submitbutton" type="button" value="Calculate" onClick="submit();" />
+
+    <p>Your grades from high to low:</p>
+    <div id="grades"></div>
+
+    <p>Your average grade is:</p>
+    <div id="avg_grades"></div>
+
+    <p>Your final grade is:</p>
+    <div id="final_grade"></div>
+
+</div>
+
+<div class="wrapper">
+    <h2>Have programming homework and need a Ubuntu instance to use? Oodle provides free of charge Ubuntu command lines VIA SSH:</h2>
+
+    <h3>UBUNTU BASIC: </h3>
+    <a href="https://87ri5c4jyc.execute-api.us-west-2.amazonaws.com/prod/ubuntuServerNonRoot">
+        <img src="/Content/img/ubuntu.png" alt="Ubuntu Logo" style="width:120px;height:120px;border:0">
+    </a>
+
+</div>
+<!--
+<div class="wrapper">
+    <h2>Calculate what you need on your final in order to pass the class!</h2>
+    <div class="form-group">
+        <label for="curGrade">Current Grade:</label>
+        <input type="text" class="form-control" id="curGrade">
+    </div>
+    <div class="form-group">
+        <label for="aimGrade">Goal Grade:</label>
+        <input type="text" class="form-control" id="aimGrade">
+
+    </div>
+    <div class="form-group">
+        <label for="finalWorth">Final is worth:</label>
+        <input type="text" class="form-control" id="finalWorth">
+    </div>
+    <input type="button" name="clickbtn" value="Display Result" onclick="gradefinals()">
+
+    <h1 id="answer3"></h1>
+
+
+
+</div>
+    -->
+
+@section scripts
+    {
+    <script type="text/javascript" src="~/Scripts/scriptone.js"></script>
+}

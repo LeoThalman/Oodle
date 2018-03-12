@@ -198,6 +198,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\StudentsController.cs" />
     <Compile Include="Controllers\TeachersController.cs" />
+    <Compile Include="Controllers\Users1Controller.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -238,6 +239,7 @@
     <Content Include="App_Data\UpScript.sql" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\img\ubuntu.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -260,6 +262,7 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\scriptone.js" />
     <Content Include="Scripts\stylesMain.css" />
+    <Content Include="Scripts\stylestools.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -334,6 +337,11 @@
     <Content Include="Views\Teachers\EditAssignment.cshtml" />
     <Content Include="Views\Students\AssignmentTurnIn.cshtml" />
     <Content Include="Views\Teachers\SubmissionView.cshtml" />
+    <Content Include="Views\Home\Tools.cshtml" />
+    <Content Include="Views\Users1\Delete.cshtml" />
+    <Content Include="Views\Users1\Details.cshtml" />
+    <Content Include="Views\Users1\Edit.cshtml" />
+    <Content Include="Views\Users1\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
