@@ -8,8 +8,17 @@
 
 <h2>Student</h2>
 
-<div>
-    @Html.DisplayFor(Description => Model.cl.Description)
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            @Html.DisplayNameFor(Description => Model.cl.Description):
+            @Html.DisplayFor(Description => Model.cl.Description)
+        </div>
+        <div class="col-sm-6">
+            @Html.DisplayNameFor(Notification => Model.cl.Notification):
+            @Html.DisplayFor(Notification => Model.cl.Notification)
+        </div>
+    </div>
 </div>
 
 

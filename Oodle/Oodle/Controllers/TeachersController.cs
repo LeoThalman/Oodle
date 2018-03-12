@@ -13,12 +13,18 @@ using System.IO;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace Oodle.Controllers
 {
+
     [Authorize]
     public class TeachersController : Controller
     {
+        //Slack tokens
+        private string SlackToken = System.Web.Configuration.WebConfigurationManager.AppSettings["SlackToken"];
+        private string SlackBot = System.Web.Configuration.WebConfigurationManager.AppSettings["SlackBot"];
+
         // GET: Teachers
         private Model1 db = new Model1();
 
@@ -77,17 +83,127 @@ namespace Oodle.Controllers
 
             string name = Request.Form["name"];
             string desc = Request.Form["description"];
+            string notif = Request.Form["notification"];
             int classID = int.Parse(Request.Form["classID"]);
+
+            Class hasSlack = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
+            if (!hasSlack.SlackName.Equals("%"))
+            {
+                if (!notif.Equals(hasSlack.Notification))
+                {
+                    SlackNotif(notif, hasSlack.SlackName);
+                }
+            }
+
 
 
             db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Name = name);
             db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Description = desc);
+            db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Notification = notif);
 
             db.SaveChanges();
 
             return RedirectToAction("Index", new { classId = classID });
         }
 
+        private string GetSlackBotID()
+        {
+            string surl = "https://slack.com/api/users.list?token=" + SlackToken + "&pretty=1";
+            WebRequest request = WebRequest.Create(surl);
+            HttpWebResponse resp = (HttpWebResponse)request.GetResponse();
+            Stream dataStream = resp.GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+            string slackData = reader.ReadToEnd();
+            reader.Close();
+            resp.Close();
+            dataStream.Close();
+
+            string id = "";
+            JObject users = JObject.Parse(slackData);
+            IList<JToken> cData = users["members"].Children().ToList();
+            foreach (JToken temp in cData)
+            {
+                SlackBot bTemp = temp.ToObject<SlackBot>();
+                if (Convert.ToBoolean(bTemp.is_bot))
+                {
+                    id = bTemp.id;
+                    Debug.WriteLine(id);
+                }
+            }
+            return id;
+        }
+
+        private void SlackNotif(string notif, string sName)
+        {
+            string cID = GetChannelId(sName);
+            notif = Regex.Replace(notif, @"[\s]+", "%20");
+
+            string surl = "https://slack.com/api/chat.postMessage?token=" + SlackBot + "&channel=" + cID + "&as_user=true" + "&text=" + notif + "&pretty=1";
+            //Send method request to Slack
+            WebRequest request = WebRequest.Create(surl);
+            HttpWebResponse resp = (HttpWebResponse)request.GetResponse();
+            Stream dataStream = resp.GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+
+            //Convert Slack method response to readable string
+            string slackData = reader.ReadToEnd();
+            Debug.WriteLine(slackData);
+            //Close open requests
+            reader.Close();
+            resp.Close();
+            dataStream.Close();
+            JObject message = JObject.Parse(slackData);
+            PinMessage(message["ts"].ToString(), message["channel"].ToString());
+        }
+
+        /// <summary>
+        /// Sends an http reqeust to slack api to get channel ID based on class name
+        /// </summary>
+        /// <param name="className">name of class/channel</param>
+        /// <returns>ID of channel</returns>
+        [Authorize]
+        private string GetChannelId(string className)
+        {
+
+            string surl = "https://slack.com/api/groups.list?token=" + SlackToken + "&pretty=1";
+            WebRequest request = WebRequest.Create(surl);
+            HttpWebResponse resp = (HttpWebResponse)request.GetResponse();
+            Stream dataStream = resp.GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+            string slackData = reader.ReadToEnd();
+            reader.Close();
+            resp.Close();
+            dataStream.Close();
+
+            string id = "";
+            JObject channels = JObject.Parse(slackData);
+            IList<JToken> cData = channels["groups"].Children().ToList();
+            foreach (JToken temp in cData)
+            {
+                ChannelID cTemp = temp.ToObject<ChannelID>();
+                if (cTemp.name.Equals(className.ToLower()))
+                {
+                    id = cTemp.id;
+                }
+            }
+            return id;
+        }
+
+        private void PinMessage(string time, string channel)
+        {
+            string surl = "https://slack.com/api/pins.add?token=" + SlackBot + "&channel=" + channel + "&timestamp=" + time + "&pretty=1";
+            //Send method request to Slack
+            WebRequest request = WebRequest.Create(surl);
+            HttpWebResponse resp = (HttpWebResponse)request.GetResponse();
+            Stream dataStream = resp.GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+            string slackData = reader.ReadToEnd();
+            Debug.WriteLine(slackData);
+            //Close open requests
+            reader.Close();
+            resp.Close();
+            dataStream.Close();
+        }
 
         public ActionResult Delete(int classID)
         {
