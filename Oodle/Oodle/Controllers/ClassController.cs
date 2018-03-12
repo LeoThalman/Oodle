@@ -38,16 +38,17 @@ namespace Oodle.Controllers
 
             }
 
-            else if (urc.RoleID == 0) {
-                return RedirectToAction("Teacher", new { classId = classID });
+            else if (urc.RoleID == 0)
+            {
+                return RedirectToAction("Index", "Teachers", new { classId = classID });
             }
             else if (urc.RoleID == 1)
             {
-                return RedirectToAction("Grader", new { classId = classID });
+                return RedirectToAction("Index", "Graders", new { classId = classID });
             }
             else if (urc.RoleID == 2)
             {
-                return RedirectToAction("Student", new { classId = classID });
+                return RedirectToAction("Index", "Students", new { classId = classID });
             }
             else
             {
