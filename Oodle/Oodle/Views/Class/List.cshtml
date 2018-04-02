@@ -7,30 +7,41 @@
 
 
 
+<div id="classListBody">
 
-<h2>Classes</h2>
 
-<a class="button2" href="@Url.Action("Create", "Class")">
-    Create a Class
-</a>
-<br />
+    <h2 style="text-align:center;">
+        Want to teach a class?
+    </h2>
+    <a id="buttonAncor" class="createClassButton btn btn-info" type="button" href="@Url.Action("Create", "Class")">
+        Create a new class
+    </a>
 
-<div>
-    @foreach (var i in Model)
-    {
-        <div class="row, block">
-            <a href="@Url.Action("Index", "Class", new { ClassID = (i.ClassID) })">
-                <div class="classItem">
-                    <div class="title">
-                        @Html.DisplayFor(Name => i.Name)
+    <h2 style="text-align:center;">
+        All Current Classes: <br />
+
+    </h2>
+
+
+
+    <div>
+        @foreach (var i in Model)
+        {
+            <div class="block">
+                <a href="@Url.Action("Index", "Class", new { ClassID = (i.ClassID) })">
+                    <div class="classItem">
+                        <div class="title">
+                            @Html.DisplayFor(Name => i.Name)
+                        </div>
+                        <div class="description">
+                            @Html.DisplayFor(Description => i.Description)
+                        </div>
                     </div>
-                    <div class="description">
-                        @Html.DisplayFor(Description => i.Description)
-                    </div>
-                </div>
-            </a>
-        </div>
-        <br />
-        <br />
-    }
+                </a>
+            </div>
+            <br />
+            <br />
+        }
+    </div>
+
 </div>

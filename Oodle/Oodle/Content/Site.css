@@ -1,4 +1,5 @@
 ﻿body {
+    font-family: 'Ubuntu', sans-serif;
     padding-top: 50px;
     padding-bottom: 20px;
 }
@@ -23,40 +24,9 @@ textarea {
     max-width: 280px;
 }
 
-.classItem {
-    position: relative;
-    background-color: #84CEEB;
-}
 
-.button2 {
-    padding: 10px, 10px, 10px, 10px;
-    color: black;
-    background-color: #84CEEB;
-}
 
-.button2:hover {
-    padding: 10px, 10px, 10px, 10px;
-    color: black;
-    background-color: #94CEEB;
-}
 
-.classItem:hover {
-    position: relative;
-    background-color: #94CEEB;
-}
-
-.title {
-    color: black;
-    padding-left: 15px;
-    padding-right: 15px;
-    height: 30px;
-    font-size: x-large;
-}
-
-.block {
-    width: 500px;
-    height: 90px;
-}
 
 .sidebar {
     width: 20%;
@@ -68,13 +38,7 @@ textarea {
     width: 80%;
 }
 
-.description {
-    padding-left: 5px;
-    padding-right: 5px;
-    color: black;
-    height: 80px;
-    font-size: small;
-}
+
 
 .dateLeft {
     position: absolute;
