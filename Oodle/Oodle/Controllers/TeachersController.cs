@@ -17,7 +17,6 @@ using System.Text.RegularExpressions;
 
 namespace Oodle.Controllers
 {
-
     [Authorize]
     public class TeachersController : Controller
     {
@@ -28,7 +27,7 @@ namespace Oodle.Controllers
         // GET: Teachers
         private Model1 db = new Model1();
 
-        public ActionResult Index(int classID)
+        public ActionResult test(int classID)
         {
             var idid = User.Identity.GetUserId();
 
@@ -39,6 +38,16 @@ namespace Oodle.Controllers
             {
                 return RedirectToAction("Index", "Class", new { classId = classID });
             }
+            return null;
+        }
+
+
+        public ActionResult Index(int classID)
+        {
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
             var teacher = getTVM(classID);
 
             return View("index", "_TeacherLayout", teacher);
@@ -46,6 +55,12 @@ namespace Oodle.Controllers
 
         public ActionResult Accept(int classID, int userID)
         {
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+
+
             db.UserRoleClasses.Where(i => i.UsersID == userID & i.ClassID == classID).ToList().ForEach(x => x.RoleID = 2);
             db.SaveChanges();
 
@@ -60,6 +75,12 @@ namespace Oodle.Controllers
 
         public ActionResult Reject(int classID, int userID)
         {
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+
+
             db.UserRoleClasses.Remove(db.UserRoleClasses.Where(i => i.UsersID == userID & i.ClassID == classID).FirstOrDefault());
             db.SaveChanges();
 
@@ -68,9 +89,13 @@ namespace Oodle.Controllers
 
         public ActionResult Edit(int classID)
         {
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+
+
             ViewBag.id = classID;
-
-
 
             var teacher = getTVM(classID);
 
@@ -93,6 +118,11 @@ namespace Oodle.Controllers
                 {
                     SlackNotif(notif, hasSlack.SlackName);
                 }
+            }
+
+            if (test(classID) != null)
+            {
+                return test(classID);
             }
 
 
@@ -207,6 +237,12 @@ namespace Oodle.Controllers
 
         public ActionResult Delete(int classID)
         {
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+
+
             var list = db.UserRoleClasses.Where(i => i.ClassID == classID);
             foreach (var i in list)
             {
@@ -273,6 +309,11 @@ namespace Oodle.Controllers
 
             int classID = int.Parse(id);
 
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+
 
             var assi = new Assignment();
 
@@ -281,6 +322,7 @@ namespace Oodle.Controllers
             assi.ClassID = classID;
             assi.StartDate = DateTime.Parse(startDate);
             assi.DueDate = DateTime.Parse(dueDate);
+
 
             db.Assignments.Add(assi);
             db.SaveChanges();
@@ -293,6 +335,12 @@ namespace Oodle.Controllers
 
         public ActionResult EditAssignment(int classID, int assignmentID)
         {
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+
+
             var urcL = db.UserRoleClasses.Where(i => i.RoleID == 3 && i.ClassID == classID);
             var list = new List<int>();
 
@@ -323,6 +371,11 @@ namespace Oodle.Controllers
             int assignmentID = int.Parse(assiID);
             int classID = int.Parse(id);
 
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+
 
             db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList().ForEach(x => x.Name = name);
             db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList().ForEach(x => x.Description = desc);
@@ -352,6 +405,12 @@ namespace Oodle.Controllers
 
         public ActionResult SubmissionView(int classID, int assignmentID)
         {
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+
+
             var urcL = db.UserRoleClasses.Where(i => i.RoleID == 3 && i.ClassID == classID);
             var list = new List<int>();
 
