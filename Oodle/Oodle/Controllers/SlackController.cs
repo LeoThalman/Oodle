@@ -19,6 +19,16 @@ namespace Oodle.Controllers
         private string SlackToken = System.Web.Configuration.WebConfigurationManager.AppSettings["SlackToken"];
         private string SlackBot = System.Web.Configuration.WebConfigurationManager.AppSettings["SlackBot"];
 
+        public Boolean HasToken()
+        {
+            return (!(SlackToken == null));
+        }
+
+        public Boolean HasBot()
+        {
+            return (!(SlackBot == null));
+        }
+
         private string GetData(string method, string parameters)
         {
             string surl = "https://slack.com/api/" + method + "?token=" + SlackToken + parameters + "&pretty=1";
@@ -58,7 +68,7 @@ namespace Oodle.Controllers
         /// </summary>
         /// <param name="email">email of user to check</param>
         /// <returns>true if user is on slack, false if not</returns>
-        private Boolean IsOnSlack(string email)
+        public Boolean IsOnSlack(string email)
         {
             string slackData = GetData("users.lookupByEmail" , "&email=" + email);
 
@@ -68,7 +78,7 @@ namespace Oodle.Controllers
             return onSlack;
         }
 
-        private string ValidateSlackName(string name)
+        public string ValidateSlackName(string name)
         {
             string sName = name.ToLower();
             sName = Regex.Replace(sName, @"[\s]+", "-");
@@ -80,7 +90,7 @@ namespace Oodle.Controllers
             return sName;
         }
 
-        private void SlackNotif(string notif, string sName)
+        public void SlackNotif(string notif, string sName)
         {
             string cID = GetChannelId(sName);
             notif = Regex.Replace(notif, @"[\s]+", "%20");
@@ -101,7 +111,7 @@ namespace Oodle.Controllers
         /// </summary>
         /// <param name="className">Name of class/channel</param>
         [Authorize]
-        private string CreateChannel(string className)
+        public string CreateChannel(string className)
         {
             //url to query Slack to create a private channel. Slack Token authorizes method and identifies slack workspace.
             //className is the name of the private channel
@@ -126,7 +136,7 @@ namespace Oodle.Controllers
         /// <param name="email">email of user trying to join a slack private channel</param>
         /// <param name="className">name of private to join</param>
         [Authorize]
-        private void JoinChannel(string email, string className)
+        public void JoinChannel(string email, string className)
         {
             String cid = GetChannelId(className);
             String uid = GetSlackUserId(email);
