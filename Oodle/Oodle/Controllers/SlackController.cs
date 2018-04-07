@@ -22,43 +22,29 @@ namespace Oodle.Controllers
         public Boolean HasToken()
         {
             return (!(SlackToken == null));
-        }
+        } 
 
         public Boolean HasBot()
         {
             return (!(SlackBot == null));
         }
 
-        private string GetData(string method, string parameters)
+        private string GetData(string method, string parameters, Boolean isBot)
         {
-            string surl = "https://slack.com/api/" + method + "?token=" + SlackToken + parameters + "&pretty=1";
+            string token = SlackToken;
+            if (isBot)
+            {
+                token = SlackBot;
+            }
+            string surl = "https://slack.com/api/" + method + "?token=" + token + parameters + "&pretty=1";
             WebRequest request = WebRequest.Create(surl);
             HttpWebResponse resp = (HttpWebResponse)request.GetResponse();
             Stream dataStream = resp.GetResponseStream();
             StreamReader reader = new StreamReader(dataStream);
             string slackData = reader.ReadToEnd();
             reader.Close();
-            resp.Close();
             dataStream.Close();
-
-            return slackData;
-        }
-        private string BotData(string method, string parameters)
-        {
-            string surl = "https://slack.com/api/ "+ method +"?token=" + SlackBot + parameters + "&pretty=1";
-            //Send method request to Slack
-            WebRequest request = WebRequest.Create(surl);
-            HttpWebResponse resp = (HttpWebResponse)request.GetResponse();
-            Stream dataStream = resp.GetResponseStream();
-            StreamReader reader = new StreamReader(dataStream);
-
-            //Convert Slack method response to readable string
-            string slackData = reader.ReadToEnd();
-            Debug.WriteLine(slackData);
-            //Close open requests
-            reader.Close();
             resp.Close();
-            dataStream.Close();
 
             return slackData;
         }
@@ -70,7 +56,7 @@ namespace Oodle.Controllers
         /// <returns>true if user is on slack, false if not</returns>
         public Boolean IsOnSlack(string email)
         {
-            string slackData = GetData("users.lookupByEmail" , "&email=" + email);
+            string slackData = GetData("users.lookupByEmail" , "&email=" + email, false);
 
             JObject userID = JObject.Parse(slackData);
             Boolean onSlack = Convert.ToBoolean(userID["ok"].ToString());
@@ -95,7 +81,7 @@ namespace Oodle.Controllers
             string cID = GetChannelId(sName);
             notif = Regex.Replace(notif, @"[\s]+", "%20");
 
-            string slackData = BotData("chat.postMessage" , "&channel=" + cID + "&as_user=true" + "&text=" + notif);
+            string slackData = GetData("chat.postMessage" , "&channel=" + cID + "&as_user=true" + "&text=" + notif, true);
 
             JObject message = JObject.Parse(slackData);
             PinMessage(message["ts"].ToString(), message["channel"].ToString());
@@ -103,7 +89,7 @@ namespace Oodle.Controllers
 
         private void PinMessage(string time, string channel)
         {
-            string slackData = BotData("pins.add" , "&channel=" + channel + "&timestamp=" + time);
+            string slackData = GetData("pins.add" , "&channel=" + channel + "&timestamp=" + time, true);
         }
 
         /// <summary>
@@ -115,15 +101,26 @@ namespace Oodle.Controllers
         {
             //url to query Slack to create a private channel. Slack Token authorizes method and identifies slack workspace.
             //className is the name of the private channel
-            string slackData = GetData("groups.create" , "&name=" + className);
-
-            Debug.WriteLine(slackData);
-            JObject channel = JObject.Parse(slackData);
+            string slackData = null;
+            ChannelID archived = IsArchived(className);
             string name = "%";
-            if (Convert.ToBoolean(channel["ok"].ToString()))
+            if (archived != null)
             {
-                name = channel["group"]["name"].ToString();
+                slackData = GetData("groups.unarchive", "&channel=" + archived.id, false);
+                Debug.WriteLine("Archived Name is:" + archived.name);
+                name = archived.name;
                 AddBot(name);
+            }
+            else
+            {
+                slackData = GetData("groups.create", "&name=" + className, false);            
+
+                JObject channel = JObject.Parse(slackData);                
+                if (Convert.ToBoolean(channel["ok"].ToString()))
+                {
+                    name = channel["group"]["name"].ToString();
+                    AddBot(name);
+                }
             }
 
             return name;
@@ -140,19 +137,19 @@ namespace Oodle.Controllers
         {
             String cid = GetChannelId(className);
             String uid = GetSlackUserId(email);
-            string slackData = GetData("groups.invite" , "&channel=" + cid + "&user=" + uid);
+            string slackData = GetData("groups.invite" , "&channel=" + cid + "&user=" + uid, false);
         }
 
         private void AddBot(string className)
         {
             String cid = GetChannelId(className);
             string uid = GetSlackBotID();
-            string slackData = GetData("groups.invite" , "&channel=" + cid + "&user=" + uid);
+            string slackData = GetData("groups.invite" , "&channel=" + cid + "&user=" + uid, false);
         }
 
         private string GetSlackBotID()
         {
-            string slackData = GetData("users.list" , "");  
+            string slackData = GetData("users.list" , "", false);  
 
             string id = "";
             JObject users = JObject.Parse(slackData);
@@ -177,7 +174,7 @@ namespace Oodle.Controllers
         [Authorize]
         private string GetSlackUserId(string email)
         {
-            string slackData = GetData("users.lookupByEmail" , "&email=" + email);
+            string slackData = GetData("users.lookupByEmail" , "&email=" + email, false);
 
             JObject userID = JObject.Parse(slackData);
             string id = "";
@@ -193,8 +190,7 @@ namespace Oodle.Controllers
         [Authorize]
         private string GetChannelId(string className)
         {
-
-            string slackData = GetData("groups.list" , "");
+            string slackData = GetData("groups.list" , "", false);
 
             string id = "";
             JObject channels = JObject.Parse(slackData);
@@ -208,6 +204,47 @@ namespace Oodle.Controllers
                 }
             }
             return id;
+        }
+
+        private ChannelID IsArchived(string className)
+        {
+            ChannelID rtn = null;
+            List<ChannelID> groups = GetArchivedChannels();
+            foreach (ChannelID channel in groups)
+            {
+                if (channel.name.Equals(className))
+                {
+                    rtn = channel;
+                }
+            }
+
+            return rtn;
+        }
+
+        private List<ChannelID> GetArchivedChannels()
+        {
+            string slackData = GetData("groups.list", "" , false);
+            List<ChannelID> groups = new List<ChannelID>();
+
+            JObject channels = JObject.Parse(slackData);
+            IList<JToken> cData = channels["groups"].Children().ToList();
+            foreach (JToken temp in cData)
+            {
+                ChannelID cTemp = temp.ToObject<ChannelID>();
+                if (Convert.ToBoolean(cTemp.is_archived.ToString()))
+                {
+                    groups.Add(cTemp);
+                }
+            }
+            return groups;
+        }
+
+        public void DeleteChannel(string name)
+        {
+            string id = GetChannelId(name);
+            string slackData = GetData("groups.archive", "&channel=" + id, false);
+            Debug.WriteLine(slackData);
+
         }
     }
 }

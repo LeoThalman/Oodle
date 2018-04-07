@@ -226,6 +226,8 @@ CREATE TABLE dbo.UserRoleClass
 	CONSTRAINT [FK_dbo.UserRoleClass_dbo.UserID] FOREIGN KEY ([UsersID]) REFERENCES [dbo].[Users] ([UsersID]),
 	--CONSTRAINT [FK_dbo.UserRoleClass_dbo.RoleID] FOREIGN KEY ([RoleID]) REFERENCES [dbo].[Role] ([RoleID]),
 	CONSTRAINT [FK_dbo.UserRoleClass_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
+	ON DELETE CASCADE
+	ON UPDATE CASCADE
 );
 
 
@@ -268,7 +270,6 @@ CREATE TABLE dbo.Questions
 	CONSTRAINT [PK_dbo.Questions] PRIMARY KEY CLUSTERED (QuestionsID ASC),
 	CONSTRAINT [FK_dbo.Questions_dbo.AssignmentID] FOREIGN KEY ([AssignmentID]) REFERENCES [dbo].[Assignment] ([AssignmentID])
 );
-
 
 CREATE TABLE dbo.Documents(  
     Id INT IDENTITY(1,1) NOT NULL,  
