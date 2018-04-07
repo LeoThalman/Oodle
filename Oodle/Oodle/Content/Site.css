@@ -44,6 +44,37 @@ p {
 
 
 
+
+
+/*-----------------------------NAV BAR STYLING-----------------------------*/
+.navbar-inverse {
+    background-color: #17252A;
+    border-color: #3AAFA9;
+    border-bottom-width: 20px;
+    font-weight: 300;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 20px;
+}
+
+.navbar-inverse .brand, .navbar-inverse .nav > li > a:hover {
+    background-color: #2B7A78;
+}
+
+.navbar-nav > li:nth-child(4) {
+    padding-right:130px;
+}
+
+.navbar-nav > li:nth-child(1) {
+    padding-left: 25px;
+}
+
+
+
+
+
+
+
+
 /*HR (line) on main page*/
 hr.style1 {
     height: 30px;
