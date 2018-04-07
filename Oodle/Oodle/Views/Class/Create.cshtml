@@ -3,30 +3,33 @@
     ViewBag.Title = "Create";
 }
 
-<h2>Create</h2>
 
-<div>
+
+
+
+<div class="form-style-6">
+    <h1>Create a Class</h1>
+
     <form method="post" action="CreateClass">
-        <div>
-            <label for="name">Name</label>
-            <input type="text" name="name" value="" required/>
-
-            <br />
 
 
-            <label for="description">Description</label>
-            <textarea name="description" placeholder="Enter comments here..." required></textarea> <br />
-            Slack channel must be 21 characters or less and only allows lowercase, numbers and - _<br />
-            If channel name is blank class name will be used and will be formatted by slack to fit naming conventions<br />
-            <label for="slackName">Channel Name</label>
-            <input type="text" name="slackName" placeholder="If left blank will use class name" maxlength="21" oninput="this.value = this.value.replace(/[^a-z0-9-_]/, '')"></input> <br />
+        <label for="name">Name of class:</label><br />
+        <input type="text" name="name" placeholder="(e.g., Anthropology 101)" value="" required /><br />
 
-            <label for="slackChoice">Do you want a slack channel?</label>
-            <input type="radio" name="slackChoice" value="true">Yes
-            <input type="radio" name="slackChoice" value="false" checked>No <br />
-        </div>
-        <div>
-            <input type="submit" name="submit" value="Submit" />
-        </div>
+
+        <label for="description">Brief description of your class:</label> <br />
+        <input type="text" name="description" placeholder="We will learn about..." required />
+
+        <label for="slackName">Slack Channel Name: <br /> (only allows lowercase, numbers and - _ and must be less then 21 characters)</label>
+        <input type="text" name="slackName" placeholder="If left blank we will use class name" maxlength="21" oninput="this.value = this.value.replace(/[^a-z0-9-_]/, '')"/> <br />
+
+
+
+        <label for="slackChoice">Do you want a slack channel?</label>
+        <input type="radio" name="slackChoice" value="true">Yes
+        <input type="radio" name="slackChoice" value="false" checked>No <br />
+
+        <input type="submit" name="submit" value="Start Teaching!" />
+
     </form>
 </div>

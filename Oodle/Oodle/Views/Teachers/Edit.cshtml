@@ -4,26 +4,39 @@
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
 
-<div>
+
+
+
+
+<div class="form-style-6">
+    <h1>Edit your class</h1>
+
     <form method="post" action="EditClass">
-        <div>
-            <label for="name">Name</label>
-            <input type="text" name="name" value="@Model.cl.Name" required/>
 
-            <input type="hidden" name="classID" value=@Model.cl.ClassID required/>
 
-            <br />
+        <label for="name">Name of class:</label><br />
+        <input type="text" name="name" value="@Model.cl.Name" required />
+        <br />
 
-            <label for="description">Description</label>
-            <textarea name="description" placeholder="Enter comments here..." value="" required>@Model.cl.Description</textarea>
-            <br />
-            <label for="notification">Notification</label>
-            <textarea name="notification" placeholder="Enter notification here..." value="">@Model.cl.Notification</textarea>
-        </div>
-        <div>
-            <input type="submit" name="update" value="Submit" />
-        </div>
+        <input type="hidden" name="classID" value=@Model.cl.ClassID required />
+
+        <br />
+
+
+
+        <label for="description">Brief description of your class:</label> <br />
+        <textarea name="description" placeholder="We will learn about..." value="" required>@Model.cl.Description</textarea>
+
+
+        <br />
+        <label for="notification">Notification</label><br />
+        <textarea name="notification" placeholder="Enter notification here..." value="">@Model.cl.Notification</textarea>
+
+
+     <br />
+        <input type="submit" name="submit" value="Save Changes" />
+
     </form>
 </div>
+
