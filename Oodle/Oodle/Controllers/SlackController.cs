@@ -76,20 +76,25 @@ namespace Oodle.Controllers
             return sName;
         }
 
-        public void SlackNotif(string notif, string sName)
+        public Boolean SlackNotif(string notif, string sName)
         {
+            Boolean rtn = false;
             string cID = GetChannelId(sName);
             notif = Regex.Replace(notif, @"[\s]+", "%20");
 
             string slackData = GetData("chat.postMessage" , "&channel=" + cID + "&as_user=true" + "&text=" + notif, true);
 
             JObject message = JObject.Parse(slackData);
-            PinMessage(message["ts"].ToString(), message["channel"].ToString());
+            string didPost = PinMessage(message["ts"].ToString(), message["channel"].ToString());
+            JObject posted = JObject.Parse(didPost);
+            rtn = Convert.ToBoolean(posted["ok"].ToString());
+            return rtn;
         }
 
-        private void PinMessage(string time, string channel)
+        private string PinMessage(string time, string channel)
         {
             string slackData = GetData("pins.add" , "&channel=" + channel + "&timestamp=" + time, true);
+            return slackData;
         }
 
         /// <summary>

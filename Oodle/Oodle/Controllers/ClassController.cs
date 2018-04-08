@@ -292,21 +292,33 @@ namespace Oodle.Controllers
             Class hasSlack = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
             if (!hasSlack.SlackName.Equals("%"))
             {
-                if (!notif.Equals(hasSlack.Notification))
-                { 
                     slack.SlackNotif(notif, hasSlack.SlackName);
-                }
             }
 
+            AddNotification(notif, classID);
 
             db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Name = name);
             db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Description = desc);
-            db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Notification = notif);
 
             db.SaveChanges();
 
             return RedirectToAction("Teacher", new { classId = classID });
         }
+
+        private void AddNotification(string notif, int classID)
+        {
+            ClassNotification cNotif = new ClassNotification();
+            cNotif.Notification = notif;
+            cNotif.TimePosted = DateTime.Now;
+            cNotif.ClassID = classID;
+            db.ClassNotifications.Add(cNotif);
+
+            db.SaveChanges();
+
+
+        }
+
+
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         [Authorize]

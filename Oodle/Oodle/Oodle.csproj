@@ -212,6 +212,7 @@
     <Compile Include="Models\Assignment.cs" />
     <Compile Include="Models\ChannelID.cs" />
     <Compile Include="Models\Class.cs" />
+    <Compile Include="Models\ClassNotification.cs" />
     <Compile Include="Models\C__MigrationHistory.cs" />
     <Compile Include="Models\Document.cs" />
     <Compile Include="Models\Grade.cs" />

@@ -85,24 +85,37 @@ namespace Oodle.Controllers
             string notif = Request.Form["notification"];
             int classID = int.Parse(Request.Form["classID"]);
 
+
             Class hasSlack = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
-            if (!hasSlack.SlackName.Equals("%"))
+
+            if (!(string.IsNullOrEmpty(notif)))
             {
-                if (!notif.Equals(hasSlack.Notification))
+                if (!hasSlack.SlackName.Equals("%"))
                 {
                     slack.SlackNotif(notif, hasSlack.SlackName);
                 }
+                AddNotification(notif, classID);
             }
-
-
 
             db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Name = name);
             db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Description = desc);
-            db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Notification = notif);
 
             db.SaveChanges();
 
             return RedirectToAction("Index", new { classId = classID });
+        }
+
+        private void AddNotification(string notif, int classID)
+        {
+            ClassNotification cNotif = new ClassNotification();
+            cNotif.Notification = notif;
+            cNotif.TimePosted = DateTime.Now;
+            cNotif.ClassID = classID;
+            db.ClassNotifications.Add(cNotif);
+
+            db.SaveChanges();
+
+           
         }
 
         public ActionResult Delete(int classID)
@@ -161,6 +174,8 @@ namespace Oodle.Controllers
             var teacher = new TeacherVM(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault(), request);
 
             teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).OrderBy(i => i.StartDate).ToList();
+
+            teacher.notifs = db.ClassNotifications.Where(i => i.ClassID == classID).OrderBy(i => i.TimePosted).ToList();
 
             return teacher;
         }
