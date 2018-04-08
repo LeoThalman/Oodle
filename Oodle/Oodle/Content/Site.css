@@ -222,8 +222,45 @@ hr.style1 {
     opacity: 0.9;
 }
 
-/*-----------------------------TEACHER CLASS VIEW PAGE-----------------------------*/
 
+/*-----------------------------EDIT USER INFO SECTION-----------------------------*/
+.editPerson {
+    border-radius: 15px;
+    font-size: 23px;
+    display: inline-block;
+    color: #FEFFFF;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    align-content: center;
+    font-weight: bold;
+}
+
+.editPersonDetail {
+    background-color: #17252A;
+    color: #FEFFFF;
+    display: inline-block;
+}
+
+.razorButtons {
+    font-size: 22px;
+    color: #17252A;
+    width: 195px;
+    padding: 8px 12px;
+    border: none;
+    outline: none;
+    outline: 0;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    -moz-box-shadow: 0px 1px 3px rgba(0,0,0,0.4);
+    -webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.4);
+    box-shadow: 0px 1px 3px rgba(0,0,0,0.8);
+}
+
+
+/*-----------------------------TEACHER CLASS VIEW PAGE-----------------------------*/
 hr.style-four {
     height: 12px;
     border: 0;
@@ -255,6 +292,7 @@ hr.style-four {
 
 /*-----------------------------CREATE A CLASS PAGE-----------------------------*/
 #classCreateTitle {
+    padding:1px;
 }
 
 .form-style-6 {
@@ -468,7 +506,6 @@ Lighter white: #FEFFFF
 @media (min-width: 550px) {
     .grid-dl {
         display: grid;
-        grid-template-columns: 1fr 1fr;
         grid-template-rows: auto;
     }
 

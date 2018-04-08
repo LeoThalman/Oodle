@@ -1,4 +1,23 @@
 ﻿
+//-------------------------------------Delete page---------------------------------------
+function deleteConfirm() {
+    alert('Are you sure you want to delete your profile? This cannot be undone? If yes please click "Confirm Delete" ');
+
+}
+
+$(document).ready(function () {
+    $("#deleteFinal").click(function () {
+        $("#deleteConfirm").fadeOut("slow");
+        $("#test").fadeIn("slow");
+    });
+});
+
+
+
+
+//-------------------------------------Tools page---------------------------------------
+
+
 var worth2 = document.getElementById("curGrade");
 var score2 = document.getElementById("aimGrade");
 var grade2 = document.getElementById("finalWorth");
