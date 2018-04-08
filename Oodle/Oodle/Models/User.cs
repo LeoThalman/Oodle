@@ -12,6 +12,7 @@ namespace Oodle.Models
         public User()
         {
             Classes = new HashSet<Class>();
+            Documents = new HashSet<Document>();
             Grades = new HashSet<Grade>();
             UserRoleClasses = new HashSet<UserRoleClass>();
         }
@@ -32,7 +33,7 @@ namespace Oodle.Models
         [Required]
         [StringLength(128)]
         public string Email { get; set; }
-        
+
         public byte[] Icon { get; set; }
 
         [StringLength(512)]
@@ -46,6 +47,9 @@ namespace Oodle.Models
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Class> Classes { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Document> Documents { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Grade> Grades { get; set; }

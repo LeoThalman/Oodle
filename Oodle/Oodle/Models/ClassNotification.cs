@@ -6,19 +6,19 @@ namespace Oodle.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("UserRoleClass")]
-    public partial class UserRoleClass
+    [Table("ClassNotification")]
+    public partial class ClassNotification
     {
-        public int UserRoleClassID { get; set; }
+        public int ClassNotificationID { get; set; }
 
-        public int UsersID { get; set; }
+        [Required]
+        [StringLength(256)]
+        public string Notification { get; set; }
 
-        public int RoleID { get; set; }
+        public DateTime TimePosted { get; set; }
 
         public int ClassID { get; set; }
 
         public virtual Class Class { get; set; }
-
-        public virtual User User { get; set; }
     }
 }

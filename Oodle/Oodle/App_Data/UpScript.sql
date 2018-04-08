@@ -4,6 +4,7 @@ DROP TABLE dbo.Documents;
 DROP TABLE dbo.Assignment;
 DROP TABLE dbo.UserRoleClass;
 DROP TABLE dbo.Role;
+DROP TABLE dbo.ClassNotification;
 DROP TABLE dbo.Class;
 DROP TABLE dbo.Users;
 
@@ -201,7 +202,6 @@ CREATE TABLE dbo.Class
 	Name	NVARCHAR(128) NOT NULL,
 	Description NVARCHAR(256) NOT NULL,
 	SlackName NVARCHAR(20) NULL,
-	Notification NVARCHAR(256) NULL,
 	CONSTRAINT [PK_dbo.Class] PRIMARY KEY CLUSTERED (ClassID ASC),
 	CONSTRAINT [FK_dbo.Class_dbo.UsersID] FOREIGN KEY ([UsersID]) REFERENCES [dbo].[Users] ([UsersID])
 );
@@ -226,6 +226,22 @@ CREATE TABLE dbo.UserRoleClass
 	CONSTRAINT [FK_dbo.UserRoleClass_dbo.UserID] FOREIGN KEY ([UsersID]) REFERENCES [dbo].[Users] ([UsersID]),
 	--CONSTRAINT [FK_dbo.UserRoleClass_dbo.RoleID] FOREIGN KEY ([RoleID]) REFERENCES [dbo].[Role] ([RoleID]),
 	CONSTRAINT [FK_dbo.UserRoleClass_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
+	ON DELETE CASCADE
+	ON UPDATE CASCADE
+);
+
+--Class Notifications table
+CREATE TABLE dbo.ClassNotification
+(
+	ClassNotificationID INT IDENTITY (1,1) NOT NULL,
+	Notification NVARCHAR(256) NOT NULL,
+	TimePosted DATETIME NOT NULL,
+	ClassID INT NOT NULL,
+	CONSTRAINT [PK_dbo.ClassNotification] PRIMARY KEY CLUSTERED (ClassNotificationID ASC),
+	CONSTRAINT [FK_dbo.ClassNotification_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
+	ON DELETE CASCADE
+	ON UPDATE CASCADE,
+
 );
 
 
@@ -268,7 +284,6 @@ CREATE TABLE dbo.Questions
 	CONSTRAINT [PK_dbo.Questions] PRIMARY KEY CLUSTERED (QuestionsID ASC),
 	CONSTRAINT [FK_dbo.Questions_dbo.AssignmentID] FOREIGN KEY ([AssignmentID]) REFERENCES [dbo].[Assignment] ([AssignmentID])
 );
-
 
 CREATE TABLE dbo.Documents(  
     Id INT IDENTITY(1,1) NOT NULL,  

@@ -11,6 +11,7 @@ namespace Oodle.Models.ViewModels
         public List<Assignment> assignment { get; set; }
         public List<User> users { get; set; }
         public List<Document> documents {get; set;}
+        public List<ClassNotification> notifs { get; set; }
 
 
         public TeacherVM(Class classP, List<User> userP)

@@ -13,6 +13,8 @@ namespace Oodle.Models
         public Class()
         {
             Assignments = new HashSet<Assignment>();
+            ClassNotifications = new HashSet<ClassNotification>();
+            Documents = new HashSet<Document>();
             UserRoleClasses = new HashSet<UserRoleClass>();
         }
 
@@ -31,13 +33,16 @@ namespace Oodle.Models
         [StringLength(20)]
         public string SlackName { get; set; }
 
-        [StringLength(256)]
-        public string Notification { get; set; }
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Assignment> Assignments { get; set; }
 
         public virtual User User { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClassNotification> ClassNotifications { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Document> Documents { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserRoleClass> UserRoleClasses { get; set; }
