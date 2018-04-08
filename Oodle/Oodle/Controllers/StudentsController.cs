@@ -20,7 +20,7 @@ namespace Oodle.Controllers
     {
         private Model1 db = new Model1();
 
-        public ActionResult Index(int classID)
+        public ActionResult test(int classID)
         {
             var idid = User.Identity.GetUserId();
 
@@ -30,6 +30,17 @@ namespace Oodle.Controllers
             if (urc == null || urc.RoleID != 2)
             {
                 return RedirectToAction("Index", "Class", new { classId = classID });
+            }
+            return null;
+        }
+
+
+
+        public ActionResult Index(int classID)
+        {
+            if (test(classID) != null)
+            {
+                return test(classID);
             }
 
             var student = getTVM(classID);
@@ -48,6 +59,11 @@ namespace Oodle.Controllers
 
         public ActionResult Assignment(int classID)
         {
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+
             var student = getTVM(classID);
 
             return View("Assignment", "_StudentLayout", student);
@@ -97,6 +113,11 @@ namespace Oodle.Controllers
 
         public ActionResult AssignmentTurnIn(int classID, int assignmentID)
         {
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+
             var urcL = db.UserRoleClasses.Where(i => i.RoleID == 3 && i.ClassID == classID);
             var list = new List<int>();
 
@@ -121,6 +142,11 @@ namespace Oodle.Controllers
         [HttpPost]
         public ActionResult AssignmentTurnIn(HttpPostedFileBase postedFile, int classID, int assignmentID)
         {
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+
             var idid = User.Identity.GetUserId();
             int studentID = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault().UsersID;
 
