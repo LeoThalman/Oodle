@@ -1,44 +1,497 @@
-﻿body {
+﻿
+
+/*
+Main Colors:
+
+Black-ish: #17252A
+Darker blue: #2B7A78
+Lighter blue: #3AAFA9
+Darker white: #DEF2F1
+Lighter white: #FEFFFF
+*/
+
+
+
+/*-----------------------------SITE WIDE STYLING-----------------------------*/
+
+/*Logo on index*/
+#indexHeading {
+    font-family: 'Gloria Hallelujah', cursive;
+}
+
+
+body {
     font-family: 'Ubuntu', sans-serif;
     padding-top: 50px;
     padding-bottom: 20px;
+    background-color: #3AAFA9;
+    color: #17252A
 }
 
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Ubuntu', sans-serif;
+    color: #FAFAFA;
+}
+
+p {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 16px;
+    color: #FAFAFA;
+}
+
+
+
+
+
+
+
+
+/*-----------------------------NAV BAR STYLING-----------------------------*/
+.navbar-inverse {
+    background-color: #17252A;
+    border-color: #3AAFA9;
+    border-bottom-width: 20px;
+    font-weight: 300;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 20px;
+}
+
+.navbar-inverse .brand, .navbar-inverse .nav > li > a:hover {
+    background-color: #2B7A78;
+}
+
+.navbar-nav > li:nth-child(4) {
+    padding-right:130px;
+}
+
+.navbar-nav > li:nth-child(1) {
+    padding-left: 25px;
+}
+
+
+
+
+
+
+
+
+/*HR (line) on main page*/
+hr.style1 {
+    height: 30px;
+    border-style: solid;
+    border-color: #8c8b8b;
+    border-width: 3px 0 0 0;
+    border-radius: 20px;
+}
+
+    hr.style1:before {
+        display: block;
+        content: "";
+        height: 30px;
+        margin-top: -31px;
+        border-style: solid;
+        border-color: #8c8b8b;
+        border-width: 0 0 3px 0;
+        border-radius: 20px;
+    }
+
+
+
+
+/*-----------------------------Shared Layouts-----------------------------*/
+
+
+/*Side bar for shared layouts*/
+.sidebar {
+    width: 15%;
+    height: 100%;
+    padding: 10%;
+}
+
+
+
 /* Set padding to keep content from hitting the edges */
-.body-content {
+.body-content-2 {
+    float: left;
+    width: 80%;
     padding-left: 15px;
     padding-right: 15px;
 }
 
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
-*/
-.dl-horizontal dt {
-    white-space: normal;
-}
+.navBarDiv {
+    color:white;
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
+}
+/*-----------------------------CLASS LIST PAGE-----------------------------*/
+#classListBody {
+    margin: 0 auto;
+    width: 60%;
+    font-family: 'Ubuntu', sans-serif;
 }
 
 
-
-
-
-.sidebar {
-    width: 20%;
-    height: 100%;
-}
-
-.body-content-2 {
-    float: left;
-    width: 80%;
+#buttonAncor {
+    display: flex;
+    justify-content: center;
 }
 
 
+
+.createClassButton {
+    margin: 0 auto;
+    align-content: center;
+}
+
+
+.block {
+    width: 460px;
+    height: 100px;
+    margin: 0 auto;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.classItem {
+    border-radius: 25px;
+    position: relative;
+    background-color: #2B7A78;
+    margin: 0 auto;
+}
+
+
+    .classItem:hover {
+        border-radius: 25px;
+        transition: all .2s ease-in-out;
+        transform: scale(1.2);
+        position: relative;
+        background-color: #FEFFFF;
+        margin: 0 auto;
+        text-decoration: none;
+    }
+
+
+
+.title {
+    color: black;
+    text-align: center;
+    height: 30px;
+    font-size: x-large;
+    margin: 0 auto;
+}
+
+.description {
+    padding-left: 5px;
+    padding-right: 5px;
+    color: black;
+    text-align: center;
+    height: 80px;
+    font-size: small;
+    margin: 0 auto;
+}
+
+
+/*-----------------------------CREATE A CLASS PAGE-----------------------------*/
+
+.teacherPage {
+    text-align: center;
+    color: #17252A !important;
+    }
+
+.descriptionClass {
+    font-size: 18px;
+    color: #FEFFFF;
+}
+
+
+
+.acceptRejectStudent {
+    text-align: center;
+    font-size: 20px;
+}
+
+
+.buttonReject {
+    display: inline-block;
+    border-radius: 25px;
+    background-color: #17252A;
+    color: #FEFFFF;
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin-left: 20px;
+    opacity: 0.9;
+}
+
+/*-----------------------------TEACHER CLASS VIEW PAGE-----------------------------*/
+
+hr.style-four {
+    height: 12px;
+    border: 0;
+    box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);
+}
+
+
+#teacherPage {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 20px;
+    color: #FAFAFA;
+}
+
+.fontClass {
+    font-family: 'Ubuntu', sans-serif;
+    color: #FAFAFA;
+    text-align: center
+}
+
+
+.testingURL {
+    font-size: 24px;
+    background-color: antiquewhite;
+    margin: auto;
+    width: 50%;
+    border-radius: 25px;
+}
+
+
+/*-----------------------------CREATE A CLASS PAGE-----------------------------*/
+#classCreateTitle {
+}
+
+.form-style-6 {
+    font: 95% Arial, Helvetica, sans-serif;
+    max-width: 600px;
+    margin: 10px auto;
+    padding: 16px;
+    background: #F7F7F7;
+}
+
+    .form-style-6 h1 {
+        background: #17252A;
+        padding: 20px 0;
+        font-size: 140%;
+        font-weight: 300;
+        text-align: center;
+        color: #fff;
+        margin: -16px -16px 16px -16px;
+    }
+
+    .form-style-6 input[type="text"],
+    .form-style-6 input[type="date"],
+    .form-style-6 input[type="datetime"],
+    .form-style-6 input[type="email"],
+    .form-style-6 input[type="number"],
+    .form-style-6 input[type="search"],
+    .form-style-6 input[type="time"],
+    .form-style-6 input[type="url"],
+    .form-style-6 textarea,
+    .form-style-6 select {
+        -webkit-transition: all 0.30s ease-in-out;
+        -moz-transition: all 0.30s ease-in-out;
+        -ms-transition: all 0.30s ease-in-out;
+        -o-transition: all 0.30s ease-in-out;
+        outline: none;
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        width: 100%;
+        background: #fff;
+        margin-bottom: 4%;
+        border: 1px solid #ccc;
+        padding: 3%;
+        color: #555;
+        font: 95% Arial, Helvetica, sans-serif;
+    }
+
+        .form-style-6 input[type="text"]:focus,
+        .form-style-6 input[type="date"]:focus,
+        .form-style-6 input[type="datetime"]:focus,
+        .form-style-6 input[type="email"]:focus,
+        .form-style-6 input[type="number"]:focus,
+        .form-style-6 input[type="search"]:focus,
+        .form-style-6 input[type="time"]:focus,
+        .form-style-6 input[type="url"]:focus,
+        .form-style-6 textarea:focus,
+        .form-style-6 select:focus {
+            box-shadow: 0 0 5px #43D1AF;
+            padding: 3%;
+            border: 1px solid #43D1AF;
+        }
+
+    .form-style-6 input[type="submit"],
+    .form-style-6 input[type="button"] {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        width: 100%;
+        padding: 3%;
+        background: #17252A;
+        color: #DEF2F1;
+    }
+
+        .form-style-6 input[type="submit"]:hover,
+        .form-style-6 input[type="button"]:hover {
+            background: #3AAFA9;
+        }
+
+/*       
+Black-ish: #17252A
+Darker blue: #2B7A78
+Lighter blue: #3AAFA9
+Darker white: #DEF2F1
+Lighter white: #FEFFFF
+     */
+/*-----------------------------TOOLS PAGE-----------------------------*/
+
+
+
+
+
+.col-lg-6, .col-lg-8, .col-lg-2, .col-lg-12 {
+    text-align: center;
+}
+
+
+.a {
+    text-align: center;
+}
+
+.top-buffer {
+    margin-top: 40px;
+}
+
+
+
+
+.directions {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 80%;
+}
+
+.wrapper {
+    width: 50%;
+    min-width: 300px;
+    background: #808080;
+    text-align: center;
+    padding: 20px;
+    margin: 0 auto;
+}
+
+#grades, #avg_grades {
+    font: normal 20px "Courier New";
+}
+
+#final_grade {
+    font: bold 72px Helvetica, Verdana;
+}
+
+.green {
+    color: green;
+}
+
+.teal {
+    color: teal;
+}
+
+.blue {
+    color: blue;
+}
+
+.orange {
+    color: orange;
+}
+
+.red {
+    color: red;
+}
+
+
+/*-----------------------------FAQ PAGE-----------------------------*/
+
+
+* {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.slide-toggle {
+    background: #DEF2F1;
+}
+
+    .slide-toggle .box-toggle {
+        padding: 10px 0 39px;
+    }
+
+        .slide-toggle .box-toggle .contorol {
+            background: #17252A;
+            color: #fff;
+            overflow: hidden;
+            margin-top: 22px;
+        }
+
+            .slide-toggle .box-toggle .contorol h3 {
+                float: left;
+                padding-left: 29px;
+            }
+
+            .slide-toggle .box-toggle .contorol span {
+                float: right !important;
+                padding-right: 29px;
+                line-height: 65px;
+            }
+
+
+        .slide-toggle .box-toggle .content-box {
+            background: #17252A;
+            padding: 2px 2px 6px 13px;
+            text-align: center;
+        }
+
+
+
+
+.grid-dl dt {
+    border-top: 2px solid #ccc;
+    padding: 0.5em 0 0.5em 0;
+    font-weight: 600;
+}
+
+.grid-dl dd {
+    margin: 0;
+    padding: 0.5em 0 0.5em 0;
+}
+
+@media (min-width: 550px) {
+    .grid-dl {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+    }
+
+        .grid-dl dt {
+            grid-column-start: 1;
+        }
+
+        .grid-dl dd {
+            grid-column-start: 2;
+        }
+
+        .grid-dl dt + dd {
+            border-top: 2px solid #ccc;
+        }
+}
+
+
+
+
+
+
+
+/*-----------------------------UNSURE WHAT THESE DO-----------------------------*/
 
 .dateLeft {
     position: absolute;
@@ -83,4 +536,48 @@ textarea {
     font-size: small;
     height: 10px;
 }
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+
+/* button styling TOFIND
+.button1 {
+    display: block;
+    width: 115px;
+    height: 25px;
+    background: #4E9CAF;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+}
+    */
+
+.button1 {
+    display: block;
+    width: 115px;
+    height: 25px;
+    background: deeppink;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    color: deeppink;
+    font-weight: bold;
+}
+
+
+
 

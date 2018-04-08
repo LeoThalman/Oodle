@@ -20,9 +20,8 @@ namespace Oodle.Controllers
     [Authorize]
     public class TeachersController : Controller
     {
-        //Slack tokens
-        private string SlackToken = System.Web.Configuration.WebConfigurationManager.AppSettings["SlackToken"];
-        private string SlackBot = System.Web.Configuration.WebConfigurationManager.AppSettings["SlackBot"];
+        //Slack access
+        private SlackController slack = new SlackController();
 
         // GET: Teachers
         private Model1 db = new Model1();
@@ -68,7 +67,7 @@ namespace Oodle.Controllers
             User user = db.Users.Where(i => i.UsersID == userID).FirstOrDefault();
             Class c = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
             //Send request to slack for user to join the group
-            //JoinChannel(user.Email, c.Name);
+            //slack.JoinChannel(user.Email, c.Name);
 
             return RedirectToAction("Index", new { classId = classID });
         }
@@ -111,13 +110,16 @@ namespace Oodle.Controllers
             string notif = Request.Form["notification"];
             int classID = int.Parse(Request.Form["classID"]);
 
+
             Class hasSlack = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
-            if (!hasSlack.SlackName.Equals("%"))
+
+            if (!(string.IsNullOrEmpty(notif)))
             {
-                if (!notif.Equals(hasSlack.Notification))
+                if (!hasSlack.SlackName.Equals("%"))
                 {
-                    SlackNotif(notif, hasSlack.SlackName);
+                    slack.SlackNotif(notif, hasSlack.SlackName);
                 }
+                AddNotification(notif, classID);
             }
 
             if (test(classID) != null)
@@ -125,114 +127,25 @@ namespace Oodle.Controllers
                 return test(classID);
             }
 
-
-
             db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Name = name);
             db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Description = desc);
-            db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Notification = notif);
 
             db.SaveChanges();
 
             return RedirectToAction("Index", new { classId = classID });
         }
 
-        private string GetSlackBotID()
+        private void AddNotification(string notif, int classID)
         {
-            string surl = "https://slack.com/api/users.list?token=" + SlackToken + "&pretty=1";
-            WebRequest request = WebRequest.Create(surl);
-            HttpWebResponse resp = (HttpWebResponse)request.GetResponse();
-            Stream dataStream = resp.GetResponseStream();
-            StreamReader reader = new StreamReader(dataStream);
-            string slackData = reader.ReadToEnd();
-            reader.Close();
-            resp.Close();
-            dataStream.Close();
+            ClassNotification cNotif = new ClassNotification();
+            cNotif.Notification = notif;
+            cNotif.TimePosted = DateTime.Now;
+            cNotif.ClassID = classID;
+            db.ClassNotifications.Add(cNotif);
 
-            string id = "";
-            JObject users = JObject.Parse(slackData);
-            IList<JToken> cData = users["members"].Children().ToList();
-            foreach (JToken temp in cData)
-            {
-                SlackBot bTemp = temp.ToObject<SlackBot>();
-                if (Convert.ToBoolean(bTemp.is_bot))
-                {
-                    id = bTemp.id;
-                    Debug.WriteLine(id);
-                }
-            }
-            return id;
-        }
+            db.SaveChanges();
 
-        private void SlackNotif(string notif, string sName)
-        {
-            string cID = GetChannelId(sName);
-            notif = Regex.Replace(notif, @"[\s]+", "%20");
-
-            string surl = "https://slack.com/api/chat.postMessage?token=" + SlackBot + "&channel=" + cID + "&as_user=true" + "&text=" + notif + "&pretty=1";
-            //Send method request to Slack
-            WebRequest request = WebRequest.Create(surl);
-            HttpWebResponse resp = (HttpWebResponse)request.GetResponse();
-            Stream dataStream = resp.GetResponseStream();
-            StreamReader reader = new StreamReader(dataStream);
-
-            //Convert Slack method response to readable string
-            string slackData = reader.ReadToEnd();
-            Debug.WriteLine(slackData);
-            //Close open requests
-            reader.Close();
-            resp.Close();
-            dataStream.Close();
-            JObject message = JObject.Parse(slackData);
-            PinMessage(message["ts"].ToString(), message["channel"].ToString());
-        }
-
-        /// <summary>
-        /// Sends an http reqeust to slack api to get channel ID based on class name
-        /// </summary>
-        /// <param name="className">name of class/channel</param>
-        /// <returns>ID of channel</returns>
-        [Authorize]
-        private string GetChannelId(string className)
-        {
-
-            string surl = "https://slack.com/api/groups.list?token=" + SlackToken + "&pretty=1";
-            WebRequest request = WebRequest.Create(surl);
-            HttpWebResponse resp = (HttpWebResponse)request.GetResponse();
-            Stream dataStream = resp.GetResponseStream();
-            StreamReader reader = new StreamReader(dataStream);
-            string slackData = reader.ReadToEnd();
-            reader.Close();
-            resp.Close();
-            dataStream.Close();
-
-            string id = "";
-            JObject channels = JObject.Parse(slackData);
-            IList<JToken> cData = channels["groups"].Children().ToList();
-            foreach (JToken temp in cData)
-            {
-                ChannelID cTemp = temp.ToObject<ChannelID>();
-                if (cTemp.name.Equals(className.ToLower()))
-                {
-                    id = cTemp.id;
-                }
-            }
-            return id;
-        }
-
-        private void PinMessage(string time, string channel)
-        {
-            string surl = "https://slack.com/api/pins.add?token=" + SlackBot + "&channel=" + channel + "&timestamp=" + time + "&pretty=1";
-            //Send method request to Slack
-            WebRequest request = WebRequest.Create(surl);
-            HttpWebResponse resp = (HttpWebResponse)request.GetResponse();
-            Stream dataStream = resp.GetResponseStream();
-            StreamReader reader = new StreamReader(dataStream);
-            string slackData = reader.ReadToEnd();
-            Debug.WriteLine(slackData);
-            //Close open requests
-            reader.Close();
-            resp.Close();
-            dataStream.Close();
+           
         }
 
         public ActionResult Delete(int classID)
@@ -244,16 +157,22 @@ namespace Oodle.Controllers
 
 
             var list = db.UserRoleClasses.Where(i => i.ClassID == classID);
+            Class hasSlack = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
             foreach (var i in list)
             {
                 db.UserRoleClasses.Remove(i);
             }
 
-            classID = 1;
+            //classID = 1;
+            if (!hasSlack.SlackName.Equals("%"))
+            {
+                slack.DeleteChannel(hasSlack.SlackName);
+            }
 
             db.Classes.Remove(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault());
 
             db.SaveChanges();
+
 
             return RedirectToAction("List", "Class");
         }
@@ -291,6 +210,8 @@ namespace Oodle.Controllers
             var teacher = new TeacherVM(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault(), request);
 
             teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).OrderBy(i => i.StartDate).ToList();
+
+            teacher.notifs = db.ClassNotifications.Where(i => i.ClassID == classID).OrderBy(i => i.TimePosted).ToList();
 
             return teacher;
         }

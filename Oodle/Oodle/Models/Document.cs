@@ -8,16 +8,29 @@ namespace Oodle.Models
 
     public partial class Document
     {
-        [Key]
-        [Required]
         public int Id { get; set; }
+
         [Required]
+        [StringLength(250)]
         public string Name { get; set; }
+
         [Required]
+        [StringLength(250)]
         public string ContentType { get; set; }
+
         [Required]
         public byte[] Data { get; set; }
-        [Required]
+
+        public int ClassID { get; set; }
+
+        public int AssignmentID { get; set; }
+
         public int UserID { get; set; }
+
+        public virtual Assignment Assignment { get; set; }
+
+        public virtual Class Class { get; set; }
+
+        public virtual User User { get; set; }
     }
 }
