@@ -12,14 +12,14 @@ namespace Oodle.Models
         {
         }
 
-        public virtual DbSet<Document> Documents { get; set; }
-        public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<Assignment> Assignments { get; set; }
         public virtual DbSet<Class> Classes { get; set; }
+        public virtual DbSet<ClassNotification> ClassNotifications { get; set; }
+        public virtual DbSet<Document> Documents { get; set; }
         public virtual DbSet<Grade> Grades { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
@@ -50,6 +50,11 @@ namespace Oodle.Models
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Assignment>()
+                .HasMany(e => e.Documents)
+                .WithRequired(e => e.Assignment)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Assignment>()
                 .HasMany(e => e.Grades)
                 .WithRequired(e => e.Assignment)
                 .WillCascadeOnDelete(false);
@@ -65,18 +70,19 @@ namespace Oodle.Models
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Class>()
-                .HasMany(e => e.UserRoleClasses)
+                .HasMany(e => e.Documents)
                 .WithRequired(e => e.Class)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Role>()
-                .HasMany(e => e.UserRoleClasses)
-                .WithRequired(e => e.Role)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<User>()
                 .HasMany(e => e.Classes)
                 .WithRequired(e => e.User)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<User>()
+                .HasMany(e => e.Documents)
+                .WithRequired(e => e.User)
+                .HasForeignKey(e => e.UserID)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<User>()

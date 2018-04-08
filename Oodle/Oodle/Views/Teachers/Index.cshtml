@@ -36,8 +36,11 @@
                 </p>
             </div>
             <div class="col-sm-6" id="teacherPage">
-                @Html.DisplayNameFor(Notification => Model.cl.Notification):
-                @Html.DisplayFor(Notification => Model.cl.Notification)
+                @foreach (var notif in Model.notifs)
+                {
+                    @Html.DisplayNameFor(Notification => notif.Notification)
+                    @Html.DisplayFor(Notification => notif.Notification)
+                }
             </div>
         </div>
     </div>
