@@ -5,29 +5,37 @@
 }
 
 
-<h2>Create</h2>
 
-<div>
+
+<div class="form-style-6">
     <form method="post" action="CreateAssignmentAction">
         <div>
-            <label for="name">Name</label>
-            <input type="text" name="name" value="" required />
+            <h1>Create an Assignment</h1>
+
+
+
+            <label for="name">Name of Assignment:</label><br />
+            <input type="text" name="name" placeholder="e.g., Assignment one, history of modernism" value="" required /><br />
             <input type="hidden" name="classID" value="@Model.cl.ClassID" />
+
+
+
+
+
+            <label for="description">Description of your Assignment:</label> <br />
+            <textarea name="description" placeholder="e.g., please read chapter four and attach a word document of your answers to the questions at the end of the chapter." required></textarea>
+
             <br />
-
-
-            <label for="description">Description</label>
-            <textarea name="description" placeholder="Enter comments here..." required></textarea>
-
-            <label for="startDate">Start Date</label>
+            <label for="startDate">Start Date</label><br />
             <input type="datetime" name="startDate" value="@DateTime.Now" required />
 
-            <label for="dueDate">Due Date</label>
+            <br />
+            <label for="dueDate">Due Date</label><br />
             <input type="datetime" name="dueDate" value="@DateTime.Now" required />
-            
+
         </div>
         <div>
-            <input type="submit" name="submit" value="Submit" />
+            <input type="submit" name="submit" value="Create Assignment" />
         </div>
     </form>
 </div>
