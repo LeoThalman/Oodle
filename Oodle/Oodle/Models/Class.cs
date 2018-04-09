@@ -30,6 +30,10 @@ namespace Oodle.Models
         [StringLength(256)]
         public string Description { get; set; }
 
+        [Required]
+        [StringLength(128)]
+        public string Subject { get; set; }
+
         [StringLength(20)]
         public string SlackName { get; set; }
 

@@ -5,6 +5,113 @@
     ViewBag.Title = "List";
 }
 
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  
+<div class="sidenav">
+    <div class="slide-toggle2">
+        <div>
+            <br />
+            <!-- fluid -->
+            <div class="box-toggle">
+                <div class="contorol">
+                    <h3>My Classes</h3>
+                    <span class="toggle-info pull-left">
+                        <i class="fa fa-plus"></i>
+                    </span>
+                </div>
+                <div class="content-box">
+                    <div class="black">
+                        <form method="get" action="FilterList">
+                            <h4>Filter by Roles</h4>
+                            <input type="checkbox" id="student" name="student" value="student">
+                            <label for="student">Student</label>
+                            <br />
+                            <input type="checkbox" id="teacher" name="teacher" value="teacher">
+                            <label for="teacher">Teacher</label>
+                            <br />
+                            <input type="checkbox" id="grader" name="grader" value="grader">
+                            <label for="grader">Grader</label>
+                            <br />
+                            <input type="checkbox" id="pend" name="pend" value="pend">
+                            <label for="pend">Pending</label>
+
+                            <hr />
+
+                            <h4>Filter by Subject</h4>
+                            <input type="checkbox" id="math" name="math" value="math">
+                            <label for="math">Math</label>
+                            <br />
+                            <input type="checkbox" id="english" name="english" value="english">
+                            <label for="english">English</label>
+                            <br />
+                            <input type="checkbox" id="cs" name="cs" value="cs">
+                            <label for="cs">Computer Science</label>
+                            <br />
+                            <input type="checkbox" id="art" name="art" value="art">
+                            <label for="art">Art</label>
+
+                            <hr />
+
+                            <h4>Sort By</h4>
+                            <input type="radio" id="mostRecent" name="sort" value="mostRecent">
+                            <label for="mostRecent">Most Recent</label>
+                            <br />
+                            <input type="radio" id="size" name="sort" value="size">
+                            <label for="size">Size</label>
+                            <br />
+                            <input type="radio" id="name" name="sort" value="name">
+                            <label for="name">Name</label>
+                            <br />
+                            <input class="createClassButton btn btn-info" type="submit" value="Search for Classes!" />
+                        </form>
+                    </div>
+                </div>
+                <div class="contorol">
+                    <h3>All Classes</h3>
+                    <span class="toggle-info pull-left">
+                        <i class="fa fa-plus"></i>
+                    </span>
+                </div>
+                <div class="content-box">
+                    <div class="black">
+                        <form>
+                            <h4>Filter by Subject</h4>
+                            <input type="checkbox" id="math" name="math" value="math">
+                            <label for="math">Math</label>
+                            <br />
+                            <input type="checkbox" id="english" name="english" value="english">
+                            <label for="english">English</label>
+                            <br />
+                            <input type="checkbox" id="cs" name="cs" value="cs">
+                            <label for="cs">Computer Science</label>
+                            <br />
+                            <input type="checkbox" id="art" name="art" value="art">
+                            <label for="art">Art</label>
+
+                            <hr />
+
+                            <h4>Sort By</h4>
+                            <input type="radio" id="mostRecent" name="sort" value="mostRecent">
+                            <label for="mostRecent">Most Recent</label>
+                            <br />
+                            <input type="radio" id="size" name="sort" value="size">
+                            <label for="size">Size</label>
+                            <br />
+                            <input type="radio" id="name" name="sort" value="name">
+                            <label for="name">Name</label>
+                            <br />
+                            <input class="createClassButton btn btn-info" type="submit" value="Search for Classes!" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+<script type="text/javascript" src="~/Scripts/scriptone.js"></script>
+}
 
 
 <div id="classListBody">
@@ -28,22 +135,22 @@
 
     <div>
         @foreach (var i in Model)
-        {
-            <div class="block">
-                <a href="@Url.Action("Index", "Class", new { ClassID = (i.ClassID) })">
-                    <div class="classItem">
-                        <div class="title">
-                            @Html.DisplayFor(Name => i.Name)
-                        </div>
-                        <div class="description">
-                            @Html.DisplayFor(Description => i.Description)
-                        </div>
+    {
+        <div class="block">
+            <a href="@Url.Action("Index", "Class", new { ClassID = (i.ClassID) })">
+                <div class="classItem">
+                    <div class="title">
+                        @Html.DisplayFor(Name => i.Name)
                     </div>
-                </a>
-            </div>
-            <br />
-            <br />
-        }
+                    <div class="description">
+                        @Html.DisplayFor(Description => i.Description)
+                    </div>
+                </div>
+            </a>
+        </div>
+        <br />
+        <br />
+}
     </div>
 
 </div>
