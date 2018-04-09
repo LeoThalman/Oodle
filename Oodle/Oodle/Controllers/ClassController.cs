@@ -58,6 +58,212 @@ namespace Oodle.Controllers
             return View(db.Classes.ToList());
         }
 
+        public ActionResult FilterList()
+        {
+            var classes = db.Classes.ToList();
+
+            string math = Request.Form["math"];
+
+            if(string.IsNullOrEmpty(math))
+            {
+                classes = classes.Where(i => i.Subject != "math").ToList();
+            }
+
+            string english = Request.Form["english"];
+
+            if (string.IsNullOrEmpty(english))
+            {
+                classes = classes.Where(i => i.Subject != "english").ToList();
+            }
+
+            string cs = Request.Form["cs"];
+
+            if (string.IsNullOrEmpty(cs))
+            {
+                classes = classes.Where(i => i.Subject != "cs").ToList();
+            }
+
+            string art = Request.Form["art"];
+
+            if (string.IsNullOrEmpty(art))
+            {
+                classes = classes.Where(i => i.Subject != "art").ToList();
+            }
+
+            ///
+
+            var idid = User.Identity.GetUserId();
+
+            int id = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault().UsersID;
+
+
+            //I know this is the worst way to do this and I will make my code better in the future, right now I just want to make sure what I have works.
+            if (true)
+            {
+                var test = db.UserRoleClasses.Where(j => j.UsersID == id).ToList();
+
+                List<int> aClass = new List<int>();
+
+                foreach (var i in test)
+                {
+                    aClass.Add(i.ClassID);
+                }
+
+                classes = classes.Where(i => aClass.Contains(i.ClassID)).ToList();
+            }
+
+
+            string student = Request.Form["student"];
+
+            if (string.IsNullOrEmpty(student))
+            {
+                var test = db.UserRoleClasses.Where(j => j.UsersID == id && j.RoleID == 2).ToList();
+
+                List<int> aClass = new List<int>();
+
+                foreach(var i in test)
+                {
+                    aClass.Add(i.ClassID);
+                }
+
+                classes = classes.Where(i => !aClass.Contains(i.ClassID)).ToList();
+            }
+
+            string teacher = Request.Form["teacher"];
+
+            if (string.IsNullOrEmpty(teacher))
+            {
+                var test = db.UserRoleClasses.Where(j => j.UsersID == id && j.RoleID == 0).ToList();
+
+                List<int> aClass = new List<int>();
+
+                foreach (var i in test)
+                {
+                    aClass.Add(i.ClassID);
+                }
+
+                classes = classes.Where(i => !aClass.Contains(i.ClassID)).ToList();
+            }
+
+            string grader = Request.Form["grader"];
+
+            if (string.IsNullOrEmpty(grader))
+            {
+                var test = db.UserRoleClasses.Where(j => j.UsersID == id && j.RoleID == 1).ToList();
+
+                List<int> aClass = new List<int>();
+
+                foreach (var i in test)
+                {
+                    aClass.Add(i.ClassID);
+                }
+
+                classes = classes.Where(i => !aClass.Contains(i.ClassID)).ToList();
+            }
+
+            string pend = Request.Form["pend"];
+
+            if (string.IsNullOrEmpty(pend))
+            {
+                var test = db.UserRoleClasses.Where(j => j.UsersID == id && j.RoleID == 3).ToList();
+
+                List<int> aClass = new List<int>();
+
+                foreach (var i in test)
+                {
+                    aClass.Add(i.ClassID);
+                }
+
+                classes = classes.Where(i => !aClass.Contains(i.ClassID)).ToList();
+            }
+
+
+            ///
+
+            string sort = Request.Form["sort"];
+
+            if(sort == null)
+            {
+            }
+            else if (sort == "name")
+            {
+                classes = classes.OrderBy(i => i.Name).ToList();
+            }
+            else if(sort == "mostRecent")
+            {
+                classes.Reverse();
+            }
+
+            return View("List", classes);
+        }
+
+        public ActionResult FilterListAll()
+        {
+            var classes = db.Classes.ToList();
+
+            string math = Request.Form["math"];
+
+            if (string.IsNullOrEmpty(math))
+            {
+                classes = classes.Where(i => i.Subject != "math").ToList();
+            }
+
+            string english = Request.Form["english"];
+
+            if (string.IsNullOrEmpty(english))
+            {
+                classes = classes.Where(i => i.Subject != "english").ToList();
+            }
+
+            string cs = Request.Form["cs"];
+
+            if (string.IsNullOrEmpty(cs))
+            {
+                classes = classes.Where(i => i.Subject != "cs").ToList();
+            }
+
+            string art = Request.Form["art"];
+
+            if (string.IsNullOrEmpty(art))
+            {
+                classes = classes.Where(i => i.Subject != "art").ToList();
+            }
+            
+            string sort = Request.Form["sort"];
+
+            if (sort == null)
+            {
+            }
+            else if (sort == "name")
+            {
+                classes = classes.OrderBy(i => i.Name).ToList();
+            }
+            else if (sort == "mostRecent")
+            {
+                classes.Reverse();
+            }
+
+            return View("List", classes);
+        }
+
+        [Authorize]
+        public ActionResult Join(int classID)
+        {
+            var urc = new UserRoleClass();
+
+            var idid = User.Identity.GetUserId();
+            User user = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault();
+
+            urc.UsersID = user.UsersID;
+            urc.ClassID = classID;
+            urc.RoleID = 3;
+
+            db.UserRoleClasses.Add(urc);
+            db.SaveChanges();
+
+            return RedirectToAction("Pending", new { classId = classID });
+        }
+
         [Authorize]
         public ActionResult Create()
         {
@@ -139,6 +345,20 @@ namespace Oodle.Controllers
             db.SaveChanges();
 
             return RedirectToAction("List");
+        }
+        [Authorize]
+        public ActionResult Pending(int classID)
+        {
+            var idid = User.Identity.GetUserId();
+
+            User user = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault();
+            UserRoleClass urc = db.UserRoleClasses.Where(s => s.UsersID == user.UsersID && s.ClassID == classID).FirstOrDefault();
+
+            if (urc == null || urc.RoleID != 3)
+            {
+                return RedirectToAction("Index", new { classId = classID });
+            }
+            return View(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault());
         }
     }
 }

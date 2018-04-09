@@ -21,33 +21,33 @@
                 </div>
                 <div class="content-box">
                     <div class="black">
-                        <form method="get" action="FilterList">
+                        <form method="post" action="FilterList">
                             <h4>Filter by Roles</h4>
-                            <input type="checkbox" id="student" name="student" value="student">
+                            <input type="checkbox" name="student" checked>
                             <label for="student">Student</label>
                             <br />
-                            <input type="checkbox" id="teacher" name="teacher" value="teacher">
+                            <input type="checkbox" name="teacher" checked>
                             <label for="teacher">Teacher</label>
                             <br />
-                            <input type="checkbox" id="grader" name="grader" value="grader">
+                            <input type="checkbox" name="grader" checked>
                             <label for="grader">Grader</label>
                             <br />
-                            <input type="checkbox" id="pend" name="pend" value="pend">
+                            <input type="checkbox" name="pend" checked>
                             <label for="pend">Pending</label>
 
                             <hr />
 
                             <h4>Filter by Subject</h4>
-                            <input type="checkbox" id="math" name="math" value="math">
+                            <input type="checkbox" name="math" checked>
                             <label for="math">Math</label>
                             <br />
-                            <input type="checkbox" id="english" name="english" value="english">
+                            <input type="checkbox" name="english" checked>
                             <label for="english">English</label>
                             <br />
-                            <input type="checkbox" id="cs" name="cs" value="cs">
+                            <input type="checkbox" name="cs" checked>
                             <label for="cs">Computer Science</label>
                             <br />
-                            <input type="checkbox" id="art" name="art" value="art">
+                            <input type="checkbox" name="art" checked>
                             <label for="art">Art</label>
 
                             <hr />
@@ -67,25 +67,25 @@
                     </div>
                 </div>
                 <div class="contorol">
-                    <h3>All Classes</h3>
+                    <h3>Classes</h3>
                     <span class="toggle-info pull-left">
                         <i class="fa fa-plus"></i>
                     </span>
                 </div>
                 <div class="content-box">
                     <div class="black">
-                        <form>
+                        <form method="post" action="FilterListAll">
                             <h4>Filter by Subject</h4>
-                            <input type="checkbox" id="math" name="math" value="math">
+                            <input type="checkbox" name="math" checked>
                             <label for="math">Math</label>
                             <br />
-                            <input type="checkbox" id="english" name="english" value="english">
+                            <input type="checkbox" name="english" checked>
                             <label for="english">English</label>
                             <br />
-                            <input type="checkbox" id="cs" name="cs" value="cs">
+                            <input type="checkbox" name="cs" checked>
                             <label for="cs">Computer Science</label>
                             <br />
-                            <input type="checkbox" id="art" name="art" value="art">
+                            <input type="checkbox" name="art" checked>
                             <label for="art">Art</label>
 
                             <hr />
@@ -93,9 +93,6 @@
                             <h4>Sort By</h4>
                             <input type="radio" id="mostRecent" name="sort" value="mostRecent">
                             <label for="mostRecent">Most Recent</label>
-                            <br />
-                            <input type="radio" id="size" name="sort" value="size">
-                            <label for="size">Size</label>
                             <br />
                             <input type="radio" id="name" name="sort" value="name">
                             <label for="name">Name</label>
@@ -125,10 +122,8 @@
     </a>
 
 
-
     <h2 style="text-align:center;">
         All Current Classes: <br />
-
     </h2>
 
 
