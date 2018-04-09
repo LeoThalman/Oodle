@@ -6,8 +6,10 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using Microsoft.AspNet.Identity;
 using Oodle.Models;
+using Microsoft.Owin.Security;
 
 namespace Oodle.Controllers
 {
@@ -119,7 +121,12 @@ namespace Oodle.Controllers
             User user = db.Users.Find(id);
             db.Users.Remove(user);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            var ctrl = new AccountController();
+            ctrl.ControllerContext = ControllerContext;
+            ctrl.LogOff();
+            return RedirectToAction("Index", "Home");
+
+
         }
 
         protected override void Dispose(bool disposing)

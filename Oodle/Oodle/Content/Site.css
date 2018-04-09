@@ -222,8 +222,45 @@ hr.style1 {
     opacity: 0.9;
 }
 
-/*-----------------------------TEACHER CLASS VIEW PAGE-----------------------------*/
 
+/*-----------------------------EDIT USER INFO SECTION-----------------------------*/
+.editPerson {
+    border-radius: 15px;
+    font-size: 23px;
+    display: inline-block;
+    color: #FEFFFF;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    align-content: center;
+    font-weight: bold;
+}
+
+.editPersonDetail {
+    background-color: #17252A;
+    color: #FEFFFF;
+    display: inline-block;
+}
+
+.razorButtons {
+    font-size: 22px;
+    color: #17252A;
+    width: 195px;
+    padding: 8px 12px;
+    border: none;
+    outline: none;
+    outline: 0;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    -moz-box-shadow: 0px 1px 3px rgba(0,0,0,0.4);
+    -webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.4);
+    box-shadow: 0px 1px 3px rgba(0,0,0,0.8);
+}
+
+
+/*-----------------------------TEACHER CLASS VIEW PAGE-----------------------------*/
 hr.style-four {
     height: 12px;
     border: 0;
@@ -253,8 +290,40 @@ hr.style-four {
 }
 
 
+.dateLeft {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    text-align: left;
+    padding-left: 10px;
+    color: #17252A;
+    font-size: small;
+    height: 10px;
+}
+
+
+.dateRight {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    text-align: right;
+    padding-right: 10px;
+    color: #17252A;
+    font-size: small;
+    height: 10px;
+}
+
+
+/*-----------------------------PENDING PAGE-----------------------------*/
+#pendingPage {
+    color: #17252A;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+
 /*-----------------------------CREATE A CLASS PAGE-----------------------------*/
 #classCreateTitle {
+    padding:1px;
 }
 
 .form-style-6 {
@@ -333,13 +402,7 @@ hr.style-four {
             background: #3AAFA9;
         }
 
-/*       
-Black-ish: #17252A
-Darker blue: #2B7A78
-Lighter blue: #3AAFA9
-Darker white: #DEF2F1
-Lighter white: #FEFFFF
-     */
+
 /*-----------------------------TOOLS PAGE-----------------------------*/
 
 
@@ -468,7 +531,6 @@ Lighter white: #FEFFFF
 @media (min-width: 550px) {
     .grid-dl {
         display: grid;
-        grid-template-columns: 1fr 1fr;
         grid-template-rows: auto;
     }
 
@@ -491,18 +553,43 @@ Lighter white: #FEFFFF
 
 
 
+
+
+/*-----------------------------Submissions Table-----------------------------*/
+
+/*       
+Black-ish: #17252A
+Darker blue: #2B7A78
+Lighter blue: #3AAFA9
+Darker white: #DEF2F1
+Lighter white: #FEFFFF
+     */
+
+table {
+    border: 3px solid #17252A;
+    border-collapse: collapse;
+    background-color: #DEF2F1;
+}
+
+    table th {
+        background-color: #3AAFA9;
+        color: #FEFFFF;
+        font-weight: bold;
+    }
+
+    table th, table td {
+        padding: 18px;
+        border: 3px solid #17252A;
+    }
+
+    table, table table td {
+        border: 15px solid #17252A;
+    }
+
 /*-----------------------------UNSURE WHAT THESE DO-----------------------------*/
 
-.dateLeft {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    text-align: left;
-    padding-left: 10px;
-    color: dimgrey;
-    font-size: small;
-    height: 10px;
-}
+
+
 
 .edit {
     position: absolute;
@@ -523,17 +610,6 @@ Lighter white: #FEFFFF
     padding-left: 10px;
     color: black;
     font-size: medium;
-    height: 10px;
-}
-
-.dateRight {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    text-align: right;
-    padding-right: 10px;
-    color: dimgrey;
-    font-size: small;
     height: 10px;
 }
 

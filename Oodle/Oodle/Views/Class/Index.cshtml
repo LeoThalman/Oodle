@@ -4,10 +4,16 @@
     ViewBag.Title = "Index";
 }
 
-<h1>@Html.DisplayFor(Name => Model.Name)</h1>
 
-<h2>You have no access to this class.</h2>
 
 <a href="@Url.Action("Join", "Class", new { ClassID = (Model.ClassID) } )">
     Join Class
 </a>
+
+
+
+<div class="jumbotron">
+    <h1>Request to join @Html.DisplayFor(Name => Model.Name)</h1>
+    <p><a class="btn btn-primary btn-lg" href="@Url.Action("Join", "Class", new { ClassID = (Model.ClassID) } )" role="button">Request to Join</a></p>
+</div>
+
