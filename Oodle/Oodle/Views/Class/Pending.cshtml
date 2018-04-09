@@ -4,7 +4,62 @@
     ViewBag.Title = "Pending";
 }
 
-<h1>@Html.DisplayFor(Name => Model.Name)</h1>
 
-<h2>Pending</h2>
+
+<div class="jumbotron">
+    <h2 id="pendingPage">You have requested access to join @Html.DisplayFor(Name => Model.Name)</h2>
+    <p id="pendingPage">The next step is to wait on the teacher to accept your request. While you wait below you will find some resources to keep you busy.</p>
+</div>
+
+
+
+<div class="container description">
+    <!-- Example row of columns -->
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Khan Academy</h2>
+            <p>Here you can learn a variety of topics for free!</p>
+            <a href="https://www.khanacademy.org/" title="khan"><img src="/Content/img/khan2.png" height="200" width="200" class="img-rounded" alt="Khan Academy"></a>
+        </div>
+        <div class="col-md-4">
+            <h2>Random Wikipedia Article</h2>
+            <p>Learn something new with a random wikipedia article</p>
+            <a href="https://en.wikipedia.org/wiki/Special:Random" title="wikipedia"><img src="/Content/img/wiki.png" height="200" width="200" class="img-rounded" alt="Khan Academy"></a>
+        </div>
+        <div class="col-md-4">
+            <h2>Free Code Camp</h2>
+            <p>Learn to program by doing at Free Code Camp!</p>
+            <a href="https://www.freecodecamp.org/" title="free code camp"><img src="~/Content/img/codecamp.jpeg" height="200" width="200" class="img-rounded" alt="Khan Academy"></a>
+        </div>
+    </div>
+
+
+
+    <br />
+    <br />
+    <!-- Example row of columns -->
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Wolfram Alpha</h2>
+            <p>Get some help with Wolfram Alpha</p>
+            <a href="https://www.wolframalpha.com/" title="wolfram alpha"><img src="~/Content/img/Wolfram.png" height="200" width="200" class="img-rounded" alt="Khan Academy"></a>
+        </div>
+        <div class="col-md-4">
+            <h2>FreeRice.com</h2>
+            <p>Might count as a tax write off</p>
+            <a href="http://freerice.com/" title="free rice"><img src="~/Content/img/rice.png" height="200" width="200" class="img-rounded" alt="Khan Academy"></a>
+        </div>
+        <div class="col-md-4">
+            <h2>Duolingo</h2>
+            <p>Start learning a new language</p>
+            <a href="https://www.duolingo.com/" title="khan"><img src="~/Content/img/duolingo.png" height="200" width="200" class="img-rounded" alt="Khan Academy"></a>
+        </div>
+    </div>
+
+
+
+    <br />
+    <br />
+</div>
+
 

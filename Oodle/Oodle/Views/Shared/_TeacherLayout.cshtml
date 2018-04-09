@@ -47,15 +47,15 @@
     </div>
     <div class="navBarDiv">
     <!--Local Nav bar for Teacher controller-->
-    <nav class="navbar sidebar" style="float:left;border-right:solid black 1px;font-size:22px;padding:10px;">
+    <nav class="navbar sidebar" style="float:left;border-right:solid black 1px;font-size:22px;padding:10px; width:15%; min-width:100px">
         <br />
         <ul>@Html.ActionLink("Home", "Index", "Teachers", new { ClassID = Model.cl.ClassID }, new { @style = "color: #17252A" })</ul>
         <ul>@Html.ActionLink("Assignments", "Assignment", "Teachers", new { ClassID = Model.cl.ClassID }, new { @style = "color: #17252A" })</ul>
-        <ul>@Html.ActionLink("Grades", "MakeGrade", "Teachers", new { ClassID = Model.cl.ClassID }, new { @style = "color:#17252A" })</ul>
-        <ul>@Html.ActionLink("Roster", "ViewRoster", "Teachers", new { ClassID = Model.cl.ClassID }, new { @style = "color: #17252A" })</ul>
-        <ul>@Html.ActionLink("Tasks", "CreateTask", "Teachers", new { ClassID = Model.cl.ClassID }, new { @style = "color: #17252A" })</ul>
-        <ul>@Html.ActionLink("Slack", "CreateSlack", "Teachers", new { ClassID = Model.cl.ClassID }, new { @style = "color: #17252A" })</ul>
-        <ul>@Html.ActionLink("Quizes", "CreateQuiz", "Teachers", new { ClassID = Model.cl.ClassID }, new { @style = "color:#17252A" })</ul>
+        <ul>@Html.ActionLink("Grades", "UnderDevelopment", "Home", new { ClassID = Model.cl.ClassID }, new { @style = "color:#17252A" })</ul>
+        <ul>@Html.ActionLink("Roster", "UnderDevelopment", "Home", new { ClassID = Model.cl.ClassID }, new { @style = "color: #17252A" })</ul>
+        <ul>@Html.ActionLink("Tasks", "UnderDevelopment", "Home", new { ClassID = Model.cl.ClassID }, new { @style = "color: #17252A" })</ul>
+        <ul>@Html.ActionLink("Slack", "UnderDevelopment", "Home", new { ClassID = Model.cl.ClassID }, new { @style = "color: #17252A" })</ul>
+        <ul>@Html.ActionLink("Quizes", "UnderDevelopment", "Home", new { ClassID = Model.cl.ClassID }, new { @style = "color:#17252A" })</ul>
     </nav>
     </div>
     <br />
@@ -63,7 +63,7 @@
     <div class="container body-content body-content-2">
         @RenderBody()
 
-        <footer style="position:absolute;bottom:0;">
+        <footer >
             <p>&copy; @DateTime.Now.Year - Oodle Incorporated</p>
         </footer>
     </div>

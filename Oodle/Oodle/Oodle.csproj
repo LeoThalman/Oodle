@@ -241,8 +241,16 @@
     <Content Include="App_Data\UpScript.sql" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\img\codecamp.jpeg" />
+    <Content Include="Content\img\duolingo.png" />
+    <Content Include="Content\img\khan.png" />
+    <Content Include="Content\img\khan2.png" />
     <Content Include="Content\img\logo.png" />
+    <Content Include="Content\img\rice.png" />
     <Content Include="Content\img\ubuntu.png" />
+    <Content Include="Content\img\Under_construction_transparent.png" />
+    <Content Include="Content\img\wiki.png" />
+    <Content Include="Content\img\Wolfram.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -339,6 +347,7 @@
     <Content Include="Views\Users1\Details.cshtml" />
     <Content Include="Views\Users1\Edit.cshtml" />
     <Content Include="Views\Users1\Index.cshtml" />
+    <Content Include="Views\Home\UnderDevelopment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
