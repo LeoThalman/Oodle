@@ -229,14 +229,6 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\Oodle.mdf" />
-    <Content Include="App_Data\OodleDB.mdf" />
-    <Content Include="App_Data\OodleDB_log.ldf">
-      <DependentUpon>OodleDB.mdf</DependentUpon>
-    </Content>
-    <Content Include="App_Data\Oodle_log.ldf">
-      <DependentUpon>Oodle.mdf</DependentUpon>
-    </Content>
     <Content Include="App_Data\up.sql" />
     <Content Include="App_Data\UpScript.sql" />
     <Content Include="Content\bootstrap.css" />

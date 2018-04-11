@@ -18,7 +18,7 @@ using System.Text.RegularExpressions;
 namespace Oodle.Controllers
 {
     [Authorize]
-    public class TeachersController : Controller
+    public class TeachersController : Controller 
     {
         //Slack access
         private SlackController slack = new SlackController();
@@ -183,10 +183,31 @@ namespace Oodle.Controllers
             return View("MakeGrade", "_TeacherLayout");
         }
 
+
+
+
+
+
+
+
+
+
+
         public ActionResult ViewRoster()
         {
-            return View("ViewRoster", "_TeacherLayout");
+            
+            var classes = db.Classes.ToList();
+            return View("ViewRoster", classes);
+            
         }
+
+
+
+
+
+
+
+
 
         public ActionResult Assignment(int classID)
         {
