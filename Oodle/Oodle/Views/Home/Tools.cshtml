@@ -10,12 +10,15 @@
 <link rel="stylesheet" type="text/css" href="/Scripts/stylestools.css" />
 
 
-
 <div class="wrapper">
+
+
+
+
     <h1>Some tools for you to use!</h1>
 
     <h3>Need to edit your information?</h3>
-    @Html.ActionLink("Edit your Info", "Index", "Users1", routeValues: null, htmlAttributes: new {@class = "btn btn-info" })
+    @Html.ActionLink("Edit your Info", "Index", "Users1", routeValues: null, htmlAttributes: new { @class = "btn btn-info" })
 
     <hr />
     <h1>Grade Calculator</h1>
@@ -190,7 +193,7 @@
             incr[3] = document.GPACalcForm.CR4.value;
             incr[4] = document.GPACalcForm.CR5.value;
             incr[5] = document.GPACalcForm.CR6.value;
-    
+
 
             // Calculate GPA
             var allgr = 0;
@@ -222,14 +225,14 @@
             gpa = allgr / allcr;
 
             alert("GPA =  " + eval(gpa));
-        
+
 
             return 0;
         }
 
 
     </SCRIPT>
-   
+
 
 </div>
 
@@ -246,30 +249,16 @@
     </a>
 
 </div>
-<!--
 <div class="wrapper">
-    <h2>Calculate what you need on your final in order to pass the class!</h2>
-    <div class="form-group">
-        <label for="curGrade">Current Grade:</label>
-        <input type="text" class="form-control" id="curGrade">
-    </div>
-    <div class="form-group">
-        <label for="aimGrade">Goal Grade:</label>
-        <input type="text" class="form-control" id="aimGrade">
+    <h3>How Do you rate oodle?</h3>
+    <form id="MyForm" action="/Home/Tools" method="post">
+        <p>enter your rating from 1-5:</p>
+        <input type="number" name="textBoxIntData" />      
 
-    </div>
-    <div class="form-group">
-        <label for="finalWorth">Final is worth:</label>
-        <input type="text" class="form-control" id="finalWorth">
-    </div>
-    <input type="button" name="clickbtn" value="Display Result" onclick="gradefinals()">
-
-    <h1 id="answer3"></h1>
-
-
+        <input type="submit" name="Submit" value="Submit rating" />
+    </form>
 
 </div>
-    -->
 
 @section scripts
     {
