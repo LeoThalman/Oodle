@@ -181,8 +181,35 @@ namespace Oodle.Controllers
 
         public ActionResult RemoveNotif(int classID, int notifID)
         {
-            
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
 
+            ClassNotification cNotif = db.ClassNotifications.Where(n => n.ClassID == classID 
+                                                                && n.ClassNotificationID == notifID).FirstOrDefault();
+            if(cNotif == null)
+            {
+                return RedirectToAction("Index", new { classId = classID });
+            }
+
+            return View("RemoveNotif", "_TeacherLayout", cNotif);
+        }
+
+        public ActionResult RemoveNotification()
+        {
+            int classID = int.Parse(Request.Form["classID"]);
+            int notifID = int.Parse(Request.Form["notifID"]);
+            
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+
+            ClassNotification notif = db.ClassNotifications.Where(n => n.ClassID == classID
+                                                    && n.ClassNotificationID == notifID).FirstOrDefault();
+            db.ClassNotifications.Remove(notif);
+            db.SaveChanges();
 
             return RedirectToAction("Index", new { classId = classID });
         }

@@ -349,7 +349,8 @@
     <Content Include="Views\Users1\Edit.cshtml" />
     <Content Include="Views\Users1\Index.cshtml" />
     <Content Include="Views\Home\UnderDevelopment.cshtml" />
-    <Content Include="Views\Teachers\AddNotification.cshtml" />
+    <Content Include="Views\Teachers\AddNotifToClass.cshtml" />
+    <Content Include="Views\Teachers\RemoveNotif.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

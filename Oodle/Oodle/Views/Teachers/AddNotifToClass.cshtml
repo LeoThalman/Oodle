@@ -1,20 +1,13 @@
 ﻿@model Oodle.Models.ViewModels.TeacherVM
 
-@{
-    ViewBag.Title = "Edit";
-}
-
-
-
-
-
-
 <div class="form-style-6">
-    <h1>Edit your class</h1>
+    <h1>Add Notification to @Model.cl.Name</h1>
 
     <form method="post" action="SaveNotif">
 
-        <label for="notification">Add Notification</label><br />
+        <input type="hidden" name="classID" value=@Model.cl.ClassID required />
+
+        <label for="notification">Notification</label><br />
         <textarea name="notification" placeholder="Enter notification here..." value=""></textarea>
 
 
