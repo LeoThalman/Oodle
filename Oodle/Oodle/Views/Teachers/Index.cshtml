@@ -36,18 +36,20 @@
                 </p>
             </div>
             <div class="col-sm-6" id="teacherPage">
-                @Html.DisplayFor(Notification => Model.notifs)
-                <a href="@Url.Action("AddNotifToClass", "Teachers", new { ClassID = (Model.cl.ClassID)} )">
-                    Add A Notification
-                </a>
+                <p> Notifications </p>
 
                 @foreach (var notif in Model.notifs)
                 {
+                <p>
                     @Html.DisplayFor(Notification => notif.Notification)
                     <a href="@Url.Action("RemoveNotif", "Teachers", new { classID = (notif.ClassID), notifID = (notif.ClassNotificationID)} )">
                         Remove Notification
                     </a>
+                </p>
                 }
+                <a href="@Url.Action("AddNotifToClass", "Teachers", new { ClassID = (Model.cl.ClassID)} )">
+                    Add A Notification
+                </a>
             </div>
         </div>
     </div>

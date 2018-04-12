@@ -193,7 +193,10 @@ namespace Oodle.Controllers
                 return RedirectToAction("Index", new { classId = classID });
             }
 
-            return View("RemoveNotif", "_TeacherLayout", cNotif);
+            var teacher = getTVM(classID);
+            teacher.rNotif = cNotif;
+
+            return View("RemoveNotif", "_TeacherLayout", teacher);
         }
 
         public ActionResult RemoveNotification()
@@ -221,10 +224,7 @@ namespace Oodle.Controllers
             cNotif.TimePosted = DateTime.Now;
             cNotif.ClassID = classID;
             db.ClassNotifications.Add(cNotif);
-
-            db.SaveChanges();
-
-           
+            db.SaveChanges();           
         }
 
         public ActionResult Delete(int classID)

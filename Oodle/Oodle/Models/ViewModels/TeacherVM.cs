@@ -12,6 +12,7 @@ namespace Oodle.Models.ViewModels
         public List<User> users { get; set; }
         public List<Document> documents {get; set;}
         public List<ClassNotification> notifs { get; set; }
+        public ClassNotification rNotif { get; set; }
 
 
         public TeacherVM(Class classP, List<User> userP)

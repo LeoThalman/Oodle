@@ -1,17 +1,17 @@
-﻿@model Oodle.Models.ClassNotification
+﻿@model Oodle.Models.ViewModels.TeacherVM
 
 
 <div class="form-style-6">
     <h1>Edit your class</h1>
 
-    <p>Click Remove to confirm removing notification, otherwise click the back link to return to your class</p>
+    <p style="color:black">Click Remove to confirm removing notification, otherwise click the back link to return to your class</p>
 
     <form method="post" action="RemoveNotification">
-        <input type="hidden" name="classID" value=@Model.ClassID required />
-        <input type="hidden" name="notifID" value=@Model.ClassNotificationID required />
+        <input type="hidden" name="classID" value=@Model.rNotif.ClassID required />
+        <input type="hidden" name="notifID" value=@Model.rNotif.ClassNotificationID required />
         <input type="submit" name="submit" value="Remove" />
     </form>
-    <a href="@Url.Action("Index", "Teachers", new { ClassID = (Model.ClassID)} )">
+    <a href="@Url.Action("Index", "Teachers", new { ClassID = (Model.rNotif.ClassID)} )">
         Back
     </a>
 </div>
