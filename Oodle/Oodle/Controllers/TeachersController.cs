@@ -111,6 +111,10 @@ namespace Oodle.Controllers
             string notif = Request.Form["notification"];
             int classID = int.Parse(Request.Form["classID"]);
 
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
 
             Class hasSlack = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
 
@@ -123,15 +127,62 @@ namespace Oodle.Controllers
                 AddNotification(notif, classID);
             }
 
-            if (test(classID) != null)
-            {
-                return test(classID);
-            }
+
 
             db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Name = name);
             db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Description = desc);
 
             db.SaveChanges();
+
+            return RedirectToAction("Index", new { classId = classID });
+        }
+
+        public ActionResult AddNotifToClass(int classID)
+        {
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+
+
+            ViewBag.id = classID;
+
+            var teacher = getTVM(classID);
+
+            return View("AddNotifToClass", "_TeacherLayout", teacher);
+        }
+
+        public ActionResult SaveNotif()
+        {
+            ViewBag.RequestMethod = "POST";
+            string notif = Request.Form["notification"];
+            int classID = int.Parse(Request.Form["classID"]);
+
+            if (test(classID) != null)
+            {
+                return test(classID);
+            } 
+
+            Class hasSlack = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
+
+
+            if (!(string.IsNullOrEmpty(notif)))
+            {
+                if (!hasSlack.SlackName.Equals("%"))
+                {
+                    slack.SlackNotif(notif, hasSlack.SlackName);
+                }
+                AddNotification(notif, classID);
+            }
+
+
+            return RedirectToAction("Index", new { classId = classID });
+        }
+
+        public ActionResult RemoveNotif(int classID, int notifID)
+        {
+            
+
 
             return RedirectToAction("Index", new { classId = classID });
         }
