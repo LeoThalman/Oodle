@@ -11,9 +11,9 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
 
-namespace Oodle.Controllers
+namespace Oodle.Utility
 {
-    public class SlackController : Controller
+    public class SlackManager
     {
         //Slack token to allow creating and joining classes
         private string SlackToken = System.Web.Configuration.WebConfigurationManager.AppSettings["SlackToken"];
@@ -22,7 +22,7 @@ namespace Oodle.Controllers
         public Boolean HasToken()
         {
             return (!(SlackToken == null));
-        } 
+        }
 
         public Boolean HasBot()
         {
@@ -56,7 +56,7 @@ namespace Oodle.Controllers
         /// <returns>true if user is on slack, false if not</returns>
         public Boolean IsOnSlack(string email)
         {
-            string slackData = GetData("users.lookupByEmail" , "&email=" + email, false);
+            string slackData = GetData("users.lookupByEmail", "&email=" + email, false);
 
             JObject userID = JObject.Parse(slackData);
             Boolean onSlack = Convert.ToBoolean(userID["ok"].ToString());
@@ -66,7 +66,7 @@ namespace Oodle.Controllers
 
         public string ValidateSlackName(string name)
         {
-            if(name == null)
+            if (name == null)
             {
                 return "";
             }
@@ -86,7 +86,7 @@ namespace Oodle.Controllers
             string cID = GetChannelId(sName);
             notif = Regex.Replace(notif, @"[\s]+", "%20");
 
-            string slackData = GetData("chat.postMessage" , "&channel=" + cID + "&as_user=true" + "&text=" + notif, true);
+            string slackData = GetData("chat.postMessage", "&channel=" + cID + "&as_user=true" + "&text=" + notif, true);
 
             JObject message = JObject.Parse(slackData);
             string didPost = PinMessage(message["ts"].ToString(), message["channel"].ToString());
@@ -97,7 +97,7 @@ namespace Oodle.Controllers
 
         private string PinMessage(string time, string channel)
         {
-            string slackData = GetData("pins.add" , "&channel=" + channel + "&timestamp=" + time, true);
+            string slackData = GetData("pins.add", "&channel=" + channel + "&timestamp=" + time, true);
             return slackData;
         }
 
@@ -122,9 +122,9 @@ namespace Oodle.Controllers
             }
             else
             {
-                slackData = GetData("groups.create", "&name=" + className, false);            
+                slackData = GetData("groups.create", "&name=" + className, false);
 
-                JObject channel = JObject.Parse(slackData);                
+                JObject channel = JObject.Parse(slackData);
                 if (Convert.ToBoolean(channel["ok"].ToString()))
                 {
                     name = channel["group"]["name"].ToString();
@@ -146,19 +146,19 @@ namespace Oodle.Controllers
         {
             String cid = GetChannelId(className);
             String uid = GetSlackUserId(email);
-            string slackData = GetData("groups.invite" , "&channel=" + cid + "&user=" + uid, false);
+            string slackData = GetData("groups.invite", "&channel=" + cid + "&user=" + uid, false);
         }
 
         private void AddBot(string className)
         {
             String cid = GetChannelId(className);
             string uid = GetSlackBotID();
-            string slackData = GetData("groups.invite" , "&channel=" + cid + "&user=" + uid, false);
+            string slackData = GetData("groups.invite", "&channel=" + cid + "&user=" + uid, false);
         }
 
         private string GetSlackBotID()
         {
-            string slackData = GetData("users.list" , "", false);  
+            string slackData = GetData("users.list", "", false);
 
             string id = "";
             JObject users = JObject.Parse(slackData);
@@ -183,7 +183,7 @@ namespace Oodle.Controllers
         [Authorize]
         private string GetSlackUserId(string email)
         {
-            string slackData = GetData("users.lookupByEmail" , "&email=" + email, false);
+            string slackData = GetData("users.lookupByEmail", "&email=" + email, false);
 
             JObject userID = JObject.Parse(slackData);
             string id = "";
@@ -199,7 +199,7 @@ namespace Oodle.Controllers
         [Authorize]
         private string GetChannelId(string className)
         {
-            string slackData = GetData("groups.list" , "", false);
+            string slackData = GetData("groups.list", "", false);
 
             string id = "";
             JObject channels = JObject.Parse(slackData);
@@ -232,7 +232,7 @@ namespace Oodle.Controllers
 
         private List<ChannelID> GetArchivedChannels()
         {
-            string slackData = GetData("groups.list", "" , false);
+            string slackData = GetData("groups.list", "", false);
             List<ChannelID> groups = new List<ChannelID>();
 
             JObject channels = JObject.Parse(slackData);

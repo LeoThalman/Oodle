@@ -13,6 +13,7 @@ using System.IO;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Diagnostics;
+using Oodle.Utility;
 using System.Text.RegularExpressions;
 
 namespace Oodle.Controllers
@@ -21,7 +22,7 @@ namespace Oodle.Controllers
     public class TeachersController : Controller
     {
         //Slack access
-        private SlackController slack = new SlackController();
+        private SlackManager slack = new SlackManager();
 
         // GET: Teachers
         private Model1 db = new Model1();
