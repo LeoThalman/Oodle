@@ -7,6 +7,8 @@ namespace Oodle.Models
 
     public partial class Model1 : DbContext
     {
+        internal object TeacherVM;
+
         public Model1()
             : base("name=Model1")
         {

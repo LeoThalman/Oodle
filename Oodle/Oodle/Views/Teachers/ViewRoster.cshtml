@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Oodle.Models.Class>
+﻿@model Oodle.Models.ViewModels.TeacherVM
 
 
 @{
@@ -23,45 +23,52 @@
 
 
         <h2 style="text-align:center;">
-            Classes Registered Under X: <br />
+            @*@<!-- Look up name, to look up ID
+                 Look up Class with User ID-->
+            USER ID: @ViewBag.id <br />*@
+            Classes Registered Under: @ViewBag.name;
+            <br />
         </h2>
-
-</div>
-
-        <div>
-            @foreach (var i in Model)
-    {
         
-            <div class="slide-toggle text-center">
-                <div class="container">
 
-                    <div class="box-toggle">
+    </div>
 
-                        <div>
-                            <div class="contorol">
-                                @Html.DisplayFor(Name => i.Name)
-                                <span class="toggle-info pull-left">
-                                    <i class="fa fa-plus"></i>
-                                </span>
-                            </div>
-                            <div class="content-box">
-                                @Html.DisplayFor(Description => i.Description)
-                                <span class="toggle-info pull-left">
-                                    <i class="fa fa-plus"></i>
-                                </span>
-                            </div>
+<div>
+    @foreach (var i in Model.classList)
+    {
 
-
+        <div class="slide-toggle text-center">
+            <div class="container">
+                <div class="box-toggle">
+                    <div>
+                        <div class="contorol">
+                            @Html.DisplayFor(Name => i.Name)
+                            <span class="toggle-info pull-left">
+                                <i class="fa fa-plus"></i>
+                            </span>
+                            <br />
+                            <h1>Students in class: @Model.users.Count();</h1>
+                        </div>
+                            
+                        
+                        <div class="content-box">
+                        @for (int j = 0; j < Model.users.Count(); j++)
+                        {
+                            var user = Model.users[j];
+                           
+                                <h3> Name: @Model.users[j].UserName; </h3> <br />
+                           
+                           }
                         </div>
                     </div>
                 </div>
             </div>
-
-            <br />
-            <br />
-            }
         </div>
 
+        <br />
+        <br />
+    }
+</div>
 
 
 

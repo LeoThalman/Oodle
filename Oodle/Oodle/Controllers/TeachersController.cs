@@ -195,9 +195,27 @@ namespace Oodle.Controllers
 
         public ActionResult ViewRoster()
         {
+
+            var classes = db.Classes.ToList(); // list of all classes
+            var user = db.Users.ToList(); // list of all users
+            var roles = db.UserRoleClasses.ToList(); // List of all Roles
             
-            var classes = db.Classes.ToList();
-            return View("ViewRoster", classes);
+            var idid = User.Identity.GetUserId();//get Teachers Identity ID
+
+            var teachId = db.Users.Where(i => i.IdentityID == idid); // teachID finds the ID that we are logged into
+        
+
+            
+          
+            ViewBag.name = User.Identity.GetUserName(); // testing viewbag output
+            var Bob = db.Users.ToList();
+            ViewBag.id = Bob[0].ToString();
+
+
+
+            var teacher = new TeacherVM(classes, user, roles); // New TeacherVM using the list of classes and user
+
+            return View("ViewRoster", teacher);
             
         }
 
