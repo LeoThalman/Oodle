@@ -24,6 +24,11 @@ Lighter white: #FEFFFF
     padding-top: 20px;
 }
 
+.lb {
+    padding-left:20px;
+    padding-bottom:20px;
+    background-color: #2B7A78;
+}
 .black {
     color: white;
     text-align: left;

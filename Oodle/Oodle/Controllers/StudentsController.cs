@@ -168,10 +168,13 @@ namespace Oodle.Controllers
             {
                 bytes = br.ReadBytes(postedFile.ContentLength);
             }
+
+            var submitted = DateTime.Now;
+
             string constr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             using (SqlConnection con = new SqlConnection(constr))
             {
-                string query = "INSERT INTO Documents VALUES (@Name, @ContentType, @Data, @ClassID, @AssignmentID, @userID)";
+                string query = "INSERT INTO Documents VALUES (@Name, @ContentType, @Data, @Submitted, @ClassID, @AssignmentID, @userID, @grade)";
                 using (SqlCommand cmd = new SqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -181,7 +184,8 @@ namespace Oodle.Controllers
                     cmd.Parameters.AddWithValue("@ClassID", classID);
                     cmd.Parameters.AddWithValue("@AssignmentID", assignmentID);
                     cmd.Parameters.AddWithValue("@userID", studentID);
-
+                    cmd.Parameters.AddWithValue("@Submitted", submitted);
+                    cmd.Parameters.AddWithValue("@grade", -1);
 
                     con.Open();
                     cmd.ExecuteNonQuery();

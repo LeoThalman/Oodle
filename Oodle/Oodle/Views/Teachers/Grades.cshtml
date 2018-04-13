@@ -1,0 +1,71 @@
+﻿@model Oodle.Models.ViewModels.TeacherVM
+
+@{
+    ViewBag.Title = "Grades";
+}
+
+<h2>Grades</h2>
+<div class="slide-toggle2">
+    <div>
+        <br />
+        <!-- fluid -->
+        <div class="box-toggle">
+            @if(true){
+                var number = 0;
+
+                foreach (var i in Model.users.ToList())
+                {
+                    <div class="contorol">
+
+                        <h3>
+                            @Html.DisplayFor(Name => i.UserName)
+                        </h3>
+                        <span class="toggle-info pull-left">
+                            <i class="fa fa-plus"></i>
+                        </span>
+                    </div>
+                    <div class="content-box">
+                        <div class="black">
+                            @for (int i2 = 0; i2 < Model.documents.Where(j => j.UserID == i.UsersID).Count(); i2++)
+                            {
+                                var doc = Model.documents[i2];
+                                var classID = Model.cl.ClassID;
+                                var documentID = doc.Id;
+                                var assignmentID = doc.AssignmentID;
+
+                                <div>@doc.Assignment.Name</div>
+
+                                <a href="@Url.Action("Grade", "Teachers", new { classID = classID, documentID = documentID, assignmentID = assignmentID })"> Grade Assignment </a>
+                                <div>
+                                    Current Grade: @if (doc.Grade == -1)
+                                    {
+                                        <div>Not yet graded.</div>
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(Grade => doc.Grade);
+                                    }
+                                </div>
+                                <hr />
+                            }
+                        </div>
+                    </div>
+                    <div>
+                        Average on Graded Assignments Based off Weights:
+                        @Model.classGrade[number]
+                    </div>
+                    number = number + 1;
+
+                    <hr />
+                }
+            }
+        </div>
+    </div>
+</div>
+<div>
+
+</div>
+@section scripts
+{
+    <script type="text/javascript" src="~/Scripts/scriptone.js"></script>
+}
