@@ -12,7 +12,7 @@ namespace Oodle.Models.ViewModels
         public List<User> users { get; set; }
         public List<Document> documents {get; set;}
         public List<ClassNotification> notifs { get; set; }
-
+        public List<int> classGrade { get; set; }
 
         public TeacherVM(Class classP, List<User> userP)
         {

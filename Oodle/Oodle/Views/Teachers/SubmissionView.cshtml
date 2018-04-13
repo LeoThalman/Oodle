@@ -20,6 +20,7 @@
     <tr>
         <th style="width:50px">Student</th>
         <th style="width:120px">File Name</th>
+        <th style="width:120px">Grade Link</th>
         <th style="width:80px">Download</th>
     </tr>
     @if (Model.documents.Count() > 0)
@@ -28,11 +29,13 @@
         {
             var file = Model.documents[i];
             var user = Model.users[i];
-
-
+            var classID = Model.cl.ClassID;
+            var documentID = Model.documents[i].Id;
+            var assignmentID = Model.assignment.FirstOrDefault().AssignmentID;
             <tr>
                 <td>@user.UserName</td>
                 <td>@file.Name</td>
+                <td><a href="@Url.Action("Grade", "Teachers", new {classID = classID,documentID = documentID,assignmentID = assignmentID})"> Grade </a></td>
                 <td><a href="javascript:;" onclick="DownloadFile(@file.Id)">Download</a></td>
             </tr>
         }

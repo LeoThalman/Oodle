@@ -123,10 +123,8 @@
         All Current Classes: <br />
     </h2>
 
-
-
     <div>
-        @foreach (var i in Model)
+    @foreach (var i in Model)
     {
         <div class="block">
             <a href="@Url.Action("Index", "Class", new { ClassID = (i.ClassID) })">

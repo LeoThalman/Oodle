@@ -34,6 +34,8 @@ namespace Oodle.Models
 
         public virtual Class Class { get; set; }
 
+        public int Weight { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Document> Documents { get; set; }
 
