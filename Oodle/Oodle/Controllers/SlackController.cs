@@ -66,8 +66,12 @@ namespace Oodle.Controllers
 
         public string ValidateSlackName(string name)
         {
+            if(name == null)
+            {
+                return "";
+            }
             string sName = name.ToLower();
-            sName = Regex.Replace(sName, @"[\s]+", "-");
+            sName = Regex.Replace(sName, @"[\s]", "-");
             sName = Regex.Replace(sName, @"[^a-z0-9-_]+", "_");
             if (sName.Length > 21)
             {

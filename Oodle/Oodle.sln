@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oodle", "Oodle\Oodle.csproj", "{98CA70C2-4E65-4DFA-930A-A7EF6FDF143B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OodleTests", "OodleTests\OodleTests.csproj", "{3AB46451-5819-449E-9D40-17043E4AB1F7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{D8908835-B114-4E55-AB0F-5C5803A25AC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{98CA70C2-4E65-4DFA-930A-A7EF6FDF143B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98CA70C2-4E65-4DFA-930A-A7EF6FDF143B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98CA70C2-4E65-4DFA-930A-A7EF6FDF143B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3AB46451-5819-449E-9D40-17043E4AB1F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3AB46451-5819-449E-9D40-17043E4AB1F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3AB46451-5819-449E-9D40-17043E4AB1F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3AB46451-5819-449E-9D40-17043E4AB1F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8908835-B114-4E55-AB0F-5C5803A25AC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8908835-B114-4E55-AB0F-5C5803A25AC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8908835-B114-4E55-AB0F-5C5803A25AC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8908835-B114-4E55-AB0F-5C5803A25AC1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
