@@ -14,11 +14,9 @@ namespace Oodle.Models.ViewModels
         public List<User> users { get; set; }
         public List<Document> documents {get; set;}
         public List<ClassNotification> notifs { get; set; }
-<<<<<<< HEAD
         public List<int> classGrade { get; set; }
-=======
         public List<UserRoleClass> roles { get; set; }
->>>>>>> teacherRoster
+
 
         public TeacherVM(Class classP, List<User> userP)
         {
