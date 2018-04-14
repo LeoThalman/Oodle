@@ -229,14 +229,6 @@
     <Compile Include="Utility\SlackManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\Oodle.mdf" />
-    <Content Include="App_Data\OodleDB.mdf" />
-    <Content Include="App_Data\OodleDB_log.ldf">
-      <DependentUpon>OodleDB.mdf</DependentUpon>
-    </Content>
-    <Content Include="App_Data\Oodle_log.ldf">
-      <DependentUpon>Oodle.mdf</DependentUpon>
-    </Content>
     <Content Include="App_Data\up.sql" />
     <Content Include="App_Data\UpScript.sql" />
     <Content Include="Content\bootstrap.css" />
@@ -351,6 +343,7 @@
     <Content Include="Views\Home\UnderDevelopment.cshtml" />
     <Content Include="Views\Teachers\AddNotifToClass.cshtml" />
     <Content Include="Views\Teachers\RemoveNotif.cshtml" />
+    <Content Include="Views\Teachers\Grades.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

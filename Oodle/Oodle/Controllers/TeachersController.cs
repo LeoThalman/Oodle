@@ -19,7 +19,7 @@ using System.Text.RegularExpressions;
 namespace Oodle.Controllers
 {
     [Authorize]
-    public class TeachersController : Controller
+    public class TeachersController : Controller 
     {
         //Slack access
         private SlackManager slack = new SlackManager();
@@ -260,9 +260,30 @@ namespace Oodle.Controllers
             return View("MakeGrade", "_TeacherLayout");
         }
 
+        /*
+         * Method returns the ViewRoster Html object and loads in 3 db models into the view.
+         * 
+         */
         public ActionResult ViewRoster()
         {
-            return View("ViewRoster", "_TeacherLayout");
+            var classes = db.Classes.ToList(); // list of all classes
+            var user = db.Users.ToList(); // list of all users
+            var roles = db.UserRoleClasses.ToList(); // List of all Roles
+
+            ViewBag.name = User.Identity.GetUserName(); // testing viewbag output
+  
+            var urcL = db.UserRoleClasses.Where(i => i.RoleID == 0);
+            var list = new List<int>();
+            foreach (var i in urcL)
+            {
+                list.Add(i.UsersID);
+            }
+            var request = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
+            var request2 = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
+
+            var teacher = new TeacherVM(classes, user, roles);  // New TeacherVM using the list of classes and user
+            return View("ViewRoster", teacher);
+            
         }
 
         public ActionResult Assignment(int classID)
@@ -304,6 +325,8 @@ namespace Oodle.Controllers
             string id = Request.Form["classID"];
             string startDate = Request.Form["startDate"];
             string dueDate = Request.Form["dueDate"];
+            string weight = Request.Form["weight"];
+
 
             int classID = int.Parse(id);
 
@@ -320,7 +343,7 @@ namespace Oodle.Controllers
             assi.ClassID = classID;
             assi.StartDate = DateTime.Parse(startDate);
             assi.DueDate = DateTime.Parse(dueDate);
-
+            assi.Weight = int.Parse(weight);
 
             db.Assignments.Add(assi);
             db.SaveChanges();
@@ -365,6 +388,8 @@ namespace Oodle.Controllers
             string startDate = Request.Form["startDate"];
             string dueDate = Request.Form["dueDate"];
             string assiID = Request.Form["assignmentID"];
+            string weight = Request.Form["weight"];
+
 
             int assignmentID = int.Parse(assiID);
             int classID = int.Parse(id);
@@ -379,6 +404,8 @@ namespace Oodle.Controllers
             db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList().ForEach(x => x.Description = desc);
             db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList().ForEach(x => x.StartDate = DateTime.Parse(startDate));
             db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList().ForEach(x => x.DueDate = DateTime.Parse(dueDate));
+            db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList().ForEach(x => x.Weight = int.Parse(weight));
+
 
             db.SaveChanges();
 
@@ -507,8 +534,76 @@ namespace Oodle.Controllers
             }
             return files;
         }
+      
+        public ActionResult Grade(int classID, int documentID, int assignmentID)
+        {
+            var teacher = getTVM(classID);
+            teacher.documents = db.Documents.Where(i => i.Id == documentID).ToList();
+            teacher.users = db.Users.Where(i => i.UsersID == db.Documents.Where(j => j.Id == documentID).FirstOrDefault().UserID).ToList();
+            teacher.assignment = db.Assignments.Where(i => i.AssignmentID == assignmentID).ToList();
 
+            return View("MakeGrade", "_TeacherLayout", teacher);
+        }
 
+        [HttpPost]
+        public ActionResult SubmitGrade(int classID, int documentID, int assignmentID)
+        {
+            var grade = Int32.Parse(Request.Form["grade"]);
+
+            var teacher = getTVM(classID);
+            teacher.documents = db.Documents.Where(i => i.Id == documentID).ToList();
+            teacher.users = db.Users.Where(i => i.UsersID == db.Documents.Where(j => j.Id == documentID).FirstOrDefault().UserID).ToList();
+            teacher.assignment = db.Assignments.Where(i => i.AssignmentID == assignmentID).ToList();
+
+            db.Documents.Where(i => i.Id == documentID).ToList().ForEach(x => x.Grade = grade);
+
+            db.SaveChanges();
+
+            return View("MakeGrade", "_TeacherLayout", teacher);
+        }
+
+        public ActionResult GradeList(int classID)
+        {
+            var teacher = getTVM(classID);
+            var tmp = db.UserRoleClasses.Where(i => i.ClassID == classID && i.RoleID == 2).ToList(); //Gets all the students in the class.
+
+            List<User> list = new List<User>();
+            List<int> classGrades = new List<int>();
+
+            foreach(var i in tmp)
+            {
+                list.Add(db.Users.Where(l => l.UsersID == i.UsersID).FirstOrDefault());
+
+                var submissions = db.Documents.Where(l => l.ClassID == classID && l.UserID == i.UsersID).ToList();
+
+                int total = 0;
+                int divisor = 0;
+                foreach(var l in submissions)
+                {
+                    if (l.Grade != -1)
+                    {
+                        var contribution = l.Assignment.Weight * l.Grade;
+                        total = contribution + total;
+                        divisor = l.Assignment.Weight + divisor;
+                    }
+                }
+                if (divisor != 0)
+                {
+                    classGrades.Add(total / divisor);
+                }
+                else
+                {
+                    classGrades.Add(0);
+                }
+            }
+
+            teacher.documents = db.Documents.Where(i => i.ClassID == classID).ToList();
+            teacher.classGrade = classGrades;
+            teacher.users = list;
+            teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).ToList();
+
+            return View("Grades", "_TeacherLayout", teacher);
+        }
 
         public ActionResult CreateQuiz()
         {

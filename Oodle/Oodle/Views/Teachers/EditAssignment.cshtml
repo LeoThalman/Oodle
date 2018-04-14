@@ -12,8 +12,7 @@
     <form method="post" action="EditAssignmentAction">
         <div>
             <h1>Edit Your Assignment</h1>
-
-
+            
             <label for="name">Name</label> <br />
             <input type="text" name="name" value="@Model.assignment.FirstOrDefault().Name" required />
 
@@ -25,8 +24,11 @@
 
 
             <label for="description">Description</label><br />
-            <textarea name="description" required>@Model.assignment.FirstOrDefault().Description</textarea>
-            <br />
+            <textarea name="description" required>@Model.assignment.FirstOrDefault().Description</textarea><br />
+
+            <label for="weight">Weight of Grade:</label> <br />
+            <input type="number" name="weight" placeholder="0" value="@Model.assignment.FirstOrDefault().Weight" max="1000" min="0" required /><br />
+
             <label for="startDate">Start Date</label>             <br />
 
             <input type="datetime" name="startDate" value="@Model.assignment.FirstOrDefault().StartDate" required />
