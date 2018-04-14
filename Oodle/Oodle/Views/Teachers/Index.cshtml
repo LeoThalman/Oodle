@@ -30,17 +30,25 @@
     <div class="container">
         <div>
             <div class="col-lg-6" id="teacherPage">
-                @Html.DisplayNameFor(Description => Model.cl.Description):<br />
+                <h3>Description</h3>
                 <p style="font-size:14px;">
                     @Html.DisplayFor(Description => Model.cl.Description)
                 </p>
             </div>
             <div class="col-sm-6" id="teacherPage">
+                <h3> Notifications </h3>
                 @foreach (var notif in Model.notifs)
                 {
-                    @Html.DisplayNameFor(Notification => notif.Notification)
+                <p>
                     @Html.DisplayFor(Notification => notif.Notification)
+                    <a href="@Url.Action("RemoveNotif", "Teachers", new { classID = (notif.ClassID), notifID = (notif.ClassNotificationID)} )">
+                        Remove Notification
+                    </a>
+                </p>
                 }
+                <a href="@Url.Action("AddNotifToClass", "Teachers", new { ClassID = (Model.cl.ClassID)} )">
+                    Add A Notification
+                </a>
             </div>
         </div>
     </div>
