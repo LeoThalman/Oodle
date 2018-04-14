@@ -202,8 +202,9 @@ namespace Oodle.Controllers
                 list.Add(i.UsersID);
             }
             var request = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
+            var request2 = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
 
-            var teacher = new TeacherVM(classes, user, roles); // New TeacherVM using the list of classes and user
+            var teacher = new TeacherVM(classes, user, roles);  // New TeacherVM using the list of classes and user
             return View("ViewRoster", teacher);
             
         }
