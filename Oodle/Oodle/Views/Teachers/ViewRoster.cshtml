@@ -3,4 +3,77 @@
 @{
     ViewBag.Title = "ViewRoster";
 }
-<center><h2>ViewRoster View for Teachers Controller</h2></center>
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+@section scripts
+{
+    <script type="text/javascript" src="~/Scripts/scriptone.js"></script>
+}
+
+    <div id="classListBody">  
+        <h2 style="text-align:center;">
+            Class Rosters
+        </h2>
+        <hr />
+        <h2 style="text-align:center;">
+            Classes For: @ViewBag.name
+            <br />
+        </h2>
+    </div>
+
+    <div>
+        @foreach (var i in Model.classList)
+    {
+
+        // +Get Teacher ID
+        // +Match with Class ID
+        // +Print out Class
+        // Print out Students that match class
+
+        //Loops Users, Finds Teacher
+        for (int u = 0; u < Model.users.Count(); u++)
+        {
+
+            // If Teach Print Class
+            if (i.UsersID == Model.users[u].UsersID && Model.users[u].UserName == ViewBag.name)
+            {
+                <div class="slide-toggle text-center">
+                    <div class="container">
+                        <div class="box-toggle">
+                            <div>
+                                <div class="contorol">
+                                    <h1>@Html.DisplayFor(Name => i.Name)</h1>
+                                    <hr/>
+                                    <h2>@Html.DisplayFor(Description => i.Description)</h2>
+                                    <span class="toggle-info pull-left">
+                                        <i class="fa fa-plus"></i>
+                                    </span>
+                                </div>
+                                <div class="content-box">
+                                    @for (int x = 0; x < Model.roles.Count(); x++)
+                                    {
+                                    if (Model.roles[x].ClassID == i.ClassID && Model.roles[x].RoleID == 2)
+                                    {
+                                        var bob = Model.roles[x].UsersID;
+                                        for (int c = 0; c < Model.users.Count(); c++)
+                                        {
+                                            if (Model.users[c].UsersID == bob)
+                                            {
+                                               <h5>@Model.users[c].UserName</h5>
+                                        }
+                                     }
+                                     }
+                                     }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        }
+    }
+}
+</div>
+
+
+
