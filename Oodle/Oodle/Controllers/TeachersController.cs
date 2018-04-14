@@ -199,10 +199,8 @@ namespace Oodle.Controllers
             return View("RemoveNotif", "_TeacherLayout", teacher);
         }
 
-        public ActionResult RemoveNotification()
+        public ActionResult RemoveNotification(int classID, int notifID)
         {
-            int classID = int.Parse(Request.Form["classID"]);
-            int notifID = int.Parse(Request.Form["notifID"]);
             
             if (test(classID) != null)
             {
