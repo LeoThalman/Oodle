@@ -183,49 +183,30 @@ namespace Oodle.Controllers
             return View("MakeGrade", "_TeacherLayout");
         }
 
-
-
-
-
-
-
-
-
-
-
+        /*
+         * Method returns the ViewRoster Html object and loads in 3 db models into the view.
+         * 
+         */
         public ActionResult ViewRoster()
         {
-
             var classes = db.Classes.ToList(); // list of all classes
             var user = db.Users.ToList(); // list of all users
             var roles = db.UserRoleClasses.ToList(); // List of all Roles
-            
-            var idid = User.Identity.GetUserId();//get Teachers Identity ID
 
-            var teachId = db.Users.Where(i => i.IdentityID == idid); // teachID finds the ID that we are logged into
-        
-
-            
-          
             ViewBag.name = User.Identity.GetUserName(); // testing viewbag output
-            var Bob = db.Users.ToList();
-            ViewBag.id = Bob[0].ToString();
-
-
+  
+            var urcL = db.UserRoleClasses.Where(i => i.RoleID == 0);
+            var list = new List<int>();
+            foreach (var i in urcL)
+            {
+                list.Add(i.UsersID);
+            }
+            var request = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
 
             var teacher = new TeacherVM(classes, user, roles); // New TeacherVM using the list of classes and user
-
             return View("ViewRoster", teacher);
             
         }
-
-
-
-
-
-
-
-
 
         public ActionResult Assignment(int classID)
         {

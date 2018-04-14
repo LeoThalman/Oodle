@@ -1,6 +1,5 @@
 ﻿@model Oodle.Models.ViewModels.TeacherVM
 
-
 @{
     ViewBag.Title = "ViewRoster";
 }
@@ -12,62 +11,68 @@
     <script type="text/javascript" src="~/Scripts/scriptone.js"></script>
 }
 
-
-    <div id="classListBody">
-
-
+    <div id="classListBody">  
         <h2 style="text-align:center;">
             Class Rosters
         </h2>
         <hr />
-
-
         <h2 style="text-align:center;">
-            @*@<!-- Look up name, to look up ID
-                 Look up Class with User ID-->
-            USER ID: @ViewBag.id <br />*@
-            Classes Registered Under: @ViewBag.name;
+            Classes For: @ViewBag.name
             <br />
         </h2>
-        
-
     </div>
 
-<div>
-    @foreach (var i in Model.classList)
+    <div>
+        @foreach (var i in Model.classList)
     {
 
-        <div class="slide-toggle text-center">
-            <div class="container">
-                <div class="box-toggle">
-                    <div>
-                        <div class="contorol">
-                            @Html.DisplayFor(Name => i.Name)
-                            <span class="toggle-info pull-left">
-                                <i class="fa fa-plus"></i>
-                            </span>
-                            <br />
-                            <h1>Students in class: @Model.users.Count();</h1>
-                        </div>
-                            
-                        
-                        <div class="content-box">
-                        @for (int j = 0; j < Model.users.Count(); j++)
-                        {
-                            var user = Model.users[j];
-                           
-                                <h3> Name: @Model.users[j].UserName; </h3> <br />
-                           
-                           }
+        // +Get Teacher ID
+        // +Match with Class ID
+        // +Print out Class
+        // Print out Students that match class
+
+        //Loops Users, Finds Teacher
+        for (int u = 0; u < Model.users.Count(); u++)
+        {
+
+            // If Teach Print Class
+            if (i.UsersID == Model.users[u].UsersID && Model.users[u].UserName == ViewBag.name)
+            {
+                <div class="slide-toggle text-center">
+                    <div class="container">
+                        <div class="box-toggle">
+                            <div>
+                                <div class="contorol">
+                                    <h1>@Html.DisplayFor(Name => i.Name)</h1>
+                                    <hr/>
+                                    <h2>@Html.DisplayFor(Description => i.Description)</h2>
+                                    <span class="toggle-info pull-left">
+                                        <i class="fa fa-plus"></i>
+                                    </span>
+                                </div>
+                                <div class="content-box">
+                                    @for (int x = 0; x < Model.roles.Count(); x++)
+                                    {
+                                    if (Model.roles[x].ClassID == i.ClassID && Model.roles[x].RoleID == 2)
+                                    {
+                                        var bob = Model.roles[x].UsersID;
+                                        for (int c = 0; c < Model.users.Count(); c++)
+                                        {
+                                            if (Model.users[c].UsersID == bob)
+                                            {
+                                               <h5>@Model.users[c].UserName</h5>
+                                        }
+                                     }
+                                     }
+                                     }
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <br />
-        <br />
+        }
     }
+}
 </div>
 
 
