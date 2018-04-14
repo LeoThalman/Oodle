@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 
 namespace Oodle.Controllers
 {
@@ -77,6 +78,11 @@ namespace Oodle.Controllers
 
         }
 
+        public ActionResult Calendar()
+        {
+            
+            return View(DateTime.Now);
+        }
 
 
 
