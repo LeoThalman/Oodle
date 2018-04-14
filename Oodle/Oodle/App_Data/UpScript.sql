@@ -255,6 +255,7 @@ CREATE TABLE dbo.Assignment
 	Description NVARCHAR(512),
 	StartDate DATETIME,
 	DueDate DATETIME,
+	Weight INT NOT NULL,
 	CONSTRAINT [PK_dbo.Assignment] PRIMARY KEY CLUSTERED (AssignmentID ASC),
 	CONSTRAINT [FK_dbo.Assignment_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
 );
@@ -291,9 +292,11 @@ CREATE TABLE dbo.Documents(
     Name NVARCHAR(250) NOT NULL,  
     ContentType NVARCHAR(250) NOT NULL,  
 	Data VARBINARY(MAX) NOT NULL,
+	submitted DateTime NOT NULL,
 	ClassID INT NOT NULL,
 	AssignmentID INT NOT NULL,
 	UserID INT NOT NULL,
+	Grade INT NOT NULL,
 	CONSTRAINT [PK_dbo.Documents] PRIMARY KEY CLUSTERED (Id ASC),
 	CONSTRAINT [FK_dbo.Documents_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID]),
 	CONSTRAINT [FK_dbo.Documents_dbo.UserID] FOREIGN KEY ([UserID]) REFERENCES [dbo].[Users] ([UsersID]),
