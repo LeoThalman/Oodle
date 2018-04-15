@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using Newtonsoft.Json.Linq;
 using Oodle.Models;
+using Oodle.Utility;
 using Oodle.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace Oodle.Controllers
     public class ClassController : Controller
     {
         private Model1 db = new Model1();
-        private SlackController slack = new SlackController();
+        private SlackManager slack = new SlackManager();
 
 
         // GET: Class

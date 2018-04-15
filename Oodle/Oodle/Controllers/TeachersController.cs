@@ -13,15 +13,16 @@ using System.IO;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Diagnostics;
+using Oodle.Utility;
 using System.Text.RegularExpressions;
 
 namespace Oodle.Controllers
 {
     [Authorize]
-    public class TeachersController : Controller
+    public class TeachersController : Controller 
     {
         //Slack access
-        private SlackController slack = new SlackController();
+        private SlackManager slack = new SlackManager();
 
         // GET: Teachers
         private Model1 db = new Model1();
@@ -110,6 +111,10 @@ namespace Oodle.Controllers
             string notif = Request.Form["notification"];
             int classID = int.Parse(Request.Form["classID"]);
 
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
 
             Class hasSlack = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
 
@@ -122,14 +127,89 @@ namespace Oodle.Controllers
                 AddNotification(notif, classID);
             }
 
+
+
+            db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Name = name);
+            db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Description = desc);
+
+            db.SaveChanges();
+
+            return RedirectToAction("Index", new { classId = classID });
+        }
+
+        public ActionResult AddNotifToClass(int classID)
+        {
             if (test(classID) != null)
             {
                 return test(classID);
             }
 
-            db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Name = name);
-            db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Description = desc);
 
+            ViewBag.id = classID;
+
+            var teacher = getTVM(classID);
+
+            return View("AddNotifToClass", "_TeacherLayout", teacher);
+        }
+
+        public ActionResult SaveNotif()
+        {
+            ViewBag.RequestMethod = "POST";
+            string notif = Request.Form["notification"];
+            int classID = int.Parse(Request.Form["classID"]);
+
+            if (test(classID) != null)
+            {
+                return test(classID);
+            } 
+
+            Class hasSlack = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
+
+
+            if (!(string.IsNullOrEmpty(notif)))
+            {
+                if (!hasSlack.SlackName.Equals("%"))
+                {
+                    slack.SlackNotif(notif, hasSlack.SlackName);
+                }
+                AddNotification(notif, classID);
+            }
+
+
+            return RedirectToAction("Index", new { classId = classID });
+        }
+
+        public ActionResult RemoveNotif(int classID, int notifID)
+        {
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+
+            ClassNotification cNotif = db.ClassNotifications.Where(n => n.ClassID == classID 
+                                                                && n.ClassNotificationID == notifID).FirstOrDefault();
+            if(cNotif == null)
+            {
+                return RedirectToAction("Index", new { classId = classID });
+            }
+
+            var teacher = getTVM(classID);
+            teacher.rNotif = cNotif;
+
+            return View("RemoveNotif", "_TeacherLayout", teacher);
+        }
+
+        public ActionResult RemoveNotification(int classID, int notifID)
+        {
+            
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+
+            ClassNotification notif = db.ClassNotifications.Where(n => n.ClassID == classID
+                                                    && n.ClassNotificationID == notifID).FirstOrDefault();
+            db.ClassNotifications.Remove(notif);
             db.SaveChanges();
 
             return RedirectToAction("Index", new { classId = classID });
@@ -142,10 +222,7 @@ namespace Oodle.Controllers
             cNotif.TimePosted = DateTime.Now;
             cNotif.ClassID = classID;
             db.ClassNotifications.Add(cNotif);
-
-            db.SaveChanges();
-
-           
+            db.SaveChanges();           
         }
 
         public ActionResult Delete(int classID)
@@ -183,9 +260,30 @@ namespace Oodle.Controllers
             return View("MakeGrade", "_TeacherLayout");
         }
 
+        /*
+         * Method returns the ViewRoster Html object and loads in 3 db models into the view.
+         * 
+         */
         public ActionResult ViewRoster()
         {
-            return View("ViewRoster", "_TeacherLayout");
+            var classes = db.Classes.ToList(); // list of all classes
+            var user = db.Users.ToList(); // list of all users
+            var roles = db.UserRoleClasses.ToList(); // List of all Roles
+
+            ViewBag.name = User.Identity.GetUserName(); // testing viewbag output
+  
+            var urcL = db.UserRoleClasses.Where(i => i.RoleID == 0);
+            var list = new List<int>();
+            foreach (var i in urcL)
+            {
+                list.Add(i.UsersID);
+            }
+            var request = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
+            var request2 = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
+
+            var teacher = new TeacherVM(classes, user, roles);  // New TeacherVM using the list of classes and user
+            return View("ViewRoster", teacher);
+            
         }
 
         public ActionResult Assignment(int classID)

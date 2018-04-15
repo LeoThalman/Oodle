@@ -1,0 +1,19 @@
+﻿@model Oodle.Models.ViewModels.TeacherVM
+
+<div class="form-style-6">
+    <h1>Add Notification to @Model.cl.Name</h1>
+
+    <form method="post" action="SaveNotif">
+
+        <input type="hidden" name="classID" value=@Model.cl.ClassID required />
+
+        <label for="notification">Notification</label><br />
+        <textarea name="notification" placeholder="Enter notification here..." value=""></textarea>
+
+
+        <br />
+        <input type="submit" name="submit" value="Add Notification" />
+
+    </form>
+</div>
+

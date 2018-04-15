@@ -2,6 +2,7 @@
 
 using NUnit.Framework;
 using Oodle.Controllers;
+using Oodle.Utility;
 
 namespace Test
 {
@@ -71,7 +72,7 @@ namespace Test
         [Test]
         public void ValidateSlackName_ShortensNamesLongerThan21Chars_ReturnsShortenedName()
         {
-            SlackController slack = new SlackController();
+            SlackManager slack = new SlackManager();
             string temp = "thisnameislongerthan21chars";
             string answer = "thisnameislongerthan2";
             string temp2 = "thisnameis-longenough";
@@ -83,7 +84,7 @@ namespace Test
         [Test]
         public void ValidateSlackName_NullParamReturnsEmptyString_ReturnsEmptyString()
         {
-            SlackController slack = new SlackController();
+            SlackManager slack = new SlackManager();
             string temp = null;
             string answer = "";
             Assert.That(slack.ValidateSlackName(temp), Does.Match(answer));
@@ -92,7 +93,7 @@ namespace Test
         [Test]
         public void ValidateSlackName_ConvertsSpacesToDashes_ReturnsConvertedName()
         {
-            SlackController slack = new SlackController();
+            SlackManager slack = new SlackManager();
             string temp = "a  a";
             string answer = "a--a";
             Assert.That(slack.ValidateSlackName(temp), Does.Match(answer));
@@ -101,7 +102,7 @@ namespace Test
         [Test]
         public void ValidateSlackName_ConvertsToLowerCase_ReturnsConvertedName()
         {
-            SlackController slack = new SlackController();
+            SlackManager slack = new SlackManager();
             string temp = "TEST";
             string answer = "test";
 
@@ -111,7 +112,7 @@ namespace Test
         [Test]
         public void ValidateSlackName_ConvertsSpecialCharToUnderScore_ReturnsConverted()
         {
-            SlackController slack = new SlackController();
+            SlackManager slack = new SlackManager();
             string temp = "!@#$%^&()+=|><,.;:[]{}";
             string answer = "_";
 

@@ -102,6 +102,8 @@ namespace Oodle.Controllers
 
             teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).OrderBy(i => i.StartDate).ToList();
 
+            teacher.notifs = db.ClassNotifications.Where(i => i.ClassID == classID).OrderBy(i => i.TimePosted).ToList();
+
             return teacher;
         }
 
