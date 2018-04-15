@@ -1,9 +1,7 @@
 ﻿$(document).ready(function () {
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    console.log("Test")
 
     var date = new Date(Date.now());
-    console.log(date);
     var day = date.getDay();
     var month = date.getMonth();
     var year = date.getFullYear();
@@ -14,10 +12,12 @@
     } else {
         FebNumberOfDays = 28;
     }
-    var dayPerMonth = ["31", "" + FebNumberOfDays + "", "31", "30", "31", "30", "31", "31", "30", "31", "30", "31"]
+    var dayPerMonth = ["31", "" + FebNumberOfDays + "", "31", "30", "31", "30", "31", "31", "30", "31", "30", "31"];
 
+    var maxd = parseInt(dayPerMonth[month]);
     var fday = new Date(date.getFullYear(), date.getMonth(), 1);
-    var lday = new Date(date.getFullYear, date.getMonth(), dayPerMonth[date.getMonth() - 1]);
+    var lday = new Date(date.getFullYear(), date.getMonth(), maxd);
+    console.log("First Day: " + fday.getDay());
 
     var cal = $("<table>", {
         "class": "calendar"
@@ -38,32 +38,35 @@
     var body = $("<tbody>");
     var row = null;
     var cell = null;
-    var n = null;
+    var n = 0;
 
     for (var w = 0; w < 6; w++) {
         row = $("<tr>");
         for (var d = 0; d < 7; d++) {
-            n = w * 7 + (d + 1) - fday;
-            if (n < 1 || n > lday) {
+            n = (w * 7) + (d + 1) - fday.getDay();
+            if (n < 1 || n > maxd) {
                 cell = $("<td>");
             } else {
                 if (n == date.getDate()) {
+                    console.log("Test 3");
                     cell = $("<td>", {
                         id: n,
                         "class": "today"
                     });
                 }
                 else {
-                    cell = ("<td>", {
+                    cell = $("<td>", {
                         id: n
                     });
                 }
-                
+                cell.append(n);  
             }
-            row.append(cell);  
+            
+            row.append(cell);
+             
         }
         body.append(row);
-        if (n >= lday.getDate) {
+        if (n >= maxd) {
             break;
         }
 
