@@ -48,7 +48,6 @@
                 cell = $("<td>");
             } else {
                 if (n == date.getDate()) {
-                    console.log("Test 3");
                     cell = $("<td>", {
                         id: n,
                         "class": "today"

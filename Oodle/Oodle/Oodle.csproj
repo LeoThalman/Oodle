@@ -253,7 +253,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\calendar2.js" />
+    <Content Include="Scripts\calendar.js" />
     <Content Include="Scripts\ClassList.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -346,6 +346,7 @@
     <Content Include="Views\Teachers\RemoveNotif.cshtml" />
     <Content Include="Views\Teachers\Grades.cshtml" />
     <Content Include="Views\Home\Calendar.cshtml" />
+    <Content Include="Views\Shared\_CalendarLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

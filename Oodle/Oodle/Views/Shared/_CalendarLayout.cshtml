@@ -6,6 +6,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- Fonts-->
     <link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah|Ubuntu" rel="stylesheet">
+    <!-- Style sheets-->
+
     <link rel="stylesheet" type="text/css" href="/Scripts/main.css">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,36 +31,23 @@
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Classes", "List", "Class")</li>
+                    <li>@Html.ActionLink("Tools", "Tools", "Home")</li>
                     <li><a href="https://oodle-dev.slack.com/" target="_blank">Go to Slack</a></li>
-                    
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>
 
-    <!--Local Nav bar for Grader Controller-->
-    <nav class="navbar" style="float:left;border-right:solid black 1px;font-size:22px;padding:10px;">
-        <br />
-        <ul>@Html.ActionLink("Home", "Index", "Graders", new { @style = "color:#000aaa;" })</ul>
-        <ul>@Html.ActionLink("To Do List", "ToDoList", "Graders", new { @style = "color:#000aaa;" })</ul>
-        <ul>@Html.ActionLink("Grade Quizzes", "GradeQuiz", "Graders", new { @style = "color:#000aaa;" })</ul>
-        <ul>@Html.ActionLink("Grade Tasks", "GradeTask", "Graders", new { @style = "color:#000aaa;" })</ul>
-        <ul>@Html.ActionLink("Grade Assignments", "GradeAssignment", "Graders", new { @style = "color:#000aaa;" })</ul>
-    </nav><br />
-
-
-
-
     <div class="container body-content">
         @RenderBody()
-        
-        <footer style="position:absolute;bottom:0;">
-            <p>&copy; @DateTime.Now.Year - Oodle Incorporated</p>
-        </footer>
+        <hr />
+        <footer></footer>
     </div>
+
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    <script src="/Scripts/calendar.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

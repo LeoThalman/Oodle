@@ -81,7 +81,7 @@ namespace Oodle.Controllers
         public ActionResult Calendar()
         {
             
-            return View(DateTime.Now);
+            return View("Calendar", "_CalendarLayout");
         }
 
 
