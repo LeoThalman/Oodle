@@ -424,7 +424,20 @@ hr.style-four {
     background: #3AAFA9;
 }
 
+/*---------------------------CALENDAR PAGE------------------------------------*/
+.calMonth {
+    text-align:center;
+    font-size:40px;
+}
 
+
+
+.today {
+    background-color: #49e2ea;
+}
+.thisWeek {
+    background-color: rgba(23, 37, 42, 0.35);
+}
 
 /*-----------------------------CREATE A CLASS PAGE-----------------------------*/
 #classCreateTitle {

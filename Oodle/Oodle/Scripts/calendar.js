@@ -22,7 +22,11 @@
     var cal = $("<table>", {
         "class": "calendar"
     });
-
+    var monthHeader = $('<thead>\
+			      <tr>\
+			         <th class="calMonth" colspan="7">'+ months[month]+ ' </th>\
+			      </tr>\
+				</thead>');
     var header = $("<thead>\
 			      <tr>\
 			         <th>Sunday</th>\
@@ -34,6 +38,7 @@
 					 <th>Saturday</th>\
 			      </tr>\
 				</thead>");
+    cal.append(monthHeader);
     cal.append(header);
     var body = $("<tbody>");
     var row = null;
@@ -41,8 +46,15 @@
     var n = 0;
 
     for (var w = 0; w < 6; w++) {
-        row = $("<tr>");
+        if ((w * 7)+1 <= date.getDate() && ((w + 1) * 7) >= date.getDate()) {
+            row = $("<tr>", {
+                "class": "thisWeek"
+            });
+        } else {
+            row = $("<tr>");
+        }
         for (var d = 0; d < 7; d++) {
+           
             n = (w * 7) + (d + 1) - fday.getDay();
             if (n < 1 || n > maxd) {
                 cell = $("<td>");
