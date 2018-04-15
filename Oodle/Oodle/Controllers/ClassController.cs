@@ -29,30 +29,59 @@ namespace Oodle.Controllers
 
             UserRoleClass urc = db.UserRoleClasses.Where(s => s.UsersID == user.UsersID && s.ClassID == classID).FirstOrDefault();
 
+
             if (urc == null)
             {
                 return View(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault());
-
-            }
-
-            else if (urc.RoleID == 0)
-            {
-                return RedirectToAction("Index", "Teachers", new { classId = classID });
-            }
-            else if (urc.RoleID == 1)
-            {
-                return RedirectToAction("Index", "Graders", new { classId = classID });
-            }
-            else if (urc.RoleID == 2)
-            {
-                return RedirectToAction("Index", "Students", new { classId = classID });
             }
             else
             {
-                return RedirectToAction("Pending", new { classId = classID });
+                var id = urc.RoleID;
+
+                if (id == 0)
+                {
+                    return RedirectToAction("Index", "Teachers", new { classId = classID });
+                }
+                else if (id == 1)
+                {
+                    return RedirectToAction("Index", "Graders", new { classId = classID });
+                }
+                else if (id == 2)
+                {
+                    return RedirectToAction("Index", "Students", new { classId = classID });
+                }
+                else
+                {
+                    return RedirectToAction("Pending", new { classId = classID });
+                }
             }
         }
         
+        public string roleFromID(int roleID)
+        {
+            if (roleID == 0)
+            {
+                return "teacher";
+            }
+            else if (roleID == 1)
+            {
+                return "grader";
+            }
+            else if (roleID == 2)
+            {
+                return "student";
+            }
+            else if (roleID == 3)
+            {
+                return "pending";
+            }
+            else
+            {
+                return "No Valid Role";
+            }
+        }
+
+
         public ActionResult List()
         {
             return View(db.Classes.ToList());
@@ -98,7 +127,6 @@ namespace Oodle.Controllers
 
 
             //I know this is the worst way to do this and I will make my code better in the future, right now I just want to make sure what I have works.
-            if (true)
             {
                 var test = db.UserRoleClasses.Where(j => j.UsersID == id).ToList();
 
