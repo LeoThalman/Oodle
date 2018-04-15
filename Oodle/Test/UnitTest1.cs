@@ -26,7 +26,7 @@ namespace Test
         public void TestingTestShouldFail()
         {
             HomeController c = new HomeController();
-            string input = "notFail"; 
+            string input = "notFail";
             string expected = "Fail";
             string result = c.Capitalize(input);
             Assert.That(result, Is.EqualTo(expected));
@@ -119,6 +119,69 @@ namespace Test
             Assert.That(slack.ValidateSlackName(temp), Does.Match(answer));
 
 
+        }
+
+        [Test]
+        public void roleFromID_ReturnsRoleForRoleIDZero_ReturnsTeacher()
+        {
+            ClassController classcont = new ClassController();
+            int roleID = 0;
+
+            Assert.That(classcont.roleFromID(roleID), Does.Match("teacher"));
+        }
+
+        [Test]
+        public void roleFromID_ReturnsRoleForRoleIDOne_ReturnsGrader()
+        {
+            ClassController classcont = new ClassController();
+            int roleID = 1;
+
+            Assert.That(classcont.roleFromID(roleID), Does.Match("grader"));
+        }
+
+        [Test]
+        public void roleFromID_ReturnsRoleForRoleIDTwo_ReturnsStudent()
+        {
+            ClassController classcont = new ClassController();
+            int roleID = 2;
+
+            Assert.That(classcont.roleFromID(roleID), Does.Match("student"));
+        }
+
+        [Test]
+        public void roleFromID_ReturnsRoleForRoleIDThree_ReturnsPending()
+        {
+            ClassController classcont = new ClassController();
+            int roleID = 3;
+
+            Assert.That(classcont.roleFromID(roleID), Does.Match("pending"));
+        }
+
+        [Test]
+        public void roleFromID_ReturnsRoleForRoleIDNegative_ReturnsInvalid()
+        {
+            ClassController classcont = new ClassController();
+            int roleID = -1;
+
+            Assert.That(classcont.roleFromID(roleID), Does.Match("No Valid Role"));
+        }
+
+        [Test]
+        public void roleFromID_ReturnsRoleForRoleIDTooLarge_ReturnsInvalid()
+        {
+            ClassController classcont = new ClassController();
+            int roleID = 4;
+
+            Assert.That(classcont.roleFromID(roleID), Does.Match("No Valid Role"));
+        }
+
+        [Test]
+        public void roleFromID_ReturnsRoleForRoleIDMuchTooLarge_ReturnsInvalid()
+        {
+            ClassController classcont = new ClassController();
+            int roleID = 2147483647;
+
+            Assert.That(classcont.roleFromID(roleID), Does.Match("No Valid Role"));
         }
     }
 }
