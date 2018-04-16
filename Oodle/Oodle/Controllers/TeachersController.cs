@@ -108,26 +108,12 @@ namespace Oodle.Controllers
 
             string name = Request.Form["name"];
             string desc = Request.Form["description"];
-            string notif = Request.Form["notification"];
             int classID = int.Parse(Request.Form["classID"]);
 
             if (test(classID) != null)
             {
                 return test(classID);
             }
-
-            Class hasSlack = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
-
-            if (!(string.IsNullOrEmpty(notif)))
-            {
-                if (!hasSlack.SlackName.Equals("%"))
-                {
-                    slack.SlackNotif(notif, hasSlack.SlackName);
-                }
-                AddNotification(notif, classID);
-            }
-
-
 
             db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Name = name);
             db.Classes.Where(i => i.ClassID == classID).ToList().ForEach(x => x.Description = desc);
