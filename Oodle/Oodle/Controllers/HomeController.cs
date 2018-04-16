@@ -78,14 +78,30 @@ namespace Oodle.Controllers
 
         }
 
+        //Also a test method for Sam
+        public string GetTimeOfDay(DateTime dateTime)
+        {
+            if (dateTime.Hour >= 0 && dateTime.Hour < 6)
+            {
+                return "Night";
+            }
+            if (dateTime.Hour >= 6 && dateTime.Hour < 12)
+            {
+                return "Morning";
+            }
+            if (dateTime.Hour >= 12 && dateTime.Hour < 18)
+            {
+                return "Noon";
+            }
+            return "Evening";
+        }
+
+
         public ActionResult Calendar()
         {
             
             return View("Calendar", "_CalendarLayout");
         }
-
-
-
 
     }
 }
