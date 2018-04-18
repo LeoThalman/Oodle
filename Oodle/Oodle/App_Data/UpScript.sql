@@ -302,4 +302,35 @@ CREATE TABLE dbo.Documents(
 	CONSTRAINT [FK_dbo.Documents_dbo.UserID] FOREIGN KEY ([UserID]) REFERENCES [dbo].[Users] ([UsersID]),
 	CONSTRAINT [FK_dbo.Documents_dbo.AssignmentID] FOREIGN KEY ([AssignmentID]) REFERENCES [dbo].[Assignment] ([AssignmentID])
 );
+
+CREATE TABLE dbo.Quizzes(
+	QuizID INT IDENTITY(1,1) NOT NULL,
+	QuizName NVARCHAR(256) NOT NULL,
+	StartTime DateTime NOT NULL,
+	EndTime DateTIme NOT NULL,
+	ClassID INT NOT NULL,
+	IsHidden BIT NOT NULL,
+	TotalPoints INT,
+	CONSTRAINT [PK_dbo.Quizzes] PRIMARY KEY CLUSTERED (QuizID ASC),
+	CONSTRAINT [FK_dbo.Quizzes_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
+);
+
+CREATE TABLE dbo.QuizQuestions(
+	QuestionID INT IDENTITY(1,1) NOT NULL,
+	QuizID INT NOT NULL,
+	TypeOfQuestion INT NOT NULL,
+	Points INT NOT NULL,
+	QuestionText NVARCHAR(512) NOT NULL,
+	CONSTRAINT [PK_dbo.QuizQuestions] PRIMARY KEY CLUSTERED (QuestionID ASC),
+	CONSTRAINT [FK_dbo.Questions_dbo.Quizzes] FOREIGN KEY ([QuizID]) REFERENCES [dbo].[Quizzes] ([QuizID])
+);
+
+Create TABLE MultChoiceAnswer(
+	AnswerID INT IDENTITY(1,1) NOT NULL,
+	Answer1 NVARCHAR (512) NOT NULL,
+	Answer2 NVARCHAR (512),
+	Answer3 NVARCHAR (512),
+	Answer4 NVARCHAR (512),
+	CorrectAnswer INT NOT NULL,
+);
   
