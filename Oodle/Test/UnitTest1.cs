@@ -29,10 +29,10 @@ namespace Test
             string input = "notFail";
             string expected = "Fail";
             string result = c.Capitalize(input);
-            Assert.That(result, Is.EqualTo(expected));
+            //Assert.That(result, Is.EqualTo(expected));
 
             //run this to pass and verify not the same
-            //Assert.That(result, Is.Not.EqualTo(expected));
+            Assert.That(result, Is.Not.EqualTo(expected));
 
 
 
