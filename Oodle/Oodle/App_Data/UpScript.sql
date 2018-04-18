@@ -5,6 +5,9 @@ DROP TABLE dbo.Assignment;
 DROP TABLE dbo.UserRoleClass;
 DROP TABLE dbo.Role;
 DROP TABLE dbo.ClassNotification;
+DROP TABLE dbo.MultChoiceAnswers;
+DROP TABLE dbo.QuizQuestions;
+DROP TABLE dbo.Quizzes;
 DROP TABLE dbo.Class;
 DROP TABLE dbo.Users;
 
@@ -324,13 +327,15 @@ CREATE TABLE dbo.QuizQuestions(
 	CONSTRAINT [PK_dbo.QuizQuestions] PRIMARY KEY CLUSTERED (QuestionID ASC),
 	CONSTRAINT [FK_dbo.Questions_dbo.Quizzes] FOREIGN KEY ([QuizID]) REFERENCES [dbo].[Quizzes] ([QuizID])
 );
-
-Create TABLE MultChoiceAnswer(
+Create TABLE MultChoiceAnswers(
 	AnswerID INT IDENTITY(1,1) NOT NULL,
+	QuestionID INT NOT NULL,
 	Answer1 NVARCHAR (512) NOT NULL,
 	Answer2 NVARCHAR (512),
 	Answer3 NVARCHAR (512),
 	Answer4 NVARCHAR (512),
 	CorrectAnswer INT NOT NULL,
+	CONSTRAINT [PK_dbo.MultChoiceAnswers] PRIMARY KEY CLUSTERED (AnswerID ASC),
+	CONSTRAINT [FK_dbo.MultChoiceAnswers_dbo.QuizQuestions] FOREIGN KEY ([QuestionID]) REFERENCES [dbo].[QuizQuestions] ([QuestionID])
 );
   
