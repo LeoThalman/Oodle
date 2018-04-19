@@ -320,7 +320,9 @@ CREATE TABLE dbo.Quizzes(
 );
  
 INSERT INTO dbo.Quizzes (QuizName, StartTime, EndTime, ClassID, IsHidden) Values
-	('Test Quiz', '12/04/2018 09:04:22', '12/04/2019 09:04:22', 1, 0);
+	('Test Quiz', '12/04/2018 09:04:22', '12/04/2019 09:04:22', 1, 0),
+	('Another Test Quiz', '12/04/2018 09:04:22', '12/04/2019 09:04:22', 1, 0),
+	('Yet Another Test Quiz', '12/04/2018 09:04:22', '12/04/2019 09:04:22', 1, 0);
 
 CREATE TABLE dbo.QuizQuestions(
 	QuestionID INT IDENTITY(1,1) NOT NULL,

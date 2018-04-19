@@ -15,7 +15,8 @@ namespace Oodle.Models.ViewModels
         public List<Document> documents {get; set;}
         public List<ClassNotification> notifs { get; set; }
         public ClassNotification rNotif { get; set; }
-        public List<int> classGrade { get; set; }
+        public List<Quizze> quizzes { get; set; }
+        public List<int> classGrade { get; set; } 
         public List<UserRoleClass> roles { get; set; }
 
 
