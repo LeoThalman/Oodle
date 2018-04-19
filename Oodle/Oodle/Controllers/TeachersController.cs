@@ -591,9 +591,31 @@ namespace Oodle.Controllers
             return View("Grades", "_TeacherLayout", teacher);
         }
 
-        public ActionResult CreateQuiz()
+        [HttpGet]
+        public ActionResult CreateQuiz(int ClassID)
         {
-            return View("CreateQuiz", "_TeacherLayout");
+            TeacherVM teacher = getTVM(ClassID);
+            return View("CreateQuiz", "_TeacherLayout", teacher);
+        }
+
+        [HttpPost]
+        public ActionResult CreateQuiz([Bind(Include = "QuizName,ClassID,StartTime,EndTime,IsHidden")] Quizze Quiz)
+        {
+            if (ModelState.IsValid)
+            {
+                Debug.WriteLine(Quiz.QuizName);
+                Debug.WriteLine(Quiz.ClassID);
+                Debug.WriteLine(Quiz.StartTime);
+                Debug.WriteLine(Quiz.EndTime);
+                Debug.WriteLine(Quiz.IsHidden);
+                db.Quizzes.Add(Quiz);
+                db.SaveChanges();
+                return RedirectToAction("Index", "Class", new { classId = Quiz.ClassID });
+            }
+            else
+            {
+                return RedirectToAction("CreateQuiz", "Teachers", new { classId = Quiz.ClassID });
+            }
         }
 
         public ActionResult CreateTask()

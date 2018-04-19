@@ -317,7 +317,6 @@ CREATE TABLE dbo.Quizzes(
 	CONSTRAINT [PK_dbo.Quizzes] PRIMARY KEY CLUSTERED (QuizID ASC),
 	CONSTRAINT [FK_dbo.Quizzes_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
 	ON DELETE CASCADE
-	ON UPDATE CASCADE
 );
 
 CREATE TABLE dbo.QuizQuestions(

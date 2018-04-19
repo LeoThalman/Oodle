@@ -335,7 +335,6 @@
     <Content Include="Views\Teachers\MakeGrade.cshtml" />
     <Content Include="Views\Teachers\ViewRoster.cshtml" />
     <Content Include="Views\Teachers\Assignment.cshtml" />
-    <Content Include="Views\Teachers\CreateQuiz.cshtml" />
     <Content Include="Views\Teachers\CreateTask.cshtml" />
     <Content Include="Views\Teachers\CreateSlack.cshtml" />
     <Content Include="Views\Teachers\Edit.cshtml" />
@@ -354,6 +353,7 @@
     <Content Include="Views\Teachers\Grades.cshtml" />
     <Content Include="Views\Home\Calendar.cshtml" />
     <Content Include="Views\Shared\_CalendarLayout.cshtml" />
+    <Content Include="Views\Teachers\CreateQuiz.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
