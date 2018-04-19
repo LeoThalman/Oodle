@@ -32,9 +32,9 @@ namespace Oodle.Models
 
         public DateTime? DueDate { get; set; }
 
-        public virtual Class Class { get; set; }
-
         public int Weight { get; set; }
+
+        public virtual Class Class { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Document> Documents { get; set; }

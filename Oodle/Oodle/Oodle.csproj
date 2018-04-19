@@ -218,7 +218,10 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Model1.cs" />
+    <Compile Include="Models\MultChoiceAnswer.cs" />
     <Compile Include="Models\Question.cs" />
+    <Compile Include="Models\QuizQuestion.cs" />
+    <Compile Include="Models\Quizze.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\SlackBot.cs" />
     <Compile Include="Models\User.cs" />
@@ -229,6 +232,10 @@
     <Compile Include="Utility\SlackManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Oodle.mdf" />
+    <Content Include="App_Data\Oodle_log.ldf">
+      <DependentUpon>Oodle.mdf</DependentUpon>
+    </Content>
     <Content Include="App_Data\up.sql" />
     <Content Include="App_Data\UpScript.sql" />
     <Content Include="Content\bootstrap.css" />

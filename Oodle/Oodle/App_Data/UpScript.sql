@@ -316,6 +316,8 @@ CREATE TABLE dbo.Quizzes(
 	TotalPoints INT,
 	CONSTRAINT [PK_dbo.Quizzes] PRIMARY KEY CLUSTERED (QuizID ASC),
 	CONSTRAINT [FK_dbo.Quizzes_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
+	ON DELETE CASCADE
+	ON UPDATE CASCADE
 );
 
 CREATE TABLE dbo.QuizQuestions(
@@ -326,6 +328,8 @@ CREATE TABLE dbo.QuizQuestions(
 	QuestionText NVARCHAR(512) NOT NULL,
 	CONSTRAINT [PK_dbo.QuizQuestions] PRIMARY KEY CLUSTERED (QuestionID ASC),
 	CONSTRAINT [FK_dbo.Questions_dbo.Quizzes] FOREIGN KEY ([QuizID]) REFERENCES [dbo].[Quizzes] ([QuizID])
+	ON DELETE CASCADE
+	ON UPDATE CASCADE,
 );
 Create TABLE MultChoiceAnswers(
 	AnswerID INT IDENTITY(1,1) NOT NULL,
@@ -337,5 +341,7 @@ Create TABLE MultChoiceAnswers(
 	CorrectAnswer INT NOT NULL,
 	CONSTRAINT [PK_dbo.MultChoiceAnswers] PRIMARY KEY CLUSTERED (AnswerID ASC),
 	CONSTRAINT [FK_dbo.MultChoiceAnswers_dbo.QuizQuestions] FOREIGN KEY ([QuestionID]) REFERENCES [dbo].[QuizQuestions] ([QuestionID])
+	ON DELETE CASCADE
+	ON UPDATE CASCADE,
 );
   

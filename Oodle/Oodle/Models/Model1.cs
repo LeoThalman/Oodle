@@ -7,8 +7,6 @@ namespace Oodle.Models
 
     public partial class Model1 : DbContext
     {
-        internal object TeacherVM;
-
         public Model1()
             : base("name=Model1")
         {
@@ -23,7 +21,10 @@ namespace Oodle.Models
         public virtual DbSet<ClassNotification> ClassNotifications { get; set; }
         public virtual DbSet<Document> Documents { get; set; }
         public virtual DbSet<Grade> Grades { get; set; }
+        public virtual DbSet<MultChoiceAnswer> MultChoiceAnswers { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
+        public virtual DbSet<QuizQuestion> QuizQuestions { get; set; }
+        public virtual DbSet<Quizze> Quizzes { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<UserRoleClass> UserRoleClasses { get; set; }
         public virtual DbSet<User> Users { get; set; }
