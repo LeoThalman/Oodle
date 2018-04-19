@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+}
+
+
+<div class="form-style-6">
+    <h1>Create a Class</h1>
+
+    <form method="post" action="CreateClass">
+
+
+        <label for="name">Name of class:</label><br />
+        <input type="text" name="name" placeholder="(e.g., Anthropology 101)" value="" required /><br />
+
+
+        <label for="description">Brief description of your class:</label> <br />
+        <input type="text" name="description" placeholder="We will learn about..." required /> <br />
+
+
+        <label for="subject">The Subject of your class</label> <br />
+        <select name="subject">
+            <option value="math">Math</option>
+            <option value="english">English</option>
+            <option value="cs">Computer Science</option>
+            <option value="art">Art</option>
+        </select>
+
+        <label for="slackName">Slack Channel Name: <br /> (only allows lowercase, numbers and - _ and must be less then 21 characters)</label>
+        <input type="text" name="slackName" placeholder="If left blank we will use class name" maxlength="21" oninput="this.value = this.value.replace(/[^a-z0-9-_]/, '')" /> <br />
+
+
+
+        <label for="slackChoice">Do you want a slack channel?</label>
+        <input type="radio" name="slackChoice" value="true">Yes
+        <input type="radio" name="slackChoice" value="false" checked>No <br />
+
+        <input type="submit" name="submit" value="Start Teaching!" />
+
+    </form>
+</div>

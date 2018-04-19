@@ -1,0 +1,79 @@
+﻿
+@model Oodle.Models.ViewModels.TeacherVM
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="row fontClass" >
+
+    <h3>
+        Your class page for: @Html.DisplayFor(Name => Model.cl.Name)
+    </h3>
+    <hr class="style-four" />
+    <hr class="style-four" />
+
+    <div class="testingURL">
+        <a href="@Url.Action("Edit", "Teachers", new { ClassID = (Model.cl.ClassID)} )">
+            Edit Class
+        </a>
+        <p style="display:inline">----------------------</p>
+
+        <a href="@Url.Action("Delete", "Teachers", new { ClassID = (Model.cl.ClassID)})">
+            Delete Class
+        </a>
+
+    </div>
+    <hr class="style-four" />
+    <hr class="style-four" />
+
+    <div class="container">
+        <div>
+            <div class="col-lg-6" id="teacherPage">
+                <h3>Description</h3>
+                <p style="font-size:14px;">
+                    @Html.DisplayFor(Description => Model.cl.Description)
+                </p>
+            </div>
+            <div class="col-sm-6" id="teacherPage">
+                <h3> Notifications </h3>
+                @foreach (var notif in Model.notifs)
+                {
+                <p>
+                    @Html.DisplayFor(Notification => notif.Notification)
+                    <a href="@Url.Action("RemoveNotif", "Teachers", new { classID = (notif.ClassID), notifID = (notif.ClassNotificationID)} )">
+                        Remove Notification
+                    </a>
+                </p>
+                }
+                <a href="@Url.Action("AddNotifToClass", "Teachers", new { ClassID = (Model.cl.ClassID)} )">
+                    Add A Notification
+                </a>
+            </div>
+        </div>
+    </div>
+    <hr class="style-four" />
+    <hr class="style-four" />
+
+
+</div>
+
+
+
+<h4>Accept or reject the following students to the class:</h4>
+<div class="buttonReject">
+    @for (int i = 0; i < Model.users.Count(); i++)
+    {
+        var user = Model.users[i];
+        @Html.DisplayFor(Name => user.UserName)<p style="display:inline">:</p>
+        <a href="@Url.Action("Accept", "Teachers", new { ClassID = (Model.cl.ClassID), UserID = user.UsersID }, null)">
+            Accept
+        </a>
+        <p style="display:inline">|</p>
+        <a href="@Url.Action("Reject", "Teachers", new { ClassID = (Model.cl.ClassID), UserID = user.UsersID }, null)">
+            Reject
+        </a>
+        <br />
+
+    }
+</div>

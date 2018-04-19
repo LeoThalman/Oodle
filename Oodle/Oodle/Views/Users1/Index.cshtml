@@ -1,0 +1,83 @@
+﻿@model IEnumerable<Oodle.Models.User>
+
+
+
+<link rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="/Scripts/stylestools.css" />
+
+
+
+<div class="container-fluid editPerson">
+    @foreach (var item in Model)
+    {
+        <div class="row editPerson">
+            <h2 class="editPerson">Your Info:</h2>
+        </div>
+
+
+        <div>
+            <div class="row">
+
+                <div class="col-sm-6 razorButtons">
+                    @Html.ActionLink("Edit", "Edit", new { id = item.UsersID })
+                </div>
+
+            
+
+                <div class="col-sm-6 razorButtons">
+                    @Html.ActionLink("Delete Account", "Delete", new { id = item.UsersID })
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-6 editPerson editPersonDetail">Username:</div>
+            <div class="col-md-6 editPerson">
+                @Html.DisplayFor(modelItem => item.UserName)
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-sm-6 editPerson editPersonDetail">Email on File:</div>
+            <div class="col-sm-6 editPerson">
+                @Html.DisplayFor(modelItem => item.AspNetUser.Email)
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-sm-6 editPerson editPersonDetail">First Name:</div>
+            <div class="col-sm-6 editPerson">
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-sm-6 editPerson editPersonDetail">Last Name:</div>
+            <div class="col-sm-6 editPerson">
+                @Html.DisplayFor(modelItem => item.Lastname)
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-sm-6 editPerson editPersonDetail">Bio:</div>
+            <div class="col-sm-6 editPerson">
+                @Html.DisplayFor(modelItem => item.Bio)
+            </div>
+        </div>
+
+
+
+
+    }
+
+</div>

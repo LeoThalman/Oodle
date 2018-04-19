@@ -1,0 +1,51 @@
+﻿@model Oodle.Models.ViewModels.TeacherVM
+
+@{
+    ViewBag.Title = "Teacher";
+}
+
+<h1>@Html.DisplayFor(Name => Model.cl.Name)</h1>
+
+<h2>Teacher</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            @Html.DisplayNameFor(Description => Model.cl.Description):
+            @Html.DisplayFor(Description => Model.cl.Description)
+        </div>
+        <div class="col-sm-6">
+            @Html.DisplayNameFor(Notification => Model.cl.Notification):
+            @Html.DisplayFor(Notification => Model.cl.Notification)
+        </div>
+    </div>
+</div>
+
+
+<a href="@Url.Action("Edit", "Class", new { ClassID = (Model.cl.ClassID) } )">
+    Edit Class
+</a>
+
+
+<a href="@Url.Action("Delete", "Class", new { ClassID = (Model.cl.ClassID) })">
+    Delete Class
+</a>
+
+
+
+
+
+<div>
+    @for (int i = 0; i < Model.users.Count(); i++)
+    {
+        var user = Model.users[i];
+        @Html.DisplayFor(Name => user.UserName)
+        <a href="@Url.Action("Accept", "Class", new { ClassID = (Model.cl.ClassID), UserID = user.UsersID }, null)">
+            Accept
+        </a>
+        <a href="@Url.Action("Reject", "Class", new { ClassID = (Model.cl.ClassID), UserID = user.UsersID }, null)">
+            Reject
+        </a>
+
+    }
+</div>

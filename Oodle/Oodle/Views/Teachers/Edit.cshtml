@@ -1,0 +1,36 @@
+﻿@model Oodle.Models.ViewModels.TeacherVM
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+
+
+
+
+
+<div class="form-style-6">
+    <h1>Edit your class</h1>
+
+    <form method="post" action="EditClass">
+
+
+        <label for="name">Name of class:</label><br />
+        <input type="text" name="name" value="@Model.cl.Name" required />
+        <br />
+
+        <input type="hidden" name="classID" value=@Model.cl.ClassID required />
+
+        <br />
+
+
+
+        <label for="description">Brief description of your class:</label> <br />
+        <textarea name="description" placeholder="We will learn about..." value="" required>@Model.cl.Description</textarea>
+
+     <br />
+        <input type="submit" name="submit" value="Save Changes" />
+
+    </form>
+</div>
+

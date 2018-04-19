@@ -1,0 +1,41 @@
+﻿@model Oodle.Models.ViewModels.TeacherVM
+
+@{
+    ViewBag.Title = "MakeGrade";
+}
+
+@using (Html.BeginForm("DownloadFile", "Students", FormMethod.Post))
+{
+    <input type="hidden" id="hfFileId" name="FileId" />
+    <input type="submit" id="btnDownload" value="Download" style="display:none" />
+}
+
+    <div class="lb">
+
+        <h1>@Model.assignment.FirstOrDefault().Name</h1>
+        <h4>
+            @Model.users.FirstOrDefault().UserName's Submission
+        </h4>
+        <div>
+            @Model.assignment.FirstOrDefault().Description
+        </div>
+        <a class="btn btn-info" href="javascript:;" onclick="DownloadFile(@Model.documents.FirstOrDefault().Id)">
+            Download Submission
+        </a>
+
+        <div class="form-style-6">
+            <form method="post" action="SubmitGrade?classID=@Model.cl.ClassID&documentID=@Model.documents.FirstOrDefault().Id&assignmentID=@Model.assignment.FirstOrDefault().AssignmentID">
+                <label for="grade">Grade: </label>
+                <input type="number" name="grade" placeholder="e.g., 100" value="" required min="0" max="100"/>/100<br />
+                <input type="submit" name="submit" value="Submit Grade" />
+            </form>
+        </div>
+
+        <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript">
+            function DownloadFile(fileId) {
+                $("#hfFileId").val(fileId);
+                $("#btnDownload")[0].click();
+            };
+        </script>
+    </div>

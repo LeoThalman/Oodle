@@ -1,0 +1,93 @@
+﻿@model Oodle.Models.User
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete your account</h2>
+
+<h3>Are you sure you want to delete Your profile?</h3>
+
+
+
+<div class="container-fluid editPerson">
+    <div class="row">
+
+        <div class="col-md-6 editPerson editPersonDetail">Username:</div>
+        <div class="col-md-6 editPerson">
+            @Html.DisplayFor(model => model.UserName)
+        </div>
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-sm-6 editPerson editPersonDetail">First Name:</div>
+        <div class="col-sm-6 editPerson">
+            @Html.DisplayFor(model => model.FirstName)
+        </div>
+    </div>
+
+
+
+    <div class="row">
+
+        <div class="col-sm-6 editPerson editPersonDetail">Last Name:</div>
+        <div class="col-sm-6 editPerson">
+            @Html.DisplayFor(model => model.Lastname)
+        </div>
+    </div>
+
+
+
+    <div class="row">
+
+        <div class="col-sm-6 editPerson editPersonDetail">Email: </div>
+        <div class="col-sm-6 editPerson">
+            @Html.DisplayFor(model => model.Email)
+        </div>
+    </div>
+
+
+
+
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+
+            @Html.ActionLink("Back to List", "Index") 
+        </div>
+    }
+
+
+    <div id="deleteConfirm">
+        <button id="deleteFinal" class="btn btn-danger" onclick="deleteConfirm()">Click here to delete</button>
+    </div>
+
+    <div id="test" style="display:none">
+
+        @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+
+            <input type="submit" value="Confirm Delete" class="btn btn-danger" /> 
+        </div>
+}
+
+    </div>
+
+
+
+</div>
+
+
+
+@section scripts
+    {
+    <script type="text/javascript" src="~/Scripts/scriptone.js"></script>
+}

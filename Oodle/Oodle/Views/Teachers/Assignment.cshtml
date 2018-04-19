@@ -1,0 +1,60 @@
+﻿
+@model Oodle.Models.ViewModels.TeacherVM
+
+@{
+    ViewBag.Title = "Assignment";
+}
+<center><h2>Assignments</h2></center>
+
+
+<center>
+    <a class="buttonReject" href="@Url.Action("CreateAssignment", "Teachers", new { classID = Model.cl.ClassID } )">
+        Create an assignment
+    </a>
+</center>
+<br />
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+
+
+
+            <div>
+                @for (int i = 0; i < Model.assignment.Count(); i++)
+                {
+
+                    var assi = Model.assignment[i];
+                    <div class="block">
+                        <div class="classItem">
+                            <div class="title">
+                                @Html.DisplayFor(Name => assi.Name)
+                            </div>
+                            <div class="description">
+                                @Html.DisplayFor(Desc => assi.Description)
+                            </div>
+                            <div class="dateLeft" style="color:#17252A">
+                                Start Date: @Html.DisplayFor(Desc => assi.StartDate)
+                            </div>
+                            <div class="dateRight" style="color:#17252A">
+                                Due Date: @Html.DisplayFor(Desc => assi.DueDate)
+                            </div>
+                            <a href="@Url.Action("EditAssignment", "Teachers", new { classID = Model.cl.ClassID, assignmentID = assi.AssignmentID })" class="edit">
+                                Edit
+                            </a>
+                            <a href="@Url.Action("SubmissionView", "Teachers", new { classID = Model.cl.ClassID, assignmentID = assi.AssignmentID })" class="submissions">
+                                View Submissions
+                            </a>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+
+                }
+            </div>
+
+
+        </div>
+    </div>
+</div>

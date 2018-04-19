@@ -1,0 +1,38 @@
+﻿@model Oodle.Models.ViewModels.TeacherVM
+
+@{
+    ViewBag.Title = "CreateAssignment";
+}
+
+
+
+
+<div class="form-style-6">
+    <form method="post" action="CreateAssignmentAction">
+        <div>
+            <h1>Create an Assignment</h1>
+
+            <label for="name">Name of Assignment:</label><br />
+            <input type="text" name="name" placeholder="e.g., Assignment one, history of modernism" value="" required /><br />
+            <input type="hidden" name="classID" value="@Model.cl.ClassID" />
+
+            <label for="description">Description of your Assignment:</label> <br />
+            <textarea name="description" placeholder="e.g., please read chapter four and attach a word document of your answers to the questions at the end of the chapter." required></textarea>
+
+            <label for="weight">Weight of Grade:</label> <br />
+            <input type="number" name="weight" placeholder="0" value="" max="1000" min="0" required /><br />
+
+            <br />
+            <label for="startDate">Start Date</label><br />
+            <input type="datetime" name="startDate" value="@DateTime.Now" required />
+
+            <br />
+            <label for="dueDate">Due Date</label><br />
+            <input type="datetime" name="dueDate" value="@DateTime.Now" required />
+
+        </div>
+        <div>
+            <input type="submit" name="submit" value="Create Assignment" />
+        </div>
+    </form>
+</div>
