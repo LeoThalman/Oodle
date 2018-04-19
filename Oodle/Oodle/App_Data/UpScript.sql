@@ -207,7 +207,7 @@ CREATE TABLE dbo.Class
 	SlackName NVARCHAR(20) NULL,
 	Subject NVARCHAR(128) NOT NULL,
 	CONSTRAINT [PK_dbo.Class] PRIMARY KEY CLUSTERED (ClassID ASC),
-	CONSTRAINT [FK_dbo.Class_dbo.UsersID] FOREIGN KEY ([UsersID]) REFERENCES [dbo].[Users] ([UsersID])
+	--CONSTRAINT [FK_dbo.Class_dbo.UsersID] FOREIGN KEY ([UsersID]) REFERENCES [dbo].[Users] ([UsersID])--
 );
 
 
@@ -310,15 +310,17 @@ CREATE TABLE dbo.Quizzes(
 	QuizID INT IDENTITY(1,1) NOT NULL,
 	QuizName NVARCHAR(256) NOT NULL,
 	StartTime DateTime NOT NULL,
-	EndTime DateTIme NOT NULL,
+	EndTime DateTime NOT NULL,
 	ClassID INT NOT NULL,
 	IsHidden BIT NOT NULL,
 	TotalPoints INT,
 	CONSTRAINT [PK_dbo.Quizzes] PRIMARY KEY CLUSTERED (QuizID ASC),
-	CONSTRAINT [FK_dbo.Quizzes_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
-	ON DELETE CASCADE
-	ON UPDATE CASCADE
+	--CONSTRAINT [FK_dbo.Quizzes_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
+	--ON DELETE CASCADE
 );
+ 
+INSERT INTO dbo.Quizzes (QuizName, StartTime, EndTime, ClassID, IsHidden) Values
+	('Test Quiz', '12/04/2018 09:04:22', '12/04/2019 09:04:22', 1, 0);
 
 CREATE TABLE dbo.QuizQuestions(
 	QuestionID INT IDENTITY(1,1) NOT NULL,
