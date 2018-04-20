@@ -591,6 +591,12 @@ namespace Oodle.Controllers
             return View("Grades", "_TeacherLayout", teacher);
         }
 
+        public ActionResult QuizList(int ClassID)
+        {
+            TeacherVM teacher = getTVM(ClassID);
+            teacher.quizzes = db.Quizzes.Where(i => i.ClassID == ClassID).ToList();
+            return View("QuizList", "_TeacherLayout", teacher);
+        }
         [HttpGet]
         public ActionResult CreateQuiz(int ClassID)
         {

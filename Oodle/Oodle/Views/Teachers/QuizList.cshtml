@@ -1,0 +1,16 @@
+﻿@model Oodle.Models.ViewModels.TeacherVM
+
+<div class="row fontClass">
+    @foreach (var quiz in Model.quizzes)
+    {
+        <p>
+            @Html.DisplayFor(Notification => quiz.QuizName)            
+            @Html.DisplayFor(Notification => quiz.StartTime)
+            @Html.DisplayFor(Notification => quiz.EndTime)
+        </p>
+    }
+</div>
+
+
+
+
