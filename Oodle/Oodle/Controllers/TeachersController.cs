@@ -593,13 +593,71 @@ namespace Oodle.Controllers
 
         public ActionResult QuizList(int ClassID)
         {
+            if (test(ClassID) != null)
+            { 
+                return test(ClassID);
+            }
+
             TeacherVM teacher = getTVM(ClassID);
             teacher.quizzes = db.Quizzes.Where(i => i.ClassID == ClassID).ToList();
             return View("QuizList", "_TeacherLayout", teacher);
         }
+
+        [HttpGet]
+        public ActionResult EditQuiz(int QuizID, int ClassID)
+        {
+            if (test(ClassID) != null)
+            {
+                return test(ClassID);
+            }
+            Quizze quiz = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault();
+            if (quiz == null)
+            {
+                return RedirectToAction("Index", "Class", new { classId = ClassID });
+            }
+            else if (quiz.ClassID == ClassID)
+            {
+                TeacherVM teacher = getTVM(ClassID);
+                teacher.quiz = quiz;
+                return View("EditQuiz", "_TeacherLayout", teacher);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Class", new { classId = ClassID });
+            }
+        }
+
+        [HttpGet]
+        public ActionResult ViewQuiz(int QuizID, int ClassID)
+        {
+            if (test(ClassID) != null)
+            {
+                return test(ClassID);
+            }
+            Quizze quiz = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault();
+            if (quiz == null)
+            {
+                return RedirectToAction("Index", "Class", new { classId = ClassID });
+            }
+            else if (quiz.ClassID == ClassID)
+            {
+                TeacherVM teacher = getTVM(ClassID);
+                teacher.quiz = quiz;
+                return View("ViewQuiz", "_TeacherLayout", teacher);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Class", new { classId = ClassID });
+            }
+        }
+
         [HttpGet]
         public ActionResult CreateQuiz(int ClassID)
         {
+            if (test(ClassID) != null)
+            {
+                return test(ClassID);
+            }
             TeacherVM teacher = getTVM(ClassID);
             return View("CreateQuiz", "_TeacherLayout", teacher);
         }
@@ -607,6 +665,10 @@ namespace Oodle.Controllers
         [HttpPost]
         public ActionResult CreateQuiz([Bind(Include = "QuizName,ClassID,StartTime,EndTime,IsHidden")] Quizze Quiz)
         {
+            if (test(Quiz.ClassID) != null)
+            {
+                return test(Quiz.ClassID);
+            }
             if (ModelState.IsValid)
             {
                 Debug.WriteLine(Quiz.QuizName);

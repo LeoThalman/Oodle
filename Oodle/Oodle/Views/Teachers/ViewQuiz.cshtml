@@ -1,0 +1,21 @@
+﻿@model Oodle.Models.ViewModels.TeacherVM
+
+<div class="row fontClass">
+        @Html.ActionLink("Edit Quiz", "EditQuiz", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID }, null)
+        <p>
+            @Html.DisplayNameFor(Model => Model.quiz.QuizName):
+            @Html.DisplayFor(Model => Model.quiz.QuizName)
+        </p>
+        <p>
+            @Html.DisplayNameFor(Model => Model.quiz.StartTime):
+            @Html.DisplayFor(Model => Model.quiz.StartTime)
+        </p>
+        <p>
+            @Html.DisplayNameFor(Model => Model.quiz.EndTime):
+            @Html.DisplayFor(Model => Model.quiz.EndTime)
+        </p>
+</div>
+
+
+
+
