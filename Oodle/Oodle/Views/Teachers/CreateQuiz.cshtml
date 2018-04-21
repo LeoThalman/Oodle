@@ -1,10 +1,6 @@
 ﻿@model Oodle.Models.ViewModels.TeacherVM
 
-@{
-    ViewBag.Title = "CreateQuiz";
-}
-
-<h2>CreateQuiz</h2>
+<h2>Create A Quiz for the class: @Model.cl.Name</h2>
 
 @using (Html.BeginForm()) 
 {
@@ -59,5 +55,5 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "QuizList")
 </div>

@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Net;
 using System.IO;
+using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Diagnostics;
@@ -627,6 +628,26 @@ namespace Oodle.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult EditQuiz(Quizze Quiz)
+        {
+            if (test(Quiz.ClassID) != null)
+            {
+                return test(Quiz.ClassID);
+            }
+            if (ModelState.IsValid)
+            {
+
+                db.Entry(Quiz).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index", "Class", new { classId = Quiz.ClassID });
+            }
+            else
+            {
+                return RedirectToAction("EduitQuiz", "Teachers", new {QuizID = Quiz.QuizID, ClassID = Quiz.ClassID });
+            }
+        }
+
         [HttpGet]
         public ActionResult ViewQuiz(int QuizID, int ClassID)
         {
@@ -671,29 +692,19 @@ namespace Oodle.Controllers
             }
             if (ModelState.IsValid)
             {
-                Debug.WriteLine(Quiz.QuizName);
-                Debug.WriteLine(Quiz.ClassID);
-                Debug.WriteLine(Quiz.StartTime);
-                Debug.WriteLine(Quiz.EndTime);
-                Debug.WriteLine(Quiz.IsHidden);
                 db.Quizzes.Add(Quiz);
                 db.SaveChanges();
                 return RedirectToAction("Index", "Class", new { classId = Quiz.ClassID });
             }
             else
             {
-                return RedirectToAction("CreateQuiz", "Teachers", new { classId = Quiz.ClassID });
+                return RedirectToAction("CreateQuiz", "Teachers", new { ClassID = Quiz.ClassID });
             }
         }
 
         public ActionResult CreateTask()
         {
             return View("CreateTask", "_TeacherLayout");
-        }
-
-        public ActionResult CreateSlack()
-        {
-            return View("CreateSlack", "_TeacherLayout");
         }
     }
 }
