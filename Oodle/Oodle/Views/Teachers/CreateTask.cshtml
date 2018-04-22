@@ -1,6 +1,32 @@
 ﻿@model Oodle.Models.ViewModels.TeacherVM
 
 @{
-    ViewBag.Title = "CreateTask";
+    ViewBag.Title = "Tasks";
 }
-<center><h2>CreateTask View for Teachers Controller</h2></center>
+<center><h2>Tasks</h2></center>
+
+
+<div class="form-style-6">
+    <form method="post" action="CreateTasksEntry">
+        <div>
+            <h1>Create a Task</h1>
+
+            <input type="hidden" name="classID" value="@Model.cl.ClassID" />
+
+            <label for="description">Description of your Task:</label> <br />
+            <textarea name="description" placeholder="e.g., Please read chapter four and attach a word document of your answers to the questions at the end of the chapter." required></textarea>
+
+            <br />
+            <label for="startDate">Start Date</label><br />
+            <input type="datetime" name="startDate" value="@DateTime.Now" required />
+
+            <br />
+            <label for="dueDate">Due Date</label><br />
+            <input type="datetime" name="dueDate" value="@DateTime.Now" required />
+
+        </div>
+        <div>
+            <input type="submit" name="submit" value="Create Task" />
+        </div>
+    </form>
+</div>
