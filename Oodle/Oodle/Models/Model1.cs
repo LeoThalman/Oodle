@@ -7,10 +7,8 @@ namespace Oodle.Models
 
     public partial class Model1 : DbContext
     {
-        internal object TeacherVM;
-
         public Model1()
-            : base("name=Model1")
+            : base("name=Model12")
         {
         }
 
@@ -25,6 +23,7 @@ namespace Oodle.Models
         public virtual DbSet<Grade> Grades { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<Tasks> Tasks { get; set; }
         public virtual DbSet<UserRoleClass> UserRoleClasses { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
@@ -73,6 +72,11 @@ namespace Oodle.Models
 
             modelBuilder.Entity<Class>()
                 .HasMany(e => e.Documents)
+                .WithRequired(e => e.Class)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Class>()
+                .HasMany(e => e.Tasks)
                 .WithRequired(e => e.Class)
                 .WillCascadeOnDelete(false);
 
