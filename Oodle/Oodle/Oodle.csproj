@@ -318,7 +318,6 @@
     <Content Include="Views\Students\Grade.cshtml" />
     <Content Include="Views\Students\Assignment.cshtml" />
     <Content Include="Views\Students\Quiz.cshtml" />
-    <Content Include="Views\Students\Task.cshtml" />
     <Content Include="Views\Students\Slack.cshtml" />
     <Content Include="Views\Graders\Index.cshtml" />
     <Content Include="Views\Graders\ToDoList.cshtml" />
@@ -350,6 +349,7 @@
     <Content Include="Views\Teachers\CreateTask.cshtml" />
     <Content Include="Views\Teachers\EditTasks.cshtml" />
     <Content Include="Views\Teachers\Tasks.cshtml" />
+    <Content Include="Views\Students\Tasks.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
