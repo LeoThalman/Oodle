@@ -46,6 +46,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.7\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
@@ -117,12 +123,6 @@
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
@@ -221,6 +221,7 @@
     <Compile Include="Models\Question.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\SlackBot.cs" />
+    <Compile Include="Models\Task.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserRoleClass.cs" />
     <Compile Include="Models\ViewModels\TeacherVM.cs" />
@@ -321,7 +322,6 @@
     <Content Include="Views\Students\Grade.cshtml" />
     <Content Include="Views\Students\Assignment.cshtml" />
     <Content Include="Views\Students\Quiz.cshtml" />
-    <Content Include="Views\Students\Task.cshtml" />
     <Content Include="Views\Students\Slack.cshtml" />
     <Content Include="Views\Graders\Index.cshtml" />
     <Content Include="Views\Graders\ToDoList.cshtml" />
@@ -333,7 +333,6 @@
     <Content Include="Views\Teachers\ViewRoster.cshtml" />
     <Content Include="Views\Teachers\Assignment.cshtml" />
     <Content Include="Views\Teachers\CreateQuiz.cshtml" />
-    <Content Include="Views\Teachers\CreateTask.cshtml" />
     <Content Include="Views\Teachers\CreateSlack.cshtml" />
     <Content Include="Views\Teachers\Edit.cshtml" />
     <Content Include="Views\Teachers\CreateAssignment.cshtml" />
@@ -351,6 +350,10 @@
     <Content Include="Views\Teachers\Grades.cshtml" />
     <Content Include="Views\Home\Calendar.cshtml" />
     <Content Include="Views\Shared\_CalendarLayout.cshtml" />
+    <Content Include="Views\Teachers\CreateTask.cshtml" />
+    <Content Include="Views\Teachers\EditTasks.cshtml" />
+    <Content Include="Views\Teachers\Tasks.cshtml" />
+    <Content Include="Views\Students\Tasks.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

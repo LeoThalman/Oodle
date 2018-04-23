@@ -17,6 +17,7 @@ namespace Oodle.Models.ViewModels
         public ClassNotification rNotif { get; set; }
         public List<int> classGrade { get; set; }
         public List<UserRoleClass> roles { get; set; }
+        public List<Tasks> Tasks { get; set; }
 
 
         public TeacherVM(Class classP, List<User> userP)
