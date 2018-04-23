@@ -21,16 +21,14 @@ namespace Oodle.Models
         [Required]
         public byte[] Data { get; set; }
 
-        [Required]
+        public DateTime submitted { get; set; }
+
         public int ClassID { get; set; }
 
-        [Required]
         public int AssignmentID { get; set; }
 
-        [Required]
         public int UserID { get; set; }
 
-        [Required]
         public int Grade { get; set; }
 
         public virtual Assignment Assignment { get; set; }
