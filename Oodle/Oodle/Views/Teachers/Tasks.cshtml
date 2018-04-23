@@ -1,0 +1,44 @@
+﻿
+@model Oodle.Models.ViewModels.TeacherVM
+
+@{
+    ViewBag.Title = "Tasks";
+}
+<center><h2>Tasks</h2></center>
+
+
+<center>
+    <a class="buttonReject" href="@Url.Action("CreateTask", "Teachers", new { classID = Model.cl.ClassID } )">
+        Create a Task
+    </a>
+</center>
+<br />
+
+<div>
+    @foreach (var i in Model.Tasks)
+    {
+        if (i.ClassID == Model.cl.ClassID)
+        {
+            var tsk = i;
+            <div class="block">
+                <div class="classItem">
+                    <div class="description">
+                        @Html.DisplayFor(Desc => tsk.Description)
+                    </div>
+                    <div class="dateLeft" style="color:#17252A">
+                        Start Date: @Html.DisplayFor(Desc => tsk.StartDate)
+                    </div>
+                    <div class="dateRight" style="color:#17252A">
+                        Due Date: @Html.DisplayFor(Desc => tsk.DueDate)
+                    </div>
+                    <a href="@Url.Action("EditTasks", "Teachers", new { classID = Model.cl.ClassID, TasksID = tsk.TasksID })" class="edit">
+                        Edit
+                    </a>
+                </div>
+            </div>
+            <br />
+            <br />
+        }
+
+    }
+</div>

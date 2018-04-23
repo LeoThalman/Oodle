@@ -74,9 +74,12 @@ namespace Oodle.Controllers
             return View("Quiz", "_StudentLayout");
         }
 
-        public ActionResult Task()
+        /*
+         * Returns the actionresult for Tasks and directs you to the tasks view.
+         */
+        public ActionResult Tasks(int classID)
         {
-            return View("Task", "_StudentLayout");
+            return View("Tasks", "_StudentLayout", getTVM(classID));
         }
 
         public ActionResult Slack()
@@ -103,6 +106,8 @@ namespace Oodle.Controllers
             teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).OrderBy(i => i.StartDate).ToList();
 
             teacher.notifs = db.ClassNotifications.Where(i => i.ClassID == classID).OrderBy(i => i.TimePosted).ToList();
+            //adds tasks to Teacher VM
+            teacher.Tasks = db.Tasks.ToList();
 
             return teacher;
         }
