@@ -357,7 +357,7 @@
     <Content Include="Views\Teachers\QuizList.cshtml" />
     <Content Include="Views\Teachers\ViewQuiz.cshtml" />
     <Content Include="Views\Teachers\EditQuiz.cshtml" />
-    <Content Include="Views\Teachers\EditQuiz1.cshtml" />
+    <Content Include="Views\Teachers\AddQuestion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

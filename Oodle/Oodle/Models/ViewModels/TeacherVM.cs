@@ -19,6 +19,10 @@ namespace Oodle.Models.ViewModels
         public List<int> classGrade { get; set; } 
         public List<UserRoleClass> roles { get; set; }
         public Quizze quiz { get; set; }
+        public QuizQuestion question { get; set; }
+        public MultChoiceAnswer answer { get; set; }
+        public List<QuizQuestion> questionList { get; set; }
+        public List<MultChoiceAnswer> answerList { get; set; }
 
 
         public TeacherVM(Class classP, List<User> userP)

@@ -664,6 +664,8 @@ namespace Oodle.Controllers
             {
                 TeacherVM teacher = getTVM(ClassID);
                 teacher.quiz = quiz;
+                teacher.questionList = db.QuizQuestions.Where(q => q.QuizID == quiz.QuizID).ToList();
+                teacher.answerList = db.MultChoiceAnswers.Where(a => a.QuizQuestion.QuizID == QuizID).ToList();
                 return View("ViewQuiz", "_TeacherLayout", teacher);
             }
             else
@@ -700,6 +702,83 @@ namespace Oodle.Controllers
             {
                 return RedirectToAction("CreateQuiz", "Teachers", new { ClassID = Quiz.ClassID });
             }
+        }
+
+        public ActionResult AddQuestion(int QuizID, int ClassID)
+        {
+            if (test(ClassID) != null)
+            {
+                return test(ClassID);
+            }
+            TeacherVM teacher = getTVM(ClassID);
+            teacher.quiz = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault();
+            teacher.answer = new MultChoiceAnswer();
+            teacher.answer.QuestionID = -1;
+            teacher.question = new QuizQuestion();
+            teacher.question.QuizID = teacher.quiz.QuizID;
+            return View("AddQuestion", "_TeacherLayout", teacher);
+        }
+
+        public ActionResult AddAnother([Bind(Include = "QuizID,Points,QuestionText")] QuizQuestion question,
+                                       [Bind(Include = "Answer1,Answer2,Answer3,Answer4,CorrectAnswer")] MultChoiceAnswer answer)
+        {
+            Quizze temp = db.Quizzes.Where(q => q.QuizID == question.QuizID).FirstOrDefault();
+            Debug.WriteLine("Quiz ID: " + question.QuizID);
+            Debug.WriteLine("Class ID: " + temp.ClassID);
+            int ClassID = temp.ClassID;
+            if (test(ClassID) != null)
+            {
+                return test(ClassID);
+            }
+            TeacherVM teacher = getTVM(ClassID);
+            teacher.quiz = temp;
+            teacher.question = question;
+            teacher.answer = answer;
+            if (ModelState.IsValid)
+            {
+                db.QuizQuestions.Add(question);
+                Debug.WriteLine("Question ID Before Saving" + question.QuestionID);
+                db.SaveChanges();
+                Debug.WriteLine("Question ID After Saving" + question.QuestionID);
+                answer.QuestionID = question.QuestionID;
+                db.MultChoiceAnswers.Add(answer);
+                db.SaveChanges();
+                return RedirectToAction("AddQuestion", "Teachers", new {QuizID = question.QuizID, ClassID = temp.ClassID });
+            }
+
+            
+            return View("AddQuestion", "_TeacherLayout", teacher);
+        }
+
+        public ActionResult SaveQuestion([Bind(Include = "QuizID,Points,QuestionText")] QuizQuestion question,
+                                       [Bind(Include = "Answer1,Answer2,Answer3,Answer4,CorrectAnswer")] MultChoiceAnswer answer)
+        {
+            Quizze temp = db.Quizzes.Where(q => q.QuizID == question.QuizID).FirstOrDefault();
+            Debug.WriteLine("Quiz ID: " + question.QuizID);
+            Debug.WriteLine("Class ID: " + temp.ClassID);
+            int ClassID = temp.ClassID;
+            if (test(ClassID) != null)
+            {
+                return test(ClassID);
+            }
+            TeacherVM teacher = getTVM(ClassID);
+            teacher.quiz = temp;
+            teacher.question = question;
+            teacher.answer = answer;
+            if (ModelState.IsValid)
+            {
+                db.QuizQuestions.Add(question);
+                Debug.WriteLine("Question ID Before Saving" + question.QuestionID);
+                db.SaveChanges();
+                Debug.WriteLine("Question ID After Saving" + question.QuestionID);
+                answer.QuestionID = question.QuestionID;
+                db.MultChoiceAnswers.Add(answer);
+                db.SaveChanges();
+                return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = question.QuizID, ClassID = temp.ClassID });
+            }
+
+
+            return View("AddQuestion", "_TeacherLayout", teacher);
         }
 
         public ActionResult CreateTask()
