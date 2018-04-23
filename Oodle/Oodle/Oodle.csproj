@@ -229,6 +229,10 @@
     <Compile Include="Utility\SlackManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\OodleDB.mdf" />
+    <Content Include="App_Data\OodleDB_log.ldf">
+      <DependentUpon>OodleDB.mdf</DependentUpon>
+    </Content>
     <Content Include="App_Data\up.sql" />
     <Content Include="App_Data\UpScript.sql" />
     <Content Include="Content\bootstrap.css" />

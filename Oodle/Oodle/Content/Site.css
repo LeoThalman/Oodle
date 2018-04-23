@@ -12,6 +12,23 @@ Lighter white: #FEFFFF
 
 
 
+.padded {
+    border-radius: 25px;
+    position: relative;
+    margin: 0 auto;
+    padding-left: 10px;
+}
+
+.dateLeft2 {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    text-align: left;
+    padding-left: 10px;
+    font-size: small;
+    height: 10px;
+}
+
 /* The sidebar menu */
 .sidenav {
     width: 20%; /* Set the width of the sidebar */

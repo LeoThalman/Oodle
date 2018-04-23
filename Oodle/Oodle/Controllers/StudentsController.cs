@@ -34,8 +34,6 @@ namespace Oodle.Controllers
             return null;
         }
 
-
-
         public ActionResult Index(int classID)
         {
             if (test(classID) != null)
@@ -52,9 +50,44 @@ namespace Oodle.Controllers
 
 
 
-        public ActionResult Grade()
+        public ActionResult Grade(int classID)
         {
-            return View("Grade", "_StudentLayout");
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+
+
+
+            var idid = User.Identity.GetUserId();
+
+            User user = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault();
+
+
+
+
+            var teacher = getTVM(classID);
+
+            teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).ToList();
+            teacher.documents = db.Documents.Where(i => i.ClassID == classID && i.UserID == user.UsersID).ToList();
+
+            int total = 0;
+            int totalWeight = 0;
+
+            foreach (Document doc in teacher.documents)
+            {
+                if (doc.Grade != -1)
+                {
+                    total = total + (doc.Grade * doc.Assignment.Weight);
+                    totalWeight = totalWeight + doc.Assignment.Weight;
+                }
+                total = total / totalWeight;
+            }
+
+            teacher.classGrade = new List<int>();
+            teacher.classGrade.Add(total);
+
+            return View("Grade", "_StudentLayout", teacher);
         }
 
         public ActionResult Assignment(int classID)
@@ -173,10 +206,12 @@ namespace Oodle.Controllers
 
             var submitted = DateTime.Now;
 
+            var date = DateTime.Now;
+
             string constr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             using (SqlConnection con = new SqlConnection(constr))
             {
-                string query = "INSERT INTO Documents VALUES (@Name, @ContentType, @Data, @Submitted, @ClassID, @AssignmentID, @userID, @grade)";
+                string query = "INSERT INTO Documents VALUES (@Name, @ContentType, @Data, @Submitted, @ClassID, @AssignmentID, @userID, @grade, @Date)";
                 using (SqlCommand cmd = new SqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -188,6 +223,7 @@ namespace Oodle.Controllers
                     cmd.Parameters.AddWithValue("@userID", studentID);
                     cmd.Parameters.AddWithValue("@Submitted", submitted);
                     cmd.Parameters.AddWithValue("@grade", -1);
+                    cmd.Parameters.AddWithValue("@Date", date);
 
                     con.Open();
                     cmd.ExecuteNonQuery();

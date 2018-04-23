@@ -297,6 +297,7 @@ CREATE TABLE dbo.Documents(
 	AssignmentID INT NOT NULL,
 	UserID INT NOT NULL,
 	Grade INT NOT NULL,
+	Date DATETIME NOT NULL,
 	CONSTRAINT [PK_dbo.Documents] PRIMARY KEY CLUSTERED (Id ASC),
 	CONSTRAINT [FK_dbo.Documents_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID]),
 	CONSTRAINT [FK_dbo.Documents_dbo.UserID] FOREIGN KEY ([UserID]) REFERENCES [dbo].[Users] ([UsersID]),
