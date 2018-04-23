@@ -40,10 +40,25 @@ namespace Oodle.Controllers
         {
             if (test(classID) != null)
             {
+
                 return test(classID);
             }
 
+
             var student = getTVM(classID);
+            var classes = db.Classes.ToList(); // list of all classes
+            
+
+
+            ViewBag.classList = classes;
+            foreach (var item in classes) // Loop through List with foreach
+            {
+                System.Diagnostics.Debug.WriteLine(item);
+            }
+
+
+            System.Diagnostics.Debug.WriteLine(classes);
+
 
 
             return View("Index", "_StudentLayout", student);

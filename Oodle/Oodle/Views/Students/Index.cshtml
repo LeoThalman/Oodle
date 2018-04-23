@@ -4,34 +4,115 @@
 @{
     ViewBag.Title = "Index";
 }
+<link href="@Url.Content("~/Scripts/main.css")" rel="stylesheet" type="text/css" />
 
-<div class="row fontClass">
 
-    <h3>
-        Your class page for: @Html.DisplayFor(Name => Model.cl.Name)
-    </h3>
 
-    <div class="container">
-        <div>
-            <div class="col-lg-6" id="teacherPage">
-                <h3>Description</h3>
-                <p style="font-size:14px;">
-                    @Html.DisplayFor(Description => Model.cl.Description)
-                </p>
-            </div>
-            <div class="col-sm-6" id="teacherPage">
-                <h3> Notifications </h3>
-                @foreach (var notif in Model.notifs)
-                {
-                    <p>
-                        @Html.DisplayFor(Notification => notif.Notification)
+
+<div class="container Glance">
+    <div class="jumbotron">
+        <h3 style="color:black;text-align:center">
+            Welcome to your classes homepage for: @Html.DisplayFor(Name => Model.cl.Name)
+        </h3>
+        <hr />
+
+        <div class="container">
+            <div>
+                <div class="col-lg-6" id="teacherPage">
+                    <h2 style="color:black;font-size:24px;">Description</h2>
+                    <p id="indexClass" style="color:black;font-size:24px;">
+                        @Html.DisplayFor(Description => Model.cl.Description)
                     </p>
-                }
+                </div>
+                <div class="col-sm-6" id="teacherPage">
+                    <h2 style="color:black;font-size:24px;"> Notifications </h2>
+                    @foreach (var notif in Model.notifs)
+                    {
+
+                        <p id="indexClass" style="color:black;font-size:24px;">
+                            @Html.DisplayFor(Notification => notif.Notification)
+                        </p>
+                    }
+                </div>
             </div>
         </div>
+
+
+        <h3 id="Glance"> test shoukd be reddd</h3>
+
+
+
+
     </div>
-    <hr class="style-four" />
-    <hr class="style-four" />
 
 
 </div>
+
+
+
+
+
+
+<div>
+    @for (int i = 0; i < Model.assignment.Count(); i++)
+    {
+
+
+        var assi = Model.assignment[i];
+       // if (assi.Name == "test")
+       if (assi.DueDate >= DateTime.Today)
+        {
+        <div class="block">
+            <a href="@Url.Action("AssignmentTurnIn", "Students", new { ClassID = (assi.ClassID), AssignmentID = (assi.AssignmentID) })">
+                <div class="classItem">
+                    <div class="title">
+                        @Html.DisplayFor(Name => assi.Name)
+                    </div>
+                    <div class="description">
+                        @Html.DisplayFor(Desc => assi.Description)
+                    </div>
+                    <div class="dateLeft">
+                        Start Date: @Html.DisplayFor(Desc => assi.StartDate)
+                    </div>
+                    <div class="dateRight">
+                        Due Date: @Html.DisplayFor(Desc => assi.DueDate)
+                    </div>
+                </div>
+            </a>
+        </div>
+        <br />
+        <br />
+        }
+    }
+</div>
+
+
+
+
+
+
+
+
+<!-- Trigger/Open The Modal -->
+<button id="myBtn">Open Modal</button>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>Some text in the Modal..</p>
+    </div>
+
+</div>
+
+
+
+
+
+
+@section scripts
+    {
+    <script type="text/javascript" src="~/Scripts/scriptone.js"></script>
+}
