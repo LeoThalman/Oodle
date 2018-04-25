@@ -6,10 +6,12 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Oodle.Models;
 using Oodle.Models.ViewModels;
+using Oodle.Models.Repos;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Net;
 using System.IO;
+using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Diagnostics;
@@ -24,8 +26,16 @@ namespace Oodle.Controllers
         //Slack access
         private SlackManager slack = new SlackManager();
 
-        // GET: Teachers
-        private Model1 db = new Model1();
+
+        //Regular database
+        //private Model1 db = new Model1();
+        //Repo for mocking database
+        private IOodleRepository db;
+
+        public TeachersController(IOodleRepository repo)
+        {
+            this.db = repo;
+        }
 
         public ActionResult test(int classID)
         {
@@ -81,7 +91,7 @@ namespace Oodle.Controllers
             }
 
 
-            db.UserRoleClasses.Remove(db.UserRoleClasses.Where(i => i.UsersID == userID & i.ClassID == classID).FirstOrDefault());
+            db.RemoveURC(db.UserRoleClasses.Where(i => i.UsersID == userID & i.ClassID == classID).FirstOrDefault());
             db.SaveChanges();
 
             return RedirectToAction("Index", new { classId = classID });
@@ -195,7 +205,7 @@ namespace Oodle.Controllers
 
             ClassNotification notif = db.ClassNotifications.Where(n => n.ClassID == classID
                                                     && n.ClassNotificationID == notifID).FirstOrDefault();
-            db.ClassNotifications.Remove(notif);
+            db.RemoveNotif(notif);
             db.SaveChanges();
 
             return RedirectToAction("Index", new { classId = classID });
@@ -207,7 +217,7 @@ namespace Oodle.Controllers
             cNotif.Notification = notif;
             cNotif.TimePosted = DateTime.Now;
             cNotif.ClassID = classID;
-            db.ClassNotifications.Add(cNotif);
+            db.AddNotif(cNotif);
             db.SaveChanges();           
         }
 
@@ -223,7 +233,7 @@ namespace Oodle.Controllers
             Class hasSlack = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
             foreach (var i in list)
             {
-                db.UserRoleClasses.Remove(i);
+                db.RemoveURC(i);
             }
 
             //classID = 1;
@@ -232,7 +242,7 @@ namespace Oodle.Controllers
                 slack.DeleteChannel(hasSlack.SlackName);
             }
 
-            db.Classes.Remove(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault());
+            db.RemoveClass(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault());
 
             db.SaveChanges();
 
@@ -333,7 +343,7 @@ namespace Oodle.Controllers
             assi.DueDate = DateTime.Parse(dueDate);
             assi.Weight = int.Parse(weight);
 
-            db.Assignments.Add(assi);
+            db.AddAssignment(assi);
             db.SaveChanges();
 
             var teacher = getTVM(classID);
@@ -593,11 +603,199 @@ namespace Oodle.Controllers
             return View("Grades", "_TeacherLayout", teacher);
         }
 
-        public ActionResult CreateQuiz()
+        public ActionResult QuizList(int ClassID)
         {
-            return View("CreateQuiz", "_TeacherLayout");
+            if (test(ClassID) != null)
+            { 
+                return test(ClassID);
+            }
+
+            TeacherVM teacher = getTVM(ClassID);
+            teacher.quizzes = db.Quizzes.Where(i => i.ClassID == ClassID).ToList();
+            return View("QuizList", "_TeacherLayout", teacher);
         }
 
+        [HttpGet]
+        public ActionResult EditQuiz(int QuizID, int ClassID)
+        {
+            if (test(ClassID) != null)
+            {
+                return test(ClassID);
+            }
+            Quizze quiz = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault();
+            if (quiz == null)
+            {
+                return RedirectToAction("Index", "Class", new { classId = ClassID });
+            }
+            else if (quiz.ClassID == ClassID)
+            {
+                TeacherVM teacher = getTVM(ClassID);
+                teacher.quiz = quiz;
+                return View("EditQuiz", "_TeacherLayout", teacher);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Class", new { classId = ClassID });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult EditQuiz(Quizze Quiz)
+        {
+            if (test(Quiz.ClassID) != null)
+            {
+                return test(Quiz.ClassID);
+            }
+            if (ModelState.IsValid)
+            {
+
+                db.SetModified(Quiz);
+                db.SaveChanges();
+                return RedirectToAction("Index", "Class", new { classId = Quiz.ClassID });
+            }
+            else
+            {
+                return RedirectToAction("EduitQuiz", "Teachers", new {QuizID = Quiz.QuizID, ClassID = Quiz.ClassID });
+            }
+        }
+
+        public List<Quizze> TestMoq()
+        {
+            return db.Quizzes.ToList();
+        }
+
+        [HttpGet]
+        public ActionResult ViewQuiz(int QuizID, int ClassID)
+        {
+            if (test(ClassID) != null)
+            {
+                return test(ClassID);
+            }
+            Quizze quiz = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault();
+            if (quiz == null)
+            {
+                return RedirectToAction("Index", "Class", new { classId = ClassID });
+            }
+            else if (quiz.ClassID == ClassID)
+            {
+                TeacherVM teacher = getTVM(ClassID);
+                teacher.quiz = quiz;
+                teacher.questionList = db.QuizQuestions.Where(q => q.QuizID == quiz.QuizID).ToList();
+                teacher.answerList = db.MultChoiceAnswers.Where(a => a.QuizQuestion.QuizID == QuizID).ToList();
+                return View("ViewQuiz", "_TeacherLayout", teacher);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Class", new { classId = ClassID });
+            }
+        }
+
+        [HttpGet]
+        public ActionResult CreateQuiz(int ClassID)
+        {
+            if (test(ClassID) != null)
+            {
+                return test(ClassID);
+            }
+            TeacherVM teacher = getTVM(ClassID);
+            return View("CreateQuiz", "_TeacherLayout", teacher);
+        }
+
+        [HttpPost]
+        public ActionResult CreateQuiz([Bind(Include = "QuizName,ClassID,StartTime,EndTime,IsHidden")] Quizze Quiz)
+        {
+            if (test(Quiz.ClassID) != null)
+            {
+                return test(Quiz.ClassID);
+            }
+            if (ModelState.IsValid)
+            {
+                db.AddQuiz(Quiz);
+                db.SaveChanges();
+                return RedirectToAction("Index", "Class", new { classId = Quiz.ClassID });
+            }
+            else
+            {
+                return RedirectToAction("CreateQuiz", "Teachers", new { ClassID = Quiz.ClassID });
+            }
+        }
+
+        public ActionResult AddQuestion(int QuizID, int ClassID)
+        {
+            if (test(ClassID) != null)
+            {
+                return test(ClassID);
+            }
+            TeacherVM teacher = getTVM(ClassID);
+            teacher.quiz = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault();
+            teacher.answer = new MultChoiceAnswer();
+            teacher.answer.QuestionID = -1;
+            teacher.question = new QuizQuestion();
+            teacher.question.QuizID = teacher.quiz.QuizID;
+            return View("AddQuestion", "_TeacherLayout", teacher);
+        }
+
+
+        public Boolean AddQuestionToDB(QuizQuestion question, MultChoiceAnswer answer)
+        {
+            Boolean rtn = false;
+
+            if (ModelState.IsValid)
+            {
+                db.AddQuestion(question);
+                db.SaveChanges();
+                answer.QuestionID = question.QuestionID;
+                db.AddAnswer(answer);
+                db.SaveChanges();
+                rtn = true;
+            }
+
+            return rtn;
+        }
+
+        public ActionResult AddAnother([Bind(Include = "QuizID,Points,QuestionText")] QuizQuestion question,
+                                       [Bind(Include = "Answer1,Answer2,Answer3,Answer4,CorrectAnswer")] MultChoiceAnswer answer)
+        {
+            Quizze temp = db.Quizzes.Where(q => q.QuizID == question.QuizID).FirstOrDefault();
+            int ClassID = temp.ClassID;
+            if (test(ClassID) != null)
+            {
+                return test(ClassID);
+            }
+            TeacherVM teacher = getTVM(ClassID);
+            teacher.quiz = temp;
+            teacher.question = question;
+            teacher.answer = answer;
+
+            if(AddQuestionToDB(question, answer))
+            {
+                return RedirectToAction("AddQuestion", "Teachers", new { QuizID = question.QuizID, ClassID = temp.ClassID });
+            }
+            
+            return View("AddQuestion", "_TeacherLayout", teacher);
+        }
+
+        public ActionResult SaveQuestion([Bind(Include = "QuizID,Points,QuestionText")] QuizQuestion question,
+                                       [Bind(Include = "Answer1,Answer2,Answer3,Answer4,CorrectAnswer")] MultChoiceAnswer answer)
+        {
+            Quizze temp = db.Quizzes.Where(q => q.QuizID == question.QuizID).FirstOrDefault();
+            int ClassID = temp.ClassID;
+            if (test(ClassID) != null)
+            {
+                return test(ClassID);
+            }
+            TeacherVM teacher = getTVM(ClassID);
+            teacher.quiz = temp;
+            teacher.question = question;
+            teacher.answer = answer;
+            if (AddQuestionToDB(question, answer))
+            {
+                return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = question.QuizID, ClassID = temp.ClassID });
+            }
+
+
+            return View("AddQuestion", "_TeacherLayout", teacher);
+        }
 
         public ActionResult CreateTask(int classID)
         {
@@ -632,7 +830,7 @@ namespace Oodle.Controllers
             tsk.StartDate = DateTime.Parse(startDate);
             tsk.DueDate = DateTime.Parse(dueDate);
 
-            db.Tasks.Add(tsk);
+            db.AddTask(tsk);
             db.SaveChanges();
 
             var teacher = getTVM(classID);
@@ -688,7 +886,7 @@ namespace Oodle.Controllers
             {
                 foreach (var x in db.Tasks.Where(i => i.TasksID == TasksID))
                 {
-                    db.Tasks.Remove(x);
+                    db.RemoveTask(x);
                 }
 
             }
@@ -722,10 +920,5 @@ namespace Oodle.Controllers
 
         }
 
-
-        public ActionResult CreateSlack()
-        {
-            return View("CreateSlack", "_TeacherLayout");
-        }
     }
 }

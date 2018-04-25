@@ -16,7 +16,10 @@ namespace Oodle.Controllers
 {
     public class ClassController : Controller
     {
+        //Regular database
         private Model1 db = new Model1();
+        //Repo for mocking database
+        //private OodleRepository db = new OodleRepository();
         private SlackManager slack = new SlackManager();
 
 
@@ -141,6 +144,7 @@ namespace Oodle.Controllers
                 classes = classes.Where(i => aClass.Contains(i.ClassID)).ToList();
             }
 
+            
 
             string student = Request.Form["student"];
 
