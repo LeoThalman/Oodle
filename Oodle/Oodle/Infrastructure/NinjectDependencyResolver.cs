@@ -33,7 +33,7 @@ namespace Oodle.Infrastructure
             //kernel.Bind<Oodle.Models.Repos.IOodleRepository>().To<Oodle.Models.Repos.OodleRepository>();
             
             //Bind TestRepository to IOodleRepository for testing
-            kernel.Bind<Oodle.Models.Repos.IOodleRepository>().To<Oodle.Models.Repos.TestRepository>();
+            kernel.Bind<Oodle.Models.Repos.IOodleRepository>().To<Oodle.Models.Repos.OodleRepository>();
 
         }
 
