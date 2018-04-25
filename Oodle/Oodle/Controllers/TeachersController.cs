@@ -307,6 +307,8 @@ namespace Oodle.Controllers
 
             teacher.notifs = db.ClassNotifications.Where(i => i.ClassID == classID).OrderBy(i => i.TimePosted).ToList();
 
+            teacher.Tasks = db.Tasks.ToList();
+
             return teacher;
         }
 
@@ -775,6 +777,132 @@ namespace Oodle.Controllers
 
         public ActionResult SaveQuestion([Bind(Include = "QuizID,Points,QuestionText")] QuizQuestion question,
                                        [Bind(Include = "Answer1,Answer2,Answer3,Answer4,CorrectAnswer")] MultChoiceAnswer answer)
+
+        public ActionResult CreateTask(int classID)
+        {
+            var teacher = getTVM(classID);
+
+            teacher.Tasks = db.Tasks.ToList();
+
+            return View("CreateTask", "_TeacherLayout", teacher);
+        }
+
+
+        public ActionResult CreateTasksEntry()
+        {
+            ViewBag.RequestMethod = "POST";
+
+            string desc = Request.Form["description"];
+            string id = Request.Form["classID"];
+            string startDate = Request.Form["startDate"];
+            string dueDate = Request.Form["dueDate"];
+
+            int classID = int.Parse(id);
+
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+            var tsk = new Tasks();
+
+            tsk.TasksID = db.Tasks.Count() + 1;
+            tsk.Description = desc;
+            tsk.ClassID = classID;
+            tsk.StartDate = DateTime.Parse(startDate);
+            tsk.DueDate = DateTime.Parse(dueDate);
+
+            db.Tasks.Add(tsk);
+            db.SaveChanges();
+
+            var teacher = getTVM(classID);
+
+            teacher.Tasks = db.Tasks.ToList();
+
+            return View("Tasks", "_TeacherLayout", teacher);
+        }
+
+        /*
+         * Returns a view for editTasks
+         */
+        public ActionResult EditTasks(int classID, int tasksID)
+        {
+
+            var urcL = db.UserRoleClasses.Where(i => i.RoleID == 3 && i.ClassID == classID);
+            var list = new List<int>();
+
+            foreach (var i in urcL)
+            {
+                list.Add(i.UsersID);
+            }
+            var request = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
+
+            var teacher = new TeacherVM(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault(), request);
+
+            teacher.Tasks = db.Tasks.Where(i => i.ClassID == classID && i.TasksID == tasksID).ToList();
+
+            return View("EditTasks", "_TeacherLayout", teacher);
+
+        }
+
+
+        /*
+         * Method that pulls in data and then makes a decision to either delete those fields from the database, or change them.
+         */
+        public ActionResult EditTaskAction()
+        {
+            ViewBag.RequestMethod = "POST";
+
+            string desc = Request.Form["description"];
+            string id = Request.Form["classID"];
+            string startDate = Request.Form["startDate"];
+            string dueDate = Request.Form["dueDate"];
+            string TaskID = Request.Form["TaskID"];
+            string delItem = Request.Form["Delete"];
+
+            int TasksID = int.Parse(TaskID);
+            int classID = int.Parse(id);
+
+            //If delete is checked, delete task from database.
+            if (delItem == "True")
+            {
+                foreach (var x in db.Tasks.Where(i => i.TasksID == TasksID))
+                {
+                    db.Tasks.Remove(x);
+                }
+
+            }
+
+            // save fields to selected database.
+            else
+            {
+
+                db.Tasks.Where(i => i.ClassID == classID && i.TasksID == TasksID).ToList().ForEach(x => x.Description = desc);
+                db.Tasks.Where(i => i.ClassID == classID && i.TasksID == TasksID).ToList().ForEach(x => x.StartDate = DateTime.Parse(startDate));
+                db.Tasks.Where(i => i.ClassID == classID && i.TasksID == TasksID).ToList().ForEach(x => x.DueDate = DateTime.Parse(dueDate));
+            }
+
+            db.SaveChanges();
+
+            var teacher = getTVM(classID);
+            teacher.Tasks = db.Tasks.ToList();
+
+            return View("Tasks", "_TeacherLayout", teacher);
+        }
+
+
+        /*
+         * Method for grabbing the Teacher View Model for tasks
+         */
+        public ActionResult Tasks(int classID)
+        {
+            var teacher = getTVM(classID);
+
+            return View("Tasks", "_TeacherLayout", teacher);
+
+        }
+
+
+        public ActionResult CreateSlack()
         {
             Quizze temp = db.Quizzes.Where(q => q.QuizID == question.QuizID).FirstOrDefault();
             int ClassID = temp.ClassID;
@@ -795,9 +923,5 @@ namespace Oodle.Controllers
             return View("AddQuestion", "_TeacherLayout", teacher);
         }
 
-        public ActionResult CreateTask()
-        {
-            return View("CreateTask", "_TeacherLayout");
-        }
     }
 }

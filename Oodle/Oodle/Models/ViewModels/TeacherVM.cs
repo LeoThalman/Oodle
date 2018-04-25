@@ -23,6 +23,7 @@ namespace Oodle.Models.ViewModels
         public MultChoiceAnswer answer { get; set; }
         public List<QuizQuestion> questionList { get; set; }
         public List<MultChoiceAnswer> answerList { get; set; }
+        public List<Tasks> Tasks { get; set; }
 
 
         public TeacherVM(Class classP, List<User> userP)

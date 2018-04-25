@@ -10,6 +10,7 @@ DROP TABLE dbo.QuizQuestions;
 DROP TABLE dbo.Quizzes;
 DROP TABLE dbo.Class;
 DROP TABLE dbo.Users;
+DROP TABLE dbo.Tasks;
 
 
 DROP TABLE [dbo].[AspNetUserRoles];
@@ -261,6 +262,18 @@ CREATE TABLE dbo.Assignment
 	Weight INT NOT NULL,
 	CONSTRAINT [PK_dbo.Assignment] PRIMARY KEY CLUSTERED (AssignmentID ASC),
 	CONSTRAINT [FK_dbo.Assignment_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
+);
+
+-- Task Table
+CREATE TABLE dbo.Tasks
+(	
+	TasksID	INT IDENTITY (1,1) NOT NULL,
+	ClassID	INT NOT NULL,
+	Description NVARCHAR(512),
+	StartDate DATETIME,
+	DueDate DATETIME,
+	CONSTRAINT [PK_dbo.Tasks] PRIMARY KEY CLUSTERED (TasksID ASC),
+	CONSTRAINT [FK_dbo.Tasks_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
 );
 
 -- Grades Table
