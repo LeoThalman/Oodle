@@ -9,7 +9,7 @@
 
 
 
-<div class="container Glance">
+<div class="container">
     <div class="jumbotron">
         <h3 style="color:black;text-align:center">
             Welcome to your classes homepage for: @Html.DisplayFor(Name => Model.cl.Name)
@@ -37,12 +37,23 @@
             </div>
         </div>
 
+        <div class="centerDiv">
+            <h2 style="color:black;"> Information at a Glance:</h2>
+            <table align="center">
 
-        <h3 id="Glance"> test shoukd be reddd</h3>
+                <tr>
+
+                    <td><button class="btn btn-dark" id="upcomingBtn">Upcoming Assignments</button></td>
+                    <td><button class="btn btn-dark" id="testBtn1">Something Else</button></td>
+                    <td><button class="btn btn-dark" id="testBtn2">Tasks Today</button></td>
+                    <td><button class="btn btn-dark" id="infoBtn">About</button></td>
+
+                </tr>
+
+            </table>
 
 
-
-
+        </div>
     </div>
 
 
@@ -52,39 +63,6 @@
 
 
 
-
-<div>
-    @for (int i = 0; i < Model.assignment.Count(); i++)
-    {
-
-
-        var assi = Model.assignment[i];
-       // if (assi.Name == "test")
-       if (assi.DueDate >= DateTime.Today)
-        {
-        <div class="block">
-            <a href="@Url.Action("AssignmentTurnIn", "Students", new { ClassID = (assi.ClassID), AssignmentID = (assi.AssignmentID) })">
-                <div class="classItem">
-                    <div class="title">
-                        @Html.DisplayFor(Name => assi.Name)
-                    </div>
-                    <div class="description">
-                        @Html.DisplayFor(Desc => assi.Description)
-                    </div>
-                    <div class="dateLeft">
-                        Start Date: @Html.DisplayFor(Desc => assi.StartDate)
-                    </div>
-                    <div class="dateRight">
-                        Due Date: @Html.DisplayFor(Desc => assi.DueDate)
-                    </div>
-                </div>
-            </a>
-        </div>
-        <br />
-        <br />
-        }
-    }
-</div>
 
 
 
@@ -94,20 +72,304 @@
 
 
 <!-- Trigger/Open The Modal -->
-<button id="myBtn">Open Modal</button>
-
 <!-- The Modal -->
-<div id="myModal" class="modal">
+<div id="upcomingModal" class="modal">
 
     <!-- Modal content -->
     <div class="modal-content">
-        <span class="close">&times;</span>
-        <p>Some text in the Modal..</p>
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h2>Upcoming Assignments:</h2>
+        </div>
+        <div class="modal-body">
+
+
+            <div>
+                @for (int i = 0, count = 0; i < Model.assignment.Count(); i++, count++)
+        {
+
+            var assi = Model.assignment[i];
+            // if (assi.Name == "test")
+            if (assi.DueDate >= DateTime.Today && count < 3)
+            {
+                <div class="block">
+                    <a href="@Url.Action("AssignmentTurnIn", "Students", new { ClassID = (assi.ClassID), AssignmentID = (assi.AssignmentID) })">
+                        <div class="classItem">
+                            <div class="title">
+                                @Html.DisplayFor(Name => assi.Name)
+                            </div>
+                            <div class="description">
+                                @Html.DisplayFor(Desc => assi.Description)
+                            </div>
+                            <div class="dateLeft">
+                                Start Date: @Html.DisplayFor(Desc => assi.StartDate)
+                            </div>
+                            <div class="dateRight">
+                                Due Date: @Html.DisplayFor(Desc => assi.DueDate)
+                            </div>
+                        </div>
+
+                    </a>
+                </div>
+                <br />
+                <br />
+    }
+}
+            </div>
+
+
+
+        </div>
+        <div class="modal-footer">
+            <h3>Oodle Assignments</h3>
+        </div>
     </div>
 
 </div>
 
 
+
+<div id="infoModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h2>Oodle Classrooms:</h2>
+        </div>
+        <div class="modal-body">
+
+
+
+            <div class="container">
+                <div class="jumbotron">
+                    <h3 style="color:black">
+                        Naviagation Tips:
+                    </h3>
+                    <hr />
+
+
+                    <table>
+                        <tr>
+                            <th>Slack</th>
+                            <th>Grades</th>
+                            <th>Assignments</th>
+                            <th>Quizzes</th>
+                            <th>Tasks</th>
+                        </tr>
+                        <tr>
+                            <td>Set up and communicate with your classmates to talk about upcoming assignments, homework and anything else.</td>
+                            <td>View your grades for quizzes and assignments.</td>
+                            <td>See upcoming and past assignments.</td>
+                            <td>Get information and take quizzes set up by your teacher</td>
+                            <td>See anything your teacher might want you to be notified of.</td>
+
+
+                        </tr>
+                       
+                    </table>
+
+
+                    <hr />
+                    <h3 style="color:black">
+                        Support at: Oodleclassrooms@gmail.com <br>
+                    </h3>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+        <div class="modal-footer">
+            <h3>Oodle Info </h3>
+        </div>
+    </div>
+
+</div>
+
+
+<div id="TasksToday" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h2>Tasks Today</h2>
+        </div>
+        <div class="modal-body">
+
+            <br /><br />
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+
+
+
+                        <div>
+                            @foreach (var i in Model.Tasks)
+    {
+        if (i.ClassID == Model.cl.ClassID)
+        {
+            var tsk = i;
+            DateTime today = DateTime.Today;
+            DateTime toTest = tsk.StartDate.GetValueOrDefault();
+            System.TimeSpan difference = today.Subtract(toTest);
+                        <!--if (today.Value.TotalHours > -24 && toTest.TotalHours <= 24) -->
+                       if ((today - toTest).Duration().TotalHours <= 24)
+                                    {
+                        <div class="block">
+                            <div class="classItem">
+                                <div class="description">
+                                    @Html.DisplayFor(Desc => tsk.Description)
+                                </div>
+                                <div class="dateLeft" style="color:#17252A">
+                                    Start Date: @Html.DisplayFor(Desc => tsk.StartDate)
+                                </div>
+                                <div class="dateRight" style="color:#17252A">
+                                    Due Date: @Html.DisplayFor(Desc => tsk.DueDate)
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+}
+}
+
+}
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="modal-footer">
+            <h3>Oodle tasks</h3>
+        </div>
+    </div>
+
+</div>
+
+
+<div id="testModal1" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h2>11111111</h2>
+        </div>
+        <div class="modal-body">
+            <p>Some text in the Modal Body</p>
+            <p>Some other text...</p>
+        </div>
+        <div class="modal-footer">
+            <h3>Oodle Info </h3>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+
+
+    //KALI MODAL
+    // Get the modal
+    var modal2 = document.getElementById('upcomingModal');
+
+    // Get the button that opens the modal
+    var btn2 = document.getElementById("upcomingBtn");
+
+    // When the user clicks the button, open the modal
+    btn2.onclick = function () {
+        modal2.style.display = "block";
+    }
+
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal2) {
+            modal2.style.display = "none";
+        }
+    }
+
+    //CREATIVE MODAL
+    // Get the modal
+    var modal3 = document.getElementById('infoModal');
+
+    // Get the button that opens the modal
+    var btn3 = document.getElementById("infoBtn");
+
+    // When the user clicks the button, open the modal
+    btn3.onclick = function () {
+        modal3.style.display = "block";
+    }
+
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal3) {
+            modal3.style.display = "none";
+
+        }
+    }
+
+
+
+
+
+
+    //GAMING MODAL
+    // Get the modal
+    var modal4 = document.getElementById('TasksToday');
+
+    // Get the button that opens the modal
+    var btn4 = document.getElementById("testBtn2");
+
+
+    // When the user clicks the button, open the modal
+    btn4.onclick = function () {
+        modal4.style.display = "block";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal4) {
+
+            modal4.style.display = "none";
+        }
+    }
+
+
+    //DEVELOPER MODAL
+    // Get the modal
+    var modal1 = document.getElementById('testModal1');
+
+    // Get the button that opens the modal
+    var btn1 = document.getElementById("testBtn1");
+
+
+    // When the user clicks the button, open the modal
+    btn1.onclick = function () {
+        modal1.style.display = "block";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal1 || event.target == modal2 || event.target == modal3 || event.target == modal4) {
+            modal1.style.display = "none";
+            modal2.style.display = "none";
+            modal3.style.display = "none";
+            modal4.style.display = "none";
+
+        }
+    }
+</script>
 
 
 
@@ -116,3 +378,92 @@
     {
     <script type="text/javascript" src="~/Scripts/scriptone.js"></script>
 }
+
+<style>
+
+    .centerDiv {
+        border: 5px solid black;
+        margin: 50px;
+        padding: 50px;
+        margin: auto;
+    }
+
+
+
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 0;
+        top: 0;
+        color: black;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /*
+    Main Colors:
+
+    Black-ish: #17252A
+    Darker blue: #2B7A78
+    Lighter blue: #3AAFA9
+    Darker white: #DEF2F1
+    Lighter white: #FEFFFF
+    */
+
+
+    /* Modal Content */
+    .modal-content {
+        position: relative;
+        background-color: #DEF2FF;
+        margin: auto;
+        padding: 0;
+        border: 1px solid #888;
+        width: 80%;
+        color: black;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+        -webkit-animation-name: animatetop;
+        -webkit-animation-duration: 0.4s;
+        animation-name: animatetop;
+        animation-duration: 0.4s;
+    }
+
+
+
+    .close {
+        color: white;
+        float: right;
+        font-size: 0px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    .modal-header {
+        padding: 2px 16px;
+        background-color: #2B7A78;
+        color: white;
+    }
+
+    .modal-body {
+        padding: 2px 16px;
+        color: black;
+    }
+
+    .modal-footer {
+        padding: 2px 16px;
+        background-color: #17252A;
+        color: white;
+    }
+</style>
+
