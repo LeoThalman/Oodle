@@ -16,9 +16,10 @@ namespace Oodle.Controllers
 {
     public class ClassController : Controller
     {
-
-        //private Model1 db = new Model1();
-        private OodleRepository db = new OodleRepository();
+        //Regular database
+        private Model1 db = new Model1();
+        //Repo for mocking database
+        //private OodleRepository db = new OodleRepository();
         private SlackManager slack = new SlackManager();
 
 

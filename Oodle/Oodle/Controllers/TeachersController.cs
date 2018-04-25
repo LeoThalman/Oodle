@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Oodle.Models;
 using Oodle.Models.ViewModels;
+using Oodle.Models.Repos;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Net;
@@ -25,8 +26,16 @@ namespace Oodle.Controllers
         //Slack access
         private SlackManager slack = new SlackManager();
 
-        // GET: Teachers
-        private Model1 db = new Model1();
+
+        //Regular database
+        //private Model1 db = new Model1();
+        //Repo for mocking database
+        private IOodleRepository db;
+
+        public TeachersController(IOodleRepository repo)
+        {
+            this.db = repo;
+        }
 
         public ActionResult test(int classID)
         {
@@ -82,7 +91,7 @@ namespace Oodle.Controllers
             }
 
 
-            db.UserRoleClasses.Remove(db.UserRoleClasses.Where(i => i.UsersID == userID & i.ClassID == classID).FirstOrDefault());
+            db.RemoveURC(db.UserRoleClasses.Where(i => i.UsersID == userID & i.ClassID == classID).FirstOrDefault());
             db.SaveChanges();
 
             return RedirectToAction("Index", new { classId = classID });
@@ -196,7 +205,7 @@ namespace Oodle.Controllers
 
             ClassNotification notif = db.ClassNotifications.Where(n => n.ClassID == classID
                                                     && n.ClassNotificationID == notifID).FirstOrDefault();
-            db.ClassNotifications.Remove(notif);
+            db.RemoveNotif(notif);
             db.SaveChanges();
 
             return RedirectToAction("Index", new { classId = classID });
@@ -208,7 +217,7 @@ namespace Oodle.Controllers
             cNotif.Notification = notif;
             cNotif.TimePosted = DateTime.Now;
             cNotif.ClassID = classID;
-            db.ClassNotifications.Add(cNotif);
+            db.AddNotif(cNotif);
             db.SaveChanges();           
         }
 
@@ -224,7 +233,7 @@ namespace Oodle.Controllers
             Class hasSlack = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
             foreach (var i in list)
             {
-                db.UserRoleClasses.Remove(i);
+                db.RemoveURC(i);
             }
 
             //classID = 1;
@@ -233,7 +242,7 @@ namespace Oodle.Controllers
                 slack.DeleteChannel(hasSlack.SlackName);
             }
 
-            db.Classes.Remove(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault());
+            db.RemoveClass(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault());
 
             db.SaveChanges();
 
@@ -332,7 +341,7 @@ namespace Oodle.Controllers
             assi.DueDate = DateTime.Parse(dueDate);
             assi.Weight = int.Parse(weight);
 
-            db.Assignments.Add(assi);
+            db.AddAssignment(assi);
             db.SaveChanges();
 
             var teacher = getTVM(classID);
@@ -638,7 +647,7 @@ namespace Oodle.Controllers
             if (ModelState.IsValid)
             {
 
-                db.Entry(Quiz).State = EntityState.Modified;
+                db.SetModified(Quiz);
                 db.SaveChanges();
                 return RedirectToAction("Index", "Class", new { classId = Quiz.ClassID });
             }
@@ -646,6 +655,11 @@ namespace Oodle.Controllers
             {
                 return RedirectToAction("EduitQuiz", "Teachers", new {QuizID = Quiz.QuizID, ClassID = Quiz.ClassID });
             }
+        }
+
+        public List<Quizze> TestMoq()
+        {
+            return db.Quizzes.ToList();
         }
 
         [HttpGet]
@@ -694,7 +708,7 @@ namespace Oodle.Controllers
             }
             if (ModelState.IsValid)
             {
-                db.Quizzes.Add(Quiz);
+                db.AddQuiz(Quiz);
                 db.SaveChanges();
                 return RedirectToAction("Index", "Class", new { classId = Quiz.ClassID });
             }
@@ -726,10 +740,10 @@ namespace Oodle.Controllers
 
             if (ModelState.IsValid)
             {
-                db.QuizQuestions.Add(question);
+                db.AddQuestion(question);
                 db.SaveChanges();
                 answer.QuestionID = question.QuestionID;
-                db.MultChoiceAnswers.Add(answer);
+                db.AddAnswer(answer);
                 db.SaveChanges();
                 rtn = true;
             }
@@ -772,14 +786,9 @@ namespace Oodle.Controllers
             teacher.quiz = temp;
             teacher.question = question;
             teacher.answer = answer;
-            if (ModelState.IsValid)
-            {
-                db.QuizQuestions.Add(question);
-                db.SaveChanges();
-                answer.QuestionID = question.QuestionID;
-                db.MultChoiceAnswers.Add(answer);
-                db.SaveChanges();
-                return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = question.QuizID, ClassID = temp.ClassID });
+            if (AddQuestionToDB(question, answer))
+            {                
+            return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = question.QuizID, ClassID = temp.ClassID });
             }
 
 

@@ -228,6 +228,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AspNetRole.cs" />
     <Compile Include="Models\AspNetUser.cs" />
@@ -241,14 +242,15 @@
     <Compile Include="Models\Document.cs" />
     <Compile Include="Models\Grade.cs" />
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\IOodleRepository.cs" />
+    <Compile Include="Models\Repos\IOodleRepository.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Model1.cs" />
     <Compile Include="Models\MultChoiceAnswer.cs" />
-    <Compile Include="Models\OodleRepository.cs" />
+    <Compile Include="Models\Repos\OodleRepository.cs" />
     <Compile Include="Models\Question.cs" />
     <Compile Include="Models\QuizQuestion.cs" />
     <Compile Include="Models\Quizze.cs" />
+    <Compile Include="Models\Repos\TestRepository.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\SlackBot.cs" />
     <Compile Include="Models\User.cs" />
