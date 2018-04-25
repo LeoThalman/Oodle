@@ -57,7 +57,14 @@ namespace Oodle.Models.Repos
         {
             get { return db.MultChoiceAnswers; }
         }
-//-----------------------Add and Remove Methods for the tables-------------------------------
+
+        public IEnumerable<Tasks> Tasks
+        {
+            get { return db.Tasks; }
+        }
+
+
+        //-----------------------Add and Remove Methods for the tables-------------------------------
         //Save Db Changes
         public void SaveChanges()
         {
@@ -112,6 +119,16 @@ namespace Oodle.Models.Repos
         public void AddAnswer(MultChoiceAnswer a)
         {
             db.MultChoiceAnswers.Add(a);
+        }
+
+        public void AddTask(Tasks t)
+        {
+            db.Tasks.Add(t);
+        }
+
+        public void RemoveTask(Tasks t)
+        {
+            db.Tasks.Remove(t);
         }
     }
 }

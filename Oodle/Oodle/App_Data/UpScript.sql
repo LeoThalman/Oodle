@@ -8,9 +8,10 @@ DROP TABLE dbo.ClassNotification;
 DROP TABLE dbo.MultChoiceAnswers;
 DROP TABLE dbo.QuizQuestions;
 DROP TABLE dbo.Quizzes;
+DROP TABLE dbo.Tasks;
 DROP TABLE dbo.Class;
 DROP TABLE dbo.Users;
-DROP TABLE dbo.Tasks;
+
 
 
 DROP TABLE [dbo].[AspNetUserRoles];

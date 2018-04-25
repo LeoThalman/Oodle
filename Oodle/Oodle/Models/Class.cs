@@ -51,11 +51,8 @@ namespace Oodle.Models
         public virtual ICollection<Document> Documents { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-<<<<<<< HEAD
         public virtual ICollection<Quizze> Quizzes { get; set; }
-=======
         public virtual ICollection<Tasks> Tasks { get; set; }
->>>>>>> development
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserRoleClass> UserRoleClasses { get; set; }

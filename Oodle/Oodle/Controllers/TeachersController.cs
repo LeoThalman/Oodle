@@ -777,6 +777,25 @@ namespace Oodle.Controllers
 
         public ActionResult SaveQuestion([Bind(Include = "QuizID,Points,QuestionText")] QuizQuestion question,
                                        [Bind(Include = "Answer1,Answer2,Answer3,Answer4,CorrectAnswer")] MultChoiceAnswer answer)
+        {
+            Quizze temp = db.Quizzes.Where(q => q.QuizID == question.QuizID).FirstOrDefault();
+            int ClassID = temp.ClassID;
+            if (test(ClassID) != null)
+            {
+                return test(ClassID);
+            }
+            TeacherVM teacher = getTVM(ClassID);
+            teacher.quiz = temp;
+            teacher.question = question;
+            teacher.answer = answer;
+            if (AddQuestionToDB(question, answer))
+            {
+                return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = question.QuizID, ClassID = temp.ClassID });
+            }
+
+
+            return View("AddQuestion", "_TeacherLayout", teacher);
+        }
 
         public ActionResult CreateTask(int classID)
         {
@@ -811,7 +830,7 @@ namespace Oodle.Controllers
             tsk.StartDate = DateTime.Parse(startDate);
             tsk.DueDate = DateTime.Parse(dueDate);
 
-            db.Tasks.Add(tsk);
+            db.AddTask(tsk);
             db.SaveChanges();
 
             var teacher = getTVM(classID);
@@ -867,7 +886,7 @@ namespace Oodle.Controllers
             {
                 foreach (var x in db.Tasks.Where(i => i.TasksID == TasksID))
                 {
-                    db.Tasks.Remove(x);
+                    db.RemoveTask(x);
                 }
 
             }
@@ -899,28 +918,6 @@ namespace Oodle.Controllers
 
             return View("Tasks", "_TeacherLayout", teacher);
 
-        }
-
-
-        public ActionResult CreateSlack()
-        {
-            Quizze temp = db.Quizzes.Where(q => q.QuizID == question.QuizID).FirstOrDefault();
-            int ClassID = temp.ClassID;
-            if (test(ClassID) != null)
-            {
-                return test(ClassID);
-            }
-            TeacherVM teacher = getTVM(ClassID);
-            teacher.quiz = temp;
-            teacher.question = question;
-            teacher.answer = answer;
-            if (AddQuestionToDB(question, answer))
-            {                
-            return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = question.QuizID, ClassID = temp.ClassID });
-            }
-
-
-            return View("AddQuestion", "_TeacherLayout", teacher);
         }
 
     }

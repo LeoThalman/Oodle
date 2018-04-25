@@ -22,6 +22,7 @@ namespace Oodle.Models.Repos
 
         public IEnumerable<QuizQuestion> QuizQuestions { get; }
         public IEnumerable<MultChoiceAnswer> MultChoiceAnswers { get; }
+        public IEnumerable<Tasks> Tasks { get; }
 
 
         //No database so no need to save
@@ -92,6 +93,18 @@ namespace Oodle.Models.Repos
         {
             List<MultChoiceAnswer> temp = MultChoiceAnswers.ToList();
             temp.Remove(a);
+        }
+
+        public void AddTask(Tasks t)
+        {
+            List<Tasks> temp = Tasks.ToList();
+            temp.Add(t);
+        }
+
+        public void RemoveTask(Tasks t)
+        {
+            List<Tasks> temp = Tasks.ToList();
+            temp.Remove(t);
         }
     }
 }
