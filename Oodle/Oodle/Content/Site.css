@@ -12,6 +12,12 @@ Lighter white: #FEFFFF
 
 
 
+
+table {
+    color: #17252A;
+}
+
+
 /* The sidebar menu */
 .sidenav {
     width: 20%; /* Set the width of the sidebar */

@@ -61,6 +61,12 @@ namespace Oodle.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
+<<<<<<< HEAD
+=======
+            //This allows Ninject to insert the Database Dependencies to auto create Oodle or TestRepos
+            System.Web.Mvc.DependencyResolver
+                    .SetResolver(new Infrastructure.NinjectDependencyResolver(kernel));
+>>>>>>> development
         }        
     }
 }

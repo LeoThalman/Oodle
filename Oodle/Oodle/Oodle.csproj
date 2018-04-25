@@ -46,14 +46,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
-    </Reference>
+
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.7\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
@@ -228,6 +227,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AspNetRole.cs" />
     <Compile Include="Models\AspNetUser.cs" />
@@ -241,9 +241,15 @@
     <Compile Include="Models\Document.cs" />
     <Compile Include="Models\Grade.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Repos\IOodleRepository.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Model1.cs" />
+    <Compile Include="Models\MultChoiceAnswer.cs" />
+    <Compile Include="Models\Repos\OodleRepository.cs" />
     <Compile Include="Models\Question.cs" />
+    <Compile Include="Models\QuizQuestion.cs" />
+    <Compile Include="Models\Quizze.cs" />
+    <Compile Include="Models\Repos\TestRepository.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\SlackBot.cs" />
     <Compile Include="Models\Task.cs" />
@@ -255,6 +261,10 @@
     <Compile Include="Utility\SlackManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Oodle.mdf" />
+    <Content Include="App_Data\Oodle_log.ldf">
+      <DependentUpon>Oodle.mdf</DependentUpon>
+    </Content>
     <Content Include="App_Data\up.sql" />
     <Content Include="App_Data\UpScript.sql" />
     <Content Include="Content\bootstrap.css" />
@@ -353,6 +363,7 @@
     <Content Include="Views\Teachers\MakeGrade.cshtml" />
     <Content Include="Views\Teachers\ViewRoster.cshtml" />
     <Content Include="Views\Teachers\Assignment.cshtml" />
+    <Content Include="Views\Teachers\CreateTask.cshtml" />
     <Content Include="Views\Teachers\CreateQuiz.cshtml" />
     <Content Include="Views\Teachers\CreateSlack.cshtml" />
     <Content Include="Views\Teachers\Edit.cshtml" />
@@ -371,6 +382,11 @@
     <Content Include="Views\Teachers\Grades.cshtml" />
     <Content Include="Views\Home\Calendar.cshtml" />
     <Content Include="Views\Shared\_CalendarLayout.cshtml" />
+    <Content Include="Views\Teachers\CreateQuiz.cshtml" />
+    <Content Include="Views\Teachers\QuizList.cshtml" />
+    <Content Include="Views\Teachers\ViewQuiz.cshtml" />
+    <Content Include="Views\Teachers\EditQuiz.cshtml" />
+    <Content Include="Views\Teachers\AddQuestion.cshtml" />
     <Content Include="Views\Teachers\CreateTask.cshtml" />
     <Content Include="Views\Teachers\EditTasks.cshtml" />
     <Content Include="Views\Teachers\Tasks.cshtml" />
