@@ -10,14 +10,19 @@ namespace Oodle.Models.Repos
     public class OodleRepository : IOodleRepository
     {
         private Model1 db = new Model1();
+
+//-----------------------Database Tables-------------------------------
+        //These act as tables for the database
         public IEnumerable<User> Users
         {
             get { return db.Users; }
         }
+
         public IEnumerable<UserRoleClass> UserRoleClasses
         {
             get { return db.UserRoleClasses; }
         }
+
         public IEnumerable<Class> Classes
         {
             get { return db.Classes; }
@@ -52,12 +57,13 @@ namespace Oodle.Models.Repos
         {
             get { return db.MultChoiceAnswers; }
         }
-
+//-----------------------Add and Remove Methods for the tables-------------------------------
+        //Save Db Changes
         public void SaveChanges()
         {
             db.SaveChanges();
         }
-
+        //Mark EntityState as Modified to save edits
         public void SetModified(object entity)
         {
             db.Entry(entity).State = EntityState.Modified;

@@ -11,6 +11,7 @@ namespace Oodle.Models.Repos
 {
     public interface IOodleRepository
     {
+        //These act as tables for the database
         IEnumerable<User> Users { get; }
         IEnumerable<UserRoleClass> UserRoleClasses { get; }
         IEnumerable<Class> Classes { get; }
@@ -22,10 +23,12 @@ namespace Oodle.Models.Repos
         IEnumerable<MultChoiceAnswer> MultChoiceAnswers { get; }
 
 
+        //Save db changes
         void SaveChanges();
+        //Mark entry EntityState as modified to save edits
         void SetModified(object entity);
 
-
+        //Various Add and Remove functions for the tables
         void RemoveNotif(ClassNotification notif);
         void AddNotif(ClassNotification notif);
         void RemoveURC(UserRoleClass urc);

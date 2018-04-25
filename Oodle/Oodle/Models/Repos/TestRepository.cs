@@ -8,6 +8,7 @@ namespace Oodle.Models.Repos
 {
     public class TestRepository : IOodleRepository
     {
+        //Fake Tables for test Database
         public IEnumerable<User> Users { get; }
         public IEnumerable<UserRoleClass> UserRoleClasses { get; }
         public IEnumerable<Class> Classes { get; }
@@ -22,17 +23,22 @@ namespace Oodle.Models.Repos
         public IEnumerable<QuizQuestion> QuizQuestions { get; }
         public IEnumerable<MultChoiceAnswer> MultChoiceAnswers { get; }
 
+
+        //No database so no need to save
         public void SaveChanges()
         {
 
         }
 
+        //No database so no need to edit
         public void SetModified(object entity)
         {
            
         }
 
-
+//--------------------Add and Remove methods for unit tests------------------
+        //Convert IEnumerable into a list to add or remove from it
+        //Haven't tested if the changes save or if we need to save them manually
         public void RemoveNotif(ClassNotification notif)
         {
             List<ClassNotification> temp = ClassNotifications.ToList();

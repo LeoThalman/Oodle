@@ -26,12 +26,13 @@ namespace Oodle.Infrastructure
             return kernel.GetAll(serviceType);
         }
 
+        //This function Binds the Repos to IOodle
         private void AddBindings()
         {
-            //Bind OodleRepository to IOodleRepository, so that one is created whenever IOodleRepository is needed
-            //kernel.Bind<Oodle.Models.Repos.IOodleRepository>().To<Oodle.Models.Repos.OodleRepository>();
-            //Bind TestRepository to IOodleRepository
-            kernel.Bind<Oodle.Models.Repos.IOodleRepository>().To<Oodle.Models.Repos.TestRepository>();
+            //Bind OodleRepository to IOodleRepository for production
+            kernel.Bind<Oodle.Models.Repos.IOodleRepository>().To<Oodle.Models.Repos.OodleRepository>();
+            //Bind TestRepository to IOodleRepository for testing
+            //kernel.Bind<Oodle.Models.Repos.IOodleRepository>().To<Oodle.Models.Repos.TestRepository>();
 
         }
 
