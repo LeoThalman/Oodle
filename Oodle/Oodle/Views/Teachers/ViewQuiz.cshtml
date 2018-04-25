@@ -1,8 +1,9 @@
 ﻿@model Oodle.Models.ViewModels.TeacherVM
 
 <div class="row fontClass">
-        @Html.ActionLink("Edit Quiz", "EditQuiz", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID }, null)
-        @Html.ActionLink("Add Question", "AddQuestion", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID }, null)
+        @Html.ActionLink("Edit Quiz", "EditQuiz", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID }, new { @class = "btn btn-primary btn-large" })
+        @Html.ActionLink("Add Question", "AddQuestion", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID }, new { @class = "btn btn-primary btn-large" })
+        
         <p>
             @Html.DisplayNameFor(Model => Model.quiz.QuizName):
             @Html.DisplayFor(Model => Model.quiz.QuizName)

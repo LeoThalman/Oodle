@@ -719,12 +719,28 @@ namespace Oodle.Controllers
             return View("AddQuestion", "_TeacherLayout", teacher);
         }
 
+
+        public Boolean AddQuestionToDB(QuizQuestion question, MultChoiceAnswer answer)
+        {
+            Boolean rtn = false;
+
+            if (ModelState.IsValid)
+            {
+                db.QuizQuestions.Add(question);
+                db.SaveChanges();
+                answer.QuestionID = question.QuestionID;
+                db.MultChoiceAnswers.Add(answer);
+                db.SaveChanges();
+                rtn = true;
+            }
+
+            return rtn;
+        }
+
         public ActionResult AddAnother([Bind(Include = "QuizID,Points,QuestionText")] QuizQuestion question,
                                        [Bind(Include = "Answer1,Answer2,Answer3,Answer4,CorrectAnswer")] MultChoiceAnswer answer)
         {
             Quizze temp = db.Quizzes.Where(q => q.QuizID == question.QuizID).FirstOrDefault();
-            Debug.WriteLine("Quiz ID: " + question.QuizID);
-            Debug.WriteLine("Class ID: " + temp.ClassID);
             int ClassID = temp.ClassID;
             if (test(ClassID) != null)
             {
@@ -734,18 +750,11 @@ namespace Oodle.Controllers
             teacher.quiz = temp;
             teacher.question = question;
             teacher.answer = answer;
-            if (ModelState.IsValid)
-            {
-                db.QuizQuestions.Add(question);
-                Debug.WriteLine("Question ID Before Saving" + question.QuestionID);
-                db.SaveChanges();
-                Debug.WriteLine("Question ID After Saving" + question.QuestionID);
-                answer.QuestionID = question.QuestionID;
-                db.MultChoiceAnswers.Add(answer);
-                db.SaveChanges();
-                return RedirectToAction("AddQuestion", "Teachers", new {QuizID = question.QuizID, ClassID = temp.ClassID });
-            }
 
+            if(AddQuestionToDB(question, answer))
+            {
+                return RedirectToAction("AddQuestion", "Teachers", new { QuizID = question.QuizID, ClassID = temp.ClassID });
+            }
             
             return View("AddQuestion", "_TeacherLayout", teacher);
         }
@@ -754,8 +763,6 @@ namespace Oodle.Controllers
                                        [Bind(Include = "Answer1,Answer2,Answer3,Answer4,CorrectAnswer")] MultChoiceAnswer answer)
         {
             Quizze temp = db.Quizzes.Where(q => q.QuizID == question.QuizID).FirstOrDefault();
-            Debug.WriteLine("Quiz ID: " + question.QuizID);
-            Debug.WriteLine("Class ID: " + temp.ClassID);
             int ClassID = temp.ClassID;
             if (test(ClassID) != null)
             {
@@ -768,9 +775,7 @@ namespace Oodle.Controllers
             if (ModelState.IsValid)
             {
                 db.QuizQuestions.Add(question);
-                Debug.WriteLine("Question ID Before Saving" + question.QuestionID);
                 db.SaveChanges();
-                Debug.WriteLine("Question ID After Saving" + question.QuestionID);
                 answer.QuestionID = question.QuestionID;
                 db.MultChoiceAnswers.Add(answer);
                 db.SaveChanges();
