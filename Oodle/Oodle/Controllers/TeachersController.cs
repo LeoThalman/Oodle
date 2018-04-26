@@ -671,12 +671,11 @@ namespace Oodle.Controllers
             {
                 return test(ClassID);
             }
+
             Quizze quiz = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault();
-            if (quiz == null)
-            {
-                return RedirectToAction("Index", "Class", new { classId = ClassID });
-            }
-            else if (quiz.ClassID == ClassID)
+
+            
+            if (CheckQuizClassID(quiz,ClassID))
             {
                 TeacherVM teacher = getTVM(ClassID);
                 teacher.quiz = quiz;
@@ -684,10 +683,16 @@ namespace Oodle.Controllers
                 teacher.answerList = db.MultChoiceAnswers.Where(a => a.QuizQuestion.QuizID == QuizID).ToList();
                 return View("ViewQuiz", "_TeacherLayout", teacher);
             }
-            else
-            {
                 return RedirectToAction("Index", "Class", new { classId = ClassID });
-            }
+        }
+
+
+        public Boolean CheckQuizClassID(Quizze quiz, int ClassID)
+        {
+            Boolean rtn = false;
+            if (quiz != null && quiz.ClassID == ClassID)
+                rtn = true;
+            return rtn;
         }
 
         [HttpGet]
@@ -714,6 +719,7 @@ namespace Oodle.Controllers
                 }
             }
             return rtn;
+        }
 
         [HttpPost]
         public ActionResult CreateQuiz([Bind(Include = "QuizName,ClassID,StartTime,EndTime,IsHidden")] Quizze Quiz)
@@ -725,7 +731,7 @@ namespace Oodle.Controllers
 
             if(AddQuizToDB(Quiz))            
                 return RedirectToAction("QuizList", "Teachers", new { classId = Quiz.ClassID });
-            }
+            
             else
             {
                 return RedirectToAction("CreateQuiz", "Teachers", new { ClassID = Quiz.ClassID });

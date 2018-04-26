@@ -6,6 +6,7 @@ using Oodle.Models.Repos;
 using Oodle.Models;
 using Moq;
 using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace Test
 {
@@ -46,10 +47,18 @@ namespace Test
                     new MultChoiceAnswer { QuestionID = 1, AnswerID = 1, CorrectAnswer = 2, Answer1 = "true", Answer2 = "false" , Answer3 = "", Answer4 = "" },
                     new MultChoiceAnswer { QuestionID = 2, AnswerID = 2, CorrectAnswer = 1, Answer1 = "one", Answer2 = "two" , Answer3 = "three", Answer4 = "four" },
                     new MultChoiceAnswer { QuestionID = 3, AnswerID = 3, CorrectAnswer = 4, Answer1 = "1", Answer2 = "2" , Answer3 = "3", Answer4 = "4" }
-                }); 
+                });
+
+            mock.Setup(m => m.Classes)
+    .           Returns(
+                new Class[]
+                {
+                                new Class { ClassID = 1, Name = "test", Description = "testdescrip", Subject = "Math", UsersID = 1 }
+
+                });
 
 
-            
+
         }
 
         [Test]
@@ -107,6 +116,47 @@ namespace Test
                 Points = 2
             };
             Assert.IsFalse(teacher.AddQuestionToDB(q, null));
+        }
+
+        [Test]
+        public void AddQuizToDB_ValidQuiz_ReturnsTrue()
+        {
+            TeachersController teacher = new TeachersController(mock.Object);
+            Quizze q = new Quizze
+            {
+                QuizID = 4,
+                QuizName = "test",
+                StartTime = DateTime.Now,
+                EndTime = DateTime.Now,
+                IsHidden = false,
+                ClassID = 1,
+                TotalPoints = 0
+            }; 
+            Assert.IsTrue(teacher.AddQuizToDB(q));
+        }
+
+        [Test]
+        public void AddQuizToDB_InvalidQuiz_ReturnsFalse()
+        {
+            TeachersController teacher = new TeachersController(mock.Object);
+            Assert.IsFalse(teacher.AddQuizToDB(null));
+
+        }
+
+        [Test]
+        public void CheckQuizClassID_ValidID_ReturnsTrue()
+        {
+            TeachersController teacher = new TeachersController(mock.Object);
+            Quizze q = new Quizze { QuizID = 1, QuizName = "Q1", StartTime = DateTime.Now, EndTime = DateTime.Now, ClassID = 1, IsHidden = false, TotalPoints = 0 };
+            Assert.IsTrue(teacher.CheckQuizClassID(q, 1));
+        }
+
+        [Test]
+        public void CheckQuizClassID_ValidID_ReturnsFalse()
+        {
+            TeachersController teacher = new TeachersController(mock.Object);
+            Quizze q = new Quizze { QuizID = 1, QuizName = "Q1", StartTime = DateTime.Now, EndTime = DateTime.Now, ClassID = 1, IsHidden = false, TotalPoints = 0 };
+            Assert.IsFalse(teacher.CheckQuizClassID(q, 2));
         }
 
         [Test]
