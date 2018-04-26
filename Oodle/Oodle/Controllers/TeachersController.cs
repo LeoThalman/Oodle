@@ -659,9 +659,9 @@ namespace Oodle.Controllers
             }
         }
 
-        public List<Quizze> TestMoq()
+        public List<MultChoiceAnswer> TestMoq()
         {
-            return db.Quizzes.ToList();
+            return db.MultChoiceAnswers.ToList();
         }
 
         [HttpGet]
@@ -701,6 +701,20 @@ namespace Oodle.Controllers
             return View("CreateQuiz", "_TeacherLayout", teacher);
         }
 
+        public Boolean AddQuizToDB(Quizze Quiz)
+        {
+            Boolean rtn = false;
+            if (Quiz != null)
+            {
+                if (ModelState.IsValid)
+                {
+                    db.AddQuiz(Quiz);
+                    db.SaveChanges();
+                    rtn = true;
+                }
+            }
+            return rtn;
+
         [HttpPost]
         public ActionResult CreateQuiz([Bind(Include = "QuizName,ClassID,StartTime,EndTime,IsHidden")] Quizze Quiz)
         {
@@ -708,11 +722,9 @@ namespace Oodle.Controllers
             {
                 return test(Quiz.ClassID);
             }
-            if (ModelState.IsValid)
-            {
-                db.AddQuiz(Quiz);
-                db.SaveChanges();
-                return RedirectToAction("Index", "Class", new { classId = Quiz.ClassID });
+
+            if(AddQuizToDB(Quiz))            
+                return RedirectToAction("QuizList", "Teachers", new { classId = Quiz.ClassID });
             }
             else
             {
@@ -739,7 +751,8 @@ namespace Oodle.Controllers
         public Boolean AddQuestionToDB(QuizQuestion question, MultChoiceAnswer answer)
         {
             Boolean rtn = false;
-
+            if (question == null || answer == null)
+                return rtn;
             if (ModelState.IsValid)
             {
                 db.AddQuestion(question);
