@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Oodle.Models;
 using Oodle.Models.ViewModels;
+using Oodle.Models.Repos;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Net;
@@ -25,8 +26,16 @@ namespace Oodle.Controllers
         //Slack access
         private SlackManager slack = new SlackManager();
 
-        // GET: Teachers
-        private Model1 db = new Model1();
+
+        //Regular database
+        //private Model1 db = new Model1();
+        //Repo for mocking database
+        private IOodleRepository db;
+
+        public TeachersController(IOodleRepository repo)
+        {
+            this.db = repo;
+        }
 
         public ActionResult test(int classID)
         {
@@ -82,7 +91,7 @@ namespace Oodle.Controllers
             }
 
 
-            db.UserRoleClasses.Remove(db.UserRoleClasses.Where(i => i.UsersID == userID & i.ClassID == classID).FirstOrDefault());
+            db.RemoveURC(db.UserRoleClasses.Where(i => i.UsersID == userID & i.ClassID == classID).FirstOrDefault());
             db.SaveChanges();
 
             return RedirectToAction("Index", new { classId = classID });
@@ -196,7 +205,7 @@ namespace Oodle.Controllers
 
             ClassNotification notif = db.ClassNotifications.Where(n => n.ClassID == classID
                                                     && n.ClassNotificationID == notifID).FirstOrDefault();
-            db.ClassNotifications.Remove(notif);
+            db.RemoveNotif(notif);
             db.SaveChanges();
 
             return RedirectToAction("Index", new { classId = classID });
@@ -208,7 +217,7 @@ namespace Oodle.Controllers
             cNotif.Notification = notif;
             cNotif.TimePosted = DateTime.Now;
             cNotif.ClassID = classID;
-            db.ClassNotifications.Add(cNotif);
+            db.AddNotif(cNotif);
             db.SaveChanges();           
         }
 
@@ -224,7 +233,7 @@ namespace Oodle.Controllers
             Class hasSlack = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
             foreach (var i in list)
             {
-                db.UserRoleClasses.Remove(i);
+                db.RemoveURC(i);
             }
 
             //classID = 1;
@@ -233,7 +242,7 @@ namespace Oodle.Controllers
                 slack.DeleteChannel(hasSlack.SlackName);
             }
 
-            db.Classes.Remove(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault());
+            db.RemoveClass(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault());
 
             db.SaveChanges();
 
@@ -298,6 +307,8 @@ namespace Oodle.Controllers
 
             teacher.notifs = db.ClassNotifications.Where(i => i.ClassID == classID).OrderBy(i => i.TimePosted).ToList();
 
+            teacher.Tasks = db.Tasks.ToList();
+
             return teacher;
         }
 
@@ -332,7 +343,7 @@ namespace Oodle.Controllers
             assi.DueDate = DateTime.Parse(dueDate);
             assi.Weight = int.Parse(weight);
 
-            db.Assignments.Add(assi);
+            db.AddAssignment(assi);
             db.SaveChanges();
 
             var teacher = getTVM(classID);
@@ -638,7 +649,7 @@ namespace Oodle.Controllers
             if (ModelState.IsValid)
             {
 
-                db.Entry(Quiz).State = EntityState.Modified;
+                db.SetModified(Quiz);
                 db.SaveChanges();
                 return RedirectToAction("Index", "Class", new { classId = Quiz.ClassID });
             }
@@ -646,6 +657,11 @@ namespace Oodle.Controllers
             {
                 return RedirectToAction("EduitQuiz", "Teachers", new {QuizID = Quiz.QuizID, ClassID = Quiz.ClassID });
             }
+        }
+
+        public List<Quizze> TestMoq()
+        {
+            return db.Quizzes.ToList();
         }
 
         [HttpGet]
@@ -694,7 +710,7 @@ namespace Oodle.Controllers
             }
             if (ModelState.IsValid)
             {
-                db.Quizzes.Add(Quiz);
+                db.AddQuiz(Quiz);
                 db.SaveChanges();
                 return RedirectToAction("Index", "Class", new { classId = Quiz.ClassID });
             }
@@ -726,10 +742,10 @@ namespace Oodle.Controllers
 
             if (ModelState.IsValid)
             {
-                db.QuizQuestions.Add(question);
+                db.AddQuestion(question);
                 db.SaveChanges();
                 answer.QuestionID = question.QuestionID;
-                db.MultChoiceAnswers.Add(answer);
+                db.AddAnswer(answer);
                 db.SaveChanges();
                 rtn = true;
             }
@@ -772,13 +788,8 @@ namespace Oodle.Controllers
             teacher.quiz = temp;
             teacher.question = question;
             teacher.answer = answer;
-            if (ModelState.IsValid)
+            if (AddQuestionToDB(question, answer))
             {
-                db.QuizQuestions.Add(question);
-                db.SaveChanges();
-                answer.QuestionID = question.QuestionID;
-                db.MultChoiceAnswers.Add(answer);
-                db.SaveChanges();
                 return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = question.QuizID, ClassID = temp.ClassID });
             }
 
@@ -786,9 +797,128 @@ namespace Oodle.Controllers
             return View("AddQuestion", "_TeacherLayout", teacher);
         }
 
-        public ActionResult CreateTask()
+        public ActionResult CreateTask(int classID)
         {
-            return View("CreateTask", "_TeacherLayout");
+            var teacher = getTVM(classID);
+
+            teacher.Tasks = db.Tasks.ToList();
+
+            return View("CreateTask", "_TeacherLayout", teacher);
         }
+
+
+        public ActionResult CreateTasksEntry()
+        {
+            ViewBag.RequestMethod = "POST";
+
+            string desc = Request.Form["description"];
+            string id = Request.Form["classID"];
+            string startDate = Request.Form["startDate"];
+            string dueDate = Request.Form["dueDate"];
+
+            int classID = int.Parse(id);
+
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+            var tsk = new Tasks();
+
+            tsk.TasksID = db.Tasks.Count() + 1;
+            tsk.Description = desc;
+            tsk.ClassID = classID;
+            tsk.StartDate = DateTime.Parse(startDate);
+            tsk.DueDate = DateTime.Parse(dueDate);
+
+            db.AddTask(tsk);
+            db.SaveChanges();
+
+            var teacher = getTVM(classID);
+
+            teacher.Tasks = db.Tasks.ToList();
+
+            return View("Tasks", "_TeacherLayout", teacher);
+        }
+
+        /*
+         * Returns a view for editTasks
+         */
+        public ActionResult EditTasks(int classID, int tasksID)
+        {
+
+            var urcL = db.UserRoleClasses.Where(i => i.RoleID == 3 && i.ClassID == classID);
+            var list = new List<int>();
+
+            foreach (var i in urcL)
+            {
+                list.Add(i.UsersID);
+            }
+            var request = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
+
+            var teacher = new TeacherVM(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault(), request);
+
+            teacher.Tasks = db.Tasks.Where(i => i.ClassID == classID && i.TasksID == tasksID).ToList();
+
+            return View("EditTasks", "_TeacherLayout", teacher);
+
+        }
+
+
+        /*
+         * Method that pulls in data and then makes a decision to either delete those fields from the database, or change them.
+         */
+        public ActionResult EditTaskAction()
+        {
+            ViewBag.RequestMethod = "POST";
+
+            string desc = Request.Form["description"];
+            string id = Request.Form["classID"];
+            string startDate = Request.Form["startDate"];
+            string dueDate = Request.Form["dueDate"];
+            string TaskID = Request.Form["TaskID"];
+            string delItem = Request.Form["Delete"];
+
+            int TasksID = int.Parse(TaskID);
+            int classID = int.Parse(id);
+
+            //If delete is checked, delete task from database.
+            if (delItem == "True")
+            {
+                foreach (var x in db.Tasks.Where(i => i.TasksID == TasksID))
+                {
+                    db.RemoveTask(x);
+                }
+
+            }
+
+            // save fields to selected database.
+            else
+            {
+
+                db.Tasks.Where(i => i.ClassID == classID && i.TasksID == TasksID).ToList().ForEach(x => x.Description = desc);
+                db.Tasks.Where(i => i.ClassID == classID && i.TasksID == TasksID).ToList().ForEach(x => x.StartDate = DateTime.Parse(startDate));
+                db.Tasks.Where(i => i.ClassID == classID && i.TasksID == TasksID).ToList().ForEach(x => x.DueDate = DateTime.Parse(dueDate));
+            }
+
+            db.SaveChanges();
+
+            var teacher = getTVM(classID);
+            teacher.Tasks = db.Tasks.ToList();
+
+            return View("Tasks", "_TeacherLayout", teacher);
+        }
+
+
+        /*
+         * Method for grabbing the Teacher View Model for tasks
+         */
+        public ActionResult Tasks(int classID)
+        {
+            var teacher = getTVM(classID);
+
+            return View("Tasks", "_TeacherLayout", teacher);
+
+        }
+
     }
 }

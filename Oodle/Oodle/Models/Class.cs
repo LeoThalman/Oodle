@@ -16,6 +16,7 @@ namespace Oodle.Models
             ClassNotifications = new HashSet<ClassNotification>();
             Documents = new HashSet<Document>();
             Quizzes = new HashSet<Quizze>();
+            Tasks = new HashSet<Tasks>();
             UserRoleClasses = new HashSet<UserRoleClass>();
         }
 
@@ -51,6 +52,7 @@ namespace Oodle.Models
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Quizze> Quizzes { get; set; }
+        public virtual ICollection<Tasks> Tasks { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserRoleClass> UserRoleClasses { get; set; }
