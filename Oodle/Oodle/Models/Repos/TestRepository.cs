@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 
@@ -12,16 +13,12 @@ namespace Oodle.Models.Repos
         public IEnumerable<User> Users { get; }
         public IEnumerable<UserRoleClass> UserRoleClasses { get; }
         public IEnumerable<Class> Classes { get; }
-
         public IEnumerable<ClassNotification> ClassNotifications { get; }
-
         public IEnumerable<Assignment> Assignments { get; }
         public IEnumerable<Document> Documents { get; }
-
-        public IEnumerable<Quizze> Quizzes { get; }
-
-        public IEnumerable<QuizQuestion> QuizQuestions { get; }
-        public IEnumerable<MultChoiceAnswer> MultChoiceAnswers { get; }
+        public IEnumerable<Quizze> Quizzes { get; set; }
+        public IEnumerable<QuizQuestion> QuizQuestions { get; set; }
+        public IEnumerable<MultChoiceAnswer> MultChoiceAnswers { get; set; }
         public IEnumerable<Tasks> Tasks { get; }
 
 
@@ -74,25 +71,28 @@ namespace Oodle.Models.Repos
         public void AddAssignment(Assignment a)
         {
             List<Assignment> temp = Assignments.ToList();
-            temp.Remove(a);
+            temp.Add(a);
         }
 
         public void AddQuiz(Quizze q)
         {
             List<Quizze> temp =  Quizzes.ToList();
-            temp.Remove(q);
+            temp.Add(q);
+            Quizzes = temp;
         }
 
         public void AddQuestion(QuizQuestion q)
         {
             List<QuizQuestion> temp = QuizQuestions.ToList();
-            temp.Remove(q);
+            temp.Add(q);
+            QuizQuestions = temp;
         }
 
         public void AddAnswer(MultChoiceAnswer a)
         {
             List<MultChoiceAnswer> temp = MultChoiceAnswers.ToList();
-            temp.Remove(a);
+            temp.Add(a);
+            MultChoiceAnswers = temp;
         }
 
         public void AddTask(Tasks t)

@@ -14,7 +14,7 @@ namespace Test
     {
         private Mock<IOodleRepository> mock;
 
-        [Test]
+        [SetUp]
         public void TestingMoq()
         {
 
@@ -46,18 +46,68 @@ namespace Test
                     new MultChoiceAnswer { QuestionID = 1, AnswerID = 1, CorrectAnswer = 2, Answer1 = "true", Answer2 = "false" , Answer3 = "", Answer4 = "" },
                     new MultChoiceAnswer { QuestionID = 2, AnswerID = 2, CorrectAnswer = 1, Answer1 = "one", Answer2 = "two" , Answer3 = "three", Answer4 = "four" },
                     new MultChoiceAnswer { QuestionID = 3, AnswerID = 3, CorrectAnswer = 4, Answer1 = "1", Answer2 = "2" , Answer3 = "3", Answer4 = "4" }
-                });
+                }); 
 
+
+            
+        }
+
+        [Test]
+        public void AddQuestionToDB_ValidQuestionAndValidAnswer_ReturnsTrue()
+        {
             //Pass the mocked db to the controller, when testing make sure to use TestRepository and pass mock.Object
             //Which repository you are using can be found in Infrastructure folder in Oodle project. In the NinjectDependencyResolver.cs file
             //under the AddBindings method. For production use OodleRepository, for test set up use TestRepository.
             TeachersController teacher = new TeachersController(mock.Object);
-            List<Quizze> temp = teacher.TestMoq();
-
-            //Test that moq correctly mocked a field.
-            Assert.That(temp[0].QuizName, Does.Match("Q1"));
+            QuizQuestion q = new QuizQuestion
+            {
+                QuizID = 3,
+                QuestionID = 4,
+                QuestionText = "Test",
+                Points = 2
+            };
+            MultChoiceAnswer a = new MultChoiceAnswer
+            {
+                AnswerID = 4,
+                CorrectAnswer = 4,
+                Answer1 = "This",
+                Answer2 = "is",
+                Answer3 = "a",
+                Answer4 = "test"
+            };
+            Assert.IsTrue(teacher.AddQuestionToDB(q, a));
         }
 
+        [Test]
+        public void AddQuestionToDB_InvalidQuestionAndValidAnswer_ReturnsFalse()
+        {
+            TeachersController teacher = new TeachersController(mock.Object);
+            MultChoiceAnswer a = new MultChoiceAnswer
+            {
+                QuestionID = 5,
+                AnswerID = 5,
+                CorrectAnswer = 4,
+                Answer1 = "This",
+                Answer2 = "is",
+                Answer3 = "a",
+                Answer4 = "test"
+            };
+            Assert.IsFalse(teacher.AddQuestionToDB(null, a));
+        }
+
+        [Test]
+        public void AddQuestionToDB_ValidQuestionAndInvalidAnswer_ReturnsFalse()
+        {
+            TeachersController teacher = new TeachersController(mock.Object);
+            QuizQuestion q = new QuizQuestion
+            {
+                QuizID = 3,
+                QuestionID = 5,
+                QuestionText = "Test",
+                Points = 2
+            };
+            Assert.IsFalse(teacher.AddQuestionToDB(q, null));
+        }
 
         [Test]
         public void TestingTestShouldPass()

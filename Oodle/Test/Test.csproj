@@ -67,10 +67,7 @@
       <HintPath>..\packages\NUnit.3.10.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-<<<<<<< HEAD
-=======
     <Reference Include="System.ComponentModel.DataAnnotations" />
->>>>>>> 39454ec52284fb9e4c1eb035a1a16518f3c341af
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
