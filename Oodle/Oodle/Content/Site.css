@@ -12,6 +12,7 @@ Lighter white: #FEFFFF
 
 
 
+
 .padded {
     border-radius: 25px;
     position: relative;
@@ -28,6 +29,12 @@ Lighter white: #FEFFFF
     font-size: small;
     height: 10px;
 }
+
+
+table {
+    color: #17252A;
+}
+
 
 /* The sidebar menu */
 .sidenav {

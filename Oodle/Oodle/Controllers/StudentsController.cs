@@ -13,13 +13,20 @@ using System.IO;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Diagnostics;
+using Oodle.Models.Repos;
 
 namespace Oodle.Controllers
 {
     [Authorize]
     public class StudentsController : Controller
     {
-        private Model1 db = new Model1();
+        private IOodleRepository db;
+
+        public StudentsController(IOodleRepository repo)
+        {
+            this.db = repo;
+        }
+
 
         public ActionResult test(int classID)
         {
@@ -51,52 +58,6 @@ namespace Oodle.Controllers
 
 
 
-        public ActionResult Grade(int classID)
-        {
-            if (test(classID) != null)
-            {
-                return test(classID);
-            }
-
-
-
-            var idid = User.Identity.GetUserId();
-
-            User user = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault();
-
-
-
-
-            var teacher = getTVM(classID);
-
-            teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).ToList();
-            teacher.documents = db.Documents.Where(i => i.ClassID == classID && i.UserID == user.UsersID).ToList();
-
-            int total = 0;
-            int totalWeight = 0;
-
-            foreach (Document doc in teacher.documents)
-            {
-                if (doc.Grade != -1)
-                {
-                    total = total + (doc.Grade * doc.Assignment.Weight);
-                    totalWeight = totalWeight + doc.Assignment.Weight;
-                }
-            }
-            if (totalWeight == 0)
-            {
-                total = 0;
-            }
-            else
-            {
-                total = total / totalWeight;
-            }
-
-            teacher.classGrade = new List<int>();
-            teacher.classGrade.Add(total);
-
-            return View("Grade", "_StudentLayout", teacher);
-        }
 
         public ActionResult Assignment(int classID)
         {
@@ -115,9 +76,12 @@ namespace Oodle.Controllers
             return View("Quiz", "_StudentLayout");
         }
 
-        public ActionResult Task()
+        /*
+         * Returns the actionresult for Tasks and directs you to the tasks view.
+         */
+        public ActionResult Tasks(int classID)
         {
-            return View("Task", "_StudentLayout");
+            return View("Tasks", "_StudentLayout", getTVM(classID));
         }
 
         public ActionResult Slack()
@@ -144,6 +108,8 @@ namespace Oodle.Controllers
             teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).OrderBy(i => i.StartDate).ToList();
 
             teacher.notifs = db.ClassNotifications.Where(i => i.ClassID == classID).OrderBy(i => i.TimePosted).ToList();
+            //adds tasks to Teacher VM
+            teacher.Tasks = db.Tasks.ToList();
 
             return teacher;
         }
@@ -306,24 +272,84 @@ namespace Oodle.Controllers
             return files;
         }
 
+
+
+
+
+        public ActionResult Grade(int classID)
+        {
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+            var idid = User.Identity.GetUserId();
+
+            int userId = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault().UsersID;
+
+            var teacher = getTVM(classID);
+
+            //This will be used when I refactor this code in a later sprint.
+            //teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).ToList();
+            teacher.documents = db.Documents.Where(i => i.ClassID == classID && i.UserID == userId).ToList();
+
+            List<Document> list = teacher.documents;
+
+            teacher.classGrade = new List<int>();
+            teacher.classGrade.Add(GradeHelper(list));
+
+            return View("Grade", "_StudentLayout", teacher);
+        }
+
+        //This is the method I'm really testing.
+        public int GradeHelper(List<Document> list)
+        {
+            int total = 0;
+            int totalWeight = 0;
+
+            foreach (Document doc in list)
+            {
+                if (doc.Grade != -1)
+                {
+                    total = total + (doc.Grade * doc.Assignment.Weight);
+                    totalWeight = totalWeight + doc.Assignment.Weight;
+                }
+            }
+            if (totalWeight == 0)
+            {
+                return total = 0;
+            }
+            else
+            {
+                return total = total / totalWeight;
+            }
+        }
+
+
+
+
         [HttpPost]
         public ActionResult FakeGrade()
         {
             string id = Request.Form["classID"];
             int classID = int.Parse(id);
 
-
-            var teacher = getTVM(classID);
-
             var idid = User.Identity.GetUserId();
 
-            User user = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault();
+            int userId = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault().UsersID;
 
-            teacher.assignment = db.Assignments.Where(j => j.ClassID == classID).ToList();
-            teacher.documents = db.Documents.Where(j => j.ClassID == classID && j.UserID == user.UsersID).ToList();
+            TeacherVM teacher = FakeGradeHelper(classID, userId, Request.Form);
 
-            int total = 0;
-            int totalWeight = 0;
+            return View("Grade", "_StudentLayout", teacher);
+        }
+
+
+        public TeacherVM FakeGradeHelper(int classID, int userId, System.Collections.Specialized.NameValueCollection form)
+        {
+            var teacher = getTVM(classID);
+
+            //teacher.assignment = db.Assignments.Where(j => j.ClassID == classID).ToList();
+
+            teacher.documents = db.Documents.Where(j => j.ClassID == classID && j.UserID == userId).ToList();
 
             int i = 0;
             string i2 = "1";
@@ -333,10 +359,9 @@ namespace Oodle.Controllers
 
             while (i2 != null && i2 != "")
             {
-                i2 = Request.Form[i.ToString()];
-                Debug.WriteLine(i2);
-
-                if (i2 != null) {
+                i2 =  form[i.ToString()];
+                if (i2 != null)
+                {
                     int i3 = Int32.Parse(i2);
                     fTotal = (i3 * teacher.documents[i].Assignment.Weight) + fTotal;
                     teacher.fClassGrade.Add(i3);
@@ -344,8 +369,6 @@ namespace Oodle.Controllers
                 }
                 i++;
             }
-            Debug.WriteLine(fTotal);
-            Debug.WriteLine(fNumber);
 
             if (fNumber == 0)
             {
@@ -356,28 +379,10 @@ namespace Oodle.Controllers
                 teacher.fakeTotal = fTotal / fNumber;
             }
 
-
-
-            foreach (Document doc in teacher.documents)
-            {
-                if (doc.Grade != -1)
-                {
-                    total = total + (doc.Grade * doc.Assignment.Weight);
-                    totalWeight = totalWeight + doc.Assignment.Weight;
-                }
-            }
-            if (totalWeight == 0)
-            {
-                total = 0;
-            }
-            else
-            {
-                total = total / totalWeight;
-            }
             teacher.classGrade = new List<int>();
-            teacher.classGrade.Add(total);
+            teacher.classGrade.Add(GradeHelper(teacher.documents));
 
-            return View("Grade", "_StudentLayout", teacher);
+            return teacher;
         }
     }
 }

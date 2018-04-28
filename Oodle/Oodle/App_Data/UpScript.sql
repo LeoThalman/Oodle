@@ -1,12 +1,17 @@
-﻿DROP TABLE dbo.Questions;
+﻿DROP TABLE dbo.Tasks;
+DROP TABLE dbo.Questions;
 DROP TABLE dbo.Grades;
 DROP TABLE dbo.Documents;
 DROP TABLE dbo.Assignment;
 DROP TABLE dbo.UserRoleClass;
 DROP TABLE dbo.Role;
 DROP TABLE dbo.ClassNotification;
+DROP TABLE dbo.MultChoiceAnswers;
+DROP TABLE dbo.QuizQuestions;
+DROP TABLE dbo.Quizzes;
 DROP TABLE dbo.Class;
 DROP TABLE dbo.Users;
+
 
 
 DROP TABLE [dbo].[AspNetUserRoles];
@@ -204,7 +209,7 @@ CREATE TABLE dbo.Class
 	SlackName NVARCHAR(20) NULL,
 	Subject NVARCHAR(128) NOT NULL,
 	CONSTRAINT [PK_dbo.Class] PRIMARY KEY CLUSTERED (ClassID ASC),
-	CONSTRAINT [FK_dbo.Class_dbo.UsersID] FOREIGN KEY ([UsersID]) REFERENCES [dbo].[Users] ([UsersID])
+	CONSTRAINT [FK_dbo.Class_dbo.UsersID] FOREIGN KEY ([UsersID]) REFERENCES [dbo].[Users] ([UsersID])--
 );
 
 
@@ -225,7 +230,7 @@ CREATE TABLE dbo.UserRoleClass
 	ClassID INT NOT NULL,
 	CONSTRAINT [PK_dbo.UserRoleClass] PRIMARY KEY CLUSTERED (UserRoleClassID ASC),
 	CONSTRAINT [FK_dbo.UserRoleClass_dbo.UserID] FOREIGN KEY ([UsersID]) REFERENCES [dbo].[Users] ([UsersID]),
-	--CONSTRAINT [FK_dbo.UserRoleClass_dbo.RoleID] FOREIGN KEY ([RoleID]) REFERENCES [dbo].[Role] ([RoleID]),
+	-- CONSTRAINT [FK_dbo.UserRoleClass_dbo.RoleID] FOREIGN KEY ([RoleID]) REFERENCES [dbo].[Role] ([RoleID]),
 	CONSTRAINT [FK_dbo.UserRoleClass_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
 	ON DELETE CASCADE
 	ON UPDATE CASCADE
@@ -258,6 +263,18 @@ CREATE TABLE dbo.Assignment
 	Weight INT NOT NULL,
 	CONSTRAINT [PK_dbo.Assignment] PRIMARY KEY CLUSTERED (AssignmentID ASC),
 	CONSTRAINT [FK_dbo.Assignment_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
+);
+
+-- Task Table
+CREATE TABLE dbo.Tasks
+(	
+	TasksID	INT IDENTITY (1,1) NOT NULL,
+	ClassID	INT NOT NULL,
+	Description NVARCHAR(512),
+	StartDate DATETIME,
+	DueDate DATETIME,
+	CONSTRAINT [PK_dbo.Tasks] PRIMARY KEY CLUSTERED (TasksID ASC),
+	CONSTRAINT [FK_dbo.Tasks_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
 );
 
 -- Grades Table
@@ -303,3 +320,43 @@ CREATE TABLE dbo.Documents(
 	CONSTRAINT [FK_dbo.Documents_dbo.UserID] FOREIGN KEY ([UserID]) REFERENCES [dbo].[Users] ([UsersID]),
 	CONSTRAINT [FK_dbo.Documents_dbo.AssignmentID] FOREIGN KEY ([AssignmentID]) REFERENCES [dbo].[Assignment] ([AssignmentID])
 );
+
+CREATE TABLE dbo.Quizzes(
+	QuizID INT IDENTITY(1,1) NOT NULL,
+	QuizName NVARCHAR(256) NOT NULL,
+	StartTime DateTime NOT NULL,
+	EndTime DateTime NOT NULL,
+	ClassID INT NOT NULL,
+	IsHidden BIT NOT NULL,
+	TotalPoints INT,
+	CONSTRAINT [PK_dbo.Quizzes] PRIMARY KEY CLUSTERED (QuizID ASC),
+	CONSTRAINT [FK_dbo.Quizzes_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
+	ON DELETE CASCADE
+);
+ 
+
+CREATE TABLE dbo.QuizQuestions(
+	QuestionID INT IDENTITY(1,1) NOT NULL,
+	QuizID INT NOT NULL,
+	TypeOfQuestion INT NOT NULL,
+	Points INT NOT NULL,
+	QuestionText NVARCHAR(512) NOT NULL,
+	CONSTRAINT [PK_dbo.QuizQuestions] PRIMARY KEY CLUSTERED (QuestionID ASC),
+	CONSTRAINT [FK_dbo.Questions_dbo.Quizzes] FOREIGN KEY ([QuizID]) REFERENCES [dbo].[Quizzes] ([QuizID])
+	ON DELETE CASCADE
+	ON UPDATE CASCADE,
+);
+Create TABLE MultChoiceAnswers(
+	AnswerID INT IDENTITY(1,1) NOT NULL,
+	QuestionID INT NOT NULL,
+	Answer1 NVARCHAR (512) NOT NULL,
+	Answer2 NVARCHAR (512),
+	Answer3 NVARCHAR (512),
+	Answer4 NVARCHAR (512),
+	CorrectAnswer INT NOT NULL,
+	CONSTRAINT [PK_dbo.MultChoiceAnswers] PRIMARY KEY CLUSTERED (AnswerID ASC),
+	CONSTRAINT [FK_dbo.MultChoiceAnswers_dbo.QuizQuestions] FOREIGN KEY ([QuestionID]) REFERENCES [dbo].[QuizQuestions] ([QuestionID])
+	ON DELETE CASCADE
+	ON UPDATE CASCADE,
+);
+  
