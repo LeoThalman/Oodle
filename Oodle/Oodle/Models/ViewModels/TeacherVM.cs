@@ -18,6 +18,8 @@ namespace Oodle.Models.ViewModels
         public List<Quizze> quizzes { get; set; }
         public List<int> classGrade { get; set; } 
         public List<UserRoleClass> roles { get; set; }
+        public List<int> fClassGrade { get; set; }
+        public int fakeTotal { get; set; }
         public Quizze quiz { get; set; }
         public QuizQuestion question { get; set; }
         public MultChoiceAnswer answer { get; set; }
