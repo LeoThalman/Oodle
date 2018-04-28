@@ -12,6 +12,7 @@ using System.Net;
 using System.IO;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Diagnostics;
 
 namespace Oodle.Controllers
 {
@@ -81,6 +82,13 @@ namespace Oodle.Controllers
                     total = total + (doc.Grade * doc.Assignment.Weight);
                     totalWeight = totalWeight + doc.Assignment.Weight;
                 }
+            }
+            if (totalWeight == 0)
+            {
+                total = 0;
+            }
+            else
+            {
                 total = total / totalWeight;
             }
 
@@ -296,6 +304,80 @@ namespace Oodle.Controllers
                 }
             }
             return files;
+        }
+
+        [HttpPost]
+        public ActionResult FakeGrade()
+        {
+            string id = Request.Form["classID"];
+            int classID = int.Parse(id);
+
+
+            var teacher = getTVM(classID);
+
+            var idid = User.Identity.GetUserId();
+
+            User user = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault();
+
+            teacher.assignment = db.Assignments.Where(j => j.ClassID == classID).ToList();
+            teacher.documents = db.Documents.Where(j => j.ClassID == classID && j.UserID == user.UsersID).ToList();
+
+            int total = 0;
+            int totalWeight = 0;
+
+            int i = 0;
+            string i2 = "1";
+            int fTotal = 0;
+            int fNumber = 0;
+            teacher.fClassGrade = new List<int>();
+
+            while (i2 != null && i2 != "")
+            {
+                i2 = Request.Form[i.ToString()];
+                Debug.WriteLine(i2);
+
+                if (i2 != null) {
+                    int i3 = Int32.Parse(i2);
+                    fTotal = (i3 * teacher.documents[i].Assignment.Weight) + fTotal;
+                    teacher.fClassGrade.Add(i3);
+                    fNumber = fNumber + teacher.documents[i].Assignment.Weight;
+                }
+                i++;
+            }
+            Debug.WriteLine(fTotal);
+            Debug.WriteLine(fNumber);
+
+            if (fNumber == 0)
+            {
+                teacher.fakeTotal = 0;
+            }
+            else
+            {
+                teacher.fakeTotal = fTotal / fNumber;
+            }
+
+
+
+            foreach (Document doc in teacher.documents)
+            {
+                if (doc.Grade != -1)
+                {
+                    total = total + (doc.Grade * doc.Assignment.Weight);
+                    totalWeight = totalWeight + doc.Assignment.Weight;
+                }
+            }
+            if (totalWeight == 0)
+            {
+                total = 0;
+            }
+            else
+            {
+                total = total / totalWeight;
+            }
+            teacher.classGrade = new List<int>();
+            teacher.classGrade.Add(total);
+
+            return View("Grade", "_StudentLayout", teacher);
         }
     }
 }
