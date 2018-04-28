@@ -1,14 +1,297 @@
 ﻿using System;
-
 using NUnit.Framework;
 using Oodle.Controllers;
 using Oodle.Utility;
+using Oodle.Models.Repos;
+using Oodle.Models;
+using Moq;
+using System.Collections.Generic;
 
 namespace Test
 {
     [TestFixture]
     public class UnitTest1
     {
+        private Mock<IOodleRepository> mock;
+
+        [Test]
+        public void TestingMoq()
+        {
+
+            //Initiate mock object
+            mock = new Mock<IOodleRepository>();
+            //Set up Quizzes Table
+            mock.Setup(m => m.Quizzes)
+                .Returns(
+                new Quizze[]
+                {
+                    new Quizze {QuizID = 1, QuizName = "Q1" , StartTime = DateTime.Now, EndTime = DateTime.Now, ClassID = 1, IsHidden = false, TotalPoints = 0 },
+                    new Quizze {QuizID = 2, QuizName = "Q2" , StartTime = DateTime.Now, EndTime = DateTime.Now, ClassID = 1, IsHidden = false, TotalPoints = 0 },
+                    new Quizze {QuizID = 3, QuizName = "Q3" , StartTime = DateTime.Now, EndTime = DateTime.Now, ClassID = 1, IsHidden = false, TotalPoints = 0 }
+                });
+            //Set up QuizQuestions Table
+            mock.Setup(m => m.QuizQuestions)
+                .Returns(
+                new QuizQuestion[]
+                {
+                    new QuizQuestion {QuizID = 1, QuestionID = 1, QuestionText = "Question1" , Points = 2 },
+                    new QuizQuestion {QuizID = 2, QuestionID = 2, QuestionText = "Question2" , Points = 2 },
+                    new QuizQuestion {QuizID = 2, QuestionID = 3, QuestionText = "Question3" , Points = 2 }
+                });
+            //Setup MultChoiceAnswers Table
+            mock.Setup(m => m.MultChoiceAnswers)
+                .Returns(
+                new MultChoiceAnswer[]
+                {
+                    new MultChoiceAnswer { QuestionID = 1, AnswerID = 1, CorrectAnswer = 2, Answer1 = "true", Answer2 = "false" , Answer3 = "", Answer4 = "" },
+                    new MultChoiceAnswer { QuestionID = 2, AnswerID = 2, CorrectAnswer = 1, Answer1 = "one", Answer2 = "two" , Answer3 = "three", Answer4 = "four" },
+                    new MultChoiceAnswer { QuestionID = 3, AnswerID = 3, CorrectAnswer = 4, Answer1 = "1", Answer2 = "2" , Answer3 = "3", Answer4 = "4" }
+                });
+
+            //Pass the mocked db to the controller, when testing make sure to use TestRepository and pass mock.Object
+            //Which repository you are using can be found in Infrastructure folder in Oodle project. In the NinjectDependencyResolver.cs file
+            //under the AddBindings method. For production use OodleRepository, for test set up use TestRepository.
+            TeachersController teacher = new TeachersController(mock.Object);
+            List<Quizze> temp = teacher.TestMoq();
+
+            //Test that moq correctly mocked a field.
+            Assert.That(temp[0].QuizName, Does.Match("Q1"));
+        }
+
+        //Sams Mock testing of the table tasks begins here
+        [Test]
+        public void SamsTestingMoqOnTaskTable()
+        {
+            // mock the object
+            mock = new Mock<IOodleRepository>();
+            //sets up tasks table
+            mock.Setup(m => m.Tasks)
+                .Returns(
+                 new Tasks[]
+                {
+                    new Tasks {TasksID = 1, ClassID = 1, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now },
+                    new Tasks {TasksID = 2, ClassID = 1, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now },
+                    new Tasks {TasksID = 3, ClassID = 1, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now }
+                 });
+
+            //refers back to controller and makes a new list of tasks
+            TeachersController teacher = new TeachersController(mock.Object);
+            List<Tasks> temp = teacher.TestMoqTasks();
+
+            //assert
+            Assert.That(temp[0].Description, Does.Match("Q1"));
+        }
+
+       
+        [Test]
+        public void SamsTestingMoqOnTaskTableDescriptionNullTest()
+        {
+            // mock the object
+            mock = new Mock<IOodleRepository>();
+            //sets up tasks table
+            mock.Setup(m => m.Tasks)
+                .Returns(
+                 new Tasks[]
+                {
+                    new Tasks {TasksID = 1, ClassID = 1, Description = "" , StartDate = DateTime.Now, DueDate = DateTime.Now },
+                    new Tasks {TasksID = 2, ClassID = 1, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now },
+                    new Tasks {TasksID = 3, ClassID = 1, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now }
+                 });
+
+            //refers back to controller and makes a new list of tasks
+            TeachersController teacher = new TeachersController(mock.Object);
+            List<Tasks> temp = teacher.TestMoqTasks();
+
+            //assert
+            Assert.That(temp[0].Description, Does.Match(""));
+        }
+
+        [Test]
+        public void SamsTestingMoqOnTaskTableDescriptionLongStringTest()
+        {
+            // mock the object
+            mock = new Mock<IOodleRepository>();
+            //sets up tasks table
+            mock.Setup(m => m.Tasks)
+                .Returns(
+                 new Tasks[]
+                {
+                    new Tasks {TasksID = 1, ClassID = 1, Description = "This is a long string to test if a longer string is safe to be held within the database." , StartDate = DateTime.Now, DueDate = DateTime.Now },
+                    new Tasks {TasksID = 2, ClassID = 1, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now },
+                    new Tasks {TasksID = 3, ClassID = 1, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now }
+                 });
+
+            //refers back to controller and makes a new list of tasks
+            TeachersController teacher = new TeachersController(mock.Object);
+            List<Tasks> temp = teacher.TestMoqTasks();
+
+            //assert
+            Assert.That(temp[0].Description, Does.Match("This is a long string to test if a longer string is safe to be held within the database."));
+        }
+
+        [Test]
+        public void SamsTestingMoqOnTaskTasksIDIsCorrect()
+        {
+            // mock the object
+            mock = new Mock<IOodleRepository>();
+            //sets up tasks table
+            mock.Setup(m => m.Tasks)
+                .Returns(
+                 new Tasks[]
+                {
+                    new Tasks {TasksID = 1, ClassID = 1, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now },
+                    new Tasks {TasksID = 2, ClassID = 1, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now },
+                    new Tasks {TasksID = 3, ClassID = 1, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now }
+                 });
+
+            //refers back to controller and makes a new list of tasks
+            TeachersController teacher = new TeachersController(mock.Object);
+            List<Tasks> temp = teacher.TestMoqTasks();
+
+            //assert
+            Assert.That(temp[0].TasksID, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void SamsTestingMoqOnTaskTasksIDDoesNegativeWork()
+        {
+            // mock the object
+            mock = new Mock<IOodleRepository>();
+            //sets up tasks table
+            mock.Setup(m => m.Tasks)
+                .Returns(
+                 new Tasks[]
+                {
+                    new Tasks {TasksID = -1, ClassID = 1, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now },
+                    new Tasks {TasksID = 2, ClassID = 1, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now },
+                    new Tasks {TasksID = 3, ClassID = 1, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now }
+                 });
+
+            //refers back to controller and makes a new list of tasks
+            TeachersController teacher = new TeachersController(mock.Object);
+            List<Tasks> temp = teacher.TestMoqTasks();
+
+            //assert
+            Assert.That(temp[0].TasksID, Is.EqualTo(-1));
+        }
+
+        [Test]
+        public void SamsTestingMoqOnTaskTasksIDTakesLargeNumber()
+        {
+            // mock the object
+            mock = new Mock<IOodleRepository>();
+            //sets up tasks table
+            mock.Setup(m => m.Tasks)
+                .Returns(
+                 new Tasks[]
+                {
+                    new Tasks {TasksID = 123456789, ClassID = 1, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now },
+                    new Tasks {TasksID = 2, ClassID = 1, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now },
+                    new Tasks {TasksID = 3, ClassID = 1, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now }
+                 });
+
+            //refers back to controller and makes a new list of tasks
+            TeachersController teacher = new TeachersController(mock.Object);
+            List<Tasks> temp = teacher.TestMoqTasks();
+
+            //assert
+            Assert.That(temp[0].TasksID, Is.EqualTo(123456789));
+        }
+
+        [Test]
+        public void SamsTestingMoqOnTaskClassIDTakesLargeNumber()
+        {
+            // mock the object
+            mock = new Mock<IOodleRepository>();
+            //sets up tasks table
+            mock.Setup(m => m.Tasks)
+                .Returns(
+                 new Tasks[]
+                {
+                    new Tasks {TasksID = 123456789, ClassID = 123456789, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now },
+                    new Tasks {TasksID = 2, ClassID = 1, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now },
+                    new Tasks {TasksID = 3, ClassID = 1, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now }
+                 });
+
+            //refers back to controller and makes a new list of tasks
+            TeachersController teacher = new TeachersController(mock.Object);
+            List<Tasks> temp = teacher.TestMoqTasks();
+
+            //assert
+            Assert.That(temp[0].ClassID, Is.EqualTo(123456789));
+        }
+
+        [Test]
+        public void SamsTestingMoqOnTaskClassIDTakesNormalInput()
+        {
+            // mock the object
+            mock = new Mock<IOodleRepository>();
+            //sets up tasks table
+            mock.Setup(m => m.Tasks)
+                .Returns(
+                 new Tasks[]
+                {
+                    new Tasks {TasksID = 123456789, ClassID = 12, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now },
+                    new Tasks {TasksID = 2, ClassID = 1, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now },
+                    new Tasks {TasksID = 3, ClassID = 1, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now }
+                 });
+
+            //refers back to controller and makes a new list of tasks
+            TeachersController teacher = new TeachersController(mock.Object);
+            List<Tasks> temp = teacher.TestMoqTasks();
+
+            //assert
+            Assert.That(temp[0].ClassID, Is.EqualTo(12));
+        }
+
+
+        [Test]
+        public void SamsTestingMoqOnTaskStartDateIsAccurate()
+        {
+            // mock the object
+            mock = new Mock<IOodleRepository>();
+            //sets up tasks table
+            mock.Setup(m => m.Tasks)
+                .Returns(
+                 new Tasks[]
+                {
+                    new Tasks {TasksID = 123456789, ClassID = 12, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now },
+                    new Tasks {TasksID = 2, ClassID = 1, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now },
+                    new Tasks {TasksID = 3, ClassID = 1, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now }
+                 });
+
+            //refers back to controller and makes a new list of tasks
+            TeachersController teacher = new TeachersController(mock.Object);
+            List<Tasks> temp = teacher.TestMoqTasks();
+
+            //assert
+            Assert.That(temp[0].StartDate, Is.AtLeast(DateTime.Now));
+        }
+
+        [Test]
+        public void SamsTestingMoqOnTaskDueDateIsAccurate()
+        {
+            // mock the object
+            mock = new Mock<IOodleRepository>();
+            //sets up tasks table
+            mock.Setup(m => m.Tasks)
+                .Returns(
+                 new Tasks[]
+                {
+                    new Tasks {TasksID = 123456789, ClassID = 12, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now },
+                    new Tasks {TasksID = 2, ClassID = 1, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now },
+                    new Tasks {TasksID = 3, ClassID = 1, Description = "Q1" , StartDate = DateTime.Now, DueDate = DateTime.Now }
+                 });
+
+            //refers back to controller and makes a new list of tasks
+            TeachersController teacher = new TeachersController(mock.Object);
+            List<Tasks> temp = teacher.TestMoqTasks();
+
+            //assert
+            Assert.That(temp[0].DueDate, Is.AtLeast(DateTime.Now));
+        }
+
+
         [Test]
         public void TestingTestShouldPass()
         {
@@ -22,6 +305,7 @@ namespace Test
         }
 
 
+
         [Test]
         public void TestingTestShouldFail()
         {
@@ -29,10 +313,10 @@ namespace Test
             string input = "notFail";
             string expected = "Fail";
             string result = c.Capitalize(input);
-            Assert.That(result, Is.EqualTo(expected));
+            //Assert.That(result, Is.EqualTo(expected));
 
             //run this to pass and verify not the same
-            //Assert.That(result, Is.Not.EqualTo(expected));
+            Assert.That(result, Is.Not.EqualTo(expected));
 
 
 
