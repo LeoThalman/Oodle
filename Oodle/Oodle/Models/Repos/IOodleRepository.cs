@@ -22,6 +22,8 @@ namespace Oodle.Models.Repos
         IEnumerable<QuizQuestion> QuizQuestions { get; }
         IEnumerable<MultChoiceAnswer> MultChoiceAnswers { get; }
         IEnumerable<Tasks> Tasks { get; }
+        IEnumerable<Notes> Notes { get; }
+
 
 
         //Save db changes
@@ -41,5 +43,6 @@ namespace Oodle.Models.Repos
         void AddAnswer(MultChoiceAnswer a);
         void AddTask(Tasks t);
         void RemoveTask(Tasks t);
+        void AddNote(Notes n);
     }
 }

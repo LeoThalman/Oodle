@@ -1,0 +1,25 @@
+
+@model Oodle.Models.ViewModels.TeacherVM
+
+@{
+    ViewBag.Title = "Notes";
+}
+<center><h2>Notes</h2></center>
+
+<div class="form-style-6">
+    <form method="post" action="CreateNotesEntry">
+        <div>
+            <h1>Create a Note</h1>
+
+            <input type="hidden" name="classID" value="@Model.cl.ClassID" />
+
+            <label for="description">Description of your Note:</label> <br />
+            <textarea name="description" placeholder="e.g., Please read chapter four and attach a word document of your answers to the questions at the end of the chapter." required></textarea>
+
+
+        </div>
+        <div>
+            <input type="submit" name="submit" value="Create Note" />
+        </div>
+    </form>
+</div>

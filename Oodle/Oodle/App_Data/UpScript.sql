@@ -2,6 +2,7 @@
 DROP TABLE dbo.Questions;
 DROP TABLE dbo.Grades;
 DROP TABLE dbo.Documents;
+DROP TABLE dbo.Notes;
 DROP TABLE dbo.Assignment;
 DROP TABLE dbo.UserRoleClass;
 DROP TABLE dbo.Role;
@@ -276,6 +277,17 @@ CREATE TABLE dbo.Tasks
 	CONSTRAINT [PK_dbo.Tasks] PRIMARY KEY CLUSTERED (TasksID ASC),
 	CONSTRAINT [FK_dbo.Tasks_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
 );
+
+-- Notes Table
+CREATE TABLE dbo.Notes
+(	
+	NotesID	INT IDENTITY (1,1) NOT NULL,
+	ClassID	INT NOT NULL,
+	Description NVARCHAR(512),
+	CONSTRAINT [PK_dbo.Notes] PRIMARY KEY CLUSTERED (NotesID ASC),
+	CONSTRAINT [FK_dbo.Notes_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
+);
+
 
 -- Grades Table
 CREATE TABLE dbo.Grades

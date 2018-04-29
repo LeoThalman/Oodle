@@ -27,6 +27,7 @@ namespace Oodle.Models
         public virtual DbSet<Quizze> Quizzes { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Tasks> Tasks { get; set; }
+        public virtual DbSet<Notes> Notes { get; set; }
         public virtual DbSet<UserRoleClass> UserRoleClasses { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
