@@ -677,6 +677,8 @@ namespace Oodle.Controllers
             return db.Notes.ToList();
         }
 
+
+
         [HttpGet]
         public ActionResult ViewQuiz(int QuizID, int ClassID)
         {
