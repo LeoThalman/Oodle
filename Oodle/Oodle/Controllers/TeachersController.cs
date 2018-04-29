@@ -664,6 +664,11 @@ namespace Oodle.Controllers
             return db.MultChoiceAnswers.ToList();
         }
 
+        public List<Tasks> TestMoqTasks()
+        {
+            return db.Tasks.ToList();
+        }
+
         [HttpGet]
         public ActionResult ViewQuiz(int QuizID, int ClassID)
         {
