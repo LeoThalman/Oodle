@@ -646,16 +646,16 @@ namespace Oodle.Controllers
             {
                 return test(Quiz.ClassID);
             }
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && CheckQuizTime(Quiz))
             {
 
                 db.SetModified(Quiz);
                 db.SaveChanges();
-                return RedirectToAction("Index", "Class", new { classId = Quiz.ClassID });
+                return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = Quiz.QuizID, ClassID = Quiz.ClassID });
             }
             else
             {
-                return RedirectToAction("EduitQuiz", "Teachers", new {QuizID = Quiz.QuizID, ClassID = Quiz.ClassID });
+                return RedirectToAction("EditQuiz", "Teachers", new {QuizID = Quiz.QuizID, ClassID = Quiz.ClassID });
             }
         }
 
@@ -711,6 +711,24 @@ namespace Oodle.Controllers
             return View("CreateQuiz", "_TeacherLayout", teacher);
         }
 
+        [HttpPost]
+        public ActionResult CreateQuiz([Bind(Include = "QuizName,ClassID,StartTime,EndTime,IsHidden")] Quizze Quiz)
+        {
+            if (test(Quiz.ClassID) != null)
+            {
+                return test(Quiz.ClassID);
+            }
+            TeacherVM teacher = getTVM(Quiz.ClassID);
+            teacher.quiz = Quiz;
+            if (AddQuizToDB(Quiz))
+                return RedirectToAction("QuizList", "Teachers", new { classId = Quiz.ClassID });
+
+            else
+            {
+                return View("CreateQuiz", "_TeacherLayout", teacher);
+            }
+        }
+
         public Boolean AddQuizToDB(Quizze Quiz)
         {
             Boolean rtn = false;
@@ -736,24 +754,6 @@ namespace Oodle.Controllers
             else
                 ModelState.AddModelError("StartTime", "Start Time must be before End Time");
             return rtn;
-        }
-
-        [HttpPost]
-        public ActionResult CreateQuiz([Bind(Include = "QuizName,ClassID,StartTime,EndTime,IsHidden")] Quizze Quiz)
-        {
-            if (test(Quiz.ClassID) != null)
-            {
-                return test(Quiz.ClassID);
-            }
-            TeacherVM teacher = getTVM(Quiz.ClassID);
-            teacher.quiz = Quiz;
-            if (AddQuizToDB(Quiz))            
-                return RedirectToAction("QuizList", "Teachers", new { classId = Quiz.ClassID });
-            
-            else
-            {
-                return View("CreateQuiz", "_TeacherLayout", teacher);
-            }
         }
 
         public ActionResult AddQuestion(int QuizID, int ClassID)
