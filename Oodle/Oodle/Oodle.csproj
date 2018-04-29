@@ -261,6 +261,7 @@
     <Compile Include="Utility\SlackManager.cs" />
   </ItemGroup>
   <ItemGroup>
+
     <Content Include="App_Data\Oodle.mdf" />
     <Content Include="App_Data\Oodle_log.ldf">
       <DependentUpon>Oodle.mdf</DependentUpon>

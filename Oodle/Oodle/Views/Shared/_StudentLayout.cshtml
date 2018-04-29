@@ -28,7 +28,7 @@
                 </button>
                 <img src="~/Content/img/logo.png" class="img-center" height="45" width="90" />
             </div>
-            <div class="navbar-collapse collapse" ">
+            <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
@@ -47,7 +47,7 @@
         <br />
         <ul>@Html.ActionLink("Home", "Index", "Students", new { ClassID = Model.cl.ClassID }, new { @style = "color:#17252A" })</ul>
         <ul>@Html.ActionLink("Slack", "UnderDevelopment", "Home", new { ClassID = Model.cl.ClassID }, new { @style = "color:#17252A" })</ul>
-        <ul>@Html.ActionLink("Grades", "UnderDevelopment", "Home", new { ClassID = Model.cl.ClassID }, new { @style = "color:#17252A" })</ul>
+        <ul>@Html.ActionLink("Grades", "Grade", "Students", new { ClassID = Model.cl.ClassID }, new { @style = "color:#17252A" })</ul>
         <ul>@Html.ActionLink("Assignments", "Assignment", "Students", new { ClassID = Model.cl.ClassID }, new { @style = "color:#17252A" })</ul>
         <ul>@Html.ActionLink("Quizzes", "UnderDevelopment", "Home", new { ClassID = Model.cl.ClassID }, new { @style = "color:#17252A" })</ul>
         <ul>@Html.ActionLink("Tasks", "Tasks", "Students", new { ClassID = Model.cl.ClassID }, new { @style = "color:#17252A" })</ul>
