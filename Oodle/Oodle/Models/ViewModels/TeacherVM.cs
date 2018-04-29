@@ -26,6 +26,8 @@ namespace Oodle.Models.ViewModels
         public List<QuizQuestion> questionList { get; set; }
         public List<MultChoiceAnswer> answerList { get; set; }
         public List<Tasks> Tasks { get; set; }
+        public List<Notes> Notes { get; set; }
+
 
 
         public TeacherVM(Class classP, List<User> userP)

@@ -44,7 +44,7 @@
                 <tr>
 
                     <td><button class="btn btn-dark" id="upcomingBtn">Upcoming Assignments</button></td>
-                    <td><button class="btn btn-dark" id="testBtn1">Something Else</button></td>
+                    <td><button class="btn btn-dark" id="testBtn1">Your Notes</button></td>
                     <td><button class="btn btn-dark" id="testBtn2">Tasks Today</button></td>
                     <td><button class="btn btn-dark" id="infoBtn">About</button></td>
 
@@ -58,6 +58,10 @@
 
 
 </div>
+
+
+
+
 
 
 
@@ -86,35 +90,36 @@
 
             <div>
                 @for (int i = 0, count = 0; i < Model.assignment.Count(); i++, count++)
-        {
+                {
 
-            var assi = Model.assignment[i];
-            // if (assi.Name == "test")
-            if (assi.DueDate >= DateTime.Today && count < 3)
-            {
-                <div class="block">
-                    <a href="@Url.Action("AssignmentTurnIn", "Students", new { ClassID = (assi.ClassID), AssignmentID = (assi.AssignmentID) })">
-                        <div class="classItem">
-                            <div class="title">
-                                @Html.DisplayFor(Name => assi.Name)
-                            </div>
-                            <div class="description">
-                                @Html.DisplayFor(Desc => assi.Description)
-                            </div>
-                            <div class="dateLeft">
-                                Start Date: @Html.DisplayFor(Desc => assi.StartDate)
-                            </div>
-                            <div class="dateRight">
-                                Due Date: @Html.DisplayFor(Desc => assi.DueDate)
-                            </div>
+                    var assi = Model.assignment[i];
+                    // if (assi.Name == "test")
+                    //show 3 most upcoming assignments that arent past due
+                    if (assi.DueDate >= DateTime.Today && count < 3)
+                    {
+                        <div class="block">
+                            <a href="@Url.Action("AssignmentTurnIn", "Students", new { ClassID = (assi.ClassID), AssignmentID = (assi.AssignmentID) })">
+                                <div class="classItem">
+                                    <div class="title">
+                                        @Html.DisplayFor(Name => assi.Name)
+                                    </div>
+                                    <div class="description">
+                                        @Html.DisplayFor(Desc => assi.Description)
+                                    </div>
+                                    <div class="dateLeft">
+                                        Start Date: @Html.DisplayFor(Desc => assi.StartDate)
+                                    </div>
+                                    <div class="dateRight">
+                                        Due Date: @Html.DisplayFor(Desc => assi.DueDate)
+                                    </div>
+                                </div>
+
+                            </a>
                         </div>
-
-                    </a>
-                </div>
-                <br />
-                <br />
-    }
-}
+                        <br />
+                        <br />
+                    }
+                }
             </div>
 
 
@@ -141,44 +146,40 @@
 
 
 
-            <div class="container">
-                <div class="jumbotron">
-                    <h3 style="color:black">
-                        Naviagation Tips:
-                    </h3>
-                    <hr />
+
+            <h3 style="color:black">
+                Navigation Tips:
+            </h3>
+            <hr />
 
 
-                    <table>
-                        <tr>
-                            <th>Slack</th>
-                            <th>Grades</th>
-                            <th>Assignments</th>
-                            <th>Quizzes</th>
-                            <th>Tasks</th>
-                        </tr>
-                        <tr>
-                            <td>Set up and communicate with your classmates to talk about upcoming assignments, homework and anything else.</td>
-                            <td>View your grades for quizzes and assignments.</td>
-                            <td>See upcoming and past assignments.</td>
-                            <td>Get information and take quizzes set up by your teacher</td>
-                            <td>See anything your teacher might want you to be notified of.</td>
+            <table>
+                <tr>
+                    <th>Slack</th>
+                    <th>Grades</th>
+                    <th>Assignments</th>
+                    <th>Quizzes</th>
+                    <th>Tasks</th>
+                </tr>
+                <tr>
+                    <td>Set up and communicate with your classmates to talk about upcoming assignments, homework and anything else.</td>
+                    <td>View your grades for quizzes and assignments.</td>
+                    <td>See upcoming and past assignments.</td>
+                    <td>Get information and take quizzes set up by your teacher</td>
+                    <td>See anything your teacher might want you to be notified of.</td>
 
 
-                        </tr>
-                       
-                    </table>
+                </tr>
+
+            </table>
 
 
-                    <hr />
-                    <h3 style="color:black">
-                        Support at: Oodleclassrooms@gmail.com <br>
-                    </h3>
-
-                </div>
+            <hr />
+            <h3 style="color:black">
+                Support at: Oodleclassrooms@gmail.com <br>
+            </h3>
 
 
-            </div>
 
 
         </div>
@@ -209,35 +210,35 @@
 
                         <div>
                             @foreach (var i in Model.Tasks)
-    {
-        if (i.ClassID == Model.cl.ClassID)
-        {
-            var tsk = i;
-            DateTime today = DateTime.Today;
-            DateTime toTest = tsk.StartDate.GetValueOrDefault();
-            System.TimeSpan difference = today.Subtract(toTest);
-                        <!--if (today.Value.TotalHours > -24 && toTest.TotalHours <= 24) -->
-                       if ((today - toTest).Duration().TotalHours <= 24)
+                            {
+                                if (i.ClassID == Model.cl.ClassID)
+                                {
+                                    var tsk = i;
+                                    DateTime today = DateTime.Today;
+                                    DateTime toTest = tsk.StartDate.GetValueOrDefault();
+                                    System.TimeSpan difference = today.Subtract(toTest);
+                                    <!--if (today.Value.TotalHours > -24 && toTest.TotalHours <= 24) -->
+                                    if ((today - toTest).Duration().TotalHours <= 24)
                                     {
-                        <div class="block">
-                            <div class="classItem">
-                                <div class="description">
-                                    @Html.DisplayFor(Desc => tsk.Description)
-                                </div>
-                                <div class="dateLeft" style="color:#17252A">
-                                    Start Date: @Html.DisplayFor(Desc => tsk.StartDate)
-                                </div>
-                                <div class="dateRight" style="color:#17252A">
-                                    Due Date: @Html.DisplayFor(Desc => tsk.DueDate)
-                                </div>
-                            </div>
-                        </div>
-                        <br />
-                        <br />
-}
-}
+                                        <div class="block">
+                                            <div class="classItem">
+                                                <div class="description">
+                                                    @Html.DisplayFor(Desc => tsk.Description)
+                                                </div>
+                                                <div class="dateLeft" style="color:#17252A">
+                                                    Start Date: @Html.DisplayFor(Desc => tsk.StartDate)
+                                                </div>
+                                                <div class="dateRight" style="color:#17252A">
+                                                    Due Date: @Html.DisplayFor(Desc => tsk.DueDate)
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <br />
+                                    }
+                                }
 
-}
+                            }
                         </div>
 
 
@@ -261,14 +262,54 @@
     <div class="modal-content">
         <div class="modal-header">
             <span class="close">&times;</span>
-            <h2>11111111</h2>
+            <h2>Your Notes:</h2>
         </div>
         <div class="modal-body">
-            <p>Some text in the Modal Body</p>
-            <p>Some other text...</p>
+
+
+            <div class="form-style-6">
+                <form method="post">
+                    <div>
+                        <h1>Create a Note</h1>
+
+                        <input type="hidden" name="classID" value="@Model.cl.ClassID" />
+
+                        <label for="description">Description of your Note:</label> <br />
+                        <textarea maxlength="510" name="description" placeholder="e.g., Read chapter four and do laundry" required></textarea>
+
+
+                    </div>
+                    <div>
+                        <input type="submit" name="submit" value="Create Note" />
+                    </div>
+                </form>
+            </div>
+
+
+            <div>
+                @foreach (var i in Model.Notes)
+        {
+            if (i.ClassID == Model.cl.ClassID)
+            {
+                var note = i;
+                <div class="block">
+                    <div class="classItem">
+                        <div class="description" style="font-size:18px; color:black;">
+                            @Html.DisplayFor(Desc => note.Description)
+                        </div>
+
+
+                    </div>
+                </div>
+                <br />
+                <br />
+    }
+
+}
+            </div>
         </div>
         <div class="modal-footer">
-            <h3>Oodle Info </h3>
+            <h3>Oodle Notes </h3>
         </div>
     </div>
 
