@@ -274,6 +274,7 @@ namespace Oodle.Controllers
             {
                 list.Add(i.UsersID);
             }
+
             var request = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
             var request2 = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
 
@@ -308,6 +309,8 @@ namespace Oodle.Controllers
             teacher.notifs = db.ClassNotifications.Where(i => i.ClassID == classID).OrderBy(i => i.TimePosted).ToList();
 
             teacher.Tasks = db.Tasks.ToList();
+
+            teacher.Notes = db.Notes.ToList();
 
             return teacher;
         }
@@ -669,6 +672,11 @@ namespace Oodle.Controllers
             return db.Tasks.ToList();
         }
 
+        public List<Notes> TestMoqNotes()
+        {
+            return db.Notes.ToList();
+        }
+
         [HttpGet]
         public ActionResult ViewQuiz(int QuizID, int ClassID)
         {
@@ -970,5 +978,14 @@ namespace Oodle.Controllers
 
         }
 
+
+
+
+
+
     }
 }
+
+
+
+

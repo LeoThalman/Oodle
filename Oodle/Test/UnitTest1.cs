@@ -412,6 +412,9 @@ namespace Test
             Assert.That(temp[0].DueDate, Is.AtLeast(date));
         }
 
+//#############################################################################################//
+ //--###############################KOLLS TOOLS PAGE TESTS START ########################## --//
+
 
         [Test]
         public void TestingTestShouldPass()
@@ -424,7 +427,6 @@ namespace Test
 
 
         }
-
 
 
         [Test]
@@ -457,19 +459,6 @@ namespace Test
             Assert.That(numberReturned >= lowestPossibleScore);
 
 
-            //Testing input of negative to be changed to 0
-            int negativeNumber = -1;
-            numberReturned = rating.Tools(negativeNumber);
-            Assert.That(numberReturned >= lowestPossibleScore);
-
-
-            //Testing input of anything over 5 to be changed to a 5
-            int upperboundNumber = 7;
-            numberReturned = rating.Tools(upperboundNumber);
-            Assert.That(numberReturned <= highestPossibleScore);
-
-
-
             //Testing input of anything over 5 to be changed to a 5
             int ValidNumber = 1;
             numberReturned = rating.Tools(ValidNumber);
@@ -477,6 +466,270 @@ namespace Test
 
 
         }
+
+
+        [Test]
+        public void kollsOodleRatingTestOnEdgeCaseof0()
+        {
+            HomeController rating = new HomeController();
+
+            int lowestPossibleScore = 0;
+
+            //Testing input of 0 to be a valid number
+            int EdgeCaseOfZero = 0;
+            int numberReturned = rating.Tools(EdgeCaseOfZero);
+            Assert.That(numberReturned >= lowestPossibleScore);
+        }
+
+
+
+
+        [Test]
+        public void kollsOodleRatingTestOnToolsPageNegativeNumberChangedto0()
+        {
+            HomeController rating = new HomeController();
+
+            int lowestPossibleScore = 0;
+
+            //Testing input of 0 to be a valid number
+            int EdgeCaseOfZero = 0;
+            int numberReturned = rating.Tools(EdgeCaseOfZero);
+
+
+            //Testing input of negative to be changed to 0
+            int negativeNumber = -1;
+            numberReturned = rating.Tools(negativeNumber);
+            Assert.That(numberReturned >= lowestPossibleScore);
+
+        }
+
+
+        [Test]
+        public void kollsOodleRatingTestOnToolsPageAnythingOver5Changedto5()
+        {
+            HomeController rating = new HomeController();
+
+            int highestPossibleScore = 5;
+
+            //Testing input of 0 to be a valid number
+            int EdgeCaseOfZero = 0;
+            int numberReturned = rating.Tools(EdgeCaseOfZero);
+    
+
+            //Testing input of anything over 5 to be changed to a 5
+            int upperboundNumber = 7;
+            numberReturned = rating.Tools(upperboundNumber);
+            Assert.That(numberReturned <= highestPossibleScore);        
+
+        }
+        //--###############################KOLLS TOOLS PAGE TESTS END ########################## --//
+        //#############################################################################################//
+
+
+
+
+
+
+        //#############################################################################################//
+        //--###############################KOLLS STUDENT INDEX PAGE TESTS START ########################## --//
+
+
+
+      
+        [Test]
+        public void KollsTestingBasicInputForNotesTable()
+        {
+            // mock the object
+            mock = new Mock<IOodleRepository>();
+            //sets up tasks table
+            mock.Setup(m => m.Notes)
+                .Returns(
+                 new Notes[]
+                {
+                    new Notes {NotesID = 1, ClassID = 1, Description = "Test Note"},
+                    new Notes {NotesID = 2, ClassID = 1, Description = "Note 2" },
+                    new Notes {NotesID = 3, ClassID = 1, Description = "Note 2" }
+                 });
+
+            //refers back to controller and makes a new list of tasks
+            TeachersController teacher = new TeachersController(mock.Object);
+            List<Notes> temp = teacher.TestMoqNotes();
+
+            //assert
+            Assert.That(temp[0].Description, Does.Match("Test Note"));
+        }
+
+
+
+        [Test]
+        public void KollsTestingEmptyInputForNotesTableReturnsEmptyNote()
+        {
+            // mock the object
+            mock = new Mock<IOodleRepository>();
+            //sets up tasks table
+            mock.Setup(m => m.Notes)
+                .Returns(
+                 new Notes[]
+                {
+                    new Notes {NotesID = 1, ClassID = 1, Description = ""},
+                  
+                 });
+
+            //refers back to controller and makes a new list of tasks
+            TeachersController teacher = new TeachersController(mock.Object);
+            List<Notes> temp = teacher.TestMoqNotes();
+
+            //assert
+            Assert.That(temp[0].Description, Does.Match(""));
+        }
+
+
+        [Test]
+        public void KollsTestingOnlyNumericalInputIntoNotes()
+        {
+            // mock the object
+            mock = new Mock<IOodleRepository>();
+            //sets up tasks table
+            mock.Setup(m => m.Notes)
+                .Returns(
+                 new Notes[]
+                {
+                    new Notes {NotesID = 1, ClassID = 1, Description = "82173490827349087204"},
+
+                 });
+
+            //refers back to controller and makes a new list of tasks
+            TeachersController teacher = new TeachersController(mock.Object);
+            List<Notes> temp = teacher.TestMoqNotes();
+
+            //assert
+            Assert.That(temp[0].Description, Does.Match("82173490827349087204"));
+        }
+
+
+
+
+        [Test]
+        public void KollsTestingquotesInputIntoNotes()
+        {
+            // mock the object
+            mock = new Mock<IOodleRepository>();
+            //sets up tasks table
+            mock.Setup(m => m.Notes)
+                .Returns(
+                 new Notes[]
+                {
+                    new Notes {NotesID = 1, ClassID = 1, Description = "\"\"\""},
+
+                 });
+
+            //refers back to controller and makes a new list of tasks
+            TeachersController teacher = new TeachersController(mock.Object);
+            List<Notes> temp = teacher.TestMoqNotes();
+
+            //assert
+            Assert.That(temp[0].Description, Does.Match("\"\"\""));
+        }
+
+
+
+        [Test]
+        public void KollsTestingmaxLengthInputIntoNotes()
+        {
+            // mock the object
+            mock = new Mock<IOodleRepository>();
+            //sets up tasks table
+            mock.Setup(m => m.Notes)
+                .Returns(
+                 new Notes[]
+                {
+                    new Notes {NotesID = 1, ClassID = 1, Description = "THIS IS 513 CHARS DDDDDDDDDtest test" +
+                    " ttest test test test test test test test test test test" +
+                    " test test test est test test test test test test test " +
+                    "test tetest test ttest test test test test test test test" +
+                    " test test test test test test est test test test test test" +
+                    " test test test test test test test test test test test st" +
+                    " test test test test test test test test test ttest test " +
+                    "test test test test test test test test test test test test" +
+                    " est tasdfj dfkjsdkf s sdkjfajkdf ajsd fjds fklnads flkadsas" +
+                    " dsdsafsdnfas fa"},
+
+                 });
+
+            //refers back to controller and makes a new list of tasks
+            TeachersController teacher = new TeachersController(mock.Object);
+            List<Notes> temp = teacher.TestMoqNotes();
+
+            //assert
+            Assert.That(temp[0].Description, Does.Match("THIS IS 513 CHARS DDDDDDDDDtest " +
+                "test ttest test test test test test test test test test test test test " +
+                "test est test test test test test test test test tetest test ttest " +
+                "test test test test test test test test test test test test test est" +
+                " test test test test test test test test test test test test test test " +
+                "test test st test test test test test test test test test ttest test test test test" +
+                " test test test test test test test test test est tasdfj dfkjsdkf " +
+                "s sdkjfajkdf ajsd fjds fklnads flkadsas dsdsafsdnfas"));
+        }
+
+
+
+        [Test]
+        public void KollsTestingSQLQueryInputIntoNotesReturnsSafe()
+        {
+            // mock the object
+            mock = new Mock<IOodleRepository>();
+            //sets up tasks table
+            mock.Setup(m => m.Notes)
+                .Returns(
+                 new Notes[]
+                {
+                    new Notes {NotesID = 1, ClassID = 1, Description = @"SELECT koll FROM Users WHERE UserId = 105 OR 1=1;"
+                 },
+
+                 });
+
+            //refers back to controller and makes a new list of tasks
+            TeachersController teacher = new TeachersController(mock.Object);
+            List<Notes> temp = teacher.TestMoqNotes();
+
+            //assert
+            Assert.That(temp[0].Description, Does.Match(@"SELECT koll FROM Users WHERE UserId = 105 OR 1=1;"));
+        }
+
+
+        [Test]
+        public void KollsTestingMutlipleNotesReturnsCorrectly()
+        {
+            // mock the object
+            mock = new Mock<IOodleRepository>();
+            //sets up tasks table
+            mock.Setup(m => m.Notes)
+                .Returns(
+                 new Notes[]
+                {
+                    new Notes {NotesID = 1, ClassID = 1, Description = "abc"},
+                    new Notes {NotesID = 2, ClassID = 1, Description = "def" },
+                    new Notes {NotesID = 3, ClassID = 1, Description = "ghi" },
+                    new Notes {NotesID = 3, ClassID = 1, Description = "jkl" }
+
+                 });
+
+            //refers back to controller and makes a new list of tasks
+            TeachersController teacher = new TeachersController(mock.Object);
+            List<Notes> temp = teacher.TestMoqNotes();
+
+            //assert
+            Assert.That(temp[0].Description, Does.Match("abc"));
+            Assert.That(temp[1].Description, Does.Match("def"));
+            Assert.That(temp[2].Description, Does.Match("ghi"));
+            Assert.That(temp[3].Description, Does.Match("jkl"));
+
+        }
+
+        //--###############################KOLLS STUDENT INDEX PAGE END ########################## --//
+        //#############################################################################################//
+
+
 
         [Test]
         public void ValidateSlackName_ShortensNamesLongerThan21Chars_ReturnsShortenedName()

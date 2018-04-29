@@ -46,14 +46,84 @@ namespace Oodle.Controllers
         {
             if (test(classID) != null)
             {
+
                 return test(classID);
             }
 
+
             var student = getTVM(classID);
+            var classes = db.Classes.ToList(); // list of all classes
+
+
+
+            ViewBag.classList = classes;
+            foreach (var item in classes) // Loop through List with foreach
+            {
+                System.Diagnostics.Debug.WriteLine(item);
+            }
+
+
+            System.Diagnostics.Debug.WriteLine(classes);
+
+
+
 
 
             return View("Index", "_StudentLayout", student);
         }
+        [HttpPost]
+        [ActionName("Index")]
+        public ActionResult IndexPost(int classID)
+        {
+            if (test(classID) != null)
+            {
+
+                return test(classID);
+            }
+
+
+            var student = getTVM(classID);
+            var classes = db.Classes.ToList(); // list of all classes
+
+
+
+            ViewBag.classList = classes;
+            foreach (var item in classes) // Loop through List with foreach
+            {
+                System.Diagnostics.Debug.WriteLine(item);
+            }
+
+
+            System.Diagnostics.Debug.WriteLine(classes);
+
+
+            ViewBag.RequestMethod = "POST";
+
+            string desc = Request.Form["description"];
+            string id = Request.Form["classID"];
+
+
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+            var note = new Notes();
+
+            note.NotesID = db.Tasks.Count() + 1;
+            note.Description = desc;
+            note.ClassID = classID;
+
+
+            db.AddNote(note);
+            db.SaveChanges();
+
+
+            student.Notes = db.Notes.ToList();
+
+            // return View("Notes", "_StudentLayout", student);
+            return View("Index", "_StudentLayout", student);
+        }
+
 
 
 
@@ -110,6 +180,8 @@ namespace Oodle.Controllers
             teacher.notifs = db.ClassNotifications.Where(i => i.ClassID == classID).OrderBy(i => i.TimePosted).ToList();
             //adds tasks to Teacher VM
             teacher.Tasks = db.Tasks.ToList();
+            //adds notes to teacher VM
+            teacher.Notes = db.Notes.ToList();
 
             return teacher;
         }
@@ -384,5 +456,32 @@ namespace Oodle.Controllers
 
             return teacher;
         }
+
+
+
+
+
+
+        public ActionResult CreateNote(int classID)
+        {
+            var student = getTVM(classID);
+
+
+            student.Notes = db.Notes.ToList();
+
+            return View("CreateNote", "_StudentLayout", student);
+        }
+
+        public ActionResult Notes(int classID)
+        {
+            var student = getTVM(classID);
+
+            //return View("Notes", "_StudentLayout", student);
+            return View("Index", "_StudentLayout", student);
+
+        }
+
+
+
     }
 }

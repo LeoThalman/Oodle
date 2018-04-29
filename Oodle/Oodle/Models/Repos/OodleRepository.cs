@@ -63,6 +63,11 @@ namespace Oodle.Models.Repos
             get { return db.Tasks; }
         }
 
+        public IEnumerable<Notes> Notes
+        {
+            get { return db.Notes; }
+        }
+
 
         //-----------------------Add and Remove Methods for the tables-------------------------------
         //Save Db Changes
@@ -130,5 +135,12 @@ namespace Oodle.Models.Repos
         {
             db.Tasks.Remove(t);
         }
+
+        public void AddNote(Notes n)
+        {
+            db.Notes.Add(n);
+        }
+
+
     }
 }
