@@ -23,6 +23,7 @@
         @foreach (var question in Model.questionList)
     {
         <p>Question @question.QuestionID: @question.QuestionText</p>
+        <p>Work: @question.Points points</p>
         <p>Answers</p>
         <ul>
             <li id="FirstQItem">
