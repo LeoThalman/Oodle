@@ -99,9 +99,7 @@ namespace Oodle.Controllers
 
         public ActionResult Calendar()
         {
-            
             return View("Calendar", "_CalendarLayout");
         }
-
     }
 }
