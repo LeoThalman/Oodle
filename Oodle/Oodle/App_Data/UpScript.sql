@@ -1,4 +1,5 @@
-﻿DROP TABLE dbo.Questions;
+﻿DROP TABLE dbo.Tasks;
+DROP TABLE dbo.Questions;
 DROP TABLE dbo.Grades;
 DROP TABLE dbo.Documents;
 DROP TABLE dbo.Assignment;
@@ -8,7 +9,6 @@ DROP TABLE dbo.ClassNotification;
 DROP TABLE dbo.MultChoiceAnswers;
 DROP TABLE dbo.QuizQuestions;
 DROP TABLE dbo.Quizzes;
-DROP TABLE dbo.Tasks;
 DROP TABLE dbo.Class;
 DROP TABLE dbo.Users;
 
@@ -230,7 +230,7 @@ CREATE TABLE dbo.UserRoleClass
 	ClassID INT NOT NULL,
 	CONSTRAINT [PK_dbo.UserRoleClass] PRIMARY KEY CLUSTERED (UserRoleClassID ASC),
 	CONSTRAINT [FK_dbo.UserRoleClass_dbo.UserID] FOREIGN KEY ([UsersID]) REFERENCES [dbo].[Users] ([UsersID]),
-	--CONSTRAINT [FK_dbo.UserRoleClass_dbo.RoleID] FOREIGN KEY ([RoleID]) REFERENCES [dbo].[Role] ([RoleID]),
+	-- CONSTRAINT [FK_dbo.UserRoleClass_dbo.RoleID] FOREIGN KEY ([RoleID]) REFERENCES [dbo].[Role] ([RoleID]),
 	CONSTRAINT [FK_dbo.UserRoleClass_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
 	ON DELETE CASCADE
 	ON UPDATE CASCADE
@@ -314,6 +314,7 @@ CREATE TABLE dbo.Documents(
 	AssignmentID INT NOT NULL,
 	UserID INT NOT NULL,
 	Grade INT NOT NULL,
+	Date DATETIME NOT NULL,
 	CONSTRAINT [PK_dbo.Documents] PRIMARY KEY CLUSTERED (Id ASC),
 	CONSTRAINT [FK_dbo.Documents_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID]),
 	CONSTRAINT [FK_dbo.Documents_dbo.UserID] FOREIGN KEY ([UserID]) REFERENCES [dbo].[Users] ([UsersID]),

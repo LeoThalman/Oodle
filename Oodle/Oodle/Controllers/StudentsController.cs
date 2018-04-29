@@ -12,13 +12,21 @@ using System.Net;
 using System.IO;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Diagnostics;
+using Oodle.Models.Repos;
 
 namespace Oodle.Controllers
 {
     [Authorize]
     public class StudentsController : Controller
     {
-        private Model1 db = new Model1();
+        private IOodleRepository db;
+
+        public StudentsController(IOodleRepository repo)
+        {
+            this.db = repo;
+        }
+
 
         public ActionResult test(int classID)
         {
@@ -33,8 +41,6 @@ namespace Oodle.Controllers
             }
             return null;
         }
-
-
 
         public ActionResult Index(int classID)
         {
@@ -67,10 +73,6 @@ namespace Oodle.Controllers
 
 
 
-        public ActionResult Grade()
-        {
-            return View("Grade", "_StudentLayout");
-        }
 
         public ActionResult Assignment(int classID)
         {
@@ -193,10 +195,12 @@ namespace Oodle.Controllers
 
             var submitted = DateTime.Now;
 
+            var date = DateTime.Now;
+
             string constr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             using (SqlConnection con = new SqlConnection(constr))
             {
-                string query = "INSERT INTO Documents VALUES (@Name, @ContentType, @Data, @Submitted, @ClassID, @AssignmentID, @userID, @grade)";
+                string query = "INSERT INTO Documents VALUES (@Name, @ContentType, @Data, @Submitted, @ClassID, @AssignmentID, @userID, @grade, @Date)";
                 using (SqlCommand cmd = new SqlCommand(query))
                 {
                     cmd.Connection = con;
@@ -208,6 +212,7 @@ namespace Oodle.Controllers
                     cmd.Parameters.AddWithValue("@userID", studentID);
                     cmd.Parameters.AddWithValue("@Submitted", submitted);
                     cmd.Parameters.AddWithValue("@grade", -1);
+                    cmd.Parameters.AddWithValue("@Date", date);
 
                     con.Open();
                     cmd.ExecuteNonQuery();
@@ -280,6 +285,119 @@ namespace Oodle.Controllers
                 }
             }
             return files;
+        }
+
+
+
+
+
+        public ActionResult Grade(int classID)
+        {
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+            var idid = User.Identity.GetUserId();
+
+            int userId = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault().UsersID;
+
+            var teacher = getTVM(classID);
+
+            //This will be used when I refactor this code in a later sprint.
+            //teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).ToList();
+            teacher.documents = db.Documents.Where(i => i.ClassID == classID && i.UserID == userId).ToList();
+
+            List<Document> list = teacher.documents;
+
+            teacher.classGrade = new List<int>();
+            teacher.classGrade.Add(GradeHelper(list));
+
+            return View("Grade", "_StudentLayout", teacher);
+        }
+
+        //This is the method I'm really testing.
+        public int GradeHelper(List<Document> list)
+        {
+            int total = 0;
+            int totalWeight = 0;
+
+            foreach (Document doc in list)
+            {
+                if (doc.Grade != -1)
+                {
+                    total = total + (doc.Grade * doc.Assignment.Weight);
+                    totalWeight = totalWeight + doc.Assignment.Weight;
+                }
+            }
+            if (totalWeight == 0)
+            {
+                return total = 0;
+            }
+            else
+            {
+                return total = total / totalWeight;
+            }
+        }
+
+
+
+
+        [HttpPost]
+        public ActionResult FakeGrade()
+        {
+            string id = Request.Form["classID"];
+            int classID = int.Parse(id);
+
+            var idid = User.Identity.GetUserId();
+
+            int userId = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault().UsersID;
+
+            TeacherVM teacher = FakeGradeHelper(classID, userId, Request.Form);
+
+            return View("Grade", "_StudentLayout", teacher);
+        }
+
+
+        public TeacherVM FakeGradeHelper(int classID, int userId, System.Collections.Specialized.NameValueCollection form)
+        {
+            var teacher = getTVM(classID);
+
+            //teacher.assignment = db.Assignments.Where(j => j.ClassID == classID).ToList();
+
+            teacher.documents = db.Documents.Where(j => j.ClassID == classID && j.UserID == userId).ToList();
+
+            int i = 0;
+            string i2 = "1";
+            int fTotal = 0;
+            int fNumber = 0;
+            teacher.fClassGrade = new List<int>();
+
+            while (i2 != null && i2 != "")
+            {
+                i2 =  form[i.ToString()];
+                if (i2 != null)
+                {
+                    int i3 = Int32.Parse(i2);
+                    fTotal = (i3 * teacher.documents[i].Assignment.Weight) + fTotal;
+                    teacher.fClassGrade.Add(i3);
+                    fNumber = fNumber + teacher.documents[i].Assignment.Weight;
+                }
+                i++;
+            }
+
+            if (fNumber == 0)
+            {
+                teacher.fakeTotal = 0;
+            }
+            else
+            {
+                teacher.fakeTotal = fTotal / fNumber;
+            }
+
+            teacher.classGrade = new List<int>();
+            teacher.classGrade.Add(GradeHelper(teacher.documents));
+
+            return teacher;
         }
     }
 }
