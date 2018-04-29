@@ -144,7 +144,7 @@ namespace Test
         }
 
         [Test]
-        public void CheckQuizClassID_ValidID_ReturnsTrue()
+        public void CheckQuizClassID_ValidIDs_ReturnsTrue()
         {
             TeachersController teacher = new TeachersController(mock.Object);
             Quizze q = new Quizze { QuizID = 1, QuizName = "Q1", StartTime = DateTime.Now, EndTime = DateTime.Now, ClassID = 1, IsHidden = false, TotalPoints = 0 };
@@ -152,13 +152,28 @@ namespace Test
         }
 
         [Test]
-        public void CheckQuizClassID_ValidID_ReturnsFalse()
+        public void CheckQuizClassID_InvalidIDs_ReturnsFalse()
         {
             TeachersController teacher = new TeachersController(mock.Object);
             Quizze q = new Quizze { QuizID = 1, QuizName = "Q1", StartTime = DateTime.Now, EndTime = DateTime.Now, ClassID = 1, IsHidden = false, TotalPoints = 0 };
             Assert.IsFalse(teacher.CheckQuizClassID(q, 2));
         }
-		
+
+        [Test]
+        public void CheckQuizClassID_NullQuiz_ReturnsFalse()
+        {
+            TeachersController teacher = new TeachersController(mock.Object);
+            Assert.IsFalse(teacher.CheckQuizClassID(null, 2));
+        }
+
+        [Test]
+        public void CheckQuizClassID_EmptyQuiz_ReturnsFalse()
+        {
+            TeachersController teacher = new TeachersController(mock.Object);
+            Quizze q = new Quizze();
+            Assert.IsFalse(teacher.CheckQuizClassID(q, 2));
+        }
+
         //Sams Mock testing of the table tasks begins here
         [Test]
         public void SamsTestingMoqOnTaskTable()
