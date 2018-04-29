@@ -718,11 +718,23 @@ namespace Oodle.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    if (CheckQuizTime(Quiz)) { 
                     db.AddQuiz(Quiz);
                     db.SaveChanges();
                     rtn = true;
+                    }
                 }
             }
+            return rtn;
+        }
+
+        public Boolean CheckQuizTime (Quizze Quiz)
+        {
+            Boolean rtn = false;
+            if (Quiz.StartTime.CompareTo(Quiz.EndTime) < 0 )
+                rtn = true;
+            else
+                ModelState.AddModelError("StartTime", "Start Time must be before End Time");
             return rtn;
         }
 
@@ -733,13 +745,14 @@ namespace Oodle.Controllers
             {
                 return test(Quiz.ClassID);
             }
-
-            if(AddQuizToDB(Quiz))            
+            TeacherVM teacher = getTVM(Quiz.ClassID);
+            teacher.quiz = Quiz;
+            if (AddQuizToDB(Quiz))            
                 return RedirectToAction("QuizList", "Teachers", new { classId = Quiz.ClassID });
             
             else
             {
-                return RedirectToAction("CreateQuiz", "Teachers", new { ClassID = Quiz.ClassID });
+                return View("CreateQuiz", "_TeacherLayout", teacher);
             }
         }
 
@@ -764,7 +777,7 @@ namespace Oodle.Controllers
             Boolean rtn = false;
             if (question == null || answer == null)
                 return rtn;
-            if (ModelState.IsValid)
+            if (ModelState.IsValid &&  CheckCorrectAnswerNotNull(answer))
             {
                 db.AddQuestion(question);
                 db.SaveChanges();
@@ -773,7 +786,20 @@ namespace Oodle.Controllers
                 db.SaveChanges();
                 rtn = true;
             }
+            return rtn;
+        }
 
+        public Boolean CheckCorrectAnswerNotNull(MultChoiceAnswer a)
+        {
+            Boolean rtn = false;
+            if ((a.CorrectAnswer == 1 && !String.IsNullOrWhiteSpace(a.Answer1)) ||
+                (a.CorrectAnswer == 2 && !String.IsNullOrWhiteSpace(a.Answer2)) ||
+                (a.CorrectAnswer == 3 && !String.IsNullOrWhiteSpace(a.Answer3)) ||
+                (a.CorrectAnswer == 4 && !String.IsNullOrWhiteSpace(a.Answer4)))
+                rtn = true;
+            else
+                ModelState.AddModelError("answer.CorrectAnswer", "Corresponding answer field is empty, " +
+                                        "Please fill it out or choose a new answer");
             return rtn;
         }
 
