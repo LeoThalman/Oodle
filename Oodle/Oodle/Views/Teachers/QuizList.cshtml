@@ -1,11 +1,11 @@
 ﻿@model Oodle.Models.ViewModels.TeacherVM
 
-<div class="row fontClass">
-    @Html.ActionLink("Create A Quiz", "CreateQuiz", "Teachers", new {ClassID = Model.cl.ClassID }, null)
+<div class="row fontClass col">
     <table>
         <thead>
             <tr>
                 <td>Quiz Name</td>
+                <td>@Html.ActionLink("Create A Quiz", "CreateQuiz", "Teachers", new { ClassID = Model.cl.ClassID }, null)</td>
             </tr>
         </thead>
         @foreach (var quiz in Model.quizzes)

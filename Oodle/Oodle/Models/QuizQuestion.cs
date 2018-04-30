@@ -21,10 +21,12 @@ namespace Oodle.Models
 
         public int TypeOfQuestion { get; set; }
 
+        [Display(Name = "Points")]
         public int Points { get; set; }
 
         [Required]
         [StringLength(512)]
+        [Display(Name = "Question")]
         public string QuestionText { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
