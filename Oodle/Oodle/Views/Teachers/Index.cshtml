@@ -5,7 +5,7 @@
     ViewBag.Title = "Index";
 }
 
-<div class="row fontClass" >
+<div class="row fontClass">
 
     <h3>
         Your class page for: @Html.DisplayFor(Name => Model.cl.Name)
@@ -39,12 +39,12 @@
                 <h3> Notifications </h3>
                 @foreach (var notif in Model.notifs)
                 {
-                <p>
-                    @Html.DisplayFor(Notification => notif.Notification)
-                    <a href="@Url.Action("RemoveNotif", "Teachers", new { classID = (notif.ClassID), notifID = (notif.ClassNotificationID)} )">
-                        Remove Notification
-                    </a>
-                </p>
+                    <p>
+                        @Html.DisplayFor(Notification => notif.Notification)
+                        <a href="@Url.Action("RemoveNotif", "Teachers", new { classID = (notif.ClassID), notifID = (notif.ClassNotificationID)} )">
+                            Remove Notification
+                        </a>
+                    </p>
                 }
                 <a href="@Url.Action("AddNotifToClass", "Teachers", new { ClassID = (Model.cl.ClassID)} )">
                     Add A Notification

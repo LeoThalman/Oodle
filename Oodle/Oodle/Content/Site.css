@@ -12,8 +12,44 @@ Lighter white: #FEFFFF
 
 
 
+.QuizSide{
+    text-align: left;
+}
 
-.padded {
+.QuizSide a{ 
+    margin-bottom: 5%;
+}
+.QuizSide p {
+    text-align: left;
+    margin-left: 30%;
+}
+.ViewQuizBtn{
+    text-align:left;
+}
+
+.ViewQuiz p, .ViewQuiz a{
+    text-align: left;
+}
+
+.ViewQuiz ul {
+    padding-bottom: 5%;
+}
+
+.ViewQuiz ul li ul {
+    text-align: left;
+}
+
+
+.ViewQuiz ul li {
+    text-align: left;
+    margin-left:2%;
+}
+
+#FirstQItem {
+    list-style-type: none;
+}
+
+ .padded {
     border-radius: 25px;
     position: relative;
     margin: 0 auto;

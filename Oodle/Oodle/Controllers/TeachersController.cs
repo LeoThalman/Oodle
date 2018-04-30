@@ -274,6 +274,7 @@ namespace Oodle.Controllers
             {
                 list.Add(i.UsersID);
             }
+
             var request = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
             var request2 = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
 
@@ -308,6 +309,8 @@ namespace Oodle.Controllers
             teacher.notifs = db.ClassNotifications.Where(i => i.ClassID == classID).OrderBy(i => i.TimePosted).ToList();
 
             teacher.Tasks = db.Tasks.ToList();
+
+            teacher.Notes = db.Notes.ToList();
 
             return teacher;
         }
@@ -646,28 +649,35 @@ namespace Oodle.Controllers
             {
                 return test(Quiz.ClassID);
             }
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && CheckQuizTime(Quiz))
             {
 
                 db.SetModified(Quiz);
                 db.SaveChanges();
-                return RedirectToAction("Index", "Class", new { classId = Quiz.ClassID });
+                return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = Quiz.QuizID, ClassID = Quiz.ClassID });
             }
             else
             {
-                return RedirectToAction("EduitQuiz", "Teachers", new {QuizID = Quiz.QuizID, ClassID = Quiz.ClassID });
+                return RedirectToAction("EditQuiz", "Teachers", new {QuizID = Quiz.QuizID, ClassID = Quiz.ClassID });
             }
         }
 
-        public List<Quizze> TestMoq()
+        public List<MultChoiceAnswer> TestMoq()
         {
-            return db.Quizzes.ToList();
+            return db.MultChoiceAnswers.ToList();
         }
 
         public List<Tasks> TestMoqTasks()
         {
             return db.Tasks.ToList();
         }
+
+        public List<Notes> TestMoqNotes()
+        {
+            return db.Notes.ToList();
+        }
+
+
 
         [HttpGet]
         public ActionResult ViewQuiz(int QuizID, int ClassID)
@@ -676,12 +686,11 @@ namespace Oodle.Controllers
             {
                 return test(ClassID);
             }
+
             Quizze quiz = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault();
-            if (quiz == null)
-            {
-                return RedirectToAction("Index", "Class", new { classId = ClassID });
-            }
-            else if (quiz.ClassID == ClassID)
+
+            
+            if (CheckQuizClassID(quiz,ClassID))
             {
                 TeacherVM teacher = getTVM(ClassID);
                 teacher.quiz = quiz;
@@ -689,10 +698,16 @@ namespace Oodle.Controllers
                 teacher.answerList = db.MultChoiceAnswers.Where(a => a.QuizQuestion.QuizID == QuizID).ToList();
                 return View("ViewQuiz", "_TeacherLayout", teacher);
             }
-            else
-            {
                 return RedirectToAction("Index", "Class", new { classId = ClassID });
-            }
+        }
+
+
+        public Boolean CheckQuizClassID(Quizze quiz, int ClassID)
+        {
+            Boolean rtn = false;
+            if (quiz != null && quiz.ClassID == ClassID)
+                rtn = true;
+            return rtn;
         }
 
         [HttpGet]
@@ -713,16 +728,42 @@ namespace Oodle.Controllers
             {
                 return test(Quiz.ClassID);
             }
-            if (ModelState.IsValid)
-            {
-                db.AddQuiz(Quiz);
-                db.SaveChanges();
-                return RedirectToAction("Index", "Class", new { classId = Quiz.ClassID });
-            }
+            TeacherVM teacher = getTVM(Quiz.ClassID);
+            teacher.quiz = Quiz;
+            if (AddQuizToDB(Quiz))
+                return RedirectToAction("QuizList", "Teachers", new { classId = Quiz.ClassID });
+
             else
             {
-                return RedirectToAction("CreateQuiz", "Teachers", new { ClassID = Quiz.ClassID });
+                return View("CreateQuiz", "_TeacherLayout", teacher);
             }
+        }
+
+        public Boolean AddQuizToDB(Quizze Quiz)
+        {
+            Boolean rtn = false;
+            if (Quiz != null)
+            {
+                if (ModelState.IsValid)
+                {
+                    if (CheckQuizTime(Quiz)) { 
+                    db.AddQuiz(Quiz);
+                    db.SaveChanges();
+                    rtn = true;
+                    }
+                }
+            }
+            return rtn;
+        }
+
+        public Boolean CheckQuizTime (Quizze Quiz)
+        {
+            Boolean rtn = false;
+            if (Quiz.StartTime.CompareTo(Quiz.EndTime) < 0 )
+                rtn = true;
+            else
+                ModelState.AddModelError("StartTime", "Start Time must be before End Time");
+            return rtn;
         }
 
         public ActionResult AddQuestion(int QuizID, int ClassID)
@@ -744,8 +785,9 @@ namespace Oodle.Controllers
         public Boolean AddQuestionToDB(QuizQuestion question, MultChoiceAnswer answer)
         {
             Boolean rtn = false;
-
-            if (ModelState.IsValid)
+            if (question == null || answer == null)
+                return rtn;
+            if (ModelState.IsValid &&  CheckCorrectAnswerNotNull(answer))
             {
                 db.AddQuestion(question);
                 db.SaveChanges();
@@ -754,7 +796,20 @@ namespace Oodle.Controllers
                 db.SaveChanges();
                 rtn = true;
             }
+            return rtn;
+        }
 
+        public Boolean CheckCorrectAnswerNotNull(MultChoiceAnswer a)
+        {
+            Boolean rtn = false;
+            if ((a.CorrectAnswer == 1 && !String.IsNullOrWhiteSpace(a.Answer1)) ||
+                (a.CorrectAnswer == 2 && !String.IsNullOrWhiteSpace(a.Answer2)) ||
+                (a.CorrectAnswer == 3 && !String.IsNullOrWhiteSpace(a.Answer3)) ||
+                (a.CorrectAnswer == 4 && !String.IsNullOrWhiteSpace(a.Answer4)))
+                rtn = true;
+            else
+                ModelState.AddModelError("answer.CorrectAnswer", "Corresponding answer field is empty, " +
+                                        "Please fill it out or choose a new answer");
             return rtn;
         }
 
@@ -925,5 +980,14 @@ namespace Oodle.Controllers
 
         }
 
+
+
+
+
+
     }
 }
+
+
+
+
