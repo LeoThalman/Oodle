@@ -1,4 +1,6 @@
-﻿DROP TABLE dbo.Tasks;
+﻿DROP TABLE dbo.StudentQuizzes;
+DROP TABLE dbo.StudentQuestionAnswers;
+DROP TABLE dbo.Tasks;
 DROP TABLE dbo.Questions;
 DROP TABLE dbo.Grades;
 DROP TABLE dbo.Documents;

@@ -321,7 +321,6 @@ CREATE TABLE dbo.Quizzes(
 	ON DELETE CASCADE
 );
  
-
 CREATE TABLE dbo.QuizQuestions(
 	QuestionID INT IDENTITY(1,1) NOT NULL,
 	QuizID INT NOT NULL,
@@ -333,6 +332,7 @@ CREATE TABLE dbo.QuizQuestions(
 	ON DELETE CASCADE
 	ON UPDATE CASCADE,
 );
+
 Create TABLE MultChoiceAnswers(
 	AnswerID INT IDENTITY(1,1) NOT NULL,
 	QuestionID INT NOT NULL,
@@ -345,5 +345,34 @@ Create TABLE MultChoiceAnswers(
 	CONSTRAINT [FK_dbo.MultChoiceAnswers_dbo.QuizQuestions] FOREIGN KEY ([QuestionID]) REFERENCES [dbo].[QuizQuestions] ([QuestionID])
 	ON DELETE CASCADE
 	ON UPDATE CASCADE,
+);
+
+Create TABLE StudentQuizzes(
+	SQID INT IDENTITY(1,1) NOT NULL,
+	QuizID INT NOT NULL,
+	UserID INT NOT NULL,
+	CanReview BIT NOT NULL,
+	CONSTRAINT [PK_dbo.StudentQuizzes] PRIMARY KEY CLUSTERED (SQID ASC),
+	CONSTRAINT [FK_dbo.StudentQuizzes_dbo.Quizzes] FOREIGN KEY ([QuizID]) REFERENCES [dbo].[Quizzes] ([QuizID])
+	ON DELETE CASCADE ON UPDATE CASCADE,
+
+
+);
+
+Create TABLE StudentQuestionAnswers(
+	SQAID INT IDENTITY(1,1) NOT NULL,
+	SQID INT NOT NULL,
+	AnswerID INT NOT NULL,
+	QuestionID INT NOT NULL,
+	AnswerNumber INT NOT NULL,
+	StudentPoints INT NOT NULL,
+	CONSTRAINT [PK_dbo.StudentQuestionAnswers] PRIMARY KEY CLUSTERED (SQAID ASC),
+	CONSTRAINT [FK_dbo.StudentQuestionAnswers_dbo.QuizQuestions] FOREIGN KEY ([QuestionID]) REFERENCES [dbo].[QuizQuestions] ([QuestionID])
+	ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT [FK_dbo.StudentQuestionAnswers_dbo.MultChoiceAnswers] FOREIGN KEY ([AnswerID]) REFERENCES [dbo].[MultChoiceAnswers] ([AnswerID])
+	ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT [FK_dbo.StudentQuestionAnswers_dbo.StudentQuizzes] FOREIGN KEY ([SQID]) REFERENCES [dbo].[StudentQuizzes] ([SQID])
+	ON DELETE CASCADE ON UPDATE CASCADE,
+
 );
   
