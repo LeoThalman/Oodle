@@ -553,7 +553,8 @@ namespace Oodle.Controllers
 
             var teacher = getTVM(classID);
             teacher.documents = db.Documents.Where(i => i.Id == documentID).ToList();
-            teacher.users = db.Users.Where(i => i.UsersID == db.Documents.Where(j => j.Id == documentID).FirstOrDefault().UserID).ToList();
+            int test = db.Documents.Where(i => i.Id == documentID).FirstOrDefault().UserID;
+            teacher.users = db.Users.Where(i => i.UsersID == test).ToList();
             teacher.assignment = db.Assignments.Where(i => i.AssignmentID == assignmentID).ToList();
 
             db.Documents.Where(i => i.Id == documentID).ToList().ForEach(x => x.Grade = grade);
