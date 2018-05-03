@@ -491,8 +491,29 @@ namespace Oodle.Controllers
 
         public ActionResult QuizList(int classID)
         {
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
             StudentVM student = getSVM(classID);
+            student.Quizzes = db.Quizzes.Where(q => q.ClassID == classID).ToList();
+            student.StudentQuizzes = db.StudentQuizzes.Where(q => q.Quizze.ClassID == classID).ToList();
             return View("QuizList", "_StudentLayout", student);
+        }
+
+        [HttpGet]
+        public ActionResult TakeQuiz (int QuizID)
+        {
+            int classID = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault().ClassID;
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+            StudentVM student = getSVM(classID);
+            student.StudentQuiz = new StudentQuizze();
+            student.StudentQuiz.QuizID = QuizID;
+
+            return View("TakeQuiz", "_StudentLayout", student);
         }
 
     }

@@ -343,8 +343,7 @@ Create TABLE MultChoiceAnswers(
 	CorrectAnswer INT NOT NULL,
 	CONSTRAINT [PK_dbo.MultChoiceAnswers] PRIMARY KEY CLUSTERED (AnswerID ASC),
 	CONSTRAINT [FK_dbo.MultChoiceAnswers_dbo.QuizQuestions] FOREIGN KEY ([QuestionID]) REFERENCES [dbo].[QuizQuestions] ([QuestionID])
-	ON DELETE CASCADE
-	ON UPDATE CASCADE,
+	ON DELETE CASCADE ON UPDATE CASCADE,
 );
 
 Create TABLE StudentQuizzes(
@@ -354,25 +353,18 @@ Create TABLE StudentQuizzes(
 	CanReview BIT NOT NULL,
 	CONSTRAINT [PK_dbo.StudentQuizzes] PRIMARY KEY CLUSTERED (SQID ASC),
 	CONSTRAINT [FK_dbo.StudentQuizzes_dbo.Quizzes] FOREIGN KEY ([QuizID]) REFERENCES [dbo].[Quizzes] ([QuizID])
-	ON DELETE CASCADE ON UPDATE CASCADE,
-
-
 );
 
-Create TABLE StudentQuestionAnswers(
+Create TABLE StudentAnswers(
 	SQAID INT IDENTITY(1,1) NOT NULL,
 	SQID INT NOT NULL,
-	AnswerID INT NOT NULL,
 	QuestionID INT NOT NULL,
 	AnswerNumber INT NOT NULL,
 	StudentPoints INT NOT NULL,
-	CONSTRAINT [PK_dbo.StudentQuestionAnswers] PRIMARY KEY CLUSTERED (SQAID ASC),
-	CONSTRAINT [FK_dbo.StudentQuestionAnswers_dbo.QuizQuestions] FOREIGN KEY ([QuestionID]) REFERENCES [dbo].[QuizQuestions] ([QuestionID])
+	CONSTRAINT [PK_dbo.StudentAnswers] PRIMARY KEY CLUSTERED (SQAID ASC),
+	CONSTRAINT [FK_dbo.StudentAnswers_dbo.StudentQuizzes] FOREIGN KEY ([SQID]) REFERENCES [dbo].[StudentQuizzes] ([SQID])
 	ON DELETE CASCADE ON UPDATE CASCADE,
-	CONSTRAINT [FK_dbo.StudentQuestionAnswers_dbo.MultChoiceAnswers] FOREIGN KEY ([AnswerID]) REFERENCES [dbo].[MultChoiceAnswers] ([AnswerID])
-	ON DELETE CASCADE ON UPDATE CASCADE,
-	CONSTRAINT [FK_dbo.StudentQuestionAnswers_dbo.StudentQuizzes] FOREIGN KEY ([SQID]) REFERENCES [dbo].[StudentQuizzes] ([SQID])
-	ON DELETE CASCADE ON UPDATE CASCADE,
-
+	CONSTRAINT [FK_dbo.StudentAnswers_dbo.QuizQuestions] FOREIGN KEY ([QuestionID]) REFERENCES [dbo].[QuizQuestions] ([QuestionID])
+	ON DELETE CASCADE ON UPDATE CASCADE
 );
   

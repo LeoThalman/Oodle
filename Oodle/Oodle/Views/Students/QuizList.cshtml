@@ -1,17 +1,29 @@
-﻿
-@{
-    Layout = null;
-}
+﻿@model Oodle.Models.ViewModels.StudentVM
 
-<!DOCTYPE html>
+<div class="row fontClass col">
+    <table>
+        <thead>
+            <tr>
+                <td>Quiz Name</td>
+                <td> </td>
+            </tr>
+        </thead>
+        @foreach (var Quiz in Model.Quizzes)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(Notification => Quiz.QuizName)
+                </td>
+                <td>
+                    @*Add if statement to check if quiz has been taken, if so replace link with "Already Taken"*@
+                    @Html.ActionLink("Take Quiz", "TakeQuiz", "Students", new { QuizID = Quiz.QuizID, ClassID = Quiz.ClassID }, null)
+                </td>
+                <td>Point Value here</td>
+            </tr>
+        }
+    </table>
+</div>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>QuizList</title>
-</head>
-<body>
-    <div> 
-    </div>
-</body>
-</html>
+
+
+

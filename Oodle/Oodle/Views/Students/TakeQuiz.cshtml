@@ -1,0 +1,23 @@
+﻿@model Oodle.Models.ViewModels.StudentVM
+<div class="col-sm-6">
+
+    @{int QNum = -1; } 
+    @foreach (var question in Model.questionList)
+    {
+        {QNum = QNum + 1; }
+        <p>Question @QNum: @question.QuestionText</p>
+                <ol>
+                    <li>@Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer1</li>
+                    @if (!@Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer2.IsEmpty())
+                    {
+                        <li>@Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer2</li>}
+                    @if (!@Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer3.IsEmpty())
+                    {
+                        <li>@Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer3</li>}
+                    @if (!@Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer4.IsEmpty())
+                    {
+                        <li>@Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer4</li>}
+                </ol>
+        <hr />
+    }
+</div>

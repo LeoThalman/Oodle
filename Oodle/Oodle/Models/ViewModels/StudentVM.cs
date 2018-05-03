@@ -14,6 +14,12 @@ namespace Oodle.Models.ViewModels
         public List<ClassNotification> notifs { get; set; }
         public List<Tasks> Tasks { get; set; }
         public List<Notes> Notes { get; set; }
+        public List<Quizze> Quizzes { get; set; }
+        public List<StudentQuizze> StudentQuizzes { get; set; }
+        public List<StudentAnswer> StudentAnswers { get; set; }
+        public StudentQuizze StudentQuiz { get; set; }
+        public List<QuizQuestion> questionList { get; set; }
+        public List<MultChoiceAnswer> answerList { get; set; }
 
         public StudentVM(Class classP, List<User> userP)
         {
