@@ -185,11 +185,7 @@ namespace Oodle.Controllers
 
             return teacher;
         }
-
-
-
-
-
+        
         ///////////////////////////////////////////////////////
 
         public ActionResult AssignmentTurnIn(int classID, int assignmentID)
@@ -344,10 +340,6 @@ namespace Oodle.Controllers
             return files;
         }
 
-
-
-
-
         public ActionResult Grade(int classID)
         {
             if (test(classID) != null)
@@ -395,9 +387,6 @@ namespace Oodle.Controllers
                 return total = total / totalWeight;
             }
         }
-
-
-
 
         [HttpPost]
         public ActionResult FakeGrade()
@@ -457,11 +446,6 @@ namespace Oodle.Controllers
             return teacher;
         }
 
-
-
-
-
-
         public ActionResult CreateNote(int classID)
         {
             var student = getTVM(classID);
@@ -481,7 +465,35 @@ namespace Oodle.Controllers
 
         }
 
+        public StudentVM getSVM(int classID)
+        {
+            var urcL = db.UserRoleClasses.Where(i => i.RoleID == 3 && i.ClassID == classID);
+            var list = new List<int>();
 
+            foreach (var i in urcL)
+            {
+                list.Add(i.UsersID);
+            }
+            var request = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
+
+            StudentVM student = new StudentVM(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault(), request);
+
+            student.assignment = db.Assignments.Where(i => i.ClassID == classID).OrderBy(i => i.StartDate).ToList();
+
+            student.notifs = db.ClassNotifications.Where(i => i.ClassID == classID).OrderBy(i => i.TimePosted).ToList();
+            //adds tasks to Teacher VM
+            student.Tasks = db.Tasks.ToList();
+            //adds notes to teacher VM
+            student.Notes = db.Notes.ToList();
+
+            return student;
+        }
+
+        public ActionResult QuizList(int classID)
+        {
+            StudentVM student = getSVM(classID);
+            return View("QuizList", "_StudentLayout", student);
+        }
 
     }
 }
