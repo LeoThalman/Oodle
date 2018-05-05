@@ -1,15 +1,26 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
+using Oodle.Models;
+using Oodle.Models.ViewModels;
+using Oodle.Models.Repos;
 
 namespace Oodle.Controllers
 {
     public class HomeController : Controller
     {
+        private IOodleRepository db;
+
+        public HomeController(IOodleRepository repo)
+        {
+            this.db = repo;
+        }
+
         public ActionResult Index()
         {
             return View();
@@ -99,6 +110,9 @@ namespace Oodle.Controllers
 
         public ActionResult Calendar()
         {
+            string id = User.Identity.GetUserId();
+            User user = db.Users.Where()
+
             return View("Calendar", "_CalendarLayout");
         }
     }
