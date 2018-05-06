@@ -257,6 +257,7 @@
     <Compile Include="Models\Tasks.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserRoleClass.cs" />
+    <Compile Include="Models\ViewModels\CalendarVM.cs" />
     <Compile Include="Models\ViewModels\ITeacherVM.cs" />
     <Compile Include="Models\ViewModels\StudentVM.cs" />
     <Compile Include="Models\ViewModels\TeacherVM.cs" />

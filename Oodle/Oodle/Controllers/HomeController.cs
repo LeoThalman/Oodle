@@ -107,16 +107,47 @@ namespace Oodle.Controllers
             return "Evening";
         }
 
+        public List<int> GetClassIDs(int UserID)
+        {
+            List<int> ClassIDList = new List<int>();
+            List<UserRoleClass> temp = db.UserRoleClasses.Where(u => u.UsersID == UserID).ToList();
+            foreach(UserRoleClass c in temp)
+            {
+                ClassIDList.Add(c.ClassID);
+            }
+
+            return ClassIDList;
+        }
 
         public ActionResult Calendar()
         {
             var id = User.Identity.GetUserId();
             
             User user = db.Users.Where(a => a.IdentityID == id).FirstOrDefault();
+            
+            List<int> ClassIDs = GetClassIDs(user.UsersID);
+            CalendarVM cal = new CalendarVM();
 
+            cal.UserID = user.UsersID;
+            cal.Assignments = new List<Assignment>();
+            cal.Quizzes = new List<Quizze>();
+            List<Assignment> TempAssign = new List<Assignment>();
+            List<Quizze> TempQuiz = new List<Quizze>();
+            foreach (int ClassID in ClassIDs)
+            {
+                TempAssign = db.Assignments.Where(a => a.ClassID == ClassID).ToList();
+                foreach (Assignment a in TempAssign)
+                {
+                    cal.Assignments.Add(a);
+                }
 
-
-            return View("Calendar", "_CalendarLayout");
+                TempQuiz = db.Quizzes.Where(q => q.ClassID == ClassID).ToList();
+                foreach (Quizze q in TempQuiz)
+                {
+                    cal.Quizzes.Add(q);
+                }
+            }
+            return View("Calendar", "_CalendarLayout", cal);
         }
     }
 }
