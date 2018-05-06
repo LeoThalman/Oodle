@@ -186,10 +186,6 @@ namespace Oodle.Controllers
             return teacher;
         }
 
-
-
-
-
         ///////////////////////////////////////////////////////
 
         public ActionResult AssignmentTurnIn(int classID, int assignmentID)
@@ -324,7 +320,7 @@ namespace Oodle.Controllers
                     cmd.Parameters.AddWithValue("@classID", classID);
                     cmd.Parameters.AddWithValue("@assignmentID", assignmentID);
                     cmd.Parameters.AddWithValue("@userID", studentID);
-                    
+
                     cmd.Connection = con;
                     con.Open();
                     using (SqlDataReader sdr = cmd.ExecuteReader())
@@ -343,10 +339,6 @@ namespace Oodle.Controllers
             }
             return files;
         }
-
-
-
-
 
         public ActionResult Grade(int classID)
         {
@@ -396,9 +388,6 @@ namespace Oodle.Controllers
             }
         }
 
-
-
-
         [HttpPost]
         public ActionResult FakeGrade()
         {
@@ -431,7 +420,7 @@ namespace Oodle.Controllers
 
             while (i2 != null && i2 != "")
             {
-                i2 =  form[i.ToString()];
+                i2 = form[i.ToString()];
                 if (i2 != null)
                 {
                     int i3 = Int32.Parse(i2);
@@ -457,11 +446,6 @@ namespace Oodle.Controllers
             return teacher;
         }
 
-
-
-
-
-
         public ActionResult CreateNote(int classID)
         {
             var student = getTVM(classID);
@@ -481,7 +465,111 @@ namespace Oodle.Controllers
 
         }
 
+        public StudentVM getSVM(int classID)
+        {
+            var urcL = db.UserRoleClasses.Where(i => i.RoleID == 3 && i.ClassID == classID);
+            var list = new List<int>();
 
+            foreach (var i in urcL)
+            {
+                list.Add(i.UsersID);
+            }
+            var request = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
 
+            StudentVM student = new StudentVM(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault(), request);
+
+            student.assignment = db.Assignments.Where(i => i.ClassID == classID).OrderBy(i => i.StartDate).ToList();
+
+            student.notifs = db.ClassNotifications.Where(i => i.ClassID == classID).OrderBy(i => i.TimePosted).ToList();
+            //adds tasks to Teacher VM
+            student.Tasks = db.Tasks.ToList();
+            //adds notes to teacher VM
+            student.Notes = db.Notes.ToList();
+
+            return student;
+        }
+
+        public ActionResult QuizList(int classID)
+        {
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+            StudentVM student = getSVM(classID);
+            student.Quizzes = db.Quizzes.Where(q => q.ClassID == classID).ToList();
+            student.StudentQuizzes = db.StudentQuizzes.Where(q => q.Quizze.ClassID == classID).ToList();
+            student.QuizListQuizzes = new List<QuizListQuiz>();
+            QuizListQuiz temp = new QuizListQuiz();
+            foreach (Quizze q in student.Quizzes)
+            {
+                if(db.StudentQuizzes.Where(sq => sq.QuizID == q.QuizID).FirstOrDefault() != null)
+                {
+                    temp.Quiz = q;
+                    temp.Taken = true;
+                }
+                else
+                {
+                    temp.Quiz = q;
+                    temp.Taken = false;
+                }
+                student.QuizListQuizzes.Add(temp);
+            }
+            return View("QuizList", "_StudentLayout", student);
+        }
+
+        [HttpGet]
+        public ActionResult TakeQuiz(int QuizID)
+        {
+
+            int classID = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault().ClassID;
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+            StudentVM student = getSVM(classID);
+            student.StudentQuiz = new StudentQuizze();
+            student.StudentQuiz.QuizID = QuizID;
+            student.questionList = db.QuizQuestions.Where(q => q.QuizID == QuizID).ToList();
+            student.answerList = db.MultChoiceAnswers.Where(q => q.QuizQuestion.QuizID == QuizID).ToList();
+            student.StudentAnswers = new List<StudentAnswer>();
+
+            return View("TakeQuiz", "_StudentLayout", student);
+        }
+
+        [HttpPost]
+        public ActionResult AnswerQuiz([Bind(Include = "QuestionID,AnswerNumber")] List<StudentAnswer> StudentAnswers, 
+                                       [Bind(Include = "QuizID")] StudentQuizze StudentQuiz)
+        {
+            int QuizID = StudentQuiz.QuizID;
+            int ClassID = db.Quizzes.Where(q=> q.QuizID == QuizID).FirstOrDefault().ClassID;
+            StudentVM student = getSVM(ClassID);
+            var IdentityID = User.Identity.GetUserId();                
+            StudentQuiz.UserID = db.Users.Where(a => a.IdentityID == IdentityID).FirstOrDefault().UsersID;
+            StudentQuiz.CanReview = true;
+            db.AddStudentQuiz(StudentQuiz);
+            db.SaveChanges();
+            int PointTotal = 0;
+            foreach (StudentAnswer a in StudentAnswers)
+            {
+                if (a.AnswerNumber == db.MultChoiceAnswers.Where(an => an.QuestionID == a.QuestionID).FirstOrDefault().CorrectAnswer)
+                {
+                    a.StudentPoints = db.QuizQuestions.Where(q => q.QuestionID == a.QuestionID).FirstOrDefault().Points;
+                }
+                else
+                {
+                    a.StudentPoints = 0;
+                }
+                PointTotal += a.StudentPoints;
+                a.SQID = StudentQuiz.SQID;
+                db.AddStudentAnswer(a);
+                db.SaveChanges();
+            }
+            StudentQuiz.TotalPoints = PointTotal;
+            db.SetModified(StudentQuiz);
+            db.SaveChanges();
+
+            return RedirectToAction("QuizList", "Students", student);
+
+        }
     }
 }

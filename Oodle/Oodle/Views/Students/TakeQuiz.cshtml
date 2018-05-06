@@ -1,0 +1,36 @@
+﻿@model Oodle.Models.ViewModels.StudentVM
+<div class="col-sm-6">
+
+    @{int QNum = 0; }
+    @{ int ANum = -1; }
+    @using (Html.BeginForm("AnswerQuiz", "Students"))
+    {
+        @Html.HiddenFor(Model => Model.StudentQuiz.QuizID)
+        foreach (var question in Model.questionList)
+        {
+            { QNum = QNum + 1; }
+            { ANum = ANum + 1; }
+            <p>Question @QNum: @question.QuestionText</p>
+            <ol>
+                @Html.Hidden("StudentAnswers[" + ANum + "].QuestionID", question.QuestionID)
+                <li>@Html.RadioButton("StudentAnswers[" + ANum + "].AnswerNumber", "1") @Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer1</li>
+                @if (!@Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer2.IsEmpty())
+                {
+                    <li>@Html.RadioButton("StudentAnswers[" + ANum + "].AnswerNumber", "2") @Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer2</li>}
+                @if (!@Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer3.IsEmpty())
+                {
+                    <li> @Html.RadioButton("StudentAnswers[" + ANum + "].AnswerNumber", "3") @Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer3</li>}
+                @if (!@Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer4.IsEmpty())
+                {
+                    <li>@Html.RadioButton("StudentAnswers[" + ANum + "].AnswerNumber", "4") @Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer4</li>}
+            </ol>
+            <hr />
+        }
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Submit Quiz" class="btn btn-default" />
+            </div>
+        </div>
+    }
+</div>
