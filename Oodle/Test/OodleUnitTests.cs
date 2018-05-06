@@ -571,7 +571,8 @@ namespace Test
         [Test]
         public void Koll_TestingTestShouldPass()
         {
-            HomeController c = new HomeController();
+            mock = new Mock<IOodleRepository>();
+            HomeController c = new HomeController(mock.Object);
             string input = "test";
             string expected = "Test";
             string result = c.Capitalize(input);
@@ -584,7 +585,8 @@ namespace Test
         [Test]
         public void Koll_TestingTestShouldFail()
         {
-            HomeController c = new HomeController();
+            mock = new Mock<IOodleRepository>();
+            HomeController c = new HomeController(mock.Object);
             string input = "notFail";
             string expected = "Fail";
             string result = c.Capitalize(input);
@@ -600,7 +602,8 @@ namespace Test
         [Test]
         public void kolls_OodleRatingTestOnToolsPageShouldBeGreaterThanOrEqualTo0()
         {
-            HomeController rating = new HomeController();
+            mock = new Mock<IOodleRepository>();
+            HomeController rating = new HomeController(mock.Object);
 
             int lowestPossibleScore = 0;
             int highestPossibleScore = 5;
@@ -623,7 +626,8 @@ namespace Test
         [Test]
         public void kolls_OodleRatingTestOnEdgeCaseof0()
         {
-            HomeController rating = new HomeController();
+            mock = new Mock<IOodleRepository>();
+            HomeController rating = new HomeController(mock.Object);
 
             int lowestPossibleScore = 0;
 
@@ -639,7 +643,8 @@ namespace Test
         [Test]
         public void kolls_OodleRatingTestOnToolsPageNegativeNumberChangedto0()
         {
-            HomeController rating = new HomeController();
+            mock = new Mock<IOodleRepository>();
+            HomeController rating = new HomeController(mock.Object);
 
             int lowestPossibleScore = 0;
 
@@ -659,7 +664,8 @@ namespace Test
         [Test]
         public void kolls_OodleRatingTestOnToolsPageAnythingOver5Changedto5()
         {
-            HomeController rating = new HomeController();
+            mock = new Mock<IOodleRepository>();
+            HomeController rating = new HomeController(mock.Object);
 
             int highestPossibleScore = 5;
 
@@ -951,7 +957,8 @@ namespace Test
         public void Sam_GetTimeOfDay_For6AM_ReturnsMorning()
         {
             //Arrange
-            HomeController c = new HomeController();
+            mock = new Mock<IOodleRepository>();
+            HomeController c = new HomeController(mock.Object);
             //Act
             string timeOfDay = c.GetTimeOfDay(new DateTime(2015, 12, 31, 06, 00, 00));
             //Assert
@@ -961,7 +968,8 @@ namespace Test
         public void Sam_GetTimeOfDay_For7PM_ReturnsEvening()
         {
             //Arrange
-            HomeController c = new HomeController();
+            mock = new Mock<IOodleRepository>();
+            HomeController c = new HomeController(mock.Object);
             //Act
             string timeOfDay = c.GetTimeOfDay(new DateTime(2015, 12, 31, 19, 00, 00));
             //Assert
@@ -971,7 +979,8 @@ namespace Test
         public void Sam_GetTimeOfDay_ForNightBetweenMidnightAnd6AM_ReturnsNight()
         {
             //Arrange
-            HomeController c = new HomeController();
+            mock = new Mock<IOodleRepository>();
+            HomeController c = new HomeController(mock.Object);
             //Act
             string timeOfDay = c.GetTimeOfDay(new DateTime(2015, 12, 31, 1, 00, 00));
             //Assert
@@ -981,7 +990,8 @@ namespace Test
         public void Sam_GetTimeOfDay_ForNoonTo6PM_ReturnsNoon()
         {
             //Arrange
-            HomeController c = new HomeController();
+            mock = new Mock<IOodleRepository>();
+            HomeController c = new HomeController(mock.Object);
             //Act
             string timeOfDay = c.GetTimeOfDay(new DateTime(2015, 12, 31, 14, 00, 00));
             //Assert
@@ -991,7 +1001,8 @@ namespace Test
         public void Sam_GetTimeOfDay_ForEvening_ReturnsEvenings_EdgeCase()
         {
             //Arrange
-            HomeController c = new HomeController();
+            mock = new Mock<IOodleRepository>();
+            HomeController c = new HomeController(mock.Object);
             //Act
             string timeOfDay = c.GetTimeOfDay(new DateTime(2015, 12, 31, 18, 00, 00));
             //Assert

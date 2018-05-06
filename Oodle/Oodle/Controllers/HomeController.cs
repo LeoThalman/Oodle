@@ -110,8 +110,11 @@ namespace Oodle.Controllers
 
         public ActionResult Calendar()
         {
-            string id = User.Identity.GetUserId();
-            User user = db.Users.Where()
+            var id = User.Identity.GetUserId();
+            
+            User user = db.Users.Where(a => a.IdentityID == id).FirstOrDefault();
+
+
 
             return View("Calendar", "_CalendarLayout");
         }
