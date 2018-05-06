@@ -350,6 +350,7 @@ Create TABLE StudentQuizzes(
 	SQID INT IDENTITY(1,1) NOT NULL,
 	QuizID INT NOT NULL,
 	UserID INT NOT NULL,
+	TotalPoints INT NOT NULL,
 	CanReview BIT NOT NULL,
 	CONSTRAINT [PK_dbo.StudentQuizzes] PRIMARY KEY CLUSTERED (SQID ASC),
 	CONSTRAINT [FK_dbo.StudentQuizzes_dbo.Quizzes] FOREIGN KEY ([QuizID]) REFERENCES [dbo].[Quizzes] ([QuizID])

@@ -8,17 +8,25 @@
                 <td> </td>
             </tr>
         </thead>
-        @foreach (var Quiz in Model.Quizzes)
+        @foreach (var Quiz in Model.QuizListQuizzes)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(Notification => Quiz.QuizName)
+                    @Html.DisplayFor(Notification => Quiz.Quiz.QuizName)
                 </td>
                 <td>
                     @*Add if statement to check if quiz has been taken, if so replace link with "Already Taken"*@
-                    @Html.ActionLink("Take Quiz", "TakeQuiz", "Students", new { QuizID = Quiz.QuizID, ClassID = Quiz.ClassID }, null)
+                    @if (!(Quiz.Taken))
+                    {@Html.ActionLink("Take Quiz", "TakeQuiz", "Students", new { QuizID = Quiz.Quiz.QuizID, ClassID = Quiz.Quiz.ClassID }, null) }
+                    else
+                    { <text>Already Taken</text>}
                 </td>
-                <td>Point Value here</td>
+                <td>
+                    @if (Quiz.Taken)
+                    {@Model.StudentQuizzes.Where(q => q.QuizID == Quiz.Quiz.QuizID).FirstOrDefault().TotalPoints <text>/</text> @Quiz.Quiz.TotalPoints } 
+                    else
+                    { <text>N/A</text> }
+                            </td>
             </tr>
         }
     </table>

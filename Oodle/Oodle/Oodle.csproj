@@ -241,6 +241,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Model1.cs" />
     <Compile Include="Models\Notes.cs" />
+    <Compile Include="Models\QuizListQuiz.cs" />
     <Compile Include="Models\Repos\IOodleRepository.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MultChoiceAnswer.cs" />

@@ -21,6 +21,8 @@ namespace Oodle.Models
 
         public int UserID { get; set; }
 
+        public int TotalPoints { get; set; }
+
         public bool CanReview { get; set; }
 
         public virtual Quizze Quizze { get; set; }

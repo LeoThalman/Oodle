@@ -832,8 +832,10 @@ namespace Oodle.Controllers
 
             if(AddQuestionToDB(question, answer))
             {
+                SetPointTotal(question.QuizID);
                 return RedirectToAction("AddQuestion", "Teachers", new { QuizID = question.QuizID, ClassID = temp.ClassID });
             }
+
             
             return View("AddQuestion", "_TeacherLayout", teacher);
         }
@@ -853,11 +855,33 @@ namespace Oodle.Controllers
             teacher.answer = answer;
             if (AddQuestionToDB(question, answer))
             {
+                SetPointTotal(question.QuizID);
                 return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = question.QuizID, ClassID = temp.ClassID });
             }
 
-
+            
             return View("AddQuestion", "_TeacherLayout", teacher);
+        }
+
+        public Boolean SetPointTotal(int QuizID)
+        {
+            Boolean rtn = true;
+            if (QuizID <= 0)
+                rtn = false;
+            else
+            {
+                int TempTotal = 0;
+                List<QuizQuestion> QuestionList = db.QuizQuestions.Where(q => q.QuizID == QuizID).ToList();
+                foreach (QuizQuestion Quiz in QuestionList)
+                {
+                    TempTotal += Quiz.Points;
+                }
+                Quizze ChangedQuiz = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault();
+                ChangedQuiz.TotalPoints = TempTotal;
+                db.SetModified(ChangedQuiz);
+                db.SaveChanges();
+            }
+            return rtn;
         }
 
         public ActionResult CreateTask(int classID)
