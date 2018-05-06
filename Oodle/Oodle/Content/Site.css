@@ -9,8 +9,10 @@ Lighter blue: #3AAFA9
 Darker white: #DEF2F1
 Lighter white: #FEFFFF
 */
-
-
+.rightish {
+    float: right;
+    width: 50px
+}
 
 .QuizSide{
     text-align: left;
@@ -56,6 +58,7 @@ Lighter white: #FEFFFF
     padding-left: 10px;
 }
 
+
 .dateLeft2 {
     position: absolute;
     bottom: 10px;
@@ -65,11 +68,29 @@ Lighter white: #FEFFFF
     font-size: small;
     height: 10px;
 }
-
+.dateRight2 {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    text-align: right;
+    padding-left: 10px;
+    font-size: small;
+    height: 10px;
+}
 
 table {
     color: #17252A;
 }
+
+/* Late date. */
+.late {
+    color: red;
+}
+/* Early date. */
+.early {
+    color: green;
+}
+
 
 
 /* The sidebar menu */

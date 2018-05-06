@@ -1,5 +1,4 @@
-﻿
-//-------------------------------------Delete page---------------------------------------
+﻿//-------------------------------------Delete page---------------------------------------
 function deleteConfirm() {
     alert('Are you sure you want to delete your profile? This cannot be undone? If yes please click "Confirm Delete" ');
 
