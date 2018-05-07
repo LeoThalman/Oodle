@@ -19,34 +19,55 @@
                     var classID = Model.cl.ClassID;
 
                     var submission = Model.documents.Where(j => j.AssignmentID == i.AssignmentID).FirstOrDefault();
-                    var submittedDate = submission.Date;
-                    <div class="contorol padded">
-                        <h4>
-                            @Html.DisplayFor(assignment => i.Name)
-                        </h4>
 
-                            @if (submission.Grade == -1)
+                    if (submission != null)
+                    {
+                        var cur = 0;
+                        var submittedDate = submission.Date;
+                        <div class="contorol padded">
+                            <h4>
+                                @Html.DisplayFor(assignment => i.Name)
+                            </h4>
+                            @if(submission.Grade >= 0)
                             {
-                                <div>
-                                    Current Grade: @Html.Raw("Not yet graded")
-                                </div>
+                                cur = submission.Grade;
                             }
-                            else
-                            {
-                                <div>
-                                    Current Grade: @Html.DisplayFor(Grade => submission.Grade)%
-                                </div>
-                            }
-                        <div class="dateLeft2">
-                            Submitted @Html.DisplayFor(date => submittedDate)
-                        </div>
+                                @if (submission.Grade == -1)
+                                {
+                                    <div style="margin-right:10px">
+                                        Current Grade: @Html.Raw("Not yet graded")
+                                        <input type="number" name=@formName placeholder="0-100" value=@cur required  class="rightish"/><br/>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div style="margin-right:10px">
+                                        Current Grade: @Html.DisplayFor(Grade => submission.Grade)%
+                                        <input type="number" name=@formName placeholder="0-100" value=@cur required class="rightish"/><br />
+                                    </div>
+                                }
 
-                        <div>
-                            <label for="grade">Theoretical Grade</label><br />
-                            <input type="number" name=@formName placeholder="0-100" value="0" required /><br />
+                            <div class="dateLeft2">
+                                Submitted @Html.DisplayFor(date => submittedDate)
+                            </div>
+                        <hr />
                         </div>
-                    <hr />
-                    </div>
+                    }
+                    else
+                    {
+                        <div class="contorol padded">
+                            <h4>
+                                @Html.DisplayFor(assignment => i.Name)
+                            </h4>
+                            <div style="margin-right:10px">
+                                No submission.
+
+                                    <input type="number" name=@formName placeholder="0-100" value=0 required style="float:right; width:50px"/><br />
+                                </div>
+                                <hr />
+                            </div>
+                    }
+
                     formName++;
 
                 }
