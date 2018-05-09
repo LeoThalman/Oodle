@@ -11,6 +11,8 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
+using X.PagedList.Mvc;
+using X.PagedList;
 
 namespace Oodle.Controllers
 {
@@ -86,14 +88,45 @@ namespace Oodle.Controllers
         }
 
 
-        public ActionResult List()
+        public ActionResult List(int? page)
         {
-            return View(db.Classes.ToList());
+
+
+            var listClasses = db.Classes.ToList(); // representing however many total exist of classes
+
+            var pageNumber = page ?? 1; // if no page was specified in the querystring, default to the first page 1
+            var onePageOfProducts = listClasses.ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
+
+            ViewBag.OnePageOfProducts = onePageOfProducts;
+            return View();
+
+      
+            // return View(db.Classes.ToList());
         }
 
-        public ActionResult FilterList()
+        public ActionResult SortList(int? page)
+        {
+
+            var listClasses = db.Classes.ToList(); // representing however many total exist of classes
+
+            var pageNumber = page ?? 1; // if no page was specified in the querystring, default to the first page 1
+            var sortedClasses = listClasses.ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
+
+            ViewBag.sortedClasses = sortedClasses;
+
+    
+
+            return View();
+        }
+
+
+            public ActionResult FilterList(int? page)
         {
             var classes = db.Classes.ToList();
+
+
+            var pageNumber = page ?? 1; // if no page was specified in the querystring, default to the first page 1
+            
 
             string math = Request.Form["math"];
 
@@ -108,6 +141,38 @@ namespace Oodle.Controllers
             {
                 classes = classes.Where(i => i.Subject != "english").ToList();
             }
+
+
+            string business = Request.Form["business"];
+
+            if (string.IsNullOrEmpty(business))
+            {
+                classes = classes.Where(i => i.Subject != "business").ToList();
+            }
+
+            string language = Request.Form["language"];
+
+            if (string.IsNullOrEmpty(language))
+            {
+                classes = classes.Where(i => i.Subject != "language").ToList();
+            }
+
+
+            string communications = Request.Form["communications"];
+
+            if (string.IsNullOrEmpty(communications))
+            {
+                classes = classes.Where(i => i.Subject != "communications").ToList();
+            }
+
+
+            string health = Request.Form["health"];
+
+            if (string.IsNullOrEmpty(health))
+            {
+                classes = classes.Where(i => i.Subject != "health").ToList();
+            }
+
 
             string cs = Request.Form["cs"];
 
@@ -227,12 +292,20 @@ namespace Oodle.Controllers
                 classes.Reverse();
             }
 
+            var onePageOfProducts = classes.ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
+
+            ViewBag.OnePageOfProducts = onePageOfProducts;
+
             return View("List", classes);
         }
 
-        public ActionResult FilterListAll()
+        public ActionResult FilterListAll(int? page)
         {
             var classes = db.Classes.ToList();
+
+
+
+            var pageNumber = page ?? 1; // if no page was specified in the querystring, default to the first page 1
 
             string math = Request.Form["math"];
 
@@ -246,6 +319,35 @@ namespace Oodle.Controllers
             if (string.IsNullOrEmpty(english))
             {
                 classes = classes.Where(i => i.Subject != "english").ToList();
+            }
+
+
+            string business = Request.Form["business"];
+
+            if (string.IsNullOrEmpty(business))
+            {
+                classes = classes.Where(i => i.Subject != "business").ToList();
+            }
+
+            string language = Request.Form["language"];
+
+            if (string.IsNullOrEmpty(language))
+            {
+                classes = classes.Where(i => i.Subject != "language").ToList();
+            }
+
+            string communications = Request.Form["communications"];
+
+            if (string.IsNullOrEmpty(communications))
+            {
+                classes = classes.Where(i => i.Subject != "communications").ToList();
+            }
+
+            string health = Request.Form["health"];
+
+            if (string.IsNullOrEmpty(health))
+            {
+                classes = classes.Where(i => i.Subject != "health").ToList();
             }
 
             string cs = Request.Form["cs"];
@@ -275,6 +377,10 @@ namespace Oodle.Controllers
             {
                 classes.Reverse();
             }
+
+            var onePageOfProducts = classes.ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
+
+            ViewBag.OnePageOfProducts = onePageOfProducts;
 
             return View("List", classes);
         }

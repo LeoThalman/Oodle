@@ -266,6 +266,101 @@ hr.style1 {
     color:white;
 
 }
+
+/*-----------------------------TEACHER CLASS INDEX PAGE-----------------------------*/
+#black-text {
+color:black;
+
+
+}
+
+
+.centerDiv {
+    border: 5px solid black;
+    margin: 50px;
+    padding: 50px;
+    margin: auto;
+}
+
+
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    color: black;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/*
+    Main Colors:
+
+    Black-ish: #17252A
+    Darker blue: #2B7A78
+    Lighter blue: #3AAFA9
+    Darker white: #DEF2F1
+    Lighter white: #FEFFFF
+    */
+
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    background-color: #DEF2FF;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 65%;
+    color: black;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+}
+
+
+
+.close {
+    color: white;
+    float: right;
+    font-size: 0px;
+    font-weight: bold;
+}
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+.modal-header {
+    padding: 2px 16px;
+    background-color: #2B7A78;
+    color: white;
+}
+
+.modal-body {
+    padding: 2px 16px;
+    color: black;
+}
+
+.modal-footer {
+    padding: 2px 16px;
+    background-color: #17252A;
+    color: white;
+}
+
+
 /*-----------------------------CLASS LIST PAGE-----------------------------*/
 #classListBody {
     margin: 0 auto;
