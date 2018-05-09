@@ -535,7 +535,6 @@ namespace Oodle.Controllers
             students = students.Where(e => teacher.documents.Select(i => i.UserID).Contains(e.UsersID)).ToList();
 
 
-
             foreach (var s in students)
             {
                 Debug.WriteLine(s.UsersID);
@@ -613,7 +612,9 @@ namespace Oodle.Controllers
         {
             var teacher = getTVM(classID);
             teacher.documents = db.Documents.Where(i => i.Id == documentID).ToList();
-            teacher.users = db.Users.Where(i => i.UsersID == db.Documents.Where(j => j.Id == documentID).FirstOrDefault().UserID).ToList();
+            int test = db.Documents.Where(i => i.Id == documentID).FirstOrDefault().UserID;
+            teacher.users = db.Users.Where(i => i.UsersID == test).ToList();
+
             teacher.assignment = db.Assignments.Where(i => i.AssignmentID == assignmentID).ToList();
 
             return View("MakeGrade", "_TeacherLayout", teacher);
@@ -626,7 +627,8 @@ namespace Oodle.Controllers
 
             var teacher = getTVM(classID);
             teacher.documents = db.Documents.Where(i => i.Id == documentID).ToList();
-            teacher.users = db.Users.Where(i => i.UsersID == db.Documents.Where(j => j.Id == documentID).FirstOrDefault().UserID).ToList();
+            int test = db.Documents.Where(i => i.Id == documentID).FirstOrDefault().UserID;
+            teacher.users = db.Users.Where(i => i.UsersID == test).ToList();
             teacher.assignment = db.Assignments.Where(i => i.AssignmentID == assignmentID).ToList();
 
             db.Documents.Where(i => i.Id == documentID).ToList().ForEach(x => x.Grade = grade);
@@ -640,27 +642,52 @@ namespace Oodle.Controllers
         {
             var teacher = getTVM(classID);
             var tmp = db.UserRoleClasses.Where(i => i.ClassID == classID && i.RoleID == 2).ToList(); //Gets all the students in the class.
-
             List<User> list = new List<User>();
             List<int> classGrades = new List<int>();
+            teacher.perUser = new List<UserVMish>();
 
-            foreach(var i in tmp)
+            foreach (var i in tmp)
             {
                 list.Add(db.Users.Where(l => l.UsersID == i.UsersID).FirstOrDefault());
 
+                var UserVMish = new UserVMish();
+                UserVMish.stat = new List<bool>();
+                UserVMish.Late = new List<TimeSpan>();
                 var submissions = db.Documents.Where(l => l.ClassID == classID && l.UserID == i.UsersID).ToList();
 
                 int total = 0;
                 int divisor = 0;
                 foreach(var l in submissions)
                 {
+
                     if (l.Grade != -1)
                     {
                         var contribution = l.Assignment.Weight * l.Grade;
                         total = contribution + total;
                         divisor = l.Assignment.Weight + divisor;
                     }
+
+                    var submittedDate = l.Date;
+                    var dueDate = l.Assignment.DueDate;
+
+                    if (0 <= DateTime.Compare(submittedDate.Value, dueDate.Value))
+                    {
+                        UserVMish.stat.Add(false);
+                        UserVMish.Late.Add(submittedDate.Value.Subtract(dueDate.Value));
+                    }
+                    else if (0 >= DateTime.Compare(submittedDate.Value, dueDate.Value))
+                    {
+                        UserVMish.stat.Add(true);
+                        UserVMish.Late.Add(dueDate.Value.Subtract(submittedDate.Value));
+                    }
+                    else
+                    {
+                        UserVMish.stat.Add(true);
+                        UserVMish.Late.Add(TimeSpan.MinValue);
+                    }
                 }
+                teacher.perUser.Add(UserVMish);
+
                 if (divisor != 0)
                 {
                     classGrades.Add(total / divisor);
@@ -671,9 +698,9 @@ namespace Oodle.Controllers
                 }
             }
 
+            teacher.users = list;
             teacher.documents = db.Documents.Where(i => i.ClassID == classID).ToList();
             teacher.classGrade = classGrades;
-            teacher.users = list;
             teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).ToList();
 
             return View("Grades", "_TeacherLayout", teacher);

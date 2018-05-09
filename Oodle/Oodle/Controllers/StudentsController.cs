@@ -218,7 +218,7 @@ namespace Oodle.Controllers
 
             student.documents = GetFiles(classID, assignmentID, studentID);
 
-            return View(student);
+            return View("AssignmentTurnIn", "_StudentLayout", student);
         }
 
         [HttpPost]
@@ -281,7 +281,7 @@ namespace Oodle.Controllers
             student.documents = GetFiles(classID, assignmentID, studentID);
 
 
-            return View("AssignmentTurnIn", student);
+            return View("AssignmentTurnIn", "_StudentLayout", student);
         }
 
         [HttpPost]
@@ -362,29 +362,39 @@ namespace Oodle.Controllers
             var teacher = getTVM(classID);
 
             //This will be used when I refactor this code in a later sprint.
-            //teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).ToList();
+            teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).ToList();
             teacher.documents = db.Documents.Where(i => i.ClassID == classID && i.UserID == userId).ToList();
 
+            List<Assignment> list2 = teacher.assignment;
             List<Document> list = teacher.documents;
 
             teacher.classGrade = new List<int>();
-            teacher.classGrade.Add(GradeHelper(list));
+            teacher.classGrade.Add(GradeHelper(list, list2));
 
             return View("Grade", "_StudentLayout", teacher);
         }
 
         //This is the method I'm really testing.
-        public int GradeHelper(List<Document> list)
+        public int GradeHelper(List<Document> list, List<Assignment> list2)
         {
             int total = 0;
             int totalWeight = 0;
 
-            foreach (Document doc in list)
+            foreach (Assignment assi in list2)
             {
-                if (doc.Grade != -1)
+                Document doc = db.Documents.Where(i => i.AssignmentID == assi.AssignmentID).FirstOrDefault();
+                if (doc != null)
                 {
-                    total = total + (doc.Grade * doc.Assignment.Weight);
-                    totalWeight = totalWeight + doc.Assignment.Weight;
+                    if (doc.Grade != -1)
+                    {
+                        total = total + (doc.Grade * doc.Assignment.Weight);
+                        totalWeight = totalWeight + doc.Assignment.Weight;
+                    }
+                }
+                else if (DateTime.Compare(DateTime.Parse(assi.DueDate.ToString()), DateTime.Now) < 0)
+                {
+                    total = total + (0);
+                    totalWeight = totalWeight + assi.Weight;
                 }
             }
             if (totalWeight == 0)
@@ -396,7 +406,6 @@ namespace Oodle.Controllers
                 return total = total / totalWeight;
             }
         }
-
 
 
 
@@ -420,9 +429,10 @@ namespace Oodle.Controllers
         {
             var teacher = getTVM(classID);
 
-            //teacher.assignment = db.Assignments.Where(j => j.ClassID == classID).ToList();
+            teacher.assignment = db.Assignments.Where(j => j.ClassID == classID).ToList();
 
             teacher.documents = db.Documents.Where(j => j.ClassID == classID && j.UserID == userId).ToList();
+            var assis = db.Assignments.Where(j => j.ClassID == classID).ToList();
 
             int i = 0;
             string i2 = "1";
@@ -436,9 +446,9 @@ namespace Oodle.Controllers
                 if (i2 != null)
                 {
                     int i3 = Int32.Parse(i2);
-                    fTotal = (i3 * teacher.documents[i].Assignment.Weight) + fTotal;
+                    fTotal = (i3 * assis[i].Weight) + fTotal;
                     teacher.fClassGrade.Add(i3);
-                    fNumber = fNumber + teacher.documents[i].Assignment.Weight;
+                    fNumber = fNumber + assis[i].Weight;
                 }
                 i++;
             }
@@ -453,7 +463,7 @@ namespace Oodle.Controllers
             }
 
             teacher.classGrade = new List<int>();
-            teacher.classGrade.Add(GradeHelper(teacher.documents));
+            teacher.classGrade.Add(GradeHelper(teacher.documents, teacher.assignment));
 
             return teacher;
         }
