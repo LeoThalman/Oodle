@@ -499,9 +499,10 @@ namespace Oodle.Controllers
             student.Quizzes = db.Quizzes.Where(q => q.ClassID == classID).ToList();
             student.StudentQuizzes = db.StudentQuizzes.Where(q => q.Quizze.ClassID == classID).ToList();
             student.QuizListQuizzes = new List<QuizListQuiz>();
-            QuizListQuiz temp = new QuizListQuiz();
+            QuizListQuiz temp = null;
             foreach (Quizze q in student.Quizzes)
             {
+                temp = new QuizListQuiz();
                 if(db.StudentQuizzes.Where(sq => sq.QuizID == q.QuizID).FirstOrDefault() != null)
                 {
                     temp.Quiz = q;

@@ -111,7 +111,7 @@ namespace Oodle.Controllers
         public List<int> GetClassIDs(int UserID)
         {
             List<int> ClassIDList = new List<int>();
-            List<UserRoleClass> temp = db.UserRoleClasses.Where(u => u.UsersID == UserID).ToList();
+            List<UserRoleClass> temp = db.UserRoleClasses.Where(u => u.UsersID == UserID && u.RoleID == 2).ToList();
             foreach(UserRoleClass c in temp)
             {
                 ClassIDList.Add(c.ClassID);
@@ -123,7 +123,8 @@ namespace Oodle.Controllers
         public JsonResult GetCalendarData(int UserID)
         {
             User user = db.Users.Where(a => a.UsersID == UserID).FirstOrDefault();
-
+            if (user == null)
+                return null;
             List<int> ClassIDs = GetClassIDs(user.UsersID);
             List < CalendarItem > cal = new List<CalendarItem>();
 

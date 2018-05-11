@@ -19,10 +19,6 @@ const months = ["January", "February", "March", "April", "May", "June", "July", 
 function LoadHomework(data) {
     console.log(data);
     var Items = JSON.parse(data);
-    console.log(Items[0].Name);
-    console.log(Items[1].Name);
-    console.log(Items[2].Name);
-    console.log(Items.length);
     var today = new Date(Date.now());
     var sDate = null;
     var eDate = null;
@@ -33,18 +29,18 @@ function LoadHomework(data) {
             eDate = new Date(Items[i].EndTime);
             if (today.getMonth() == sDate.getMonth()) {
                 console.log("This month" + sDate.getMonth());
-                $("#day" + sDate.getDate()).append("<br />" + Items[i].Name + ": Opens");
+                $("#day" + sDate.getDate()).append("<p>" + Items[i].Name + ": Opens</p>");
             }
             if (today.getMonth() == eDate.getMonth()) {
                 console.log("Also this month" + eDate.getDate());
-                $("#day" + eDate.getDate()).append("<br />" + Items[i].Name + ": Closes");
+                $("#day" + eDate.getDate()).append("<p>" + Items[i].Name + ": Closes</p>");
             }
         }
         else {
             eDate = new Date(Items[i].EndTime);
             if (today.getMonth() == eDate.getMonth()) {
                 console.log("Assignment this month" + eDate.getMonth());
-                $("#day" + eDate.getDate()).append("<br />Due: " + Items[i].Name);
+                $("#day" + eDate.getDate()).append("<p>Due: " + Items[i].Name + "</p>");
             }
         }
     }
