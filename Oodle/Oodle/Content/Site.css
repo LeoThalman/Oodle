@@ -9,6 +9,21 @@ Lighter blue: #3AAFA9
 Darker white: #DEF2F1
 Lighter white: #FEFFFF
 */
+.whitebox {
+    position: relative;
+    background-color: white;
+    width: 800px;
+    height: 200px
+}
+
+.alignBottom {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    text-align: left;
+    padding-left: 10px;
+}
+
 .rightish {
     float: right;
     width: 50px

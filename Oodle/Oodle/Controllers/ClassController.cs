@@ -90,8 +90,6 @@ namespace Oodle.Controllers
 
         public ActionResult List(int? page)
         {
-
-
             var listClasses = db.Classes.ToList(); // representing however many total exist of classes
 
             var pageNumber = page ?? 1; // if no page was specified in the querystring, default to the first page 1
@@ -113,89 +111,121 @@ namespace Oodle.Controllers
             var sortedClasses = listClasses.ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
 
             ViewBag.sortedClasses = sortedClasses;
-
-    
+   
 
             return View();
         }
 
+        public List<Class> Filter(String s, List<Class> list)
+        {
+            string math = Request.Form[s];
 
-            public ActionResult FilterList(int? page)
+            if (string.IsNullOrEmpty(math))
+            {
+                return list.Where(i => i.Subject != s).ToList();
+            }
+
+            return list;
+        }
+
+        public List<Class> FilterRole(int id, String s, List<Class> list)
+        {
+            string student = Request.Form[s];
+
+            if (string.IsNullOrEmpty(student))
+            {
+                int idt = 0;
+                if(s == "student")
+                {
+                    idt = 2;
+                }
+                else if (s == "teacher")
+                {
+                    idt = 0;
+                }
+                else if (s == "grader")
+                {
+                    idt = 1;
+                }
+                else if (s == "pend")
+                {
+                    idt = 3;
+                }
+
+                var test = db.UserRoleClasses.Where(j => j.UsersID == id && j.RoleID == idt).ToList();
+
+                List<int> aClass = new List<int>();
+
+                foreach (var i in test)
+                {
+                    aClass.Add(i.ClassID);
+                }
+
+                return list.Where(i => !aClass.Contains(i.ClassID)).ToList();
+            }
+            return list;
+        }
+
+
+        public List<Class> Sort(List<Class> list)
+        {
+            string sort = Request.Form["sort"];
+
+            if (sort == null)
+            {
+            }
+            else if (sort == "name")
+            {
+                return list.OrderBy(i => i.Name).ToList();
+            }
+            else if (sort == "mostRecent")
+            {
+                list.Reverse();
+                return list;
+            }
+            return list;
+        }
+
+
+
+        private List<String> topics = new List<string>()
+        {
+            "math",
+            "english",
+            "cs",
+            "art",
+            "business",
+            "language",
+            "communications",
+            "health"
+        };
+
+        private List<String> roles = new List<string>()
+        {
+            "student",
+            "grader",
+            "teacher", 
+            "pend"
+        };
+
+
+
+        public ActionResult FilterList(int? page)
         {
             var classes = db.Classes.ToList();
 
-
             var pageNumber = page ?? 1; // if no page was specified in the querystring, default to the first page 1
-            
 
-            string math = Request.Form["math"];
 
-            if(string.IsNullOrEmpty(math))
+            foreach (string s in topics)
             {
-                classes = classes.Where(i => i.Subject != "math").ToList();
+                classes = Filter(s, classes);
             }
-
-            string english = Request.Form["english"];
-
-            if (string.IsNullOrEmpty(english))
-            {
-                classes = classes.Where(i => i.Subject != "english").ToList();
-            }
-
-
-            string business = Request.Form["business"];
-
-            if (string.IsNullOrEmpty(business))
-            {
-                classes = classes.Where(i => i.Subject != "business").ToList();
-            }
-
-            string language = Request.Form["language"];
-
-            if (string.IsNullOrEmpty(language))
-            {
-                classes = classes.Where(i => i.Subject != "language").ToList();
-            }
-
-
-            string communications = Request.Form["communications"];
-
-            if (string.IsNullOrEmpty(communications))
-            {
-                classes = classes.Where(i => i.Subject != "communications").ToList();
-            }
-
-
-            string health = Request.Form["health"];
-
-            if (string.IsNullOrEmpty(health))
-            {
-                classes = classes.Where(i => i.Subject != "health").ToList();
-            }
-
-
-            string cs = Request.Form["cs"];
-
-            if (string.IsNullOrEmpty(cs))
-            {
-                classes = classes.Where(i => i.Subject != "cs").ToList();
-            }
-
-            string art = Request.Form["art"];
-
-            if (string.IsNullOrEmpty(art))
-            {
-                classes = classes.Where(i => i.Subject != "art").ToList();
-            }
-
-            ///
 
             var idid = User.Identity.GetUserId();
 
             int id = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault().UsersID;
 
-
-            //I know this is the worst way to do this and I will make my code better in the future, right now I just want to make sure what I have works.
             {
                 var test = db.UserRoleClasses.Where(j => j.UsersID == id).ToList();
 
@@ -209,89 +239,12 @@ namespace Oodle.Controllers
                 classes = classes.Where(i => aClass.Contains(i.ClassID)).ToList();
             }
 
-            
-
-            string student = Request.Form["student"];
-
-            if (string.IsNullOrEmpty(student))
+            foreach (string s in roles)
             {
-                var test = db.UserRoleClasses.Where(j => j.UsersID == id && j.RoleID == 2).ToList();
-
-                List<int> aClass = new List<int>();
-
-                foreach(var i in test)
-                {
-                    aClass.Add(i.ClassID);
-                }
-
-                classes = classes.Where(i => !aClass.Contains(i.ClassID)).ToList();
+                classes = FilterRole(id, s, classes);
             }
 
-            string teacher = Request.Form["teacher"];
-
-            if (string.IsNullOrEmpty(teacher))
-            {
-                var test = db.UserRoleClasses.Where(j => j.UsersID == id && j.RoleID == 0).ToList();
-
-                List<int> aClass = new List<int>();
-
-                foreach (var i in test)
-                {
-                    aClass.Add(i.ClassID);
-                }
-
-                classes = classes.Where(i => !aClass.Contains(i.ClassID)).ToList();
-            }
-
-            string grader = Request.Form["grader"];
-
-            if (string.IsNullOrEmpty(grader))
-            {
-                var test = db.UserRoleClasses.Where(j => j.UsersID == id && j.RoleID == 1).ToList();
-
-                List<int> aClass = new List<int>();
-
-                foreach (var i in test)
-                {
-                    aClass.Add(i.ClassID);
-                }
-
-                classes = classes.Where(i => !aClass.Contains(i.ClassID)).ToList();
-            }
-
-            string pend = Request.Form["pend"];
-
-            if (string.IsNullOrEmpty(pend))
-            {
-                var test = db.UserRoleClasses.Where(j => j.UsersID == id && j.RoleID == 3).ToList();
-
-                List<int> aClass = new List<int>();
-
-                foreach (var i in test)
-                {
-                    aClass.Add(i.ClassID);
-                }
-
-                classes = classes.Where(i => !aClass.Contains(i.ClassID)).ToList();
-            }
-
-
-            ///
-
-            string sort = Request.Form["sort"];
-
-            if(sort == null)
-            {
-            }
-            else if (sort == "name")
-            {
-                classes = classes.OrderBy(i => i.Name).ToList();
-            }
-            else if(sort == "mostRecent")
-            {
-                classes.Reverse();
-            }
-
+            classes = Sort(classes);
             var onePageOfProducts = classes.ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
 
             ViewBag.OnePageOfProducts = onePageOfProducts;
@@ -303,80 +256,14 @@ namespace Oodle.Controllers
         {
             var classes = db.Classes.ToList();
 
-
-
             var pageNumber = page ?? 1; // if no page was specified in the querystring, default to the first page 1
 
-            string math = Request.Form["math"];
-
-            if (string.IsNullOrEmpty(math))
+            foreach (string s in topics)
             {
-                classes = classes.Where(i => i.Subject != "math").ToList();
+                classes = Filter(s, classes);
             }
 
-            string english = Request.Form["english"];
-
-            if (string.IsNullOrEmpty(english))
-            {
-                classes = classes.Where(i => i.Subject != "english").ToList();
-            }
-
-
-            string business = Request.Form["business"];
-
-            if (string.IsNullOrEmpty(business))
-            {
-                classes = classes.Where(i => i.Subject != "business").ToList();
-            }
-
-            string language = Request.Form["language"];
-
-            if (string.IsNullOrEmpty(language))
-            {
-                classes = classes.Where(i => i.Subject != "language").ToList();
-            }
-
-            string communications = Request.Form["communications"];
-
-            if (string.IsNullOrEmpty(communications))
-            {
-                classes = classes.Where(i => i.Subject != "communications").ToList();
-            }
-
-            string health = Request.Form["health"];
-
-            if (string.IsNullOrEmpty(health))
-            {
-                classes = classes.Where(i => i.Subject != "health").ToList();
-            }
-
-            string cs = Request.Form["cs"];
-
-            if (string.IsNullOrEmpty(cs))
-            {
-                classes = classes.Where(i => i.Subject != "cs").ToList();
-            }
-
-            string art = Request.Form["art"];
-
-            if (string.IsNullOrEmpty(art))
-            {
-                classes = classes.Where(i => i.Subject != "art").ToList();
-            }
-            
-            string sort = Request.Form["sort"];
-
-            if (sort == null)
-            {
-            }
-            else if (sort == "name")
-            {
-                classes = classes.OrderBy(i => i.Name).ToList();
-            }
-            else if (sort == "mostRecent")
-            {
-                classes.Reverse();
-            }
+            classes = Sort(classes);
 
             var onePageOfProducts = classes.ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
 
@@ -461,8 +348,7 @@ namespace Oodle.Controllers
                     }
                 }
             }
-
-
+            
             var cl = new Class();
 
             cl.UsersID = user.UsersID;

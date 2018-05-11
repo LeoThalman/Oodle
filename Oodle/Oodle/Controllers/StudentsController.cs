@@ -256,32 +256,51 @@ namespace Oodle.Controllers
             var date = DateTime.Now;
 
             string constr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            using (SqlConnection con = new SqlConnection(constr))
-            {
-                string query = "INSERT INTO Documents VALUES (@Name, @ContentType, @Data, @Submitted, @ClassID, @AssignmentID, @userID, @grade, @Date)";
-                using (SqlCommand cmd = new SqlCommand(query))
-                {
-                    cmd.Connection = con;
-                    cmd.Parameters.AddWithValue("@Name", Path.GetFileName(postedFile.FileName));
-                    cmd.Parameters.AddWithValue("@ContentType", postedFile.ContentType);
-                    cmd.Parameters.AddWithValue("@Data", bytes);
-                    cmd.Parameters.AddWithValue("@ClassID", classID);
-                    cmd.Parameters.AddWithValue("@AssignmentID", assignmentID);
-                    cmd.Parameters.AddWithValue("@userID", studentID);
-                    cmd.Parameters.AddWithValue("@Submitted", submitted);
-                    cmd.Parameters.AddWithValue("@grade", -1);
-                    cmd.Parameters.AddWithValue("@Date", date);
 
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-                    con.Close();
+            if (db.Documents.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID && i.UserID == studentID) == null)
+            {
+                using (SqlConnection con = new SqlConnection(constr))
+                {
+                    string query = "INSERT INTO Documents VALUES (@Name, @ContentType, @Data, @Submitted, @ClassID, @AssignmentID, @userID, @grade, @Date)";
+                    using (SqlCommand cmd = new SqlCommand(query))
+                    {
+                        cmd.Connection = con;
+                        cmd.Parameters.AddWithValue("@Name", Path.GetFileName(postedFile.FileName));
+                        cmd.Parameters.AddWithValue("@ContentType", postedFile.ContentType);
+                        cmd.Parameters.AddWithValue("@Data", bytes);
+                        cmd.Parameters.AddWithValue("@ClassID", classID);
+                        cmd.Parameters.AddWithValue("@AssignmentID", assignmentID);
+                        cmd.Parameters.AddWithValue("@userID", studentID);
+                        cmd.Parameters.AddWithValue("@Submitted", submitted);
+                        cmd.Parameters.AddWithValue("@grade", -1);
+                        cmd.Parameters.AddWithValue("@Date", date);
+
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+                        con.Close();
+                    }
                 }
             }
+            else
+            {
+                var change = db.Documents.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID && i.UserID == studentID).ToList();
+                change.ForEach(x => x.Name = Path.GetFileName(postedFile.FileName));
+                change.ForEach(x => x.ContentType = postedFile.ContentType);
+                change.ForEach(x => x.Data = bytes);
+                change.ForEach(x => x.ClassID = classID);
+                change.ForEach(x => x.AssignmentID = assignmentID);
+                change.ForEach(x => x.UserID = studentID);
+                change.ForEach(x => x.submitted =submitted);
+                change.ForEach(x => x.Grade = -1);
+                change.ForEach(x => x.Date = date);
 
+
+                db.SaveChanges();
+
+            }
             student.documents = GetFiles(classID, assignmentID, studentID);
 
-
-            return View("AssignmentTurnIn", "_StudentLayout", student);
+            return RedirectToAction("Grade", "Students", new { classId = classID });
         }
 
         [HttpPost]
@@ -491,8 +510,5 @@ namespace Oodle.Controllers
             return View("Index", "_StudentLayout", student);
 
         }
-
-
-
     }
 }
