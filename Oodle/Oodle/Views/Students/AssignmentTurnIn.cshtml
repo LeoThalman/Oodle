@@ -10,74 +10,44 @@
 <h1> @Model.assignment.FirstOrDefault().Name </h1>
 
 <html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-    <style type="text/css">
-        body {
-            font-family: Arial;
-            font-size: 10pt;
-        }
-
-        table {
-            border: 1px solid #ccc;
-            border-collapse: collapse;
-            background-color: #fff;
-        }
-
-            table th {
-                background-color: #B8DBFD;
-                color: #333;
-                font-weight: bold;
-            }
-
-            table th, table td {
-                padding: 5px;
-                border: 1px solid #ccc;
-            }
-
-            table, table table td {
-                border: 0px solid #ccc;
-            }
-    </style>
-</head>
 <body>
     @using (Html.BeginForm("AssignmentTurnIn", "Students", new { classID = (Model.assignment.FirstOrDefault().ClassID), assignmentID = (Model.assignment.FirstOrDefault().AssignmentID) }, FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
-        <input type="file" name="postedFile" />
-        <input type="submit" id="btnUpload" value="Upload" />
+        <div>
+            @if (Model.documents.Count() > 0)
+            {
+                foreach (var file in Model.documents)
+                {
+                    <h3>
+                        Current Submission
+                    </h3>
+                    <a href="javascript:;" onclick="DownloadFile(@file.Id)">
+                        <h4> @file.Name</h4>
+                    </a>
+                    <h3>
+                        Update Submission
+                    </h3>
+                }
+            }
+            else
+            {
+                <h3>New Submission</h3>
+            }
+            <input type="file" name="postedFile" />
+            <br />
+            <input type="submit" id="btnUpload" value="Save Changes" />
+        </div>
+
     }
     @using (Html.BeginForm("DownloadFile", "Students", FormMethod.Post))
     {
         <input type="hidden" id="hfFileId" name="FileId" />
         <input type="submit" id="btnDownload" value="Download" style="display:none" />
     }
-    <hr />
-    <table cellpadding="0" cellspacing="0">
-        <tr>
-            <th style="width:50px">File ID</th>
-            <th style="width:120px">File Name</th>
-            <th style="width:80px">Download</th>
-        </tr>
-        @if (Model.documents.Count() > 0)
-        {
-            foreach (var file in Model.documents)
-            {
-                <tr>
-                    <td>@file.Id</td>
-                    <td>@file.Name</td>
-                    <td><a href="javascript:;" onclick="DownloadFile(@file.Id)">Download</a></td>
-                </tr>
-            }
-        }
-        else
-        {
-            <tr>
-                <td colspan="3">&nbsp;</td>
-            </tr>
-        }
-    </table>
+
+
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="./path/to/dropzone.js"></script>
     <script type="text/javascript">
         function DownloadFile(fileId) {
             $("#hfFileId").val(fileId);

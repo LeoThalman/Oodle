@@ -91,46 +91,94 @@ namespace Oodle.Controllers
             return View(db.Classes.ToList());
         }
 
+
+        public List<Class> Filter(String s, List<Class> list)
+        {
+            string math = Request.Form[s];
+
+            if (string.IsNullOrEmpty(math))
+            {
+                return list.Where(i => i.Subject != s).ToList();
+            }
+
+            return list;
+        }
+
+        public List<Class> FilterRole(int id, String s, List<Class> list)
+        {
+            string student = Request.Form[s];
+
+            if (string.IsNullOrEmpty(student))
+            {
+                var test = db.UserRoleClasses.Where(j => j.UsersID == id && j.RoleID == 2).ToList();
+
+                List<int> aClass = new List<int>();
+
+                foreach (var i in test)
+                {
+                    aClass.Add(i.ClassID);
+                }
+
+                return list.Where(i => !aClass.Contains(i.ClassID)).ToList();
+            }
+            return list;
+        }
+
+
+        public List<Class> Sort(List<Class> list)
+        {
+            string sort = Request.Form["sort"];
+
+            if (sort == null)
+            {
+            }
+            else if (sort == "name")
+            {
+                return list.OrderBy(i => i.Name).ToList();
+            }
+            else if (sort == "mostRecent")
+            {
+                list.Reverse();
+                return list;
+            }
+            return list;
+        }
+
+
+
+        private List<String> topics = new List<string>()
+        {
+            "math",
+            "english",
+            "cs",
+            "art"
+        };
+
+        private List<String> roles = new List<string>()
+        {
+            "student",
+            "grader",
+            "teacher", 
+            "pend"
+        };
+
+
+
+
+
         public ActionResult FilterList()
         {
             var classes = db.Classes.ToList();
 
-            string math = Request.Form["math"];
-
-            if(string.IsNullOrEmpty(math))
+            foreach (string s in topics)
             {
-                classes = classes.Where(i => i.Subject != "math").ToList();
+                classes = Filter(s, classes);
             }
-
-            string english = Request.Form["english"];
-
-            if (string.IsNullOrEmpty(english))
-            {
-                classes = classes.Where(i => i.Subject != "english").ToList();
-            }
-
-            string cs = Request.Form["cs"];
-
-            if (string.IsNullOrEmpty(cs))
-            {
-                classes = classes.Where(i => i.Subject != "cs").ToList();
-            }
-
-            string art = Request.Form["art"];
-
-            if (string.IsNullOrEmpty(art))
-            {
-                classes = classes.Where(i => i.Subject != "art").ToList();
-            }
-
-            ///
 
             var idid = User.Identity.GetUserId();
 
             int id = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault().UsersID;
 
-
-            //I know this is the worst way to do this and I will make my code better in the future, right now I just want to make sure what I have works.
             {
                 var test = db.UserRoleClasses.Where(j => j.UsersID == id).ToList();
 
@@ -144,88 +192,12 @@ namespace Oodle.Controllers
                 classes = classes.Where(i => aClass.Contains(i.ClassID)).ToList();
             }
 
-            
-
-            string student = Request.Form["student"];
-
-            if (string.IsNullOrEmpty(student))
+            foreach (string s in roles)
             {
-                var test = db.UserRoleClasses.Where(j => j.UsersID == id && j.RoleID == 2).ToList();
-
-                List<int> aClass = new List<int>();
-
-                foreach(var i in test)
-                {
-                    aClass.Add(i.ClassID);
-                }
-
-                classes = classes.Where(i => !aClass.Contains(i.ClassID)).ToList();
+                classes = FilterRole(id, s, classes);
             }
 
-            string teacher = Request.Form["teacher"];
-
-            if (string.IsNullOrEmpty(teacher))
-            {
-                var test = db.UserRoleClasses.Where(j => j.UsersID == id && j.RoleID == 0).ToList();
-
-                List<int> aClass = new List<int>();
-
-                foreach (var i in test)
-                {
-                    aClass.Add(i.ClassID);
-                }
-
-                classes = classes.Where(i => !aClass.Contains(i.ClassID)).ToList();
-            }
-
-            string grader = Request.Form["grader"];
-
-            if (string.IsNullOrEmpty(grader))
-            {
-                var test = db.UserRoleClasses.Where(j => j.UsersID == id && j.RoleID == 1).ToList();
-
-                List<int> aClass = new List<int>();
-
-                foreach (var i in test)
-                {
-                    aClass.Add(i.ClassID);
-                }
-
-                classes = classes.Where(i => !aClass.Contains(i.ClassID)).ToList();
-            }
-
-            string pend = Request.Form["pend"];
-
-            if (string.IsNullOrEmpty(pend))
-            {
-                var test = db.UserRoleClasses.Where(j => j.UsersID == id && j.RoleID == 3).ToList();
-
-                List<int> aClass = new List<int>();
-
-                foreach (var i in test)
-                {
-                    aClass.Add(i.ClassID);
-                }
-
-                classes = classes.Where(i => !aClass.Contains(i.ClassID)).ToList();
-            }
-
-
-            ///
-
-            string sort = Request.Form["sort"];
-
-            if(sort == null)
-            {
-            }
-            else if (sort == "name")
-            {
-                classes = classes.OrderBy(i => i.Name).ToList();
-            }
-            else if(sort == "mostRecent")
-            {
-                classes.Reverse();
-            }
+            classes = Sort(classes);
 
             return View("List", classes);
         }
@@ -234,47 +206,12 @@ namespace Oodle.Controllers
         {
             var classes = db.Classes.ToList();
 
-            string math = Request.Form["math"];
-
-            if (string.IsNullOrEmpty(math))
+            foreach (string s in topics)
             {
-                classes = classes.Where(i => i.Subject != "math").ToList();
+                classes = Filter(s, classes);
             }
 
-            string english = Request.Form["english"];
-
-            if (string.IsNullOrEmpty(english))
-            {
-                classes = classes.Where(i => i.Subject != "english").ToList();
-            }
-
-            string cs = Request.Form["cs"];
-
-            if (string.IsNullOrEmpty(cs))
-            {
-                classes = classes.Where(i => i.Subject != "cs").ToList();
-            }
-
-            string art = Request.Form["art"];
-
-            if (string.IsNullOrEmpty(art))
-            {
-                classes = classes.Where(i => i.Subject != "art").ToList();
-            }
-            
-            string sort = Request.Form["sort"];
-
-            if (sort == null)
-            {
-            }
-            else if (sort == "name")
-            {
-                classes = classes.OrderBy(i => i.Name).ToList();
-            }
-            else if (sort == "mostRecent")
-            {
-                classes.Reverse();
-            }
+            classes = Sort(classes);
 
             return View("List", classes);
         }

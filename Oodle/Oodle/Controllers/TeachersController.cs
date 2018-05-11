@@ -400,13 +400,11 @@ namespace Oodle.Controllers
                 return test(classID);
             }
 
-
             db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList().ForEach(x => x.Name = name);
             db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList().ForEach(x => x.Description = desc);
             db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList().ForEach(x => x.StartDate = DateTime.Parse(startDate));
             db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList().ForEach(x => x.DueDate = DateTime.Parse(dueDate));
             db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList().ForEach(x => x.Weight = int.Parse(weight));
-
 
             db.SaveChanges();
 
@@ -419,7 +417,6 @@ namespace Oodle.Controllers
         public ActionResult CreateAssignment(int classID)
         {
             var teacher = getTVM(classID);
-
 
             return View("CreateAssignment", teacher);
         }
@@ -1006,12 +1003,6 @@ namespace Oodle.Controllers
             return View("Tasks", "_TeacherLayout", teacher);
 
         }
-
-
-
-
-
-
     }
 }
 
