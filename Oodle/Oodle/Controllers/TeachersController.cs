@@ -63,6 +63,79 @@ namespace Oodle.Controllers
             return View("index", "_TeacherLayout", teacher);
         }
 
+
+
+
+
+
+
+
+
+
+
+        [HttpPost]
+        [ActionName("Index")]
+        public ActionResult IndexPost(int classID)
+        {
+            if (test(classID) != null)
+            {
+
+                return test(classID);
+            }
+
+
+            var teacher = getTVM(classID);
+            var classes = db.Classes.ToList(); // list of all classes
+
+
+
+            ViewBag.classList = classes;
+            foreach (var item in classes) // Loop through List with foreach
+            {
+                System.Diagnostics.Debug.WriteLine(item);
+            }
+
+
+            System.Diagnostics.Debug.WriteLine(classes);
+
+
+            ViewBag.RequestMethod = "POST";
+
+            string desc = Request.Form["description"];
+            string id = Request.Form["classID"];
+
+
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+            var note = new Notes();
+
+            note.NotesID = db.Tasks.Count() + 1;
+            note.Description = desc;
+            note.ClassID = classID;
+
+
+            db.AddNote(note);
+            db.SaveChanges();
+
+
+            teacher.Notes = db.Notes.ToList();
+
+            return View("index", "_TeacherLayout", teacher);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
         public ActionResult Accept(int classID, int userID)
         {
             if (test(classID) != null)

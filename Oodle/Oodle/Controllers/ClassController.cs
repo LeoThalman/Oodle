@@ -11,6 +11,8 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
+using X.PagedList.Mvc;
+using X.PagedList;
 
 namespace Oodle.Controllers
 {
@@ -86,11 +88,33 @@ namespace Oodle.Controllers
         }
 
 
-        public ActionResult List()
+        public ActionResult List(int? page)
         {
-            return View(db.Classes.ToList());
+            var listClasses = db.Classes.ToList(); // representing however many total exist of classes
+
+            var pageNumber = page ?? 1; // if no page was specified in the querystring, default to the first page 1
+            var onePageOfProducts = listClasses.ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
+
+            ViewBag.OnePageOfProducts = onePageOfProducts;
+            return View();
+
+      
+            // return View(db.Classes.ToList());
         }
 
+        public ActionResult SortList(int? page)
+        {
+
+            var listClasses = db.Classes.ToList(); // representing however many total exist of classes
+
+            var pageNumber = page ?? 1; // if no page was specified in the querystring, default to the first page 1
+            var sortedClasses = listClasses.ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
+
+            ViewBag.sortedClasses = sortedClasses;
+   
+
+            return View();
+        }
 
         public List<Class> Filter(String s, List<Class> list)
         {
@@ -110,7 +134,25 @@ namespace Oodle.Controllers
 
             if (string.IsNullOrEmpty(student))
             {
-                var test = db.UserRoleClasses.Where(j => j.UsersID == id && j.RoleID == 2).ToList();
+                int idt = 0;
+                if(s == "student")
+                {
+                    idt = 2;
+                }
+                else if (s == "teacher")
+                {
+                    idt = 0;
+                }
+                else if (s == "grader")
+                {
+                    idt = 1;
+                }
+                else if (s == "pend")
+                {
+                    idt = 3;
+                }
+
+                var test = db.UserRoleClasses.Where(j => j.UsersID == id && j.RoleID == idt).ToList();
 
                 List<int> aClass = new List<int>();
 
@@ -151,7 +193,11 @@ namespace Oodle.Controllers
             "math",
             "english",
             "cs",
-            "art"
+            "art",
+            "business",
+            "language",
+            "communications",
+            "health"
         };
 
         private List<String> roles = new List<string>()
@@ -164,11 +210,12 @@ namespace Oodle.Controllers
 
 
 
-
-
-        public ActionResult FilterList()
+        public ActionResult FilterList(int? page)
         {
             var classes = db.Classes.ToList();
+
+            var pageNumber = page ?? 1; // if no page was specified in the querystring, default to the first page 1
+
 
             foreach (string s in topics)
             {
@@ -198,13 +245,18 @@ namespace Oodle.Controllers
             }
 
             classes = Sort(classes);
+            var onePageOfProducts = classes.ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
+
+            ViewBag.OnePageOfProducts = onePageOfProducts;
 
             return View("List", classes);
         }
 
-        public ActionResult FilterListAll()
+        public ActionResult FilterListAll(int? page)
         {
             var classes = db.Classes.ToList();
+
+            var pageNumber = page ?? 1; // if no page was specified in the querystring, default to the first page 1
 
             foreach (string s in topics)
             {
@@ -212,6 +264,10 @@ namespace Oodle.Controllers
             }
 
             classes = Sort(classes);
+
+            var onePageOfProducts = classes.ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
+
+            ViewBag.OnePageOfProducts = onePageOfProducts;
 
             return View("List", classes);
         }
@@ -292,8 +348,7 @@ namespace Oodle.Controllers
                     }
                 }
             }
-
-
+            
             var cl = new Class();
 
             cl.UsersID = user.UsersID;

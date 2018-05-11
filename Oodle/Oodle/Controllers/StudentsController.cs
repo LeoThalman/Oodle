@@ -71,6 +71,7 @@ namespace Oodle.Controllers
 
             return View("Index", "_StudentLayout", student);
         }
+
         [HttpPost]
         [ActionName("Index")]
         public ActionResult IndexPost(int classID)
