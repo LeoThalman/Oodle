@@ -44,5 +44,8 @@ namespace Oodle.Models.Repos
         void AddTask(Tasks t);
         void RemoveTask(Tasks t);
         void AddNote(Notes n);
+
+        void AddDocument(Document t);
+        void RemoveDocument(Document t);
     }
 }
