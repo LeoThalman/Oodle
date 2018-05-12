@@ -216,6 +216,7 @@ namespace Oodle.Controllers
             var idid = User.Identity.GetUserId();
             int studentID = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault().UsersID;
 
+
             student.documents = GetFiles(classID, assignmentID, studentID);
 
             return View("AssignmentTurnIn", "_StudentLayout", student);
@@ -228,22 +229,9 @@ namespace Oodle.Controllers
             {
                 return test(classID);
             }
-
             var idid = User.Identity.GetUserId();
             int studentID = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault().UsersID;
 
-            var urcL = db.UserRoleClasses.Where(i => i.RoleID == 3 && i.ClassID == classID);
-            var list = new List<int>();
-
-            foreach (var i in urcL)
-            {
-                list.Add(i.UsersID);
-            }
-            var request = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
-
-            var student = new TeacherVM(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault(), request);
-
-            student.assignment = db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList();
 
             byte[] bytes;
             using (BinaryReader br = new BinaryReader(postedFile.InputStream))
@@ -251,38 +239,59 @@ namespace Oodle.Controllers
                 bytes = br.ReadBytes(postedFile.ContentLength);
             }
 
+            AssignmentTurnInHelper(postedFile, classID, assignmentID, studentID, bytes);
+           
+
+            return RedirectToAction("Grade", "Students", new { classId = classID });
+        }
+
+        public Boolean AssignmentTurnInHelper(HttpPostedFileBase postedFile, int classID, int assignmentID, int studentID, byte[] bytes)
+        {
             var submitted = DateTime.Now;
+            var urcL = db.UserRoleClasses.Where(i => i.RoleID == 3 && i.ClassID == classID);
+            var list = new List<int>();
+
+            foreach (var i in urcL)
+            {
+                list.Add(i.UsersID);
+            }
 
             var date = DateTime.Now;
+            var request = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
 
-            string constr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            var student = new TeacherVM(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault(), request);
 
-            if (db.Documents.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID && i.UserID == studentID) == null)
+            student.assignment = db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList();
+            Debug.WriteLine("test3");
+
+
+            if (db.Documents.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID && i.UserID == studentID).ToList().Count() == 0)
             {
-                using (SqlConnection con = new SqlConnection(constr))
-                {
-                    string query = "INSERT INTO Documents VALUES (@Name, @ContentType, @Data, @Submitted, @ClassID, @AssignmentID, @userID, @grade, @Date)";
-                    using (SqlCommand cmd = new SqlCommand(query))
-                    {
-                        cmd.Connection = con;
-                        cmd.Parameters.AddWithValue("@Name", Path.GetFileName(postedFile.FileName));
-                        cmd.Parameters.AddWithValue("@ContentType", postedFile.ContentType);
-                        cmd.Parameters.AddWithValue("@Data", bytes);
-                        cmd.Parameters.AddWithValue("@ClassID", classID);
-                        cmd.Parameters.AddWithValue("@AssignmentID", assignmentID);
-                        cmd.Parameters.AddWithValue("@userID", studentID);
-                        cmd.Parameters.AddWithValue("@Submitted", submitted);
-                        cmd.Parameters.AddWithValue("@grade", -1);
-                        cmd.Parameters.AddWithValue("@Date", date);
+                Debug.WriteLine("test");
 
-                        con.Open();
-                        cmd.ExecuteNonQuery();
-                        con.Close();
-                    }
-                }
+                var doc = new Document();
+                doc.Name = Path.GetFileName(postedFile.FileName);
+                doc.ContentType = postedFile.ContentType;
+                doc.Data = bytes;
+                doc.ClassID = classID;
+                doc.AssignmentID = assignmentID;
+                doc.UserID = studentID;
+                doc.submitted = submitted;
+                doc.Grade = -1;
+                doc.Date = date;
+
+                db.AddDocument(doc);
+
+                db.SaveChanges();
+                student.documents = GetFiles(classID, assignmentID, studentID);
+
+                return true;
             }
             else
             {
+                Debug.WriteLine("test2");
+
+
                 var change = db.Documents.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID && i.UserID == studentID).ToList();
                 change.ForEach(x => x.Name = Path.GetFileName(postedFile.FileName));
                 change.ForEach(x => x.ContentType = postedFile.ContentType);
@@ -290,17 +299,14 @@ namespace Oodle.Controllers
                 change.ForEach(x => x.ClassID = classID);
                 change.ForEach(x => x.AssignmentID = assignmentID);
                 change.ForEach(x => x.UserID = studentID);
-                change.ForEach(x => x.submitted =submitted);
+                change.ForEach(x => x.submitted = submitted);
                 change.ForEach(x => x.Grade = -1);
                 change.ForEach(x => x.Date = date);
 
-
                 db.SaveChanges();
-
+                student.documents = GetFiles(classID, assignmentID, studentID);
+                return false;
             }
-            student.documents = GetFiles(classID, assignmentID, studentID);
-
-            return RedirectToAction("Grade", "Students", new { classId = classID });
         }
 
         [HttpPost]
@@ -331,36 +337,12 @@ namespace Oodle.Controllers
             return File(bytes, contentType, fileName);
         }
 
-        private static List<Document> GetFiles(int classID, int assignmentID, int studentID)
+        public List<Document> GetFiles(int classID, int assignmentID, int studentID)
         {
             List<Document> files = new List<Document>();
-            string constr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            using (SqlConnection con = new SqlConnection(constr))
-            {
-                using (SqlCommand cmd = new SqlCommand())
-                {
 
-                    cmd.CommandText = "SELECT Id, Name FROM Documents WHERE ClassID=@classID AND AssignmentID=@assignmentID AND userID=@userID ";
-                    cmd.Parameters.AddWithValue("@classID", classID);
-                    cmd.Parameters.AddWithValue("@assignmentID", assignmentID);
-                    cmd.Parameters.AddWithValue("@userID", studentID);
-                    
-                    cmd.Connection = con;
-                    con.Open();
-                    using (SqlDataReader sdr = cmd.ExecuteReader())
-                    {
-                        while (sdr.Read())
-                        {
-                            files.Add(new Document
-                            {
-                                Id = Convert.ToInt32(sdr["Id"]),
-                                Name = sdr["Name"].ToString()
-                            });
-                        }
-                    }
-                    con.Close();
-                }
-            }
+            db.AddDocument(new Document() { ClassID = classID, AssignmentID = assignmentID, UserID = studentID });
+
             return files;
         }
 
@@ -401,7 +383,7 @@ namespace Oodle.Controllers
 
             foreach (Assignment assi in list2)
             {
-                Document doc = db.Documents.Where(i => i.AssignmentID == assi.AssignmentID).FirstOrDefault();
+                Document doc = list.Where(i => i.AssignmentID == assi.AssignmentID).FirstOrDefault();
                 if (doc != null)
                 {
                     if (doc.Grade != -1)

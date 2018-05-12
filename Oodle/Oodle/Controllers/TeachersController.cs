@@ -664,24 +664,10 @@ namespace Oodle.Controllers
                         divisor = l.Assignment.Weight + divisor;
                     }
 
-                    var submittedDate = l.Date;
-                    var dueDate = l.Assignment.DueDate;
+                    var submittedDate = l.Date.Value;
+                    var dueDate = l.Assignment.DueDate.Value;
 
-                    if (0 <= DateTime.Compare(submittedDate.Value, dueDate.Value))
-                    {
-                        UserVMish.stat.Add(false);
-                        UserVMish.Late.Add(submittedDate.Value.Subtract(dueDate.Value));
-                    }
-                    else if (0 >= DateTime.Compare(submittedDate.Value, dueDate.Value))
-                    {
-                        UserVMish.stat.Add(true);
-                        UserVMish.Late.Add(dueDate.Value.Subtract(submittedDate.Value));
-                    }
-                    else
-                    {
-                        UserVMish.stat.Add(true);
-                        UserVMish.Late.Add(TimeSpan.MinValue);
-                    }
+                    Late(submittedDate, dueDate, UserVMish);
                 }
                 teacher.perUser.Add(UserVMish);
 
@@ -701,6 +687,25 @@ namespace Oodle.Controllers
             teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).ToList();
 
             return View("Grades", "_TeacherLayout", teacher);
+        }
+
+        public void Late(DateTime submittedDate, DateTime dueDate, UserVMish userVMish)
+        {
+            if (0 <= DateTime.Compare(submittedDate, dueDate))
+            {
+                userVMish.stat.Add(false);
+                userVMish.Late.Add(submittedDate.Subtract(dueDate));
+            }
+            else if (0 >= DateTime.Compare(submittedDate, dueDate))
+            {
+                userVMish.stat.Add(true);
+                userVMish.Late.Add(dueDate.Subtract(submittedDate));
+            }
+            else
+            {
+                userVMish.stat.Add(true);
+                userVMish.Late.Add(TimeSpan.MinValue);
+            }
         }
 
         public ActionResult QuizList(int ClassID)

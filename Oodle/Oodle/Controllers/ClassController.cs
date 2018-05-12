@@ -309,7 +309,6 @@ namespace Oodle.Controllers
             string desc = Request.Form["description"];
             string sub = Request.Form["subject"];
 
-
             //get the value of slackChoice
             Boolean slackOption = Convert.ToBoolean(Request.Form["slackChoice"].ToString());
             Debug.WriteLine("Does user want a slack channel: " + slackOption);

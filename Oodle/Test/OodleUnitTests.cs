@@ -8,7 +8,11 @@ using Moq;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web;
-
+using System.Reflection;
+using System.Linq;
+using System.IO;
+using System.Configuration;
+using Oodle.Models.ViewModels;
 
 namespace Test
 {
@@ -1009,13 +1013,21 @@ namespace Test
         {
             // mock the object
             mock = new Mock<IOodleRepository>();
+            Assignment assi = new Assignment { AssignmentID = 1, ClassID = 1, Name = "test", Weight = 1, DueDate = DateTime.Parse("5/13/2019 8:30:00 PM") };
+
+            List <Assignment> aList = new List<Assignment>
+            {
+                assi,
+            };
+
+
             List<Document> list = new List<Document>
                  {
-                    new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 1, UserID = 1, Grade = -1, Date = DateTime.Now }
+                    new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 1, UserID = 1, Grade = -1, Date = DateTime.Now, Assignment = assi }
                  };
 
             StudentsController student = new StudentsController(mock.Object);
-            var answer = student.GradeHelper(list);
+            var answer = student.GradeHelper(list, aList);
 
             Assert.AreEqual(0, answer);
         }
@@ -1026,15 +1038,22 @@ namespace Test
         {
             // mock the object
             mock = new Mock<IOodleRepository>();
-            Assignment assi = new Assignment {AssignmentID = 1, ClassID = 1, Name = "test", Weight = 1 };
+            Assignment assi = new Assignment { AssignmentID = 1, ClassID = 1, Name = "test", Weight = 1, DueDate = DateTime.Parse("5/13/2019 8:30:00 PM") };
+            Assignment assi2 = new Assignment { AssignmentID = 2, ClassID = 1, Name = "test", Weight = 1, DueDate = DateTime.Parse("5/13/2019 8:30:00 PM") };
+
+            List<Assignment> aList = new List<Assignment>
+            {
+                assi,
+                assi2
+            };
             List<Document> list = new List<Document>
                  {
                     new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 1, UserID = 1, Grade = -1, Date = DateTime.Now, Assignment = assi },
-                    new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 1, UserID = 1, Grade = 100, Date = DateTime.Now, Assignment = assi }
+                    new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 2, UserID = 1, Grade = 100, Date = DateTime.Now, Assignment = assi2 }
                  };
 
             StudentsController student = new StudentsController(mock.Object);
-            var answer = student.GradeHelper(list);
+            var answer = student.GradeHelper(list, aList);
 
             Assert.AreEqual(100, answer);
         }
@@ -1045,15 +1064,23 @@ namespace Test
         {
             // mock the object
             mock = new Mock<IOodleRepository>();
-            Assignment assi = new Assignment { AssignmentID = 1, ClassID = 1, Name = "test", Weight = 1 };
+            Assignment assi = new Assignment { AssignmentID = 1, ClassID = 1, Name = "test", Weight = 1, DueDate = DateTime.Parse("5/13/2019 8:30:00 PM") };
+            Assignment assi2 = new Assignment { AssignmentID = 2, ClassID = 1, Name = "test", Weight = 1, DueDate = DateTime.Parse("5/13/2019 8:30:00 PM") };
+
+            List<Assignment> aList = new List<Assignment>
+            {
+                assi,
+                assi2
+            };
+
             List<Document> list = new List<Document>
                  {
                     new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 1, UserID = 1, Grade = 0, Date = DateTime.Now, Assignment = assi },
-                    new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 1, UserID = 1, Grade = 100, Date = DateTime.Now, Assignment = assi }
+                    new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 2, UserID = 1, Grade = 100, Date = DateTime.Now, Assignment = assi2 }
                  };
 
             StudentsController student = new StudentsController(mock.Object);
-            var answer = student.GradeHelper(list);
+            var answer = student.GradeHelper(list, aList);
 
             Assert.AreEqual(50, answer);
         }
@@ -1064,17 +1091,23 @@ namespace Test
         {
             // mock the object
             mock = new Mock<IOodleRepository>();
-            Assignment assi = new Assignment { AssignmentID = 1, ClassID = 1, Name = "test", Weight = 1 };
-            Assignment assi2 = new Assignment { AssignmentID = 1, ClassID = 1, Name = "test", Weight = 2 };
+            Assignment assi = new Assignment { AssignmentID = 1, ClassID = 1, Name = "test", Weight = 1, DueDate = DateTime.Parse("5/13/2019 8:30:00 PM") };
+            Assignment assi2 = new Assignment { AssignmentID = 2, ClassID = 1, Name = "test", Weight = 2, DueDate = DateTime.Parse("5/13/2019 8:30:00 PM") };
+
+            List<Assignment> aList = new List<Assignment>
+            {
+                assi,
+                assi2
+            };
 
             List<Document> list = new List<Document>
                  {
                     new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 1, UserID = 1, Grade = 0, Date = DateTime.Now, Assignment = assi },
-                    new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 1, UserID = 1, Grade = 100, Date = DateTime.Now, Assignment = assi2 }
+                    new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 2, UserID = 1, Grade = 100, Date = DateTime.Now, Assignment = assi2 }
                  };
 
             StudentsController student = new StudentsController(mock.Object);
-            var answer = student.GradeHelper(list);
+            var answer = student.GradeHelper(list, aList);
 
             Assert.AreEqual(66, answer);
         }
@@ -1086,7 +1119,7 @@ namespace Test
         [Test]
         public void Will_FakeGradeHelper_Returns50_WhenFormGiven50ForOnlySubmission()
         {
-            Assignment assi = new Assignment { AssignmentID = 1, ClassID = 1, Name = "test", Weight = 1 };
+            Assignment assi = new Assignment { AssignmentID = 1, ClassID = 1, Name = "test", Weight = 1, DueDate = DateTime.Parse("5/13/2019 8:30:00 PM") };
 
 
             // mock the object
@@ -1098,7 +1131,9 @@ namespace Test
                 {
                     new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 1, UserID = 1, Grade = 100, Date = DateTime.Now, Assignment = assi },
                 });
-
+            mock.Setup(m => m.Assignments).Returns(
+               new Assignment[] { assi }
+            );
 
             System.Collections.Specialized.NameValueCollection form = new System.Collections.Specialized.NameValueCollection
             {
@@ -1111,11 +1146,104 @@ namespace Test
             Assert.AreEqual(50, answer.fakeTotal);
         }
 
+        [Test]
+        public void Will_AssignmentTurnIn_ReturnsFalse_WhenThereIsAlreadyAFileUploaded()
+        {
+            Assignment assi = new Assignment { AssignmentID = 1, ClassID = 1, Name = "test", Weight = 1, DueDate = DateTime.Parse("5/13/2019 8:30:00 PM") };
+
+            // mock the object
+            mock = new Mock<IOodleRepository>();
+
+            mock.Setup(m => m.Documents)
+                .Returns(
+                new Document[]
+                {
+                    new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 1, UserID = 1, Grade = 100, Date = DateTime.Now, Assignment = assi },
+                });
+            mock.Setup(m => m.Assignments).Returns(
+               new Assignment[] { assi }
+            );
+
+            var constructorInfo = typeof(HttpPostedFile).GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance)[0];
+            var obj = (HttpPostedFile)constructorInfo
+                      .Invoke(new object[] { "filename", "image/jpeg", null });
+
+            StudentsController student = new StudentsController(mock.Object);
+            HttpPostedFileBase postedFile = new HttpPostedFileWrapper(obj);
+
+            Byte[] post = new Byte[] { 0, 0, 0 };
+           
+
+            Assert.AreEqual(false, student.AssignmentTurnInHelper(postedFile, 1, 1, 1, post));
+        }
+
+        [Test]
+        public void Will_AssignmentTurnIn_ReturnsTrue_WhenItIsTheFirstSubmission()
+        {
+            Assignment assi = new Assignment { AssignmentID = 1, ClassID = 1, Name = "test", Weight = 1, DueDate = DateTime.Parse("5/13/2019 8:30:00 PM") };
+
+            // mock the object
+            mock = new Mock<IOodleRepository>();
+
+            mock.Setup(m => m.Documents)
+                .Returns(
+                new Document[]
+                {
+                });
+            mock.Setup(m => m.Assignments).Returns(
+               new Assignment[] { assi }
+            );
+
+            var constructorInfo = typeof(HttpPostedFile).GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance)[0];
+            var obj = (HttpPostedFile)constructorInfo
+                      .Invoke(new object[] { "filename", "image/jpeg", null });
+
+            StudentsController student = new StudentsController(mock.Object);
+            HttpPostedFileBase postedFile = new HttpPostedFileWrapper(obj);
+
+            Byte[] post = new Byte[] { 0, 0, 0 };
+
+
+            Assert.AreEqual(true, student.AssignmentTurnInHelper(postedFile, 1, 1, 1, post));
+        }
+
+        [Test]
+        public void Will_Late_StatTrue_WhenOnTime()
+        {
+            var u = new UserVMish();
+            u.stat = new List<bool>();
+            u.Late = new List<TimeSpan>();
+            mock = new Mock<IOodleRepository>();
+
+            var tc = new TeachersController(mock.Object);
+
+            tc.Late(new DateTime(1990, 5, 5), new DateTime(1999, 1, 1), u);
+
+            Assert.AreEqual(true, u.stat.FirstOrDefault());
+        }
+
+
+        [Test]
+        public void Will_Late_StatFalse_WhenOnLate()
+        {
+            var u = new UserVMish();
+            u.stat = new List<bool>();
+            u.Late = new List<TimeSpan>();
+            mock = new Mock<IOodleRepository>();
+
+            var tc = new TeachersController(mock.Object);
+
+            tc.Late(new DateTime(1990, 5, 5), new DateTime(1989, 1, 1), u);
+
+            Assert.AreEqual(false, u.stat.FirstOrDefault());
+        }
+
 
         [Test]
         public void Will_FakeGradeHelper_Returns75_WhenFormGiven100And50For2Submissions()
         {
-            Assignment assi = new Assignment { AssignmentID = 1, ClassID = 1, Name = "test", Weight = 1 };
+            Assignment assi = new Assignment { AssignmentID = 1, ClassID = 1, Name = "test", Weight = 1, DueDate = DateTime.Parse("5/13/2019 8:30:00 PM") };
+            Assignment assi2 = new Assignment { AssignmentID = 2, ClassID = 1, Name = "test", Weight = 1, DueDate = DateTime.Parse("5/13/2019 8:30:00 PM") };
 
 
             // mock the object
@@ -1126,9 +1254,11 @@ namespace Test
                 new Document[]
                 {
                     new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 1, UserID = 1, Grade = 100, Date = DateTime.Now, Assignment = assi },
-                    new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 1, UserID = 1, Grade = 100, Date = DateTime.Now, Assignment = assi },
+                    new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 2, UserID = 1, Grade = 100, Date = DateTime.Now, Assignment = assi },
                 });
-
+            mock.Setup(m => m.Assignments).Returns(
+               new Assignment[] { assi, assi2 }
+            );
 
             System.Collections.Specialized.NameValueCollection form = new System.Collections.Specialized.NameValueCollection
             {
@@ -1146,8 +1276,8 @@ namespace Test
         [Test]
         public void Will_FakeGradeHelper_Returns66_WhenFormGiven100And0For2SubmissionsWhereOneIsTwiceTheWeightOfTheOther()
         {
-            Assignment assi = new Assignment { AssignmentID = 1, ClassID = 1, Name = "test", Weight = 1 };
-            Assignment assi2 = new Assignment { AssignmentID = 1, ClassID = 1, Name = "test", Weight = 2 };
+            Assignment assi = new Assignment { AssignmentID = 1, ClassID = 1, Name = "test", Weight = 1, DueDate = DateTime.Parse("5/13/2019 8:30:00 PM") };
+            Assignment assi2 = new Assignment { AssignmentID = 2, ClassID = 1, Name = "test", Weight = 2, DueDate = DateTime.Parse("5/13/2019 8:30:00 PM") };
 
             // mock the object
             mock = new Mock<IOodleRepository>();
@@ -1157,9 +1287,11 @@ namespace Test
                 new Document[]
                 {
                     new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 1, UserID = 1, Grade = 100, Date = DateTime.Now, Assignment = assi },
-                    new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 1, UserID = 1, Grade = 100, Date = DateTime.Now, Assignment = assi2 },
+                    new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 2, UserID = 1, Grade = 100, Date = DateTime.Now, Assignment = assi2 },
                 });
-
+            mock.Setup(m => m.Assignments).Returns(
+               new Assignment[] { assi, assi2 }
+            );
 
             System.Collections.Specialized.NameValueCollection form = new System.Collections.Specialized.NameValueCollection
             {
@@ -1177,8 +1309,8 @@ namespace Test
         [Test]
         public void Will_FakeGradeHelper_Returns0_WhenFormGivenNothingForItDoesNotTryDividingBy0AndBreaking()
         {
-            Assignment assi = new Assignment { AssignmentID = 1, ClassID = 1, Name = "test", Weight = 1 };
-            Assignment assi2 = new Assignment { AssignmentID = 1, ClassID = 1, Name = "test", Weight = 2 };
+            Assignment assi = new Assignment { AssignmentID = 1, ClassID = 1, Name = "test", Weight = 1, DueDate = DateTime.Parse("5/13/2019 8:30:00 PM") };
+            Assignment assi2 = new Assignment { AssignmentID = 1, ClassID = 1, Name = "test", Weight = 2, DueDate = DateTime.Parse("5/13/2019 8:30:00 PM") };
 
             // mock the object
             mock = new Mock<IOodleRepository>();

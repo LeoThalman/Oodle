@@ -141,6 +141,14 @@ namespace Oodle.Models.Repos
             db.Notes.Add(n);
         }
 
+        public void AddDocument(Document d)
+        {
+            db.Documents.Add(d);
+        }
 
+        public void RemoveDocument(Document d)
+        {
+            db.Documents.Remove(d);
+        }
     }
 }
