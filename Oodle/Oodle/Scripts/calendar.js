@@ -1,9 +1,7 @@
 ﻿$(document).ready(function () {
     Calendar();
-    var UserID = $('#UID').val();
 
-    var query = "/Home/GetCalendarData?UserID=" + UserID;
-    console.log(query);
+    var query = "/Home/GetCalendarData";
     //query the server, which then will query giphy and pass back a json object
     $.ajax({
         type: "GET",

@@ -101,22 +101,22 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Look at day and see homework", SourceLine=18)]
-        public virtual void LookAtDayAndSeeHomework()
+        [TechTalk.SpecRun.ScenarioAttribute("Load calendar page and don\'t see hidden quizzes", SourceLine=18)]
+        public virtual void LoadCalendarPageAndDontSeeHiddenQuizzes()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Look at day and see homework", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Load calendar page and don\'t see hidden quizzes", ((string[])(null)));
 #line 19
 this.ScenarioSetup(scenarioInfo);
 #line 20
  testRunner.Given("I am enrolled in a class", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 21
- testRunner.And("The class has homework or quizzes", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("The class has quizzes", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 22
- testRunner.And("I am on the calendar page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("and one of the quizzes is hidden", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 23
- testRunner.When("I press the day number", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I press the calendar button on the menu", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 24
- testRunner.Then("I see the information for that day in regards to homework and quizzes", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("I don\'t see indicators for the hidden quiz", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

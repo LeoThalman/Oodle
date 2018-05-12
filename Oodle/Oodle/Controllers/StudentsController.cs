@@ -507,13 +507,18 @@ namespace Oodle.Controllers
                 {
                     temp.Quiz = q;
                     temp.Taken = true;
+                    student.QuizListQuizzes.Add(temp);
                 }
                 else
                 {
-                    temp.Quiz = q;
-                    temp.Taken = false;
+                    if (q.IsHidden == false && q.StartTime.CompareTo(DateTime.Now) < 0 && q.EndTime.CompareTo(DateTime.Now) > 0)
+                    {
+                        temp.Quiz = q;
+                        temp.Taken = false;
+                        student.QuizListQuizzes.Add(temp);
+                    }
                 }
-                student.QuizListQuizzes.Add(temp);
+                
             }
             return View("QuizList", "_StudentLayout", student);
         }
@@ -568,8 +573,7 @@ namespace Oodle.Controllers
             StudentQuiz.TotalPoints = PointTotal;
             db.SetModified(StudentQuiz);
             db.SaveChanges();
-
-            return RedirectToAction("QuizList", "Students", student);
+            return RedirectToAction("QuizList", "Students", new { classID = ClassID });
 
         }
     }

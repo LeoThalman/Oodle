@@ -120,9 +120,10 @@ namespace Oodle.Controllers
             return ClassIDList;
         }
 
-        public JsonResult GetCalendarData(int UserID)
+        public JsonResult GetCalendarData()
         {
-            User user = db.Users.Where(a => a.UsersID == UserID).FirstOrDefault();
+            var id = User.Identity.GetUserId();
+            User user = db.Users.Where(a => a.IdentityID == id).FirstOrDefault();
             if (user == null)
                 return null;
             List<int> ClassIDs = GetClassIDs(user.UsersID);
@@ -148,12 +149,15 @@ namespace Oodle.Controllers
                 TempQuiz = db.Quizzes.Where(q => q.ClassID == ClassID).ToList();
                 foreach (Quizze q in TempQuiz)
                 {
-                    TempItem = new CalendarItem();
-                    TempItem.Name = q.QuizName;
-                    TempItem.StartTime = q.StartTime;
-                    TempItem.EndTime = q.EndTime;
-                    TempItem.IsAQuiz = true;
-                    cal.Add(TempItem);
+                    if (q.IsHidden == false)
+                    {
+                        TempItem = new CalendarItem();
+                        TempItem.Name = q.QuizName;
+                        TempItem.StartTime = q.StartTime;
+                        TempItem.EndTime = q.EndTime;
+                        TempItem.IsAQuiz = true;
+                        cal.Add(TempItem);
+                    }
                 }
                 
             }
@@ -163,39 +167,7 @@ namespace Oodle.Controllers
 
         public ActionResult Calendar()
         {
-            var id = User.Identity.GetUserId();
-            CalendarVM cal = new CalendarVM();
-            User user = db.Users.Where(a => a.IdentityID == id).FirstOrDefault();
-            if (user != null)
-            {
-                List<int> ClassIDs = GetClassIDs(user.UsersID);
-
-
-                cal.UserID = user.UsersID;
-                cal.Assignments = new List<Assignment>();
-                cal.Quizzes = new List<Quizze>();
-                List<Assignment> TempAssign = new List<Assignment>();
-                List<Quizze> TempQuiz = new List<Quizze>();
-                foreach (int ClassID in ClassIDs)
-                {
-                    TempAssign = db.Assignments.Where(a => a.ClassID == ClassID).ToList();
-                    foreach (Assignment a in TempAssign)
-                    {
-                        cal.Assignments.Add(a);
-                    }
-
-                    TempQuiz = db.Quizzes.Where(q => q.ClassID == ClassID).ToList();
-                    foreach (Quizze q in TempQuiz)
-                    {
-                        cal.Quizzes.Add(q);
-                    }
-                }
-            }
-            else
-            {
-                cal.UserID = -1;
-            }
-            return View("Calendar", "_CalendarLayout", cal);
+            return View("Calendar", "_CalendarLayout");
         }
     }
 }
