@@ -4,6 +4,7 @@
     <div class="col-lg-6 QuizSide">
         @Html.ActionLink("Edit Quiz", "EditQuiz", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID }, new { @class = "btn btn-primary btn-large" })
         @Html.ActionLink("Add Question", "AddQuestion", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID }, new { @class = "btn btn-primary btn-large" })
+        @Html.ActionLink("Delete Quiz", "RemoveQuiz", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID}, new { @class = "btn btn-primary btn-large"})
 
         <p>
             @Html.DisplayNameFor(Model => Model.quiz.QuizName):

@@ -136,6 +136,9 @@ namespace Oodle.Models.Repos
         {
            
         }
+        public void RemoveQuiz(Quizze q)
+        {
 
+        }
     }
 }

@@ -170,5 +170,9 @@ namespace Oodle.Models.Repos
         {
             db.StudentAnswers.Remove(a);
         }
+        public void RemoveQuiz(Quizze q)
+        {
+            db.Quizzes.Remove(q);
+        }
     }
 }

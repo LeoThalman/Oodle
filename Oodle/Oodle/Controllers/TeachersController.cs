@@ -759,6 +759,40 @@ namespace Oodle.Controllers
             return rtn;
         }
 
+        [HttpGet]
+        public ActionResult RemoveQuiz(int ClassID, int QuizID)
+        {
+            if (test(ClassID) != null)
+            {
+                return test(ClassID);
+            }
+
+            Quizze Quiz = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault();
+            if (Quiz == null)
+            {
+                return RedirectToAction("Index", new { classId = ClassID });
+            }
+
+            var teacher = getTVM(ClassID);
+            teacher.quiz = Quiz;
+
+            return View("RemoveQuiz", "_TeacherLayout", teacher);
+        }
+
+        
+        public ActionResult DeleteQuiz(int QuizID, int ClassID)
+        {
+            Quizze Quiz = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault();
+            if (test(Quiz.ClassID) != null)
+            {
+                return test(Quiz.ClassID);
+            }
+            db.RemoveQuiz(Quiz);
+            db.SaveChanges();
+
+            return RedirectToAction("QuizList", "Teachers", new { ClassID = ClassID });
+        }
+
         public Boolean CheckQuizTime (Quizze Quiz)
         {
             Boolean rtn = false;

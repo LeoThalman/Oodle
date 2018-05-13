@@ -119,6 +119,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AcceptanceTests\ID406.cs" />
     <Compile Include="AcceptanceTests\ID407.cs" />
     <Compile Include="AcceptanceTests\ID406.feature.cs">
       <AutoGen>True</AutoGen>

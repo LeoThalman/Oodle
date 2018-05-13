@@ -355,6 +355,7 @@ Create TABLE StudentQuizzes(
 	CanReview BIT NOT NULL,
 	CONSTRAINT [PK_dbo.StudentQuizzes] PRIMARY KEY CLUSTERED (SQID ASC),
 	CONSTRAINT [FK_dbo.StudentQuizzes_dbo.Quizzes] FOREIGN KEY ([QuizID]) REFERENCES [dbo].[Quizzes] ([QuizID])
+	ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 Create TABLE StudentAnswers(
@@ -367,6 +368,6 @@ Create TABLE StudentAnswers(
 	CONSTRAINT [FK_dbo.StudentAnswers_dbo.StudentQuizzes] FOREIGN KEY ([SQID]) REFERENCES [dbo].[StudentQuizzes] ([SQID])
 	ON DELETE CASCADE ON UPDATE CASCADE,
 	CONSTRAINT [FK_dbo.StudentAnswers_dbo.QuizQuestions] FOREIGN KEY ([QuestionID]) REFERENCES [dbo].[QuizQuestions] ([QuestionID])
-	ON DELETE CASCADE ON UPDATE CASCADE
+	
 );
   
