@@ -21,7 +21,8 @@ namespace Oodle.Models.Repos
         public IEnumerable<MultChoiceAnswer> MultChoiceAnswers { get; set; }
         public IEnumerable<Tasks> Tasks { get; }
         public IEnumerable<Notes> Notes { get; }
-
+        public IEnumerable<StudentQuizze> StudentQuizzes { get; }
+        public IEnumerable<StudentAnswer> StudentAnswers { get; }
 
 
         //No database so no need to save
@@ -127,6 +128,30 @@ namespace Oodle.Models.Repos
         {
             List<Document> temp = Documents.ToList();
             temp.Remove(d);
+        }
+
+        public void AddStudentQuiz(StudentQuizze q)
+        {
+            
+        }
+
+        public void RemoveStudentQuiz(StudentQuizze q)
+        {
+            
+        }
+
+        public void AddStudentAnswer(StudentAnswer a)
+        {
+           
+        }
+
+        public void RemoveStudentAnswer(StudentAnswer a)
+        {
+           
+        }
+        public void RemoveQuiz(Quizze q)
+        {
+
         }
     }
 }

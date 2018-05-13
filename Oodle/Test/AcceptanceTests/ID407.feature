@@ -16,9 +16,9 @@ Scenario: Load calendar page and see quizzes
 	When I press the calendar button on the menu
 	Then I see a calendar with indicators on the days that the quizzes start and end
 
-Scenario: Look at day and see homework
+Scenario: Load calendar page and don't see hidden quizzes
 	Given I am enrolled in a class
-	And The class has homework or quizzes
-	And I am on the calendar page
-	When I press the day number
-	Then I see the information for that day in regards to homework and quizzes
+	And The class has quizzes
+	And and one of the quizzes is hidden
+	When I press the calendar button on the menu
+	Then I don't see indicators for the hidden quiz

@@ -1,4 +1,4 @@
-﻿namespace Oodle.Models
+namespace Oodle.Models
 {
     using System;
     using System.Collections.Generic;

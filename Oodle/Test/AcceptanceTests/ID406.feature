@@ -7,6 +7,8 @@
 Scenario: Look at quizzes
 	Given I am enrolled in a class
 	And The class has quizzes
+	And The current time is within the start and end times
+	And The quiz isn't hidden
 	When I press the quizzes button
 	Then I see a list of quizzes for the class with start and end times
 
@@ -24,3 +26,10 @@ Scenario: Finish Quiz
 	And I am on the Take quiz page
 	When I press the submit button
 	Then I see my score for the quiz and am unable to retake it
+
+Scenario: Quiz is hidden
+	Given I am enrolled in a class
+	And The class has quizzes
+	And One of the quizzes is hidden
+	When I press the quizzes button
+	Then I see a list of quizzes for the class with start and end times
