@@ -153,5 +153,9 @@ namespace Oodle.Models.Repos
         {
 
         }
+        public void DeleteAssignment(Assignment a)
+        {
+
+        }
     }
 }

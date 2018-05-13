@@ -522,6 +522,34 @@ namespace Oodle.Controllers
         }
 
 
+
+        public ActionResult DeleteAssignmentAction()
+        {
+            ViewBag.RequestMethod = "POST";
+
+            string assiID = Request.Form["assignmentID"];
+            string id = Request.Form["classID"];
+
+            int assignmentID = int.Parse(assiID);
+            int classID = int.Parse(id);
+
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+
+            var assi = db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).FirstOrDefault();
+
+            db.DeleteAssignment(assi);
+
+            db.SaveChanges();
+
+            var teacher = getTVM(classID);
+
+            return View("Assignment", "_TeacherLayout", teacher);
+        }
+
+
         public ActionResult CreateAssignment(int classID)
         {
             var teacher = getTVM(classID);

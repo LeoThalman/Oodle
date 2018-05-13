@@ -11,7 +11,8 @@
 
 <html>
 <body>
-    @using (Html.BeginForm("AssignmentTurnIn", "Students", new { classID = (Model.assignment.FirstOrDefault().ClassID), assignmentID = (Model.assignment.FirstOrDefault().AssignmentID) }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+
+    @using (Html.BeginForm("AssignmentTurnIn", "Students", new { classID = (Model.assignment.FirstOrDefault().ClassID), assignmentID = (Model.assignment.FirstOrDefault().AssignmentID) }, FormMethod.Post, new { name = "formT", onsubmit = "return notNull()", enctype = "multipart/form-data" }))
     {
         <div>
             @if (Model.documents.Count() > 0)
@@ -33,7 +34,7 @@
             {
                 <h3>New Submission</h3>
             }
-            <input type="file" name="postedFile" />
+            <input type="file" name="postedFile" required />
             <br />
             <input type="submit" id="btnUpload" value="Save Changes" />
         </div>

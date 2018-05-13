@@ -183,5 +183,10 @@ namespace Oodle.Models.Repos
         {
             db.Documents.Remove(d);
         }
+
+        public void DeleteAssignment(Assignment a)
+        {
+            db.Assignments.Remove(a);
+        }
     }
 }

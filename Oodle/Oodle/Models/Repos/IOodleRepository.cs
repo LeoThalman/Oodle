@@ -53,5 +53,6 @@ namespace Oodle.Models.Repos
         void RemoveQuiz(Quizze q);
         void AddDocument(Document t);
         void RemoveDocument(Document t);
+        void DeleteAssignment(Assignment a);
     }
 }
