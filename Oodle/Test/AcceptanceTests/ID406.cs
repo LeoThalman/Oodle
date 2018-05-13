@@ -40,20 +40,20 @@ namespace SeleniumTests
             driver.FindElement(By.Name("name")).SendKeys("Selenium Test");
             driver.FindElement(By.Name("description")).Click();
             driver.FindElement(By.Name("description")).Clear();
-            driver.FindElement(By.Name("description")).SendKeys("1");
+            driver.FindElement(By.Name("description")).SendKeys("Test");
             driver.FindElement(By.Name("submit")).Click();
+            driver.FindElement(By.XPath("//div[4]/a/div/div")).Click();
             driver.FindElement(By.LinkText("Log off")).Click();
             driver.FindElement(By.Id("loginLink")).Click();
             driver.FindElement(By.Id("UserName")).Click();
             driver.FindElement(By.Id("UserName")).Clear();
             driver.FindElement(By.Id("UserName")).SendKeys("stu");
-            driver.FindElement(By.XPath("//form[@action='/Account/Login']")).Click();
             driver.FindElement(By.Id("Password")).Click();
             driver.FindElement(By.Id("Password")).Clear();
             driver.FindElement(By.Id("Password")).SendKeys("123456");
             driver.FindElement(By.XPath("//input[@value='Log in']")).Click();
             driver.FindElement(By.LinkText("Classes")).Click();
-            driver.FindElement(By.XPath("//div[@id='classListBody']/div/div/a/div/div[2]")).Click();
+            driver.FindElement(By.XPath("//div[4]/a/div/div[2]")).Click();
             driver.FindElement(By.LinkText("Request to Join")).Click();
             driver.FindElement(By.LinkText("Log off")).Click();
             driver.FindElement(By.Id("loginLink")).Click();
@@ -65,7 +65,7 @@ namespace SeleniumTests
             driver.FindElement(By.Id("Password")).SendKeys("123456");
             driver.FindElement(By.XPath("//input[@value='Log in']")).Click();
             driver.FindElement(By.LinkText("Classes")).Click();
-            driver.FindElement(By.XPath("//div[@id='classListBody']/div/div/a/div/div[2]")).Click();
+            driver.FindElement(By.XPath("//div[4]/a/div/div[2]")).Click();
             driver.FindElement(By.LinkText("Accept")).Click();
             driver.FindElement(By.LinkText("Log off")).Click();
         }
@@ -85,7 +85,7 @@ namespace SeleniumTests
                 driver.FindElement(By.Id("Password")).SendKeys("123456");
                 driver.FindElement(By.XPath("//input[@value='Log in']")).Click();
                 driver.FindElement(By.LinkText("Classes")).Click();
-                driver.FindElement(By.XPath("//div[@id='classListBody']/div/div/a/div/div")).Click();
+                driver.FindElement(By.XPath("//div[4]/a/div/div")).Click();
                 driver.FindElement(By.LinkText("Delete Class")).Click();
                 driver.FindElement(By.LinkText("Log off")).Click();
 
@@ -111,7 +111,7 @@ namespace SeleniumTests
             driver.FindElement(By.Id("Password")).SendKeys("123456");
             driver.FindElement(By.XPath("//input[@value='Log in']")).Click();
             driver.FindElement(By.LinkText("Classes")).Click();
-            driver.FindElement(By.XPath("//div[@id='classListBody']/div/div/a/div/div")).Click();
+            driver.FindElement(By.XPath("//div[4]/a/div/div")).Click();
             driver.FindElement(By.LinkText("Quizzes")).Click();
             driver.FindElement(By.LinkText("Create A Quiz")).Click();
             driver.FindElement(By.Id("quiz_QuizName")).Click();
@@ -135,7 +135,7 @@ namespace SeleniumTests
             driver.FindElement(By.Id("Password")).SendKeys("123456");
             driver.FindElement(By.XPath("//input[@value='Log in']")).Click();
             driver.FindElement(By.LinkText("Classes")).Click();
-            driver.FindElement(By.XPath("//div[@id='classListBody']/div/div/a/div/div")).Click();
+            driver.FindElement(By.XPath("//div[4]/a/div/div")).Click();
             driver.FindElement(By.LinkText("Quizzes")).Click();
             Assert.AreEqual("QuizTest", driver.FindElement(By.XPath("//tbody/tr/td")).Text);
             driver.FindElement(By.LinkText("Log off")).Click();
@@ -148,7 +148,7 @@ namespace SeleniumTests
             driver.FindElement(By.Id("Password")).SendKeys("123456");
             driver.FindElement(By.XPath("//input[@value='Log in']")).Click();
             driver.FindElement(By.LinkText("Classes")).Click();
-            driver.FindElement(By.XPath("//div[@id='classListBody']/div/div/a/div/div")).Click();
+            driver.FindElement(By.XPath("//div[4]/a/div/div")).Click();
             driver.FindElement(By.LinkText("Quizzes")).Click();
             driver.FindElement(By.LinkText("View Quiz")).Click();
             driver.FindElement(By.LinkText("Delete Quiz")).Click();
@@ -169,7 +169,7 @@ namespace SeleniumTests
             driver.FindElement(By.Id("Password")).SendKeys("123456");
             driver.FindElement(By.XPath("//input[@value='Log in']")).Click();
             driver.FindElement(By.LinkText("Classes")).Click();
-            driver.FindElement(By.XPath("//div[@id='classListBody']/div/div/a/div/div")).Click();
+            driver.FindElement(By.XPath("//div[4]/a/div/div")).Click();
             driver.FindElement(By.LinkText("Quizzes")).Click();
             driver.FindElement(By.LinkText("Create A Quiz")).Click();
             driver.FindElement(By.Id("quiz_QuizName")).Click();
@@ -225,7 +225,7 @@ namespace SeleniumTests
             driver.FindElement(By.Id("Password")).SendKeys("123456");
             driver.FindElement(By.XPath("//input[@value='Log in']")).Click();
             driver.FindElement(By.LinkText("Classes")).Click();
-            driver.FindElement(By.XPath("//div[@id='classListBody']/div/div/a/div/div")).Click();
+            driver.FindElement(By.XPath("//div[4]/a/div/div")).Click();
             driver.FindElement(By.LinkText("Quizzes")).Click();
             driver.FindElement(By.LinkText("Take Quiz")).Click();
             driver.FindElement(By.Id("StudentAnswers_0__AnswerNumber")).Click();
@@ -257,7 +257,7 @@ namespace SeleniumTests
             driver.FindElement(By.Id("Password")).SendKeys("123456");
             driver.FindElement(By.XPath("//input[@value='Log in']")).Click();
             driver.FindElement(By.LinkText("Classes")).Click();
-            driver.FindElement(By.XPath("//div[@id='classListBody']/div/div/a/div/div")).Click();
+            driver.FindElement(By.XPath("//div[4]/a/div/div")).Click();
             driver.FindElement(By.LinkText("Quizzes")).Click();
             driver.FindElement(By.LinkText("Create A Quiz")).Click();
             driver.FindElement(By.Id("quiz_QuizName")).Click();
@@ -283,7 +283,7 @@ namespace SeleniumTests
             driver.FindElement(By.Id("Password")).SendKeys("123456");
             driver.FindElement(By.XPath("//input[@value='Log in']")).Click();
             driver.FindElement(By.LinkText("Classes")).Click();
-            driver.FindElement(By.XPath("//div[@id='classListBody']/div/div/a/div/div[2]")).Click();
+            driver.FindElement(By.XPath("//div[4]/a/div/div")).Click();
             driver.FindElement(By.LinkText("Quizzes")).Click();
             Assert.IsFalse(IsElementPresent(By.XPath("//tr[2]/td")));
         }
