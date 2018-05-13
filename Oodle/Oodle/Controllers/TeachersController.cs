@@ -333,27 +333,58 @@ namespace Oodle.Controllers
          * Method returns the ViewRoster Html object and loads in 3 db models into the view.
          * 
          */
-        public ActionResult ViewRoster()
+        public ActionResult ViewRoster(int classID)
         {
             var classes = db.Classes.ToList(); // list of all classes
             var user = db.Users.ToList(); // list of all users
             var roles = db.UserRoleClasses.ToList(); // List of all Roles
 
+
             ViewBag.name = User.Identity.GetUserName(); // testing viewbag output
-  
+
             var urcL = db.UserRoleClasses.Where(i => i.RoleID == 0);
             var list = new List<int>();
             foreach (var i in urcL)
             {
                 list.Add(i.UsersID);
             }
-
             var request = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
             var request2 = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
 
             var teacher = new TeacherVM(classes, user, roles);  // New TeacherVM using the list of classes and user
-            return View("ViewRoster", teacher);
-            
+
+            teacher.cl = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
+
+            return View("ViewRoster", "_TeacherLayout", teacher);
+
+        }
+
+
+        public ActionResult removeStudent()
+        {
+            ViewBag.requestMethod = "POST";
+
+            string id = Request.Form["classID"];
+            string student = Request.Form["studentName"];
+            string currentClass = Request.Form["currentClass"];
+
+            int classID = int.Parse(id);
+            int stuID = int.Parse(student);
+
+            foreach (var x in db.UserRoleClasses.Where(i => i.UsersID == stuID && i.ClassID == classID))
+            {
+
+                //db.UserRoleClasses.Remove(x);
+                db.RemoveURC(x);
+            }
+
+            db.SaveChanges();
+
+            var teacher = getTVM(classID);
+            teacher.Tasks = db.Tasks.ToList();
+
+            return ViewRoster(int.Parse(currentClass));
+            //return View("ViewRoster", "_TeacherLayout", teacher);
         }
 
         public ActionResult Assignment(int classID)
