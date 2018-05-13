@@ -1,4 +1,4 @@
-﻿Feature: ID406 - Uploading Only One Assignment
+﻿Feature: ID428 - Uploading Only One Assignment
 	As a student 
 	I would like it so I can only upload an assignment once
 	so that I don't accidently have multiple submissions to the same assignment.

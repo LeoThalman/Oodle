@@ -31,7 +31,6 @@ namespace Oodle.Models
         [StringLength(512)]
         public string Description { get; set; }
 
-        [MyDate(ErrorMessage = "Invalid date")]
         public DateTime? StartDate { get; set; }
 
         [MyDate(ErrorMessage = "Invalid date")]
