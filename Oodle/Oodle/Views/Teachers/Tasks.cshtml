@@ -21,7 +21,7 @@
         {
             var tsk = i;
             <div class="block">
-                <div class="classItem">
+                <div class="classItem" style='@(DateTime.Now>tsk.DueDate ?"background-color:red":"")'>
                     <div class="description">
                         @Html.DisplayFor(Desc => tsk.Description)
                     </div>
