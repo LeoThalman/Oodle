@@ -158,20 +158,23 @@
     <Compile Include="AcceptanceTests\Sams Tests\SamSelenium\PBI396SamTestNavBarTeacherSideTouchRoster.cs" />
     <Compile Include="AcceptanceTests\Sams Tests\SamSelenium\PBI397SamTestStudentSideShouldBeRedPastDue.cs" />
     <Compile Include="AcceptanceTests\Sams Tests\SamSelenium\PBI397SamTestTeacherSidePastDueIsRed.cs" />
+    <Compile Include="AcceptanceTests\WillsTests\CreateInvalidDate.cs" />
+    <Compile Include="AcceptanceTests\WillsTests\ID428.cs" />
+    <Compile Include="AcceptanceTests\WillsTests\NoFileMakesItGiveWarning.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="OodleUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="AcceptanceTests\ID427.feature">
+    <None Include="AcceptanceTests\WillsTests\ID427.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ID427.cs</LastGenOutput>
     </None>
-    <None Include="AcceptanceTests\ID426.feature">
+    <None Include="AcceptanceTests\WillsTests\ID426.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ID426.cs</LastGenOutput>
     </None>
-    <None Include="AcceptanceTests\ID428.feature">
+    <None Include="AcceptanceTests\WillsTests\ID428.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ID428.cs</LastGenOutput>
     </None>
