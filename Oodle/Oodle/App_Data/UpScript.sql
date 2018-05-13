@@ -371,3 +371,78 @@ Create TABLE StudentAnswers(
 	
 );
   
+
+
+INSERT INTO [dbo].[AspNetUsers](
+	[Id], 
+	[Email], 
+	[EmailConfirmed],
+    [PasswordHash],
+    [SecurityStamp],
+    [PhoneNumber],
+    [PhoneNumberConfirmed],
+    [TwoFactorEnabled],
+    [LockoutEndDateUtc],
+    [LockoutEnabled],
+    [AccessFailedCount],
+    [UserName])
+	VALUES (
+		'8e485440-f6bf-4398-8d76-af1a644908ee', 'student@student.com', 'False', 'AEalM6XUun+R+QMlhnwGFt5U5GeINLKsW+VLZlyqWUGBetC2dkk3zmPqHCzKL2YgBQ==', '73311d19-faa7-4d91-9ded-fad9a73b010e', NULL, 'False', 'False', NULL, 'True', 0, 'student'
+	),
+	(
+		'c4999e68-b230-4ba7-bb69-247819ad0e04', 'teacher@teacher.com', 'False', 'AE+0wyg/DRhnr6JXS5brN2xF7+lq3kW4BJc6RAPAP4mwDZn3Oj9WflOlthLHlWU7vQ==', 'a9231bd6-1e81-4b84-b7d4-a39b7576a93a', NULL, 'False', 'False', NULL, 'True', 0, 'teacher'
+	);
+
+	INSERT INTO dbo.Users
+	(
+	IdentityID,
+	Email,
+	UserName
+	)
+	VALUES (
+		'8e485440-f6bf-4398-8d76-af1a644908ee', 'student@student.com', 'student'
+	),
+	(
+		'c4999e68-b230-4ba7-bb69-247819ad0e04', 'teacher@teacher.com', 'teacher'
+	);
+
+	INSERT INTO dbo.Class
+	(
+	UsersID,
+	Name,
+	Description,
+	SlackName,
+	Subject
+	)
+	VALUES (
+		'2', 'The Effects of Wind on Skirts and Dresses', 'In this class we look at the effects on wind on clothing and how this impacts design. It is the first in a three class long series.', 'wind', 'art'
+	);
+
+	INSERT INTO dbo.UserRoleClass
+	(
+	UsersID,
+	RoleID,
+	ClassID
+	)
+	VALUES (
+		'2', '0', '1' 
+	),
+	(
+		'1', '2', '1' 
+	);
+
+	INSERT INTO dbo.Assignment
+	(
+	ClassID,
+	Name,
+	Description,
+	StartDate,
+	DueDate,
+	Weight
+	)
+	VALUES (
+		'1', 'Homework 1','Do the odd numbered problems 1-15 at the end up chapter 6 of Aerodynamics and Fabrics.', '5/5/2018 8:30:00 PM', '5/13/2018 8:30:00 PM',  '1'
+	),
+    (
+		'1', 'Homework 2','Do the odd numbered problems 17-33 at the end up chapter 6 of Aerodynamics and Fabrics.', '5/13/2018 8:30:00 PM', '5/20/2018 8:30:00 PM',  '1'
+	);

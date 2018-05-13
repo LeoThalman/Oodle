@@ -11,11 +11,11 @@
 
 
         <label for="name">Name of class:</label><br />
-        <input type="text" name="name" placeholder="(e.g., Anthropology 101)" value="" required /><br />
+        <input type="text" name="name" placeholder="(e.g., Anthropology 101)" value="" required maxlength="128"/><br />
 
 
         <label for="description">Brief description of your class:</label> <br />
-        <input type="text" name="description" placeholder="We will learn about..." required /> <br />
+        <input type="text" name="description" placeholder="We will learn about..." required maxlength="256"/> <br />
 
 
         <label for="subject">The Subject of your class</label> <br />
@@ -24,6 +24,10 @@
             <option value="english">English</option>
             <option value="cs">Computer Science</option>
             <option value="art">Art</option>
+            <option value="language">Language</option>
+            <option value="health">Health</option>
+            <option value="communications">Communications</option>
+            <option value="business">Business</option>
         </select>
 
         <label for="slackName">Slack Channel Name: <br /> (only allows lowercase, numbers and - _ and must be less then 21 characters)</label>

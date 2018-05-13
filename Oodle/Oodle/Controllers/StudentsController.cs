@@ -71,6 +71,7 @@ namespace Oodle.Controllers
 
             return View("Index", "_StudentLayout", student);
         }
+
         [HttpPost]
         [ActionName("Index")]
         public ActionResult IndexPost(int classID)
@@ -211,9 +212,10 @@ namespace Oodle.Controllers
             var idid = User.Identity.GetUserId();
             int studentID = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault().UsersID;
 
+
             student.documents = GetFiles(classID, assignmentID, studentID);
 
-            return View(student);
+            return View("AssignmentTurnIn", "_StudentLayout", student);
         }
 
         [HttpPost]
@@ -223,22 +225,9 @@ namespace Oodle.Controllers
             {
                 return test(classID);
             }
-
             var idid = User.Identity.GetUserId();
             int studentID = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault().UsersID;
 
-            var urcL = db.UserRoleClasses.Where(i => i.RoleID == 3 && i.ClassID == classID);
-            var list = new List<int>();
-
-            foreach (var i in urcL)
-            {
-                list.Add(i.UsersID);
-            }
-            var request = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
-
-            var student = new TeacherVM(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault(), request);
-
-            student.assignment = db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList();
 
             byte[] bytes;
             using (BinaryReader br = new BinaryReader(postedFile.InputStream))
@@ -246,37 +235,74 @@ namespace Oodle.Controllers
                 bytes = br.ReadBytes(postedFile.ContentLength);
             }
 
+            AssignmentTurnInHelper(postedFile, classID, assignmentID, studentID, bytes);
+           
+
+            return RedirectToAction("Grade", "Students", new { classId = classID });
+        }
+
+        public Boolean AssignmentTurnInHelper(HttpPostedFileBase postedFile, int classID, int assignmentID, int studentID, byte[] bytes)
+        {
             var submitted = DateTime.Now;
+            var urcL = db.UserRoleClasses.Where(i => i.RoleID == 3 && i.ClassID == classID);
+            var list = new List<int>();
 
-            var date = DateTime.Now;
-
-            string constr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            using (SqlConnection con = new SqlConnection(constr))
+            foreach (var i in urcL)
             {
-                string query = "INSERT INTO Documents VALUES (@Name, @ContentType, @Data, @Submitted, @ClassID, @AssignmentID, @userID, @grade, @Date)";
-                using (SqlCommand cmd = new SqlCommand(query))
-                {
-                    cmd.Connection = con;
-                    cmd.Parameters.AddWithValue("@Name", Path.GetFileName(postedFile.FileName));
-                    cmd.Parameters.AddWithValue("@ContentType", postedFile.ContentType);
-                    cmd.Parameters.AddWithValue("@Data", bytes);
-                    cmd.Parameters.AddWithValue("@ClassID", classID);
-                    cmd.Parameters.AddWithValue("@AssignmentID", assignmentID);
-                    cmd.Parameters.AddWithValue("@userID", studentID);
-                    cmd.Parameters.AddWithValue("@Submitted", submitted);
-                    cmd.Parameters.AddWithValue("@grade", -1);
-                    cmd.Parameters.AddWithValue("@Date", date);
-
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                }
+                list.Add(i.UsersID);
             }
 
-            student.documents = GetFiles(classID, assignmentID, studentID);
+            var date = DateTime.Now;
+            var request = db.Users.Where(i => list.Contains(i.UsersID)).ToList();
+
+            var student = new TeacherVM(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault(), request);
+
+            student.assignment = db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList();
+            Debug.WriteLine("test3");
 
 
-            return View("AssignmentTurnIn", student);
+            if (db.Documents.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID && i.UserID == studentID).ToList().Count() == 0)
+            {
+                Debug.WriteLine("test");
+
+                var doc = new Document();
+                doc.Name = Path.GetFileName(postedFile.FileName);
+                doc.ContentType = postedFile.ContentType;
+                doc.Data = bytes;
+                doc.ClassID = classID;
+                doc.AssignmentID = assignmentID;
+                doc.UserID = studentID;
+                doc.submitted = submitted;
+                doc.Grade = -1;
+                doc.Date = date;
+
+                db.AddDocument(doc);
+
+                db.SaveChanges();
+                student.documents = GetFiles(classID, assignmentID, studentID);
+
+                return true;
+            }
+            else
+            {
+                Debug.WriteLine("test2");
+
+
+                var change = db.Documents.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID && i.UserID == studentID).ToList();
+                change.ForEach(x => x.Name = Path.GetFileName(postedFile.FileName));
+                change.ForEach(x => x.ContentType = postedFile.ContentType);
+                change.ForEach(x => x.Data = bytes);
+                change.ForEach(x => x.ClassID = classID);
+                change.ForEach(x => x.AssignmentID = assignmentID);
+                change.ForEach(x => x.UserID = studentID);
+                change.ForEach(x => x.submitted = submitted);
+                change.ForEach(x => x.Grade = -1);
+                change.ForEach(x => x.Date = date);
+
+                db.SaveChanges();
+                student.documents = GetFiles(classID, assignmentID, studentID);
+                return false;
+            }
         }
 
         [HttpPost]
@@ -307,37 +333,9 @@ namespace Oodle.Controllers
             return File(bytes, contentType, fileName);
         }
 
-        private static List<Document> GetFiles(int classID, int assignmentID, int studentID)
+        public List<Document> GetFiles(int classID, int assignmentID, int studentID)
         {
-            List<Document> files = new List<Document>();
-            string constr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            using (SqlConnection con = new SqlConnection(constr))
-            {
-                using (SqlCommand cmd = new SqlCommand())
-                {
-
-                    cmd.CommandText = "SELECT Id, Name FROM Documents WHERE ClassID=@classID AND AssignmentID=@assignmentID AND userID=@userID ";
-                    cmd.Parameters.AddWithValue("@classID", classID);
-                    cmd.Parameters.AddWithValue("@assignmentID", assignmentID);
-                    cmd.Parameters.AddWithValue("@userID", studentID);
-
-                    cmd.Connection = con;
-                    con.Open();
-                    using (SqlDataReader sdr = cmd.ExecuteReader())
-                    {
-                        while (sdr.Read())
-                        {
-                            files.Add(new Document
-                            {
-                                Id = Convert.ToInt32(sdr["Id"]),
-                                Name = sdr["Name"].ToString()
-                            });
-                        }
-                    }
-                    con.Close();
-                }
-            }
-            return files;
+            return db.Documents.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID && i.UserID == studentID).ToList();
         }
 
         public ActionResult Grade(int classID)
@@ -353,29 +351,39 @@ namespace Oodle.Controllers
             var teacher = getTVM(classID);
 
             //This will be used when I refactor this code in a later sprint.
-            //teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).ToList();
+            teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).ToList();
             teacher.documents = db.Documents.Where(i => i.ClassID == classID && i.UserID == userId).ToList();
 
+            List<Assignment> list2 = teacher.assignment;
             List<Document> list = teacher.documents;
 
             teacher.classGrade = new List<int>();
-            teacher.classGrade.Add(GradeHelper(list));
+            teacher.classGrade.Add(GradeHelper(list, list2));
 
             return View("Grade", "_StudentLayout", teacher);
         }
 
         //This is the method I'm really testing.
-        public int GradeHelper(List<Document> list)
+        public int GradeHelper(List<Document> list, List<Assignment> list2)
         {
             int total = 0;
             int totalWeight = 0;
 
-            foreach (Document doc in list)
+            foreach (Assignment assi in list2)
             {
-                if (doc.Grade != -1)
+                Document doc = list.Where(i => i.AssignmentID == assi.AssignmentID).FirstOrDefault();
+                if (doc != null)
                 {
-                    total = total + (doc.Grade * doc.Assignment.Weight);
-                    totalWeight = totalWeight + doc.Assignment.Weight;
+                    if (doc.Grade != -1)
+                    {
+                        total = total + (doc.Grade * doc.Assignment.Weight);
+                        totalWeight = totalWeight + doc.Assignment.Weight;
+                    }
+                }
+                else if (DateTime.Compare(DateTime.Parse(assi.DueDate.ToString()), DateTime.Now) < 0)
+                {
+                    total = total + (0);
+                    totalWeight = totalWeight + assi.Weight;
                 }
             }
             if (totalWeight == 0)
@@ -408,9 +416,10 @@ namespace Oodle.Controllers
         {
             var teacher = getTVM(classID);
 
-            //teacher.assignment = db.Assignments.Where(j => j.ClassID == classID).ToList();
+            teacher.assignment = db.Assignments.Where(j => j.ClassID == classID).ToList();
 
             teacher.documents = db.Documents.Where(j => j.ClassID == classID && j.UserID == userId).ToList();
+            var assis = db.Assignments.Where(j => j.ClassID == classID).ToList();
 
             int i = 0;
             string i2 = "1";
@@ -424,9 +433,9 @@ namespace Oodle.Controllers
                 if (i2 != null)
                 {
                     int i3 = Int32.Parse(i2);
-                    fTotal = (i3 * teacher.documents[i].Assignment.Weight) + fTotal;
+                    fTotal = (i3 * assis[i].Weight) + fTotal;
                     teacher.fClassGrade.Add(i3);
-                    fNumber = fNumber + teacher.documents[i].Assignment.Weight;
+                    fNumber = fNumber + assis[i].Weight;
                 }
                 i++;
             }
@@ -441,7 +450,7 @@ namespace Oodle.Controllers
             }
 
             teacher.classGrade = new List<int>();
-            teacher.classGrade.Add(GradeHelper(teacher.documents));
+            teacher.classGrade.Add(GradeHelper(teacher.documents, teacher.assignment));
 
             return teacher;
         }

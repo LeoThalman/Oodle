@@ -151,6 +151,11 @@ namespace Oodle.Models.Repos
             db.Notes.Add(n);
         }
 
+        public void AddDocument(Document d)
+        {
+            db.Documents.Add(d);
+        }
+
         public void AddStudentQuiz(StudentQuizze q)
         {
             db.StudentQuizzes.Add(q);
@@ -173,6 +178,10 @@ namespace Oodle.Models.Repos
         public void RemoveQuiz(Quizze q)
         {
             db.Quizzes.Remove(q);
+		}
+        public void RemoveDocument(Document d)
+        {
+            db.Documents.Remove(d);
         }
     }
 }

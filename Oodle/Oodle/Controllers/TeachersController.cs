@@ -63,6 +63,79 @@ namespace Oodle.Controllers
             return View("index", "_TeacherLayout", teacher);
         }
 
+
+
+
+
+
+
+
+
+
+
+        [HttpPost]
+        [ActionName("Index")]
+        public ActionResult IndexPost(int classID)
+        {
+            if (test(classID) != null)
+            {
+
+                return test(classID);
+            }
+
+
+            var teacher = getTVM(classID);
+            var classes = db.Classes.ToList(); // list of all classes
+
+
+
+            ViewBag.classList = classes;
+            foreach (var item in classes) // Loop through List with foreach
+            {
+                System.Diagnostics.Debug.WriteLine(item);
+            }
+
+
+            System.Diagnostics.Debug.WriteLine(classes);
+
+
+            ViewBag.RequestMethod = "POST";
+
+            string desc = Request.Form["description"];
+            string id = Request.Form["classID"];
+
+
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+            var note = new Notes();
+
+            note.NotesID = db.Tasks.Count() + 1;
+            note.Description = desc;
+            note.ClassID = classID;
+
+
+            db.AddNote(note);
+            db.SaveChanges();
+
+
+            teacher.Notes = db.Notes.ToList();
+
+            return View("index", "_TeacherLayout", teacher);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
         public ActionResult Accept(int classID, int userID)
         {
             if (test(classID) != null)
@@ -336,7 +409,6 @@ namespace Oodle.Controllers
                 return test(classID);
             }
 
-
             var assi = new Assignment();
 
             assi.Name = name;
@@ -345,6 +417,11 @@ namespace Oodle.Controllers
             assi.StartDate = DateTime.Parse(startDate);
             assi.DueDate = DateTime.Parse(dueDate);
             assi.Weight = int.Parse(weight);
+
+
+
+
+
 
             db.AddAssignment(assi);
             db.SaveChanges();
@@ -400,13 +477,11 @@ namespace Oodle.Controllers
                 return test(classID);
             }
 
-
             db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList().ForEach(x => x.Name = name);
             db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList().ForEach(x => x.Description = desc);
             db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList().ForEach(x => x.StartDate = DateTime.Parse(startDate));
             db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList().ForEach(x => x.DueDate = DateTime.Parse(dueDate));
             db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList().ForEach(x => x.Weight = int.Parse(weight));
-
 
             db.SaveChanges();
 
@@ -419,7 +494,6 @@ namespace Oodle.Controllers
         public ActionResult CreateAssignment(int classID)
         {
             var teacher = getTVM(classID);
-
 
             return View("CreateAssignment", teacher);
         }
@@ -460,7 +534,6 @@ namespace Oodle.Controllers
             var students = db.Users.ToList();
 
             students = students.Where(e => teacher.documents.Select(i => i.UserID).Contains(e.UsersID)).ToList();
-
 
 
             foreach (var s in students)
@@ -570,27 +643,38 @@ namespace Oodle.Controllers
         {
             var teacher = getTVM(classID);
             var tmp = db.UserRoleClasses.Where(i => i.ClassID == classID && i.RoleID == 2).ToList(); //Gets all the students in the class.
-
             List<User> list = new List<User>();
             List<int> classGrades = new List<int>();
+            teacher.perUser = new List<UserVMish>();
 
-            foreach(var i in tmp)
+            foreach (var i in tmp)
             {
                 list.Add(db.Users.Where(l => l.UsersID == i.UsersID).FirstOrDefault());
 
+                var UserVMish = new UserVMish();
+                UserVMish.stat = new List<bool>();
+                UserVMish.Late = new List<TimeSpan>();
                 var submissions = db.Documents.Where(l => l.ClassID == classID && l.UserID == i.UsersID).ToList();
 
                 int total = 0;
                 int divisor = 0;
                 foreach(var l in submissions)
                 {
+
                     if (l.Grade != -1)
                     {
                         var contribution = l.Assignment.Weight * l.Grade;
                         total = contribution + total;
                         divisor = l.Assignment.Weight + divisor;
                     }
+
+                    var submittedDate = l.Date.Value;
+                    var dueDate = l.Assignment.DueDate.Value;
+
+                    Late(submittedDate, dueDate, UserVMish);
                 }
+                teacher.perUser.Add(UserVMish);
+
                 if (divisor != 0)
                 {
                     classGrades.Add(total / divisor);
@@ -601,12 +685,31 @@ namespace Oodle.Controllers
                 }
             }
 
+            teacher.users = list;
             teacher.documents = db.Documents.Where(i => i.ClassID == classID).ToList();
             teacher.classGrade = classGrades;
-            teacher.users = list;
             teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).ToList();
 
             return View("Grades", "_TeacherLayout", teacher);
+        }
+
+        public void Late(DateTime submittedDate, DateTime dueDate, UserVMish userVMish)
+        {
+            if (0 <= DateTime.Compare(submittedDate, dueDate))
+            {
+                userVMish.stat.Add(false);
+                userVMish.Late.Add(submittedDate.Subtract(dueDate));
+            }
+            else if (0 >= DateTime.Compare(submittedDate, dueDate))
+            {
+                userVMish.stat.Add(true);
+                userVMish.Late.Add(dueDate.Subtract(submittedDate));
+            }
+            else
+            {
+                userVMish.stat.Add(true);
+                userVMish.Late.Add(TimeSpan.MinValue);
+            }
         }
 
         public ActionResult QuizList(int ClassID)
@@ -1040,12 +1143,6 @@ namespace Oodle.Controllers
             return View("Tasks", "_TeacherLayout", teacher);
 
         }
-
-
-
-
-
-
     }
 }
 

@@ -15,7 +15,7 @@ namespace Oodle.Models.Repos
         public IEnumerable<Class> Classes { get; }
         public IEnumerable<ClassNotification> ClassNotifications { get; }
         public IEnumerable<Assignment> Assignments { get; }
-        public IEnumerable<Document> Documents { get; }
+        public IEnumerable<Document> Documents { get; set; }
         public IEnumerable<Quizze> Quizzes { get; set; }
         public IEnumerable<QuizQuestion> QuizQuestions { get; set; }
         public IEnumerable<MultChoiceAnswer> MultChoiceAnswers { get; set; }
@@ -115,6 +115,19 @@ namespace Oodle.Models.Repos
         {
             List<Notes> temp = Notes.ToList();
             temp.Add(n);
+        }
+
+        public void AddDocument(Document d)
+        {
+            List<Document> temp = Documents.ToList();
+            temp.Add(d);
+
+        }
+
+        public void RemoveDocument(Document d)
+        {
+            List<Document> temp = Documents.ToList();
+            temp.Remove(d);
         }
 
         public void AddStudentQuiz(StudentQuizze q)

@@ -1,3 +1,6 @@
+using System;
+using System.ComponentModel.DataAnnotations;
+
 namespace Oodle.Models
 {
     using System;
@@ -30,6 +33,7 @@ namespace Oodle.Models
 
         public DateTime? StartDate { get; set; }
 
+        [MyDate(ErrorMessage = "Invalid date")]
         public DateTime? DueDate { get; set; }
 
         public int Weight { get; set; }
@@ -44,5 +48,14 @@ namespace Oodle.Models
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Question> Questions { get; set; }
+    }
+}
+
+public class MyDateAttribute : ValidationAttribute
+{
+    public override bool IsValid(object value)// Return a boolean value: true == IsValid, false != IsValid
+    {
+        DateTime d = Convert.ToDateTime(value);
+        return d >= DateTime.Now; //Dates Greater than or equal to today are valid (true)
     }
 }
