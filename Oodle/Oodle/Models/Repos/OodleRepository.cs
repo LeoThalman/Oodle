@@ -68,6 +68,16 @@ namespace Oodle.Models.Repos
             get { return db.Notes; }
         }
 
+        public IEnumerable<StudentQuizze> StudentQuizzes 
+        {
+            get { return db.StudentQuizzes; }
+        }
+
+        public IEnumerable<StudentAnswer> StudentAnswers
+        {
+            get { return db.StudentAnswers; }
+        }
+
 
         //-----------------------Add and Remove Methods for the tables-------------------------------
         //Save Db Changes
@@ -146,6 +156,29 @@ namespace Oodle.Models.Repos
             db.Documents.Add(d);
         }
 
+        public void AddStudentQuiz(StudentQuizze q)
+        {
+            db.StudentQuizzes.Add(q);
+        }
+
+        public void RemoveStudentQuiz(StudentQuizze q)
+        {
+            db.StudentQuizzes.Remove(q);
+        }
+
+        public void AddStudentAnswer(StudentAnswer a)
+        {
+            db.StudentAnswers.Add(a);
+        }
+
+        public void RemoveStudentAnswer(StudentAnswer a)
+        {
+            db.StudentAnswers.Remove(a);
+        }
+        public void RemoveQuiz(Quizze q)
+        {
+            db.Quizzes.Remove(q);
+		}
         public void RemoveDocument(Document d)
         {
             db.Documents.Remove(d);

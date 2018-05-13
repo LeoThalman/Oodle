@@ -17,12 +17,14 @@ namespace Oodle.Models.Repos
         IEnumerable<Class> Classes { get; }
         IEnumerable<ClassNotification> ClassNotifications { get; }
         IEnumerable<Assignment> Assignments { get; }
-        IEnumerable<Document> Documents{ get; }
+        IEnumerable<Document> Documents { get; }
         IEnumerable<Quizze> Quizzes { get; }
         IEnumerable<QuizQuestion> QuizQuestions { get; }
         IEnumerable<MultChoiceAnswer> MultChoiceAnswers { get; }
         IEnumerable<Tasks> Tasks { get; }
         IEnumerable<Notes> Notes { get; }
+        IEnumerable<StudentQuizze> StudentQuizzes { get; }
+        IEnumerable<StudentAnswer> StudentAnswers { get; }
 
 
 
@@ -44,7 +46,11 @@ namespace Oodle.Models.Repos
         void AddTask(Tasks t);
         void RemoveTask(Tasks t);
         void AddNote(Notes n);
-
+        void AddStudentQuiz(StudentQuizze q);
+        void RemoveStudentQuiz(StudentQuizze q);
+        void AddStudentAnswer(StudentAnswer a);
+        void RemoveStudentAnswer(StudentAnswer a);
+        void RemoveQuiz(Quizze q);
         void AddDocument(Document t);
         void RemoveDocument(Document t);
     }

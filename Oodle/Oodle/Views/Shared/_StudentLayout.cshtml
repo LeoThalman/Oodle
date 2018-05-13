@@ -1,3 +1,5 @@
+@model Oodle.Models.ViewModels.ITeacherVM
+
 ﻿<!DOCTYPE html>
 <html>
 <head>
@@ -119,7 +121,7 @@
                                 @Html.ActionLink("Home", "Index", "Students", new { ClassID = Model.cl.ClassID }, null)
                                 @Html.ActionLink("Grades", "UnderDevelopment", "Home", new { ClassID = Model.cl.ClassID }, null)
                                 @Html.ActionLink("Assignments", "Assignment", "Students", new { ClassID = Model.cl.ClassID }, null)
-                                @Html.ActionLink("Quizzes", "UnderDevelopment", "Home", new { ClassID = Model.cl.ClassID }, null)
+                                @Html.ActionLink("Quizzes", "QuizList", "Students", new { ClassID = Model.cl.ClassID }, null)
                                 @Html.ActionLink("Tasks", "Tasks", "Students", new { ClassID = Model.cl.ClassID }, null)
                             </div>
                         </div>

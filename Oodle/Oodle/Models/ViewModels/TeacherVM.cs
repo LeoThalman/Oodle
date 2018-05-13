@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Oodle.Models.ViewModels
 {
-    public class TeacherVM
+    public class TeacherVM : ITeacherVM
     {
         public Class cl { get; set; }
         public List<Class> classList{ get; set;}

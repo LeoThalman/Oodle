@@ -893,6 +893,40 @@ namespace Oodle.Controllers
             return rtn;
         }
 
+        [HttpGet]
+        public ActionResult RemoveQuiz(int ClassID, int QuizID)
+        {
+            if (test(ClassID) != null)
+            {
+                return test(ClassID);
+            }
+
+            Quizze Quiz = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault();
+            if (Quiz == null)
+            {
+                return RedirectToAction("Index", new { classId = ClassID });
+            }
+
+            var teacher = getTVM(ClassID);
+            teacher.quiz = Quiz;
+
+            return View("RemoveQuiz", "_TeacherLayout", teacher);
+        }
+
+        
+        public ActionResult DeleteQuiz(int QuizID, int ClassID)
+        {
+            Quizze Quiz = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault();
+            if (test(Quiz.ClassID) != null)
+            {
+                return test(Quiz.ClassID);
+            }
+            db.RemoveQuiz(Quiz);
+            db.SaveChanges();
+
+            return RedirectToAction("QuizList", "Teachers", new { ClassID = ClassID });
+        }
+
         public Boolean CheckQuizTime (Quizze Quiz)
         {
             Boolean rtn = false;
@@ -966,8 +1000,10 @@ namespace Oodle.Controllers
 
             if(AddQuestionToDB(question, answer))
             {
+                SetPointTotal(question.QuizID);
                 return RedirectToAction("AddQuestion", "Teachers", new { QuizID = question.QuizID, ClassID = temp.ClassID });
             }
+
             
             return View("AddQuestion", "_TeacherLayout", teacher);
         }
@@ -987,11 +1023,33 @@ namespace Oodle.Controllers
             teacher.answer = answer;
             if (AddQuestionToDB(question, answer))
             {
+                SetPointTotal(question.QuizID);
                 return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = question.QuizID, ClassID = temp.ClassID });
             }
 
-
+            
             return View("AddQuestion", "_TeacherLayout", teacher);
+        }
+
+        public Boolean SetPointTotal(int QuizID)
+        {
+            Boolean rtn = true;
+            if (QuizID <= 0)
+                rtn = false;
+            else
+            {
+                int TempTotal = 0;
+                List<QuizQuestion> QuestionList = db.QuizQuestions.Where(q => q.QuizID == QuizID).ToList();
+                foreach (QuizQuestion Quiz in QuestionList)
+                {
+                    TempTotal += Quiz.Points;
+                }
+                Quizze ChangedQuiz = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault();
+                ChangedQuiz.TotalPoints = TempTotal;
+                db.SetModified(ChangedQuiz);
+                db.SaveChanges();
+            }
+            return rtn;
         }
 
         public ActionResult CreateTask(int classID)
