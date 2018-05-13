@@ -134,6 +134,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="AcceptanceTests\ID427.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID427.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\ID426.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID426.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\ID428.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID428.cs</LastGenOutput>
+    </None>
     <None Include="AcceptanceTests\ID406.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ID406.feature.cs</LastGenOutput>

@@ -339,11 +339,7 @@ namespace Oodle.Controllers
 
         public List<Document> GetFiles(int classID, int assignmentID, int studentID)
         {
-            List<Document> files = new List<Document>();
-
-            db.AddDocument(new Document() { ClassID = classID, AssignmentID = assignmentID, UserID = studentID });
-
-            return files;
+            return db.Documents.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID && i.UserID == studentID).ToList();
         }
 
 

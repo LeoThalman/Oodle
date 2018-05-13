@@ -1,22 +1,21 @@
-﻿Feature: ID406 - Seeing how late a submission is.
+﻿Feature: ID427 - Seeing how late a submission is.
 	As a teacher 
 	I would like to see how late or early a submission was made
 	so that I know if my students are getting their work turned in on time.
 
 @mytag
 Scenario: View late submission.
-	Given that I am a student in a class
+	Given that I am a teacher in a class
 	And The class has at least one assignment
-	And I am viewing that assignment
-	And I have not made any submissions yet
-	When I upload a file and hit submit
-	Then it uploads a new submission.
+	And a student has made a submission to that assignment
+	And that submission was late
+	When I click the students name to view their submissions
+	Then it tells me how late their submission was.
 	
-Scenario: Modify submission
-	Given that I am a student in a class
+Scenario: View on time submission.
+	Given that I am a teacher in a class
 	And The class has at least one assignment
-	And I am viewing that assignment
-	And I have already made a submission to that assignment
-	When I upload a file and hit submit
-	Then it replaces the submission that was already made.
-	
+	And a student has made a submission to that assignment
+	And that submission was made on time
+	When I click the students name to view their submissions
+	Then it tells me how early their submission was made.

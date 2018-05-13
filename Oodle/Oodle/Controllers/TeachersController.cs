@@ -409,7 +409,6 @@ namespace Oodle.Controllers
                 return test(classID);
             }
 
-
             var assi = new Assignment();
 
             assi.Name = name;
@@ -418,6 +417,11 @@ namespace Oodle.Controllers
             assi.StartDate = DateTime.Parse(startDate);
             assi.DueDate = DateTime.Parse(dueDate);
             assi.Weight = int.Parse(weight);
+
+
+
+
+
 
             db.AddAssignment(assi);
             db.SaveChanges();
