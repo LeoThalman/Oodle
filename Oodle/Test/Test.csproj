@@ -131,6 +131,33 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ID407.feature</DependentUpon>
     </Compile>
+    <Compile Include="AcceptanceTests\Sams Tests\ID395.feature.cs" />
+    <Compile Include="AcceptanceTests\Sams Tests\ID3951.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ID395.feature</DependentUpon>
+    </Compile>
+    <Compile Include="AcceptanceTests\Sams Tests\ID396.feature.cs" />
+    <Compile Include="AcceptanceTests\Sams Tests\ID3961.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ID396.feature</DependentUpon>
+    </Compile>
+    <Compile Include="AcceptanceTests\Sams Tests\ID397.feature.cs" />
+    <Compile Include="AcceptanceTests\Sams Tests\ID3971.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ID397.feature</DependentUpon>
+    </Compile>
+    <Compile Include="AcceptanceTests\Sams Tests\SamSelenium\PBI395SamTestTeacherSideRosterToSeeIfYouCanKickStudents.cs" />
+    <Compile Include="AcceptanceTests\Sams Tests\SamSelenium\PBI396SamTestNavBarStudentSideTouchGrades.cs" />
+    <Compile Include="AcceptanceTests\Sams Tests\SamSelenium\PBI396SamTestNavBarStudentSideTouchHome.cs" />
+    <Compile Include="AcceptanceTests\Sams Tests\SamSelenium\PBI396SamTestNavBarStudentSideTouchTasks.cs" />
+    <Compile Include="AcceptanceTests\Sams Tests\SamSelenium\PBI396SamTestNavBarTeacherSideTouchAssignments.cs" />
+    <Compile Include="AcceptanceTests\Sams Tests\SamSelenium\PBI396SamTestNavBarTeacherSideTouchGrades.cs" />
+    <Compile Include="AcceptanceTests\Sams Tests\SamSelenium\PBI396SamTestNavBarTeacherSideTouchRoster.cs" />
+    <Compile Include="AcceptanceTests\Sams Tests\SamSelenium\PBI397SamTestStudentSideShouldBeRedPastDue.cs" />
+    <Compile Include="AcceptanceTests\Sams Tests\SamSelenium\PBI397SamTestTeacherSidePastDueIsRed.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="OodleUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -155,6 +182,18 @@
     <None Include="AcceptanceTests\ID407.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ID407.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\Sams Tests\ID395.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID3951.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\Sams Tests\ID396.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID3961.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\Sams Tests\ID397.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID3971.feature.cs</LastGenOutput>
     </None>
     <None Include="app.config" />
     <None Include="Default.srprofile">
