@@ -31,7 +31,7 @@ namespace Oodle.Models
 
         public int Grade { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
 
         public virtual Assignment Assignment { get; set; }
 
