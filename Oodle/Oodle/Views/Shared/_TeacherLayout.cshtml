@@ -1,10 +1,8 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-
     <!--Jquery-->
     <script src="jquery-3.3.1.min.js"></script>
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- Fonts-->
     <link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah|Ubuntu" rel="stylesheet">
@@ -20,6 +18,7 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
+
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -29,13 +28,101 @@
                     <span class="icon-bar"></span>
                 </button>
                 <img src="~/Content/img/logo.png" class="img-center" height="45" width="90" />
-                
+
             </div>
-            <div class="navbar-collapse collapse" >
+
+            <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Classes", "List", "Class")</li>
+                    <li>
+
+                        <style>
+
+                            /*****************************************************************************************************************/
+                            /***                                      Drop Down Menu CSS                                                   ***/
+                            /***                                                                                                           ***/
+                            /*****************************************************************************************************************/
+                            /* Cannot for the life of me make this work in the site.css. If anyone can, please do!*/
+                            .dropDownButton {
+                                display: block;
+                                margin: 0;
+                                padding: 15px;
+                                color: #999999;
+                                font-weight: 300;
+                                font-family: "Ubuntu", sans-serif;
+                                font-size: 20px;
+                                line-height: 20px;
+                            }
+
+                            .dropDownDiv {
+                                position: relative;
+                                display: inline-block;
+                                color: #999999;
+                                margin: 0;
+                                padding: 0;
+                            }
+
+
+                            .dropDownButton a:link, a:visited, a:link {
+                                text-decoration: none;
+                                color: #999999;
+                            }
+
+                            .dropDownButton:hover {
+                                background-color: #2B7A78;
+                                color: white;
+                                text-decoration: none;
+                            }
+
+
+                            .dropDownDiv:hover .dropDown-content {
+                                display: block;
+                                margin: 0, 15px, 15px, 15px;
+                            }
+
+
+
+                            .dropDown-content {
+                                display: none;
+                                margin: 0, 15px, 15px, 15px;
+                                text-align: center;
+                                position: absolute;
+                                background-color: #17252A;
+                                min-width: 130px;
+                                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                                z-index: 1;
+                            }
+
+                                .dropDown-content a {
+                                    display: block;
+                                }
+
+                                    .dropDown-content a:hover {
+                                        background-color: #3AAFA9;
+                                        color: #FFFFFF;
+                                    }
+
+                            .dropDownLink a:hover, a:visited, a:link, a:active {
+                                text-decoration: none;
+                            }
+                        </style>
+
+                        <div class="dropDownDiv">
+
+                            <span>@Html.ActionLink("Class Menu", "List", "Class", new { ClassID = Model.cl.ClassID }, new { @class = "dropDownButton" })</span>
+
+                            <div class="dropDown-content">
+                                @Html.ActionLink("Home", "Index", "Teachers", new { ClassID = Model.cl.ClassID }, null)
+                                @Html.ActionLink("Assignments", "Assignment", "Teachers", new { ClassID = Model.cl.ClassID }, null)
+                                @Html.ActionLink("Grades", "GradeList", "Teachers", new { ClassID = Model.cl.ClassID }, null)
+                                @Html.ActionLink("Roster", "ViewRoster", "Teachers", new { ClassID = Model.cl.ClassID }, null)
+                                @Html.ActionLink("Tasks", "Tasks", "Teachers", new { ClassID = Model.cl.ClassID }, null)
+                          
+                                @Html.ActionLink("Quizes", "UnderDevelopment", "Home", new { ClassID = Model.cl.ClassID }, null)
+                            </div>
+                        </div>
+                    </li>
                     <li>@Html.ActionLink("Tools", "Tools", "Home")</li>
                     <li>@Html.ActionLink("Calendar", "Calendar", "Home")</li>
                     <li><a href="https://oodle-dev.slack.com/" target="_blank">Go to Slack</a></li>
@@ -45,25 +132,12 @@
             </div>
         </div>
     </div>
-    <div class="navBarDiv">
-    <!--Local Nav bar for Teacher controller-->
-    <nav class="navbar sidebar" style="float:left;border-right:solid black 1px;font-size:22px;padding:10px; width:15%; min-width:100px">
-        <br />
-        <ul>@Html.ActionLink("Home", "Index", "Teachers", new { ClassID = Model.cl.ClassID }, new { @style = "color: #17252A" })</ul>
-        <ul>@Html.ActionLink("Assignments", "Assignment", "Teachers", new { ClassID = Model.cl.ClassID }, new { @style = "color: #17252A" })</ul>
-        <ul>@Html.ActionLink("Grades", "GradeList", "Teachers", new { ClassID = Model.cl.ClassID }, new { @style = "color:#17252A" })</ul>
-        <ul>@Html.ActionLink("Roster", "ViewRoster", "Teachers", new { ClassID = Model.cl.ClassID }, new { @style = "color: #17252A" })</ul>
-        <ul>@Html.ActionLink("Tasks", "Tasks", "Teachers", new { ClassID = Model.cl.ClassID }, new { @style = "color: #17252A" })</ul>
-        <ul>@Html.ActionLink("Slack", "UnderDevelopment", "Home", new { ClassID = Model.cl.ClassID }, new { @style = "color: #17252A" })</ul>
-        <ul>@Html.ActionLink("Quizzes", "QuizList", "Teachers", new { ClassID = Model.cl.ClassID }, new { @style = "color:#17252A" })</ul>
-    </nav>
-    </div>
     <br />
     <!--, new { ClassID = (Model.cl.ClassID) }-->
-    <div class="container body-content body-content-2">
+    <div class="container body-content body-content">
         @RenderBody()
 
-        <footer >
+        <footer>
             <p>&copy; @DateTime.Now.Year - Oodle Incorporated</p>
         </footer>
     </div>
