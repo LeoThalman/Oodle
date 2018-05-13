@@ -7,6 +7,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
 using System.Diagnostics;
+using OpenQA.Selenium.Interactions;
 
 namespace SeleniumTests
 {
@@ -114,6 +115,8 @@ namespace SeleniumTests
             driver.FindElement(By.XPath("//body")).Click();
             driver.FindElement(By.LinkText("Classes")).Click();
             driver.FindElement(By.XPath("//div[4]/a/div/div")).Click();
+            Actions builder = new Actions(driver);
+            builder.MoveToElement(driver.FindElement(By.LinkText("Class Menu"))).Perform();
             driver.FindElement(By.LinkText("Quizzes")).Click();
             driver.FindElement(By.LinkText("Create A Quiz")).Click();
             driver.FindElement(By.Id("quiz_QuizName")).Click();
@@ -174,6 +177,8 @@ namespace SeleniumTests
             driver.FindElement(By.XPath("//input[@value='Log in']")).Click();
             driver.FindElement(By.LinkText("Classes")).Click();
             driver.FindElement(By.XPath("//div[4]/a/div/div")).Click();
+            Actions builder = new Actions(driver);
+            builder.MoveToElement(driver.FindElement(By.LinkText("Class Menu"))).Perform();
             driver.FindElement(By.LinkText("Assignments")).Click();
             driver.FindElement(By.LinkText("Create an assignment")).Click();
             driver.FindElement(By.Name("name")).Click();
@@ -221,7 +226,9 @@ namespace SeleniumTests
             driver.FindElement(By.XPath("//input[@value='Log in']")).Click();
             driver.FindElement(By.LinkText("Classes")).Click();
             driver.FindElement(By.XPath("//div[4]/a/div/div")).Click();
-            driver.FindElement(By.LinkText("Assignments")).Click();
+            Actions builder = new Actions(driver);
+            builder.MoveToElement(driver.FindElement(By.LinkText("Class Menu"))).Perform();
+            driver.FindElement(By.XPath("//a[contains(text(),'Assignments')]")).Click();
             driver.FindElement(By.LinkText("Create an assignment")).Click();
             driver.FindElement(By.Name("name")).Click();
             driver.FindElement(By.Name("name")).Clear();
@@ -271,6 +278,8 @@ namespace SeleniumTests
             driver.FindElement(By.XPath("//input[@value='Log in']")).Click();
             driver.FindElement(By.LinkText("Classes")).Click();
             driver.FindElement(By.XPath("//div[4]/a/div/div")).Click();
+            Actions builder = new Actions(driver);
+            builder.MoveToElement(driver.FindElement(By.LinkText("Class Menu"))).Perform();
             driver.FindElement(By.LinkText("Quizzes")).Click();
             driver.FindElement(By.LinkText("Create A Quiz")).Click();
             driver.FindElement(By.Id("quiz_QuizName")).Click();
