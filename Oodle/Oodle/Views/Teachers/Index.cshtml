@@ -11,7 +11,7 @@
 
 <div class="container">
     <div class="jumbotron">
-        <h3 id="black-text" stlye= "text-align:center">
+        <h3 id="black-text" stlye="text-align:center">
             Welcome to your teacher homepage for: @Html.DisplayFor(Name => Model.cl.Name)
         </h3>
         <hr />
@@ -33,23 +33,23 @@
 
             <div class="container">
                 <div class="col-lg-4" id="teacherPage">
-                    <h3  id="black-text">Description</h3>
-                    <p style="font-size:14px;"  id="black-text">
+                    <h3 id="black-text">Description</h3>
+                    <p style="font-size:14px;" id="black-text">
                         @Html.DisplayFor(Description => Model.cl.Description)
                     </p>
                 </div>
                 <div class="col-sm-4" id="teacherPage">
-                    <h3  id="black-text"> Notifications </h3>
+                    <h3 id="black-text"> Notifications </h3>
                     @foreach (var notif in Model.notifs)
                     {
-                        <p  id="black-text">
+                        <p id="black-text">
                             @Html.DisplayFor(Notification => notif.Notification)
                             <a href="@Url.Action("RemoveNotif", "Teachers", new { classID = (notif.ClassID), notifID = (notif.ClassNotificationID)} )">
                                 Remove Notification
                             </a>
                         </p>
                     }
-                    <a href="@Url.Action("AddNotifToClass", "Teachers", new { ClassID = (Model.cl.ClassID)} )"  id="black-text">
+                    <a href="@Url.Action("AddNotifToClass", "Teachers", new { ClassID = (Model.cl.ClassID)} )" id="black-text">
                         Add A Notification
                     </a>
                 </div>
@@ -86,6 +86,7 @@
                 <tr>
 
                     <td><button class="btn btn-dark" id="upcomingBtn">Need Grading</button></td>
+                    <td  style="display: none"><button class="btn btn-dark" id="otherBtn">Somehing Else</button></td>
                     <td><button class="btn btn-dark" id="testBtn1">Notes</button></td>
                     <td><button class="btn btn-dark" id="testBtn2">Tasks Today</button></td>
                     <td><button class="btn btn-dark" id="infoBtn">About</button></td>
@@ -107,6 +108,93 @@
 
 <!-- Trigger/Open The Modal -->
 <!-- The Modal -->
+<div id="upcomingModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h2>Assignments to grade:</h2>
+        </div>
+        <div class="modal-body">
+
+
+            <div>
+                @for (int i = 0, count = 0; i < Model.assignment.Count(); i++, count++)
+                {
+
+                    var assi = Model.assignment[i];
+                    // if (assi.Name == "test")
+                    if (assi.DueDate <= DateTime.Today && count < 3)
+                    {
+            <div class="block">
+                <div class="classItem">
+                    <div class="title">
+                        @Html.DisplayFor(Name => assi.Name)
+                    </div>
+                    <div class="description">
+                        @Html.DisplayFor(Desc => assi.Description)
+                    </div>
+                    <div class="dateLeft" style="color:#17252A">
+                        Start Date: @Html.DisplayFor(Desc => assi.StartDate)
+                    </div>
+                    <div class="dateRight" style="color:#17252A">
+                        Due Date: @Html.DisplayFor(Desc => assi.DueDate)
+                    </div>
+                    <a href="@Url.Action("EditAssignment", "Teachers", new { classID = Model.cl.ClassID, assignmentID = assi.AssignmentID })" class="edit">
+                        Edit
+                    </a>
+                    <a href="@Url.Action("SubmissionView", "Teachers", new { classID = Model.cl.ClassID, assignmentID = assi.AssignmentID })" class="submissions">
+                        View Submissions
+                    </a>
+                </div>
+            </div>
+            <br />
+            <br />
+                    }
+                }
+            </div>
+
+
+        </div>
+        <div class="modal-footer">
+            <h3>Oodle Assignments</h3>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+<!-- Trigger/Open The Modal -->
+<!-- The Modal -->
+<div id="otherModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h2>Quizzes past due:</h2>
+        </div>
+        <div class="modal-body">
+
+
+
+
+
+
+        </div>
+        <div class="modal-footer">
+            <h3>Oodle Assignments</h3>
+        </div>
+    </div>
+
+</div>
+
 <div id="upcomingModal" class="modal">
 
     <!-- Modal content -->
@@ -160,7 +248,6 @@
     </div>
 
 </div>
-
 
 
 <div id="infoModal" class="modal">
@@ -239,35 +326,35 @@
 
                         <div>
                             @foreach (var i in Model.Tasks)
-                        {
-                            if (i.ClassID == Model.cl.ClassID)
                             {
-                                var tsk = i;
-                                DateTime today = DateTime.Today;
-                                DateTime toTest = tsk.StartDate.GetValueOrDefault();
-                                System.TimeSpan difference = today.Subtract(toTest);
-                                <!--if (today.Value.TotalHours > -24 && toTest.TotalHours <= 24) -->
-                            if ((today - toTest).Duration().TotalHours <= 24)
-                            {
-                                <div class="block">
-                                    <div class="classItem">
-                                        <div class="description">
-                                            @Html.DisplayFor(Desc => tsk.Description)
+                                if (i.ClassID == Model.cl.ClassID)
+                                {
+                                    var tsk = i;
+                                    DateTime today = DateTime.Today;
+                                    DateTime toTest = tsk.StartDate.GetValueOrDefault();
+                                    System.TimeSpan difference = today.Subtract(toTest);
+                                    <!--if (today.Value.TotalHours > -24 && toTest.TotalHours <= 24) -->
+                                    if ((today - toTest).Duration().TotalHours <= 24)
+                                    {
+                                        <div class="block">
+                                            <div class="classItem">
+                                                <div class="description">
+                                                    @Html.DisplayFor(Desc => tsk.Description)
+                                                </div>
+                                                <div class="dateLeft" style="color:#17252A">
+                                                    Start Date: @Html.DisplayFor(Desc => tsk.StartDate)
+                                                </div>
+                                                <div class="dateRight" style="color:#17252A">
+                                                    Due Date: @Html.DisplayFor(Desc => tsk.DueDate)
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="dateLeft" style="color:#17252A">
-                                            Start Date: @Html.DisplayFor(Desc => tsk.StartDate)
-                                        </div>
-                                        <div class="dateRight" style="color:#17252A">
-                                            Due Date: @Html.DisplayFor(Desc => tsk.DueDate)
-                                        </div>
-                                    </div>
-                                </div>
-                                <br />
-                                <br />
-                        }
-                    }
+                                        <br />
+                                        <br />
+                                    }
+                                }
 
-                }
+                            }
                         </div>
 
 
@@ -317,24 +404,24 @@
 
             <div>
                 @foreach (var i in Model.Notes)
-            {
-                if (i.ClassID == Model.cl.ClassID)
                 {
-                    var note = i;
-                    <div class="block">
-                        <div class="classItem">
-                            <div class="description" style="font-size:18px; color:black;">
-                                @Html.DisplayFor(Desc => note.Description)
+                    if (i.ClassID == Model.cl.ClassID)
+                    {
+                        var note = i;
+                        <div class="block">
+                            <div class="classItem">
+                                <div class="description" style="font-size:18px; color:black;">
+                                    @Html.DisplayFor(Desc => note.Description)
+                                </div>
+
+
                             </div>
-
-
                         </div>
-                    </div>
-                    <br />
-                    <br />
-            }
+                        <br />
+                        <br />
+                    }
 
-        }
+                }
             </div>
         </div>
 
@@ -368,6 +455,29 @@
             modal2.style.display = "none";
         }
     }
+
+
+
+    //other MODAL
+    // Get the modal
+    var modal7 = document.getElementById('otherModal');
+
+    // Get the button that opens the modal
+    var btn7 = document.getElementById("otherBtn");
+
+    // When the user clicks the button, open the modal
+    btn7.onclick = function () {
+        modal7.style.display = "block";
+    }
+
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal7) {
+            modal7.style.display = "none";
+        }
+    }
+
 
     //info MODAL
     // Get the modal
@@ -432,10 +542,11 @@
 
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function (event) {
-        if (event.target == modal1 || event.target == modal2 || event.target == modal3 || event.target == modal4) {
+        if (event.target == modal1 || event.target == modal2 || event.target == modal3 || event.target == modal4 || event.target == modal7) {
             modal1.style.display = "none";
             modal2.style.display = "none";
             modal3.style.display = "none";
+            modal7.style.display = "none";
             modal4.style.display = "none";
 
         }
@@ -448,5 +559,5 @@
 @section scripts
     {
     <script type="text/javascript" src="~/Scripts/scriptone.js"></script>
-    }
+}
 

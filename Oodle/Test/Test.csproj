@@ -131,6 +131,24 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ID407.feature</DependentUpon>
     </Compile>
+    <Compile Include="AcceptanceTests\KollsTests\ID419.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ID419.feature</DependentUpon>
+    </Compile>
+    <Compile Include="AcceptanceTests\KollsTests\ID423.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ID423.feature</DependentUpon>
+    </Compile>
+    <Compile Include="AcceptanceTests\KollsTests\ID438.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ID438.feature</DependentUpon>
+    </Compile>
+    <Compile Include="AcceptanceTests\KollsTests\KollEditClass.cs" />
+    <Compile Include="AcceptanceTests\KollsTests\KollTestingIndexsTeacher.cs" />
+    <Compile Include="AcceptanceTests\KollsTests\KollTestingNote.cs" />
     <Compile Include="AcceptanceTests\Sams Tests\ID395.feature.cs" />
     <Compile Include="AcceptanceTests\Sams Tests\ID3951.feature.cs">
       <AutoGen>True</AutoGen>
@@ -166,6 +184,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="AcceptanceTests\KollsTests\ID419.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID419.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\KollsTests\ID423.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID423.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\KollsTests\ID438.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID438.feature.cs</LastGenOutput>
+    </None>
     <None Include="AcceptanceTests\WillsTests\ID427.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ID427.cs</LastGenOutput>
