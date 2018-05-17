@@ -5,8 +5,12 @@
     ViewBag.Title = "List";
 }
 
+@using X.PagedList.Mvc;
+@using X.PagedList;
+
+
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-  
+
 <div class="sidenav">
     <div class="slide-toggle2">
         <div>
@@ -49,6 +53,18 @@
                             <br />
                             <input type="checkbox" name="art" checked>
                             <label for="art">Art</label>
+                            <br />
+                            <input type="checkbox" name="language" checked>
+                            <label for="language">Language</label>
+                            <br />
+                            <input type="checkbox" name="health" checked>
+                            <label for="health">Health</label>
+                            <br />
+                            <input type="checkbox" name="business" checked>
+                            <label for="business">Business</label>
+                            <br />
+                            <input type="checkbox" name="communications" checked>
+                            <label for="communications">Communications</label>
 
                             <hr />
 
@@ -84,6 +100,18 @@
                             <br />
                             <input type="checkbox" name="art" checked>
                             <label for="art">Art</label>
+                            <br />
+                            <input type="checkbox" name="language" checked>
+                            <label for="language">Language</label>
+                            <br />
+                            <input type="checkbox" name="health" checked>
+                            <label for="health">Health</label>
+                            <br />
+                            <input type="checkbox" name="business" checked>
+                            <label for="business">Business</label>
+                            <br />
+                            <input type="checkbox" name="communications" checked>
+                            <label for="communications">Communications</label>
 
                             <hr />
 
@@ -104,7 +132,7 @@
 </div>
 @section scripts
 {
-<script type="text/javascript" src="~/Scripts/scriptone.js"></script>
+    <script type="text/javascript" src="~/Scripts/scriptone.js"></script>
 }
 
 
@@ -123,24 +151,34 @@
         All Current Classes: <br />
     </h2>
 
-    <div>
-    @foreach (var i in Model)
-    {
-        <div class="block">
-            <a href="@Url.Action("Index", "Class", new { ClassID = (i.ClassID) })">
-                <div class="classItem">
-                    <div class="title">
-                        @Html.DisplayFor(Name => i.Name)
-                    </div>
-                    <div class="description">
-                        @Html.DisplayFor(Description => i.Description)
-                    </div>
+
+</div>
+
+
+
+
+@foreach (var classItem in ViewBag.OnePageOfProducts)
+{
+
+
+    <div class="block">
+        <a href="@Url.Action("Index", "Class", new { ClassID = (classItem.ClassID) })">
+            <div class="classItem">
+                <div class="title">
+                    @classItem.Name
                 </div>
-            </a>
-        </div>
-        <br />
-        <br />
-}
+                <div class="description">
+                    @classItem.Description
+                </div>
+            </div>
+        </a>
     </div>
+    <br />
+    <br />
+
+}
+<div style="  width: 50%; margin: 0 auto;">
+    <!-- output a paging control that lets the user navigation to the previous page, next page, etc -->
+    @Html.PagedListPager((IPagedList)ViewBag.OnePageOfProducts, page => Url.Action("List", new { page }))
 
 </div>

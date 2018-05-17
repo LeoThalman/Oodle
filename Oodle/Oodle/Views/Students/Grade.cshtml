@@ -1,7 +1,88 @@
 ﻿
+@model Oodle.Models.ViewModels.TeacherVM
 @{
     ViewBag.Title = "Grade";
 }
+<h2>Grades</h2>
+<div class="slide-toggle2">
+    <div>
+        <br />
+        <!-- fluid -->
+        <div class="box-toggle">
+            <form method="post" action="FakeGrade">
 
-<center><h2>Grade View for Student Controller</h2></center>
+                @if (true)
+                {
+                    var formName = 0;
+                    foreach (var i in Model.assignment.ToList())
+                    {
+                        var classID = Model.cl.ClassID;
 
+                        var submission = Model.documents.Where(j => j.AssignmentID == i.AssignmentID).FirstOrDefault();
+
+                        if (submission != null)
+                        {
+                            var cur = 0;
+                            var submittedDate = submission.Date;
+                            <div class="contorol padded">
+                                <h4>
+                                    @Html.DisplayFor(assignment => i.Name)
+                                </h4>
+                                @if (submission.Grade >= 0)
+                                {
+                                    cur = submission.Grade;
+                                }
+                                @if (submission.Grade == -1)
+                                {
+                                    <div style="margin-right:10px">
+                                        Current Grade: @Html.Raw("Not yet graded")
+                                        <input type="number" name=@formName placeholder="0-100" value=@cur required class="rightish" /><br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div style="margin-right:10px">
+                                        Current Grade: @Html.DisplayFor(Grade => submission.Grade)%
+                                        <input type="number" name=@formName placeholder="0-100" value=@cur required class="rightish" /><br />
+                                    </div>
+                                }
+
+                                <div class="dateLeft2">
+                                    Submitted @Html.DisplayFor(date => submittedDate)
+                                </div>
+                                <hr />
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="contorol padded">
+                                <h4>
+                                    @Html.DisplayFor(assignment => i.Name)
+                                </h4>
+                                <div style="margin-right:10px">
+                                    No submission.
+
+                                    <input type="number" name=@formName placeholder="0-100" value=0 required style="float:right; width:50px" /><br />
+                                </div>
+                                <hr />
+                            </div>
+                        }
+
+                        formName++;
+
+                    }
+                    <div>
+                        Overall Grade in Class: @Model.classGrade.FirstOrDefault()
+                    </div>
+
+                    <div>
+                        Theoretical Grade in Class: @Model.fakeTotal
+                    </div>
+                    <input type="hidden" name="classID" value="@Model.cl.ClassID" />
+                    <input type="submit" name="submit" value="Calculate Grade" />
+
+                }
+            </form>
+        </div>
+    </div>
+</div>

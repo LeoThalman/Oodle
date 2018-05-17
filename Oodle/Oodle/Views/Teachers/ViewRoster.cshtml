@@ -11,19 +11,19 @@
     <script type="text/javascript" src="~/Scripts/scriptone.js"></script>
 }
 
-    <div id="classListBody">  
-        <h2 style="text-align:center;">
-            Class Rosters
-        </h2>
-        <hr />
-        <h2 style="text-align:center;">
-            Classes For: @ViewBag.name
-            <br />
-        </h2>
-    </div>
+<div id="classListBody">
+    <h2 style="text-align:center;">
+        Class Rosters
+    </h2>
+    <hr />
+    <h2 style="text-align:center;">
+        Classes For: @ViewBag.name
+        <br />
+    </h2>
+</div>
 
-    <div>
-        @foreach (var i in Model.classList)
+<div>
+    @foreach (var i in Model.classList)
     {
 
         // +Get Teacher ID
@@ -41,10 +41,11 @@
                 <div class="slide-toggle text-center">
                     <div class="container">
                         <div class="box-toggle">
-                            <div>
+                            <div style="max-width:97%;">
                                 <div class="contorol">
-                                    <h1>@Html.DisplayFor(Name => i.Name)</h1>
-                                    <hr/>
+                                    <h1>Class: @Html.DisplayFor(Name => i.Name)</h1>
+                                    <h2>Class ID: @Html.DisplayFor(cD => i.ClassID)</h2>
+                                    <hr />
                                     <h2>@Html.DisplayFor(Description => i.Description)</h2>
                                     <span class="toggle-info pull-left">
                                         <i class="fa fa-plus"></i>
@@ -53,27 +54,39 @@
                                 <div class="content-box">
                                     @for (int x = 0; x < Model.roles.Count(); x++)
                                     {
-                                    if (Model.roles[x].ClassID == i.ClassID && Model.roles[x].RoleID == 2)
-                                    {
-                                        var bob = Model.roles[x].UsersID;
-                                        for (int c = 0; c < Model.users.Count(); c++)
+                                        if (Model.roles[x].ClassID == i.ClassID && Model.roles[x].RoleID == 2)
                                         {
-                                            if (Model.users[c].UsersID == bob)
+                                            var bob = Model.roles[x].UsersID;
+                                            for (int c = 0; c < Model.users.Count(); c++)
                                             {
-                                               <h5>@Model.users[c].UserName</h5>
+                                                if (Model.users[c].UsersID == bob)
+                                                {
+
+                                                    <form action="removeStudent" method="POST">
+                                                        <input type="hidden" name="classID" value="@i.ClassID" />
+                                                        <input type="hidden" name="studentName" value="@Model.users[c].UsersID" />
+                                                        <input type="hidden" name="currentClass" value="@Model.cl.ClassID" />
+
+                                                        <h3 style="display:block; border-style: solid; border-width: 1px;">
+                                                            Student: @Model.users[c].UserName
+
+                                                            <span style="width:250px; display:inline-block;">
+                                                            </span>
+                                                            <input style="background-color:black; color:red;" type="submit" name="submit" value="Kick Student">
+
+
+                                                        </h3>
+                                                    </form>
+                                                }
+                                            }
                                         }
-                                     }
-                                     }
-                                     }
+                                    }
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            }
         }
     }
-}
 </div>
-
-
-

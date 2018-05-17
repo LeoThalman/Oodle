@@ -1,4 +1,23 @@
 ﻿
+
+
+
+
+function checkDate(formT) {
+    if (formT.startDate.value > formT.dueDate.value) {
+        alert('Due date must be after start date.');
+        return false;
+    } else {
+        return true;
+    }
+}
+
+
+
+
+
+
+
 //-------------------------------------Delete page---------------------------------------
 function deleteConfirm() {
     alert('Are you sure you want to delete your profile? This cannot be undone? If yes please click "Confirm Delete" ');

@@ -9,10 +9,10 @@
 
 
 <div class="form-style-6">
-    <form method="post" action="EditAssignmentAction">
+    <form method="post" action="EditAssignmentAction" onsubmit="return compareTime()" name="formT">
         <div>
             <h1>Edit Your Assignment</h1>
-            
+
             <label for="name">Name</label> <br />
             <input type="text" name="name" value="@Model.assignment.FirstOrDefault().Name" required />
 
@@ -29,20 +29,44 @@
             <label for="weight">Weight of Grade:</label> <br />
             <input type="number" name="weight" placeholder="0" value="@Model.assignment.FirstOrDefault().Weight" max="1000" min="0" required /><br />
 
-            <label for="startDate">Start Date</label>             <br />
 
-            <input type="datetime" name="startDate" value="@Model.assignment.FirstOrDefault().StartDate" required />
             <br />
-            <label for="dueDate">Due Date</label>            <br />
+            <label for="startDate">Start Date</label><br />
+            <input type="datetime-local" name="startDate" value="@Model.assignment.FirstOrDefault().StartDate.Value" required />
 
-            <input type="datetime" name="dueDate" value="@Model.assignment.FirstOrDefault().DueDate" required />
+            <br />
+            <label for="dueDate">Due Date</label><br />
+            <input type="datetime-local" name="dueDate" value="@Model.assignment.FirstOrDefault().DueDate.Value" required min="@DateTime.Now.ToString("dd-mm-yyyyThh:mm:ss")" />
 
         </div>
         <div>
             <input type="submit" name="submit" value="Update Assignment" />
         </div>
     </form>
+    <form method="post" action="DeleteAssignmentAction" name="formT">
+        <input type="hidden" name="assignmentID" value="@Model.assignment.FirstOrDefault().AssignmentID" />
+
+        <input type="hidden" name="classID" value="@Model.cl.ClassID" />
+        <br />
+        <div>
+            <input type="submit" name="delete" value="Delete Assignment" />
+        </div>
+    </form>
+
 </div>
+
+<script>
+    function compareTime() {
+        var x = document.forms["formT"]["dueDate"].value;
+        var y = document.forms["formT"]["startDate"].value;
+
+        if (new Date(x) <= new Date(y)){
+            alert("The due date must be after the start date.");
+        }
+        return new Date(x) > new Date(y); // true if time1 is later
+
+    }
+</script>
 
 
 

@@ -1,15 +1,27 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
+using Oodle.Models;
+using Oodle.Models.ViewModels;
+using Oodle.Models.Repos;
+using Newtonsoft.Json;
 
 namespace Oodle.Controllers
 {
     public class HomeController : Controller
     {
+        private IOodleRepository db;
+
+        public HomeController(IOodleRepository repo)
+        {
+            this.db = repo;
+        }
+
         public ActionResult Index()
         {
             return View();
@@ -96,12 +108,66 @@ namespace Oodle.Controllers
             return "Evening";
         }
 
+        public List<int> GetClassIDs(int UserID)
+        {
+            List<int> ClassIDList = new List<int>();
+            List<UserRoleClass> temp = db.UserRoleClasses.Where(u => u.UsersID == UserID && u.RoleID == 2).ToList();
+            foreach(UserRoleClass c in temp)
+            {
+                ClassIDList.Add(c.ClassID);
+            }
+
+            return ClassIDList;
+        }
+
+        public JsonResult GetCalendarData()
+        {
+            var id = User.Identity.GetUserId();
+            User user = db.Users.Where(a => a.IdentityID == id).FirstOrDefault();
+            if (user == null)
+                return null;
+            List<int> ClassIDs = GetClassIDs(user.UsersID);
+            List < CalendarItem > cal = new List<CalendarItem>();
+
+            List<Assignment> TempAssign = new List<Assignment>();
+            List<Quizze> TempQuiz = new List<Quizze>();
+
+            CalendarItem TempItem = null;
+            foreach (int ClassID in ClassIDs)
+            {
+                TempAssign = db.Assignments.Where(a => a.ClassID == ClassID).ToList();
+                foreach (Assignment a in TempAssign)
+                {
+                    TempItem = new CalendarItem();
+                    TempItem.Name = a.Name;
+                    TempItem.EndTime = (DateTime)a.DueDate;
+                    TempItem.IsAQuiz = false;
+                    cal.Add(TempItem);
+
+                }
+
+                TempQuiz = db.Quizzes.Where(q => q.ClassID == ClassID).ToList();
+                foreach (Quizze q in TempQuiz)
+                {
+                    if (q.IsHidden == false)
+                    {
+                        TempItem = new CalendarItem();
+                        TempItem.Name = q.QuizName;
+                        TempItem.StartTime = q.StartTime;
+                        TempItem.EndTime = q.EndTime;
+                        TempItem.IsAQuiz = true;
+                        cal.Add(TempItem);
+                    }
+                }
+                
+            }
+            string CalData = JsonConvert.SerializeObject(cal, Formatting.Indented);
+            return Json(CalData, JsonRequestBehavior.AllowGet);
+        }
 
         public ActionResult Calendar()
         {
-            
             return View("Calendar", "_CalendarLayout");
         }
-
     }
 }

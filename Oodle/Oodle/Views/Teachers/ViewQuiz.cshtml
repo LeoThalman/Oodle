@@ -1,0 +1,53 @@
+﻿@model Oodle.Models.ViewModels.TeacherVM
+
+<div class="fontClass">
+    <div class="col-lg-6 QuizSide">
+        @Html.ActionLink("Edit Quiz", "EditQuiz", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID }, new { @class = "btn btn-primary btn-large" })
+        @Html.ActionLink("Add Question", "AddQuestion", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID }, new { @class = "btn btn-primary btn-large" })
+        @Html.ActionLink("Delete Quiz", "RemoveQuiz", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID}, new { @class = "btn btn-primary btn-large"})
+
+        <p>
+            @Html.DisplayNameFor(Model => Model.quiz.QuizName):
+            @Html.DisplayFor(Model => Model.quiz.QuizName)
+        </p>
+        <p>
+            @Html.DisplayNameFor(Model => Model.quiz.StartTime):
+            @Html.DisplayFor(Model => Model.quiz.StartTime)
+        </p>
+        <p>
+            @Html.DisplayNameFor(Model => Model.quiz.EndTime):
+            @Html.DisplayFor(Model => Model.quiz.EndTime)
+        </p>
+    </div>
+    
+    <div class="col-sm-6 ViewQuiz">
+        @foreach (var question in Model.questionList)
+    {
+        <p>Question @question.QuestionID: @question.QuestionText</p>
+        <p>Worth: @question.Points points</p>
+        <p>Answers</p>
+        <ul>
+            <li id="FirstQItem">
+                <ol>
+                    <li>@Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer1</li>
+                    @if (!@Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer2.IsEmpty())
+                {
+                    <li>@Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer2</li>}
+                    @if (!@Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer3.IsEmpty())
+                {
+                    <li>@Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer3</li>}
+                    @if (!@Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer4.IsEmpty())
+                {
+                    <li>@Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer4</li>}
+                </ol>
+            </li>
+            <li>Correct Answer #:@Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().CorrectAnswer</li>
+        </ul>
+        <hr />
+}
+    </div>
+</div>
+
+
+
+
