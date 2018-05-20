@@ -154,6 +154,10 @@ namespace Oodle.Models.Repos
         {
 
         }
+        public void DeleteAssignment(Assignment a)
+        {
+
+        }
 
         public void RemoveGrade(Grade g)
         {

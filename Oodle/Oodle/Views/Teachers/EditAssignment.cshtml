@@ -9,7 +9,7 @@
 
 
 <div class="form-style-6">
-    <form method="post" action="EditAssignmentAction"  onsubmit="return compareTime()" name="formT">
+    <form method="post" action="EditAssignmentAction" onsubmit="return compareTime()" name="formT">
         <div>
             <h1>Edit Your Assignment</h1>
 
@@ -43,6 +43,16 @@
             <input type="submit" name="submit" value="Update Assignment" />
         </div>
     </form>
+    <form method="post" action="DeleteAssignmentAction" name="formT">
+        <input type="hidden" name="assignmentID" value="@Model.assignment.FirstOrDefault().AssignmentID" />
+
+        <input type="hidden" name="classID" value="@Model.cl.ClassID" />
+        <br />
+        <div>
+            <input type="submit" name="delete" value="Delete Assignment" />
+        </div>
+    </form>
+
 </div>
 
 <script>

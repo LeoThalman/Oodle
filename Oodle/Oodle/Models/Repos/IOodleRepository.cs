@@ -57,5 +57,7 @@ namespace Oodle.Models.Repos
 
         void AddGrade(Grade t);
         void RemoveGrade(Grade t);
+
+        void DeleteAssignment(Assignment a);
     }
 }

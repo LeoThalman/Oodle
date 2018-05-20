@@ -196,5 +196,9 @@ namespace Oodle.Models.Repos
         {
             db.Grades.Remove(g);
         }
+        public void DeleteAssignment(Assignment a)
+        {
+            db.Assignments.Remove(a);
+        }
     }
 }

@@ -177,6 +177,8 @@
     <br />
 
 }
-    
+<div style="  width: 50%; margin: 0 auto;">
     <!-- output a paging control that lets the user navigation to the previous page, next page, etc -->
     @Html.PagedListPager((IPagedList)ViewBag.OnePageOfProducts, page => Url.Action("List", new { page }))
+
+</div>
