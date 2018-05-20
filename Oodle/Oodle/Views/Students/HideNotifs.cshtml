@@ -1,0 +1,36 @@
+﻿@model Oodle.Models.ViewModels.StudentVM
+<div class="col-sm-6">
+
+    @{int QNum = 0; }
+    @{ int NotifNum = -1; }
+    @using (Html.BeginForm("SaveHideNotifs", "Students"))
+    {
+        @Html.HiddenFor(Model => Model.StudentQuiz.QuizID)
+        foreach (var notif in Model.HideNotifs)
+        {
+            { QNum = QNum + 1; }
+            { NotifNum = NotifNum + 1; }
+            @Html.DisplayNameFor(notif.Notif.Notification)
+            <ol>
+                @Html.Hidden("HiddenNotifs[" + ANum + "].ClassNotificationID", notif.Notif.ClassNotificationID)
+                <li>@Html.RadioButton("HiddenNotifs[" + NotifNum + "].AnswerNumber", "1") @Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer1</li>
+                @if (!@Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer2.IsEmpty())
+                {
+                    <li>@Html.RadioButton("StudentAnswers[" + ANum + "].AnswerNumber", "2") @Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer2</li>}
+                @if (!@Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer3.IsEmpty())
+                {
+                    <li> @Html.RadioButton("StudentAnswers[" + ANum + "].AnswerNumber", "3") @Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer3</li>}
+                @if (!@Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer4.IsEmpty())
+                {
+                    <li>@Html.RadioButton("StudentAnswers[" + ANum + "].AnswerNumber", "4") @Model.answerList.Where(a => a.QuestionID == question.QuestionID).FirstOrDefault().Answer4</li>}
+            </ol>
+            <hr />
+        }
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Submit Quiz" class="btn btn-default" />
+            </div>
+        </div>
+    }
+</div>

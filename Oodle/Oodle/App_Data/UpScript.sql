@@ -220,12 +220,25 @@ CREATE TABLE dbo.ClassNotification
 	TimePosted DATETIME NOT NULL,
 	ClassID INT NOT NULL,
 	CONSTRAINT [PK_dbo.ClassNotification] PRIMARY KEY CLUSTERED (ClassNotificationID ASC),
-	CONSTRAINT [FK_dbo.ClassNotification_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
+	CONSTRAINT [FK_dbo.ClassNotification_dbo.Class] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
 	ON DELETE CASCADE
-	ON UPDATE CASCADE,
-
+	ON UPDATE CASCADE
 );
 
+CREATE TABLE dbo.HiddenNotification
+(
+	HiddenNotificationID INT IDENTITY (1,1) NOT NULL,
+	ClassNotificationID INT NOT NULL,
+	UsersID INT NOT NULL,
+	ClassID INT NOT NULL,
+	CONSTRAINT [PK_dbo.HiddenNotification] PRIMARY KEY CLUSTERED (HiddenNotificationID ASC),
+	CONSTRAINT [FK_dbo.HiddenNotification_dbo.Class] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
+	ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT [FK_dbo.HiddenNotification_dbo.ClassNotification] FOREIGN KEY ([ClassNotificationID]) REFERENCES [dbo].[ClassNotification] ([ClassNotificationID])
+	ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT [FK_dbo.HiddenNotification_dbo.Users] FOREIGN KEY ([UsersID]) REFERENCES [dbo].[Users] ([UsersID])
+	ON DELETE CASCADE ON UPDATE CASCADE
+);
 
 -- Assignment Table
 CREATE TABLE dbo.Assignment

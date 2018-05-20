@@ -33,6 +33,11 @@ namespace Oodle.Models.Repos
             get { return db.ClassNotifications; }
         }
 
+        public IEnumerable<HiddenNotification> HiddenNotifications
+        {
+            get { return db.HiddenNotifications; }
+        }
+
         public IEnumerable<Assignment> Assignments
         {
             get { return db.Assignments; }
@@ -100,6 +105,17 @@ namespace Oodle.Models.Repos
         {
             db.ClassNotifications.Add(notif);
         }
+
+        public void AddHiddenNotif(HiddenNotification hnotif)
+        {
+            db.HiddenNotifications.Add(hnotif);
+        }
+
+        public void RemoveHiddenNotif(HiddenNotification hnotif)
+        {
+            db.HiddenNotifications.Remove(hnotif);
+        }
+
 
         public void RemoveURC(UserRoleClass urc)
         {

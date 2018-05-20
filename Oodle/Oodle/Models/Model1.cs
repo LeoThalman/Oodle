@@ -21,6 +21,7 @@ namespace Oodle.Models
         public virtual DbSet<ClassNotification> ClassNotifications { get; set; }
         public virtual DbSet<Document> Documents { get; set; }
         public virtual DbSet<Grade> Grades { get; set; }
+        public virtual DbSet<HiddenNotification> HiddenNotifications { get; set; }
         public virtual DbSet<MultChoiceAnswer> MultChoiceAnswers { get; set; }
         public virtual DbSet<Notes> Notes { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
@@ -72,11 +73,6 @@ namespace Oodle.Models
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Class>()
-                .HasMany(e => e.Assignments)
-                .WithRequired(e => e.Class)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Class>()
                 .HasMany(e => e.Documents)
                 .WithRequired(e => e.Class)
                 .WillCascadeOnDelete(false);
@@ -91,9 +87,9 @@ namespace Oodle.Models
                 .WithRequired(e => e.Class)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<Quizze>()
-                .HasMany(e => e.StudentQuizzes)
-                .WithRequired(e => e.Quizze)
+            modelBuilder.Entity<QuizQuestion>()
+                .HasMany(e => e.StudentAnswers)
+                .WithRequired(e => e.QuizQuestion)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<User>()

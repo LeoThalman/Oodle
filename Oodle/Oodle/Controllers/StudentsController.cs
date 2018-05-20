@@ -489,7 +489,10 @@ namespace Oodle.Controllers
 
             student.assignment = db.Assignments.Where(i => i.ClassID == classID).OrderBy(i => i.StartDate).ToList();
 
-            student.notifs = db.ClassNotifications.Where(i => i.ClassID == classID).OrderBy(i => i.TimePosted).ToList();
+            var id = User.Identity.GetUserId();
+            User user = db.Users.Where(a => a.IdentityID == id).FirstOrDefault();
+            student.notifs = GetNotifs(user.UsersID, classID);
+            //student.notifs = db.ClassNotifications.Where(i => i.ClassID == classID).OrderBy(i => i.TimePosted).ToList();
             //adds tasks to Teacher VM
             student.Tasks = db.Tasks.ToList();
             //adds notes to teacher VM
@@ -497,6 +500,63 @@ namespace Oodle.Controllers
 
             return student;
         }
+
+        public List<ClassNotification> GetNotifs (int UsersID, int classID)
+        {
+            List<HiddenNotification> HiddenNotifs = db.HiddenNotifications.Where(n => n.UsersID == UsersID && n.ClassID == classID).ToList();
+            if (HiddenNotifs == null)
+            {
+                return db.ClassNotifications.Where(i => i.ClassID == classID).OrderBy(i => i.TimePosted).ToList();
+            }
+            else
+            {
+                List<ClassNotification> NotifList = db.ClassNotifications.Where(i => i.ClassID == classID).OrderBy(i => i.TimePosted).ToList();
+                ClassNotification Temp = null;
+                foreach (HiddenNotification h in HiddenNotifs)
+                {
+                    Temp = NotifList.FirstOrDefault(c => c.ClassNotificationID == h.ClassNotificationID);
+                    if(Temp != null)
+                    {
+                        NotifList.Remove(Temp);
+                        Temp = null;
+                    }
+                }
+                return NotifList;                
+            }
+        }
+
+        public ActionResult HideNotifs(int classID)
+        {
+            if (test(classID) != null)
+            {
+                return test(classID);
+            }
+            var id = User.Identity.GetUserId();
+            int UsersID = db.Users.Where(a => a.IdentityID == id).FirstOrDefault().UsersID;
+            StudentVM student = getSVM(classID);
+            List<HiddenNotification> HList = db.HiddenNotifications.Where(n => n.UsersID == UsersID && n.ClassID == classID).ToList();
+            List<ClassNotification> ClassNotifs = db.ClassNotifications.Where(n => n.ClassID == classID).ToList();
+            student.HideNotifs = new List<HideNotifList>();
+            HideNotifList Temp = null;
+            foreach(ClassNotification c in ClassNotifs)
+            {
+                Temp = new HideNotifList();
+                Temp.Notif = c;
+                if(HList.Exists(h => h.ClassNotificationID == c.ClassNotificationID))
+                {
+                    Temp.Hidden = true;
+                }
+                else
+                {
+                    Temp.Hidden = false;
+                }
+                student.HideNotifs.Add(Temp);
+            }
+
+            return View("HideNotifs", "_StudentLayout", student);
+        }
+
+        public ActionResult SaveHideNotifs
 
         public ActionResult QuizList(int classID)
         {

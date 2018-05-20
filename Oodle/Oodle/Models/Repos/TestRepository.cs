@@ -14,6 +14,7 @@ namespace Oodle.Models.Repos
         public IEnumerable<UserRoleClass> UserRoleClasses { get; }
         public IEnumerable<Class> Classes { get; }
         public IEnumerable<ClassNotification> ClassNotifications { get; }
+        public IEnumerable<HiddenNotification> HiddenNotifications { get; }
         public IEnumerable<Assignment> Assignments { get; }
         public IEnumerable<Document> Documents { get; set; }
         public IEnumerable<Quizze> Quizzes { get; set; }
@@ -51,6 +52,16 @@ namespace Oodle.Models.Repos
         {
             List<ClassNotification> temp = ClassNotifications.ToList();
             temp.Add(notif);
+        }
+
+        public void AddHiddenNotif(HiddenNotification hnotif)
+        {
+
+        }
+
+        public void RemoveHiddenNotif(HiddenNotification hnotif)
+        {
+
         }
 
         public void RemoveURC(UserRoleClass urc)

@@ -441,11 +441,6 @@ namespace Oodle.Controllers
             assi.DueDate = DateTime.Parse(dueDate);
             assi.Weight = int.Parse(weight);
 
-
-
-
-
-
             db.AddAssignment(assi);
             db.SaveChanges();
 
