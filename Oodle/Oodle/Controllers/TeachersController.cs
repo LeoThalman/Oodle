@@ -63,16 +63,6 @@ namespace Oodle.Controllers
             return View("index", "_TeacherLayout", teacher);
         }
 
-
-
-
-
-
-
-
-
-
-
         [HttpPost]
         [ActionName("Index")]
         public ActionResult IndexPost(int classID)
@@ -213,7 +203,6 @@ namespace Oodle.Controllers
                 return test(classID);
             }
 
-
             ViewBag.id = classID;
 
             var teacher = getTVM(classID);
@@ -221,17 +210,9 @@ namespace Oodle.Controllers
             return View("AddNotifToClass", "_TeacherLayout", teacher);
         }
 
-        public ActionResult SaveNotif()
+        public Boolean AddNotifToDB(string notif, int classID)
         {
-            ViewBag.RequestMethod = "POST";
-            string notif = Request.Form["notification"];
-            int classID = int.Parse(Request.Form["classID"]);
-
-            if (test(classID) != null)
-            {
-                return test(classID);
-            } 
-
+            Boolean rtn = false;
             Class hasSlack = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
 
 
@@ -242,8 +223,18 @@ namespace Oodle.Controllers
                     slack.SlackNotif(notif, hasSlack.SlackName);
                 }
                 AddNotification(notif, classID);
+                rtn = true;
             }
+            return rtn;
+        }
 
+        public ActionResult SaveNotif()
+        {
+            ViewBag.RequestMethod = "POST";
+            string notif = Request.Form["notification"];
+            int classID = int.Parse(Request.Form["classID"]);
+
+            AddNotifToDB(notif, classID);
 
             return RedirectToAction("Index", new { classId = classID });
         }
@@ -431,6 +422,7 @@ namespace Oodle.Controllers
             string startDate = Request.Form["startDate"];
             string dueDate = Request.Form["dueDate"];
             string weight = Request.Form["weight"];
+            Boolean addNotif = Convert.ToBoolean(Request.Form["addNotif"].ToString());
 
 
             int classID = int.Parse(id);
@@ -458,6 +450,11 @@ namespace Oodle.Controllers
             db.SaveChanges();
 
             var teacher = getTVM(classID);
+            if (addNotif)
+            {
+                AddNotifToDB("A new assignment has been added. Name: " + assi.Name + ". Opens: " + assi.StartDate + ". Due: " + assi.DueDate , assi.ClassID );
+            }
+            
 
             return View("Assignment", "_TeacherLayout", teacher);
         }

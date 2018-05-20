@@ -415,7 +415,7 @@ INSERT INTO [dbo].[AspNetUsers](
 	Subject
 	)
 	VALUES (
-		'2', 'The Effects of Wind on Skirts and Dresses', 'In this class we look at the effects on wind on clothing and how this impacts design. It is the first in a three class long series.', 'wind', 'art'
+		'2', 'The Effects of Wind on Skirts and Dresses', 'In this class we look at the effects on wind on clothing and how this impacts design. It is the first in a three class long series.', '%', 'art'
 	);
 
 	INSERT INTO dbo.UserRoleClass
