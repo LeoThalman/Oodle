@@ -8,24 +8,36 @@ namespace Oodle.Models
 
     public partial class Grade
     {
-        [Key]
-        public int GradesID { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Grade()
+        {
+            Documents = new HashSet<Document>();
+            StudentQuizzes = new HashSet<StudentQuizze>();
+        }
 
-        public int UsersID { get; set; }
-
-        public int AssignmentID { get; set; }
-
-        [StringLength(64)]
-        public string Grader { get; set; }
-
-        [StringLength(256)]
-        public string Comment { get; set; }
+        public int GradeID { get; set; }
 
         [Column("Grade")]
-        public int Grade1 { get; set; }
+        public int? Grade1 { get; set; }
+
+        public int? AssignmentID { get; set; }
+
+        public int ClassID { get; set; }
+
+        public int? QuizID { get; set; }
+
+        public int GradeWeight { get; set; }
+
+        public DateTime DateApplied { get; set; }
 
         public virtual Assignment Assignment { get; set; }
 
-        public virtual User User { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Document> Documents { get; set; }
+
+        public virtual Quizze Quizze { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<StudentQuizze> StudentQuizzes { get; set; }
     }
 }

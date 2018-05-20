@@ -14,74 +14,178 @@
                 @if (true)
                 {
                     var formName = 0;
-                    foreach (var i in Model.assignment.ToList())
-                    {
-                        var classID = Model.cl.ClassID;
 
-                        var submission = Model.documents.Where(j => j.AssignmentID == i.AssignmentID).FirstOrDefault();
+                    var i = Model.users.FirstOrDefault();
+                    var test = Model.perUser[0];
+                    <div class="contorol">
+                        <span class="toggle-info pull-left">
+                            <i class="fa fa-plus"></i>
+                        </span>
+                    </div>
+                    <div class="content-box">
+                        <div class="black">
 
-                        if (submission != null)
-                        {
-                            var cur = 0;
-                            var submittedDate = submission.Date;
-                            <div class="contorol padded">
-                                <h4>
-                                    @Html.DisplayFor(assignment => i.Name)
-                                </h4>
-                                @if (submission.Grade >= 0)
-                                {
-                                    cur = submission.Grade;
-                                }
-                                @if (submission.Grade == -1)
-                                {
-                                    <div style="margin-right:10px">
-                                        Current Grade: @Html.Raw("Not yet graded")
-                                        <input type="number" name=@formName placeholder="0-100" value=@cur required class="rightish" /><br />
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div style="margin-right:10px">
-                                        Current Grade: @Html.DisplayFor(Grade => submission.Grade)%
-                                        <input type="number" name=@formName placeholder="0-100" value=@cur required class="rightish" /><br />
-                                    </div>
-                                }
 
-                                <div class="dateLeft2">
-                                    Submitted @Html.DisplayFor(date => submittedDate)
-                                </div>
-                                <hr />
+
+                            @for (int i2 = 0; i2 < test.Grade.Count(); i2++)
+                            {
+                                if(test.Grade[i2] != null) {
+                                    if (test.Grade[i2].Quizze != null)
+                                    {
+                                        var quiz = test.Grade[i2].Quizze;
+
+                                        var quizName = quiz.QuizName;
+
+                                        var sQuiz = Model.StudentQuizze.Where(o => o.QuizID == quiz.QuizID && o.UserID == i.UsersID).FirstOrDefault();
+
+                                        if (sQuiz != null)
+                                        {
+                                            var classID = Model.cl.ClassID;
+                                            var dueDate = quiz.EndTime;
+
+                                            var grade = sQuiz.TotalPoints / quiz.TotalPoints;
+
+                                            <div class="contorol padded">
+
+                                                <div style="font-size:20px">@quiz.QuizName</div>
+                                    
+                                                <div class="upperRight">
+                                                    Quiz
+                                                </div>
+
+                                                @if ((sQuiz.TotalPoints / quiz.TotalPoints) == -1)
+                                                {
+                                                    <div style="margin-right:10px">
+                                                        Current Grade: @Html.Raw("Not yet graded")
+                                                        <input type="number" name=@formName placeholder="0-100" value=0 required class="rightish" style="color:black"/><br />
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div style="margin-right:10px">
+                                                        Current Grade: @(grade * 100)%
+
+                                                        <input type="number" name=@formName placeholder="0-100" value=@(grade * 100) required class="rightish" style="color:black" /><br />
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            
+                                            <div class="contorol padded">
+
+                                                <div style="font-size:20px">@quiz.QuizName</div>
+
+                                                <div>
+                                                    No submission.
+                                                </div>
+
+
+
+                                                <div class="upperRight">
+                                                    Quiz
+                                                </div>
+
+                                               
+                                                <div style="margin-right:10px">
+                                                    Current Grade: @Html.Raw("Not yet graded")
+                                                    <input type="number" name=@formName placeholder="0-100" value=0 required class="rightish" style="color:black" /><br />
+                                                </div>
+                                                
+                                            </div>
+                                        }
+                                        <hr />
+
+
+                                    }
+                                    else
+                                    {
+                                        var assi = test.Grade[i2].Assignment;
+
+                                        var assiName = assi.Name;
+
+                                        var classID = Model.cl.ClassID;
+                                        if (Model.documents.Where(o => o.UserID == i.UsersID && o.AssignmentID == assi.AssignmentID).FirstOrDefault() != null) {
+                                            var doc = Model.documents.Where(o => o.UserID == i.UsersID && o.AssignmentID == assi.AssignmentID).FirstOrDefault();
+
+                                            var assignmentID = doc.AssignmentID;
+                                            var submittedDate = doc.Date;
+                                            var dueDate = doc.Assignment.DueDate;
+
+                                            <div class="contorol padded">
+
+                                                <div style="font-size:20px">@assi.Name</div>
+
+                                                   
+                                                <div class="upperRight">
+                                                    Assignment
+                                                </div>
+
+
+
+                                                @if ((doc.Grade) == -1)
+                                                {
+                                                    <div style="margin-right:10px">
+                                                        Current Grade: @Html.Raw("Not yet graded")
+                                                        <input type="number" name=@formName placeholder="0-100" value=0 required class="rightish" style="color:black" /><br />
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div style="margin-right:10px">
+                                                        Current Grade: @(doc.Grade)%
+
+                                                        <input type="number" name=@formName placeholder="0-100" value=@(doc.Grade) required class="rightish" style="color:black" /><br />
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                        else { 
+                                            <div class="contorol padded">
+
+                                                <div style="font-size:20px">@assi.Name</div>
+                                                <div>
+                                                    No submission.
+                                                </div>
+
+                                                
+                                                <div class="upperRight">
+                                                    Assignment
+                                                </div>
+
+                                                <div style="margin-right:10px">
+                                                    Current Grade: @Html.Raw("Not yet graded")
+                                                    <input type="number" name=@formName placeholder="0-100" value=0 required class="rightish" style="color:black" /><br />
+                                                </div>
+                                            </div>
+                                        }
+
+                                        <hr />
+
+
+                                    }
+                                    //var doc = Model.documents[i2];
+                                    formName++;
+
+                                }
+                            }
+                            <div style="padding-left:10px">
+                                Total Grade:
+                                @(Model.classGrade[0])%
                             </div>
-                        }
-                        else
-                        {
-                            <div class="contorol padded">
-                                <h4>
-                                    @Html.DisplayFor(assignment => i.Name)
-                                </h4>
-                                <div style="margin-right:10px">
-                                    No submission.
-
-                                    <input type="number" name=@formName placeholder="0-100" value=0 required style="float:right; width:50px" /><br />
-                                </div>
-                                <hr />
+                            
+                            <div style="padding-left:10px">
+                                Theoretical Grade in Class: @Model.fakeTotal%
                             </div>
-                        }
-
-                        formName++;
-
+                            <br/>
+                        </div>
+                    </div>
+                    <hr />
                     }
-                    <div>
-                        Overall Grade in Class: @Model.classGrade.FirstOrDefault()
-                    </div>
 
-                    <div>
-                        Theoretical Grade in Class: @Model.fakeTotal
-                    </div>
                     <input type="hidden" name="classID" value="@Model.cl.ClassID" />
                     <input type="submit" name="submit" value="Calculate Grade" />
-
-                }
             </form>
         </div>
     </div>

@@ -25,6 +25,7 @@ namespace Oodle.Models.Repos
         IEnumerable<Notes> Notes { get; }
         IEnumerable<StudentQuizze> StudentQuizzes { get; }
         IEnumerable<StudentAnswer> StudentAnswers { get; }
+        IEnumerable<Grade> Grades { get; }
 
 
 
@@ -53,6 +54,10 @@ namespace Oodle.Models.Repos
         void RemoveQuiz(Quizze q);
         void AddDocument(Document t);
         void RemoveDocument(Document t);
+
+        void AddGrade(Grade t);
+        void RemoveGrade(Grade t);
+
         void DeleteAssignment(Assignment a);
     }
 }
