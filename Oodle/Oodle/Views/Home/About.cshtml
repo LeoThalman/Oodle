@@ -1,5 +1,15 @@
-﻿<h2>Frequently Asked Questions:</h2>
+﻿<h2>Frequently Asked Questions </h2>
 
+
+<head>
+    <!-- Latest compiled and minified CSS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+</head>
 
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 <div class="slide-toggle text-center">
@@ -70,7 +80,7 @@
             <div class="content-box">
                 <p>
                     To join a class simply select the class you wish to join and click "join". The teacher will then get a notifcation alerting them of your request to join.
-                    If the teacher accepts you into the class they will and you will then have access to the class and all of its reasources. 
+                    If the teacher accepts you into the class they will and you will then have access to the class and all of its reasources.
                 </p>
             </div>
             <div class="contorol">
@@ -108,6 +118,60 @@
             </div>
 
 
+            <div class="contorol">
+                <h3>About the Oodle Developers</h3>
+                <span class="toggle-info pull-left">
+                    <i class="fa fa-plus"></i>
+                </span>
+            </div>
+            <div class="content-box">
+                <a name="targetname"></a>
+
+                <div class="container">
+
+                    <div class="row">
+                        <div class="col-lg-12"> <h3>The Oodle Developers!</h3> </div>
+                    </div>
+
+                    <div class="container">
+                        <div class="jumbotron" style="text-align:left">
+                            <br> Oodle was Created by:<br /> Koll Klienstuber, Leo Thalman, Sam Wetzel, and William Leingang <br />
+                            Oodle was created for the Computer Science Senior Capstone sequence at Western Oregon University during the 2017-2018 academic year.
+
+                            <h3 style="color:black">
+
+
+                                Created using:
+                            </h3>
+
+                            <ul style="font-size:14px;">
+                                <li>HTML, CSS, Bootstrap</li>
+                                <li>Jquery, JavaScript, JSON</li>
+                                <li>C#</li>
+                                <li>MVC</li>
+                                <li>ASP.NET</li>
+                                <li>Git</li>
+                                <li>Slack API</li>
+                                <li>Slack as a communications tools internally</li>
+                                <li>Two week Sprints using an Agile workflow</li>
+                                <li>Visual Studios Team Services</li>
+
+                            </ul>
+                            <hr />
+                            <h3 style="color:black">
+                                Support at: OodleLearning@gmail.com <br><br>
+                                <p style="color:black">Find us on <a href="https://bitbucket.org/blackwood-incorporated/senior-project" class="btn btn-primary btn-lg">Bitbucket &raquo;</a></pstyle="color:black">
+                            </h3>
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+
+
 
         </div>
     </div>
@@ -116,49 +180,15 @@
 <hr />
 <br /><br />
 
-<p>Find us on <a href="https://bitbucket.org/blackwood-incorporated/senior-project" class="btn btn-primary btn-lg">Bitbucket &raquo;</a></p>
+
+
+
+
+
+
 
 @section scripts
 {
     <script type="text/javascript" src="~/Scripts/scriptone.js"></script>
 }
 
-
-
-
-<script>
-
-
-
-
-
-    //For our moving boxes on the about page
-    $('.box').click(function () {
-
-        $(this).animate({
-            left: '-50%'
-        }, 500, function () {
-            $(this).css('left', '150%');
-            $(this).appendTo('#container');
-        });
-
-        $(this).next().animate({
-            left: '50%'
-        }, 500);
-    });
-
-
-
-
-    //Toggle FAQ section about page
-    $(document).ready(function () {
-        $(".content-box").hide();
-        $(".contorol").click(function () {
-            $(this).next(".content-box").slideToggle().siblings(".content-box").slideUp();
-            if ($("i").hasClass("fa-plus")) {
-                $(this).find("i").toggleClass("fa-minus");
-
-            }
-        });
-    });
-</script>
