@@ -737,10 +737,9 @@ namespace Oodle.Controllers
 
                     if (l.Assignment != null)
                     {
-                        d = db.Documents.Where(k => k.GradeID == l.GradeID).FirstOrDefault();
-
-                        if (d != null)
+                        if (db.Documents.Where(k => k.GradeID == l.GradeID).FirstOrDefault() != null)
                         {
+                            d = db.Documents.Where(k => k.GradeID == l.GradeID).FirstOrDefault();
                             if (d.Grade != -1)
                             {
                                 var contribution = l.Assignment.Weight * d.Grade;
