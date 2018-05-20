@@ -72,11 +72,6 @@ namespace Oodle.Models
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Class>()
-                .HasMany(e => e.Assignments)
-                .WithRequired(e => e.Class)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Class>()
                 .HasMany(e => e.Documents)
                 .WithRequired(e => e.Class)
                 .WillCascadeOnDelete(false);
@@ -91,8 +86,23 @@ namespace Oodle.Models
                 .WithRequired(e => e.Class)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<Quizze>()
+            modelBuilder.Entity<Grade>()
+                .HasMany(e => e.Documents)
+                .WithRequired(e => e.Grade1)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Grade>()
                 .HasMany(e => e.StudentQuizzes)
+                .WithRequired(e => e.Grade)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<QuizQuestion>()
+                .HasMany(e => e.StudentAnswers)
+                .WithRequired(e => e.QuizQuestion)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Quizze>()
+                .HasMany(e => e.Grades)
                 .WithRequired(e => e.Quizze)
                 .WillCascadeOnDelete(false);
 
@@ -105,11 +115,6 @@ namespace Oodle.Models
                 .HasMany(e => e.Documents)
                 .WithRequired(e => e.User)
                 .HasForeignKey(e => e.UserID)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<User>()
-                .HasMany(e => e.Grades)
-                .WithRequired(e => e.User)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<User>()

@@ -9,6 +9,17 @@ Lighter blue: #3AAFA9
 Darker white: #DEF2F1
 Lighter white: #FEFFFF
 */
+
+.upperRight {
+    position: absolute;
+    top: 0px;
+    right: 10px;
+    text-align: right;
+    padding-left: 10px;
+    font-size: small;
+    height: 10px;
+}
+
 .whitebox {
     position: relative;
     background-color: white;

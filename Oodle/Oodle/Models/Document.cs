@@ -10,6 +10,8 @@ namespace Oodle.Models
     {
         public int Id { get; set; }
 
+        public int GradeID { get; set; }
+
         [Required]
         [StringLength(250)]
         public string Name { get; set; }
@@ -31,11 +33,13 @@ namespace Oodle.Models
 
         public int Grade { get; set; }
 
-        public DateTime? Date { get; set; }
+        public DateTime Date { get; set; }
 
         public virtual Assignment Assignment { get; set; }
 
         public virtual Class Class { get; set; }
+
+        public virtual Grade Grade1 { get; set; }
 
         public virtual User User { get; set; }
     }
