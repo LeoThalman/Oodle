@@ -713,6 +713,8 @@ namespace Oodle.Controllers
             List<User> list = new List<User>();
             List<int> classGrades = new List<int>();
             teacher.perUser = new List<UserVMish>();
+            List<Grade> gradables = db.Grades.Where(g => g.ClassID == classID).ToList();
+
 
             foreach (var i in tmp)
             {
@@ -723,7 +725,6 @@ namespace Oodle.Controllers
                 UserVMish.Late = new List<TimeSpan>();
                 //var submissions = db.Documents.Where(l => l.ClassID == classID && l.UserID == i.UsersID).ToList();
 
-                var gradables = db.Grades.Where(g => g.ClassID == classID);
 
                 int total = 0;
                 int divisor = 0;
