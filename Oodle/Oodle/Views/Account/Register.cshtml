@@ -2,6 +2,8 @@
 @{
     ViewBag.Title = "Register";
 }
+@using reCAPTCHA.MVC
+
 
 <h2>@ViewBag.Title.</h2>
 
@@ -41,6 +43,8 @@
         </div>
     </div>
     <div class="form-group">
+        @Html.Recaptcha("6LetL1kUAAAAACyJBONel8N7ME28W7MnZiJTIsWK")
+        @Html.ValidationMessage("ReCaptcha")
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" class="btn btn-default" value="Register" />
         </div>
