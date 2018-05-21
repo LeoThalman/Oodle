@@ -1014,7 +1014,32 @@ namespace Oodle.Controllers
             return View("RemoveQuiz", "_TeacherLayout", teacher);
         }
 
-        
+        public Boolean RemoveQuizGrades(int QuizID, int ClassID)
+        {
+            Boolean rtn = true;
+
+            List<Grade> TempGrades = db.Grades.Where(g => g.QuizID == QuizID).ToList();
+            foreach(Grade g in TempGrades)
+            {
+                db.RemoveGrade(g);
+            }
+            db.SaveChanges();
+            return rtn;
+        }
+
+        public Boolean RemoveStudentQuizzes(int QuizID, int ClassID)
+        {
+            Boolean rtn = true;
+
+            List<StudentQuizze> TempQuizzes = db.StudentQuizzes.Where(q => q.QuizID == QuizID).ToList();
+            foreach (StudentQuizze q in TempQuizzes)
+            {
+                db.RemoveStudentQuiz(q);
+            }
+            db.SaveChanges();
+            return rtn;
+        }
+
         public ActionResult DeleteQuiz(int QuizID, int ClassID)
         {
             Quizze Quiz = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault();
@@ -1022,6 +1047,10 @@ namespace Oodle.Controllers
             {
                 return test(Quiz.ClassID);
             }
+            RemoveStudentQuizzes(QuizID, ClassID);
+            RemoveQuizGrades(QuizID, ClassID);
+            
+
             db.RemoveQuiz(Quiz);
             db.SaveChanges();
 

@@ -239,7 +239,7 @@ CREATE TABLE dbo.Assignment
 	Weight INT NOT NULL,
 	CONSTRAINT [PK_dbo.Assignment] PRIMARY KEY CLUSTERED (AssignmentID ASC),
 	CONSTRAINT [FK_dbo.Assignment_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
-	ON DELETE CASCADE ON UPDATE CASCADE
+	ON DELETE CASCADE
 );
 
 -- Task Table
@@ -318,7 +318,9 @@ CREATE TABLE Grades(
 	CONSTRAINT [PK_dbo.Grades] PRIMARY KEY CLUSTERED (GradeID ASC),
 	CONSTRAINT [FK_dbo.Grades_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID]),
 	CONSTRAINT [FK_dbo.Grades_dbo.QuizID] FOREIGN KEY ([QuizID]) REFERENCES [dbo].[Quizzes] (QuizID),
-	CONSTRAINT [FK_dbo.Grades_dbo.AssignmentID] FOREIGN KEY ([AssignmentID]) REFERENCES [dbo].[Assignment] (AssignmentID),
+	CONSTRAINT [FK_dbo.Grades_dbo.AssignmentID] FOREIGN KEY ([AssignmentID]) REFERENCES [dbo].[Assignment] (AssignmentID)
+	ON DELETE CASCADE
+	
 );
 
 CREATE TABLE dbo.Documents(  
@@ -352,7 +354,6 @@ CREATE TABLE dbo.QuizQuestions(
 	CONSTRAINT [PK_dbo.QuizQuestions] PRIMARY KEY CLUSTERED (QuestionID ASC),
 	CONSTRAINT [FK_dbo.Questions_dbo.Quizzes] FOREIGN KEY ([QuizID]) REFERENCES [dbo].[Quizzes] ([QuizID])
 	ON DELETE CASCADE
-	ON UPDATE CASCADE,
 );
 
 Create TABLE MultChoiceAnswers(
@@ -365,7 +366,7 @@ Create TABLE MultChoiceAnswers(
 	CorrectAnswer INT NOT NULL,
 	CONSTRAINT [PK_dbo.MultChoiceAnswers] PRIMARY KEY CLUSTERED (AnswerID ASC),
 	CONSTRAINT [FK_dbo.MultChoiceAnswers_dbo.QuizQuestions] FOREIGN KEY ([QuestionID]) REFERENCES [dbo].[QuizQuestions] ([QuestionID])
-	ON DELETE CASCADE ON UPDATE CASCADE,
+	ON DELETE CASCADE,
 );
 
 Create TABLE StudentQuizzes(
@@ -380,7 +381,6 @@ Create TABLE StudentQuizzes(
 	CanReview BIT NOT NULL,
 	CONSTRAINT [PK_dbo.StudentQuizzes] PRIMARY KEY CLUSTERED (SQID ASC),
 	CONSTRAINT [FK_dbo.StudentQuizzes_dbo.Quizzes] FOREIGN KEY ([QuizID]) REFERENCES [dbo].[Quizzes] ([QuizID])
-	ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 Create TABLE StudentAnswers(
@@ -391,7 +391,7 @@ Create TABLE StudentAnswers(
 	StudentPoints INT NOT NULL,
 	CONSTRAINT [PK_dbo.StudentAnswers] PRIMARY KEY CLUSTERED (SQAID ASC),
 	CONSTRAINT [FK_dbo.StudentAnswers_dbo.StudentQuizzes] FOREIGN KEY ([SQID]) REFERENCES [dbo].[StudentQuizzes] ([SQID])
-	ON DELETE CASCADE ON UPDATE CASCADE,
+	ON DELETE CASCADE,
 	CONSTRAINT [FK_dbo.StudentAnswers_dbo.QuizQuestions] FOREIGN KEY ([QuestionID]) REFERENCES [dbo].[QuizQuestions] ([QuestionID])
 );
   

@@ -48,13 +48,13 @@ namespace SeleniumTests
             driver.FindElement(By.Id("loginLink")).Click();
             driver.FindElement(By.Id("UserName")).Click();
             driver.FindElement(By.Id("UserName")).Clear();
-            driver.FindElement(By.Id("UserName")).SendKeys("password");
+            driver.FindElement(By.Id("UserName")).SendKeys("teacher");
             driver.FindElement(By.Id("Password")).Clear();
-            driver.FindElement(By.Id("Password")).SendKeys("password");
+            driver.FindElement(By.Id("Password")).SendKeys("111111");
             driver.FindElement(By.XPath("//input[@value='Log in']")).Click();
             driver.FindElement(By.LinkText("Classes")).Click();
             System.Threading.Thread.Sleep(2000);
-            driver.FindElement(By.XPath("//div[4]/a/div/div[2]")).Click();
+            driver.FindElement(By.XPath("//a/div/div")).Click();
             System.Threading.Thread.Sleep(2000);
             driver.FindElement(By.Id("testBtn1")).Click();
             System.Threading.Thread.Sleep(2000);
@@ -72,6 +72,7 @@ namespace SeleniumTests
             driver.FindElement(By.Id("testBtn1")).Click();
             System.Threading.Thread.Sleep(2000);
             Assert.AreEqual("do something", driver.FindElement(By.XPath("//div[@id='testModal1']/div/div[2]/div[2]/div/div/div")).Text);
+            driver.FindElement(By.LinkText("Log off")).Click();
         }
         private bool IsElementPresent(By by)
         {

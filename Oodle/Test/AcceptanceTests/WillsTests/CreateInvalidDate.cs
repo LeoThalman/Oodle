@@ -77,6 +77,8 @@ namespace SeleniumTests
             driver.FindElement(By.Name("dueDate")).SendKeys("2018-05-23T11:11");
             driver.FindElement(By.Name("submit")).Click();
             Assert.AreEqual("The due date must be after the start date.", CloseAlertAndGetItsText());
+            driver.FindElement(By.LinkText("Log off")).Click();
+
         }
         private bool IsElementPresent(By by)
         {
