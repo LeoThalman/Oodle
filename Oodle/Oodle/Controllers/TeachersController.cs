@@ -713,6 +713,8 @@ namespace Oodle.Controllers
             List<User> list = new List<User>();
             List<int> classGrades = new List<int>();
             teacher.perUser = new List<UserVMish>();
+            List<Grade> gradables = db.Grades.Where(g => g.ClassID == classID).ToList();
+
 
             foreach (var i in tmp)
             {
@@ -723,7 +725,6 @@ namespace Oodle.Controllers
                 UserVMish.Late = new List<TimeSpan>();
                 //var submissions = db.Documents.Where(l => l.ClassID == classID && l.UserID == i.UsersID).ToList();
 
-                var gradables = db.Grades.Where(g => g.ClassID == classID);
 
                 int total = 0;
                 int divisor = 0;
@@ -737,10 +738,9 @@ namespace Oodle.Controllers
 
                     if (l.Assignment != null)
                     {
-                        d = db.Documents.Where(k => k.GradeID == l.GradeID).FirstOrDefault();
-
-                        if (d != null)
+                        if (db.Documents.Where(k => k.GradeID == l.GradeID && k.UserID == i.UsersID).FirstOrDefault() != null)
                         {
+                            d = db.Documents.Where(k => k.GradeID == l.GradeID && k.UserID == i.UsersID).FirstOrDefault();
                             if (d.Grade != -1)
                             {
                                 var contribution = l.Assignment.Weight * d.Grade;
@@ -762,7 +762,7 @@ namespace Oodle.Controllers
 
                     if (l.Quizze != null)
                     {
-                        q = db.StudentQuizzes.Where(k => k.QuizID == l.QuizID).FirstOrDefault();
+                        q = db.StudentQuizzes.Where(k => k.QuizID == l.QuizID && k.UserID == i.UsersID).FirstOrDefault();
 
                         if (q != null)
                         {
@@ -794,7 +794,7 @@ namespace Oodle.Controllers
                 {
                     classGrades.Add(0);
                 }
-            }
+            }//////
 
             
 

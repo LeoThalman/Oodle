@@ -349,7 +349,8 @@ namespace Oodle.Controllers
             teacher.documents = db.Documents.Where(i => i.ClassID == classID && i.UserID == userId).ToList();
 
             List<Grade> list2 = db.Grades.Where(g => g.ClassID == classID).ToList();
-            
+
+
             List<Document> list = teacher.documents;
 
             teacher.perUser = new List<UserVMish>() { new UserVMish()};
