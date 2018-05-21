@@ -738,9 +738,9 @@ namespace Oodle.Controllers
 
                     if (l.Assignment != null)
                     {
-                        if (db.Documents.Where(k => k.GradeID == l.GradeID).FirstOrDefault() != null)
+                        if (db.Documents.Where(k => k.GradeID == l.GradeID && k.UserID == i.UsersID).FirstOrDefault() != null)
                         {
-                            d = db.Documents.Where(k => k.GradeID == l.GradeID).FirstOrDefault();
+                            d = db.Documents.Where(k => k.GradeID == l.GradeID && k.UserID == i.UsersID).FirstOrDefault();
                             if (d.Grade != -1)
                             {
                                 var contribution = l.Assignment.Weight * d.Grade;
@@ -762,7 +762,7 @@ namespace Oodle.Controllers
 
                     if (l.Quizze != null)
                     {
-                        q = db.StudentQuizzes.Where(k => k.QuizID == l.QuizID).FirstOrDefault();
+                        q = db.StudentQuizzes.Where(k => k.QuizID == l.QuizID && k.UserID == i.UsersID).FirstOrDefault();
 
                         if (q != null)
                         {
@@ -794,7 +794,7 @@ namespace Oodle.Controllers
                 {
                     classGrades.Add(0);
                 }
-            }
+            }//////
 
             
 
