@@ -244,21 +244,28 @@
 
     <h3>UBUNTU BASIC: </h3>
     <h6>Once you click the image please wait about 5 seconds for the server to create and to get the information.</h6>
-    <a href="https://87ri5c4jyc.execute-api.us-west-2.amazonaws.com/prod/ubuntuServerNonRoot">
+
+    <a href="https://87ri5c4jyc.execute-api.us-west-2.amazonaws.com/prod/ubuntuServerNonRoot" onclick="countDown1()">
         <img src="/Content/img/ubuntu.png" alt="Ubuntu Logo" style="width:120px;height:120px;border:0">
     </a>
+    <br />
+    <progress value="0" max="6" id="progressBar1"></progress>
 
 </div>
-<div class="wrapper">
-    <h3>How Do you rate oodle?</h3>
-    <form id="MyForm" action="/Home/Tools" method="post">
-        <p>enter your rating from 1-5:</p>
-        <input type="number" name="textBoxIntData" />      
+<script>
 
-        <input type="submit" name="Submit" value="Submit rating" />
-    </form>
 
-</div>
+        function countDown1() {
+            var timeleft = 6;
+            var downloadTimer = setInterval(function () {
+                document.getElementById("progressBar1").value = 6 - --timeleft;
+                if (timeleft <= 0)
+                    clearInterval(downloadTimer);
+            }, 1000);
+        }
+
+
+</script>
 
 @section scripts
     {
