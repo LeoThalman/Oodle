@@ -60,7 +60,7 @@ namespace SeleniumTests
             driver.FindElement(By.XPath("//a/div/div[2]")).Click();
             //driver.FindElement(By.Name("postedFile")).Click();
             //driver.FindElement(By.Name("postedFile")).Clear();
-            driver.FindElement(By.Name("postedFile")).SendKeys("C:\\Users\\leoth\\Desktop\\school-work\\cs46X\\cs461\\senior-project\\Oodle\\Test\\AcceptanceTests\\WillsTests\\ID426.feature");
+            driver.FindElement(By.Name("postedFile")).SendKeys("C:\\Users\\pocke\\Desktop\\school-work\\cs46X\\cs461\\senior-project\\Oodle\\Test\\AcceptanceTests\\WillsTests\\ID426.feature");
             driver.FindElement(By.Id("btnUpload")).Click();
 
 
@@ -75,7 +75,7 @@ namespace SeleniumTests
             driver.FindElement(By.XPath("//a/div/div[2]")).Click();
             //driver.FindElement(By.Name("postedFile")).Click();
             //driver.FindElement(By.Name("postedFile")).Clear();
-            driver.FindElement(By.Name("postedFile")).SendKeys("C:\\Users\\leoth\\Desktop\\school-work\\cs46X\\cs461\\senior-project\\Oodle\\Test\\AcceptanceTests\\WillsTests\\ID427.feature");
+            driver.FindElement(By.Name("postedFile")).SendKeys("C:\\Users\\pocke\\Desktop\\school-work\\cs46X\\cs461\\senior-project\\Oodle\\Test\\AcceptanceTests\\WillsTests\\ID427.feature");
             driver.FindElement(By.Id("btnUpload")).Click();
 
 
