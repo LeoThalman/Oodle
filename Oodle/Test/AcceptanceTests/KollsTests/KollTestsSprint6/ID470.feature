@@ -16,12 +16,3 @@ Scenario: As a user if I try and navigate to any of the pages like "confirmEmail
     Given I am visiting a page like Oodle/confirmEmail
     When I try and visit the page
     Then I wont be shown that page but rather a templated error page
-
-Scenario: Information at a glance section holds information
-    Given I am visiting the teacher index page
-    When I click a link on the information at a glance section
-    Then I am shown upcoming tasks if any exist or
-    Then data shows class naviation tips or
-    Then I am shown upcoming assignments if any exist
-
-

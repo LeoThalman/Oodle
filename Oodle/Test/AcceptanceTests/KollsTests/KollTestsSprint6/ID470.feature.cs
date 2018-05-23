@@ -85,26 +85,6 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Information at a glance section holds information", SourceLine=19)]
-        public virtual void InformationAtAGlanceSectionHoldsInformation()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Information at a glance section holds information", ((string[])(null)));
-#line 20
-this.ScenarioSetup(scenarioInfo);
-#line 21
-    testRunner.Given("I am visiting the teacher index page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 22
-    testRunner.When("I click a link on the information at a glance section", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 23
-    testRunner.Then("I am shown upcoming tasks if any exist or", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 24
-    testRunner.Then("data shows class naviation tips or", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 25
-    testRunner.Then("I am shown upcoming assignments if any exist", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
         [TechTalk.SpecRun.TestRunCleanup()]
         public virtual void TestRunCleanup()
         {

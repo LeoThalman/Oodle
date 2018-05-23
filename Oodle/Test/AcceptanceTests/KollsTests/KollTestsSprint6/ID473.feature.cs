@@ -18,7 +18,7 @@ namespace Test.AcceptanceTests.KollsTests.KollTestsSprint6
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.3.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [TechTalk.SpecRun.FeatureAttribute("ID473 -- Error page redirection", Description=@"    As a user on the Oodle site
-    I would like to be able to be redirected when I am experiencing an html status code 100-500
+    I would like to be able to be redirected when I am experiencing an html status code that sends us to an error page
     So that when I am someone I shouldn't be or somewhere that causes an error I get redirected to somewhere more user friendly", SourceFile="AcceptanceTests\\KollsTests\\KollTestsSprint6\\ID473.feature", SourceLine=6)]
     public partial class ID473_ErrorPageRedirectionFeature
     {
@@ -33,7 +33,7 @@ namespace Test.AcceptanceTests.KollsTests.KollTestsSprint6
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "ID473 -- Error page redirection", @"    As a user on the Oodle site
-    I would like to be able to be redirected when I am experiencing an html status code 100-500
+    I would like to be able to be redirected when I am experiencing an html status code that sends us to an error page
     So that when I am someone I shouldn't be or somewhere that causes an error I get redirected to somewhere more user friendly", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
@@ -65,38 +65,21 @@ namespace Test.AcceptanceTests.KollsTests.KollTestsSprint6
             testRunner.CollectScenarioErrors();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Index page should be available for a teacher", SourceLine=11)]
-        public virtual void IndexPageShouldBeAvailableForATeacher()
+        [TechTalk.SpecRun.ScenarioAttribute("As a user visiting a page that doesn\'t exist or returns an http status code page " +
+            "I get redirected to error page", SourceLine=11)]
+        public virtual void AsAUserVisitingAPageThatDoesntExistOrReturnsAnHttpStatusCodePageIGetRedirectedToErrorPage()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Index page should be available for a teacher", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("As a user visiting a page that doesn\'t exist or returns an http status code page " +
+                    "I get redirected to error page", ((string[])(null)));
 #line 12
 this.ScenarioSetup(scenarioInfo);
 #line 13
-    testRunner.Given("I am visiting a class that I, the teacher, created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("I am visiting a place on Oodle that is a non existant page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 14
     testRunner.When("I visit the page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 15
-    testRunner.Then("the information should be about that specific classs", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [TechTalk.SpecRun.ScenarioAttribute("Information at a glance section holds information", SourceLine=16)]
-        public virtual void InformationAtAGlanceSectionHoldsInformation()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Information at a glance section holds information", ((string[])(null)));
-#line 17
-this.ScenarioSetup(scenarioInfo);
-#line 18
-    testRunner.Given("I am visiting the teacher index page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 19
-    testRunner.When("I click a link on the information at a glance section", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 20
-    testRunner.Then("I am shown upcoming tasks if any exist or", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 21
-    testRunner.Then("data shows class naviation tips or", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 22
-    testRunner.Then("I am shown upcoming assignments if any exist", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+    testRunner.Then("the I get redirected to an error page that is custom for Oodle and more user frie" +
+                    "ndly", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
