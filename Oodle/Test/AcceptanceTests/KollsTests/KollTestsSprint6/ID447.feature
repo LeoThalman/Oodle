@@ -14,6 +14,13 @@ Scenario: As a user registering or logging into Oodle
     When I submit my register or login 
 	Then I will be redirected to a page that doesn't tell me to login or register
 
+
+	
+Scenario: As a teacher trying to delete a class
+    Given I am a teacher about to delete a class
+    When I click delete class
+	Then I want to have to double check that I do in fact want to delete the class
+
 		
 Scenario: As a user on the "about" page, I want to be able to read the information without it dissapering
     Given I am a Oodle user and go to the about page
@@ -45,13 +52,6 @@ Scenario: As a user on any page with the Oodle logo
     When I click the logo
 	Then I will be redireced to the new home page
 
-
-
-	
-Scenario: As a teacher trying to delete a class
-    Given I am a teacher about to delete a class
-    When I click delete class
-	Then I want to have to double check that I do in fact want to delete the class
 
 
 	
