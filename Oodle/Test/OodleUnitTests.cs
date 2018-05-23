@@ -1022,23 +1022,30 @@ namespace Test
         [Test]
         public void Will_GradeHelper_Returns0_WhenGradeIsNegativeOneBecauseThatIndicatesAnUngradedSubmission()
         {
+
             // mock the object
             mock = new Mock<IOodleRepository>();
-            Assignment assi = new Assignment { AssignmentID = 1, ClassID = 1, Name = "test", Weight = 1, DueDate = DateTime.Parse("5/13/2019 8:30:00 PM") };
 
-            List <Assignment> aList = new List<Assignment>
+            Assignment assi = new Assignment { AssignmentID = 1, ClassID = 1, Name = "test", Weight = 1, DueDate = DateTime.Parse("5/13/2019 8:30:00 PM") };
+            List<Assignment> aList = new List<Assignment>
             {
-                assi,
+                assi
             };
 
+            Grade grade = new Grade { ClassID = 1, Grade1 = -1, AssignmentID = 1, GradeWeight = 1, DateApplied = DateTime.Parse("5/13/2019 8:30:00 PM"), Assignment = assi };
+            List<Grade> gList = new List<Grade>
+            {
+                grade
+            };
 
             List<Document> list = new List<Document>
                  {
-                    new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 1, UserID = 1, Grade = -1, Date = DateTime.Now, Assignment = assi }
+                    new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 1, UserID = 1, Grade = -1, Date = DateTime.Now, Assignment = assi, GradeID = 1, Grade1 = grade }
                  };
 
             StudentsController student = new StudentsController(mock.Object);
-            //var answer = student.GradeHelper(list, aList);
+
+            var answer = student.GradeHelper(list, gList);
 
             //Assert.AreEqual(0, answer);
         }
@@ -1049,6 +1056,7 @@ namespace Test
         {
             // mock the object
             mock = new Mock<IOodleRepository>();
+
             Assignment assi = new Assignment { AssignmentID = 1, ClassID = 1, Name = "test", Weight = 1, DueDate = DateTime.Parse("5/13/2019 8:30:00 PM") };
             Assignment assi2 = new Assignment { AssignmentID = 2, ClassID = 1, Name = "test", Weight = 1, DueDate = DateTime.Parse("5/13/2019 8:30:00 PM") };
 
@@ -1057,14 +1065,34 @@ namespace Test
                 assi,
                 assi2
             };
+
+
+            Grade grade = new Grade { GradeID = 1, ClassID = 1, Grade1 = -1, AssignmentID = 1, GradeWeight = 1, DateApplied = DateTime.Parse("5/13/2019 8:30:00 PM"), Assignment = assi };
+            Grade grade2 = new Grade { GradeID = 2, ClassID = 1, Grade1 = 100, AssignmentID = 2, GradeWeight = 1, DateApplied = DateTime.Parse("5/13/2019 8:30:00 PM"), Assignment = assi2 };
+
+            List<Grade> gList = new List<Grade>
+            {
+                grade,
+                grade2
+            };
+
+
             List<Document> list = new List<Document>
                  {
-                    new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 1, UserID = 1, Grade = -1, Date = DateTime.Now, Assignment = assi },
-                    new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 2, UserID = 1, Grade = 100, Date = DateTime.Now, Assignment = assi2 }
+                    new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 1, UserID = 1, Grade = -1, Date = DateTime.Now, Assignment = assi, GradeID = 1, Grade1 = grade  },
+                    new Document {Id = 2, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 2, UserID = 1, Grade = 100, Date = DateTime.Now, Assignment = assi2, GradeID = 2, Grade1 = grade2  }
                  };
 
+
+            mock.Setup(m => m.Documents)
+            .Returns(
+             list
+             );
+
+
             StudentsController student = new StudentsController(mock.Object);
-            //var answer = student.GradeHelper(list, aList);
+
+            var answer = student.GradeHelper(list, gList);
 
             //Assert.AreEqual(100, answer);
         }
@@ -1084,15 +1112,31 @@ namespace Test
                 assi2
             };
 
+
+            Grade grade = new Grade { GradeID = 1, ClassID = 1, Grade1 = 0, AssignmentID = 1, GradeWeight = 1, DateApplied = DateTime.Parse("5/13/2019 8:30:00 PM"), Assignment = assi };
+            Grade grade2 = new Grade { GradeID = 2, ClassID = 1, Grade1 = 100, AssignmentID = 2, GradeWeight = 1, DateApplied = DateTime.Parse("5/13/2019 8:30:00 PM"), Assignment = assi2 };
+
+            List<Grade> gList = new List<Grade>
+            {
+                grade,
+                grade2
+            };
+
+
             List<Document> list = new List<Document>
                  {
-                    new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 1, UserID = 1, Grade = 0, Date = DateTime.Now, Assignment = assi },
-                    new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 2, UserID = 1, Grade = 100, Date = DateTime.Now, Assignment = assi2 }
+                    new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 1, UserID = 1, Grade = 0, Date = DateTime.Now, Assignment = assi, GradeID = 1, Grade1 = grade },
+                    new Document {Id = 2, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 2, UserID = 1, Grade = 100, Date = DateTime.Now, Assignment = assi2, GradeID = 2, Grade1 = grade2 }
                  };
 
-            StudentsController student = new StudentsController(mock.Object);
-            //var answer = student.GradeHelper(list, aList);
+             mock.Setup(m => m.Documents)
+            .Returns(
+             list
+             );
 
+            StudentsController student = new StudentsController(mock.Object);
+
+            var answer = student.GradeHelper(list, gList);
             //Assert.AreEqual(50, answer);
         }
 
@@ -1111,14 +1155,30 @@ namespace Test
                 assi2
             };
 
+
+            Grade grade = new Grade { GradeID = 1, ClassID = 1, Grade1 = -1, AssignmentID = 1, GradeWeight = 1, DateApplied = DateTime.Parse("5/13/2019 8:30:00 PM"), Assignment = assi };
+            Grade grade2 = new Grade { GradeID = 2, ClassID = 1, Grade1 = 100, AssignmentID = 2, GradeWeight = 1, DateApplied = DateTime.Parse("5/13/2019 8:30:00 PM"), Assignment = assi2 };
+
+            List<Grade> gList = new List<Grade>
+            {
+                grade,
+                grade2
+            };
+
+
             List<Document> list = new List<Document>
                  {
-                    new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 1, UserID = 1, Grade = 0, Date = DateTime.Now, Assignment = assi },
-                    new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 2, UserID = 1, Grade = 100, Date = DateTime.Now, Assignment = assi2 }
+                    new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 1, UserID = 1, Grade = 0, Date = DateTime.Now, Assignment = assi, GradeID = 1, Grade1 = grade },
+                    new Document {Id = 2, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 2, UserID = 1, Grade = 100, Date = DateTime.Now, Assignment = assi2, GradeID = 2, Grade1 = grade2 }
                  };
 
+            mock.Setup(m => m.Documents)
+            .Returns(
+             list
+             );
+
             StudentsController student = new StudentsController(mock.Object);
-            //var answer = student.GradeHelper(list, aList);
+            var answer = student.GradeHelper(list, gList);
 
             //Assert.AreEqual(66, answer);
         }
@@ -1145,6 +1205,13 @@ namespace Test
             mock.Setup(m => m.Assignments).Returns(
                new Assignment[] { assi }
             );
+
+            Grade grade = new Grade { GradeID = 1, ClassID = 1, Grade1 = -1, AssignmentID = 1, GradeWeight = 1, DateApplied = DateTime.Parse("5/13/2019 8:30:00 PM"), Assignment = assi };
+
+            mock.Setup(m => m.Grades).Returns(
+               new Grade[] { grade }
+            );
+
 
             System.Collections.Specialized.NameValueCollection form = new System.Collections.Specialized.NameValueCollection
             {
@@ -1275,11 +1342,20 @@ namespace Test
                 new Document[]
                 {
                     new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 1, UserID = 1, Grade = 100, Date = DateTime.Now, Assignment = assi },
-                    new Document {Id = 1, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 2, UserID = 1, Grade = 100, Date = DateTime.Now, Assignment = assi },
+                    new Document {Id = 2, Name = "test1", ContentType = ".png" , Data = BitConverter.GetBytes(0), submitted = DateTime.Now, ClassID = 1, AssignmentID = 2, UserID = 1, Grade = 100, Date = DateTime.Now, Assignment = assi },
                 });
             mock.Setup(m => m.Assignments).Returns(
                new Assignment[] { assi, assi2 }
             );
+
+            Grade grade = new Grade { GradeID = 1, ClassID = 1, Grade1 = -1, AssignmentID = 1, GradeWeight = 1, DateApplied = DateTime.Parse("5/13/2019 8:30:00 PM"), Assignment = assi };
+            Grade grade2 = new Grade { GradeID = 2, ClassID = 1, Grade1 = -1, AssignmentID = 2, GradeWeight = 1, DateApplied = DateTime.Parse("5/13/2019 8:30:00 PM"), Assignment = assi2 };
+
+            mock.Setup(m => m.Grades).Returns(
+               new Grade[] { grade, grade2 }
+            );
+
+
 
             System.Collections.Specialized.NameValueCollection form = new System.Collections.Specialized.NameValueCollection
             {
@@ -1312,6 +1388,12 @@ namespace Test
                 });
             mock.Setup(m => m.Assignments).Returns(
                new Assignment[] { assi, assi2 }
+            );
+            Grade grade = new Grade { GradeID = 1, ClassID = 1, Grade1 = -1, AssignmentID = 1, GradeWeight = 1, DateApplied = DateTime.Parse("5/13/2019 8:30:00 PM"), Assignment = assi };
+            Grade grade2 = new Grade { GradeID = 2, ClassID = 1, Grade1 = -1, AssignmentID = 2, GradeWeight = 1, DateApplied = DateTime.Parse("5/13/2019 8:30:00 PM"), Assignment = assi2 };
+
+            mock.Setup(m => m.Grades).Returns(
+               new Grade[] { grade, grade2 }
             );
 
             System.Collections.Specialized.NameValueCollection form = new System.Collections.Specialized.NameValueCollection

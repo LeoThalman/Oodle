@@ -33,6 +33,20 @@ $(document).ready(function () {
 
 
 
+//-------------------------------------Delete Class---------------------------------------
+function deleteConfirm() {
+    alert('Are you sure you want to delete your profile? This cannot be undone? If yes please click "Confirm Delete" ');
+
+}
+
+$(document).ready(function () {
+    $("#deleteFinalClass").click(function () {
+        $("#deleteConfirmClass").fadeOut("slow");
+        $("#testClass").fadeIn("slow");
+    });
+});
+
+
 
 //-------------------------------------Tools page---------------------------------------
 
