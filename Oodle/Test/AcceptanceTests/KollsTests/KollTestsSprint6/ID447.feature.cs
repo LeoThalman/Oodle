@@ -79,105 +79,105 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
+        [TechTalk.SpecRun.ScenarioAttribute("As a teacher trying to delete a class", SourceLine=18)]
+        public virtual void AsATeacherTryingToDeleteAClass()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("As a teacher trying to delete a class", ((string[])(null)));
+#line 19
+this.ScenarioSetup(scenarioInfo);
+#line 20
+    testRunner.Given("I am a teacher about to delete a class", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 21
+    testRunner.When("I click delete class", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 22
+ testRunner.Then("I want to have to double check that I do in fact want to delete the class", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
         [TechTalk.SpecRun.ScenarioAttribute("As a user on the \"about\" page, I want to be able to read the information without " +
-            "it dissapering", SourceLine=17)]
+            "it dissapering", SourceLine=24)]
         public virtual void AsAUserOnTheAboutPageIWantToBeAbleToReadTheInformationWithoutItDissapering()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("As a user on the \"about\" page, I want to be able to read the information without " +
                     "it dissapering", ((string[])(null)));
-#line 18
+#line 25
 this.ScenarioSetup(scenarioInfo);
-#line 19
+#line 26
     testRunner.Given("I am a Oodle user and go to the about page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 20
+#line 27
     testRunner.When("I try and click a modal to expand", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 21
+#line 28
  testRunner.Then("It will stay open and not quickly close before it can be read.", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [TechTalk.SpecRun.ScenarioAttribute("As a user on the \"Tools\" page, I don\'t want an error when I enter in my letter gr" +
-            "ades into the GPA calculator", SourceLine=23)]
+            "ades into the GPA calculator", SourceLine=30)]
         public virtual void AsAUserOnTheToolsPageIDontWantAnErrorWhenIEnterInMyLetterGradesIntoTheGPACalculator()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("As a user on the \"Tools\" page, I don\'t want an error when I enter in my letter gr" +
                     "ades into the GPA calculator", ((string[])(null)));
-#line 24
+#line 31
 this.ScenarioSetup(scenarioInfo);
-#line 25
+#line 32
     testRunner.Given("I am a Oodle user and go to the tools page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 26
+#line 33
     testRunner.When("I enter in my grades to the grade section and add more then 4 letter grades", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 27
+#line 34
  testRunner.Then("I won\'t get an error, but instead get a return value of what my grade is", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [TechTalk.SpecRun.ScenarioAttribute("As a user on the \"Class list\" page, I don\'t want to have to uncheack each value i" +
-            "n my classes when I want to re aggregate my search results", SourceLine=29)]
+            "n my classes when I want to re aggregate my search results", SourceLine=36)]
         public virtual void AsAUserOnTheClassListPageIDontWantToHaveToUncheackEachValueInMyClassesWhenIWantToReAggregateMySearchResults()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("As a user on the \"Class list\" page, I don\'t want to have to uncheack each value i" +
                     "n my classes when I want to re aggregate my search results", ((string[])(null)));
-#line 30
+#line 37
 this.ScenarioSetup(scenarioInfo);
-#line 31
+#line 38
     testRunner.Given("I am a Oodle user and go to the class list page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 32
+#line 39
     testRunner.When("I want to search for specific classes under \"my classes\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 33
+#line 40
  testRunner.Then("I wont have to un check each box but instead will have to check only the boxes i " +
                     "want", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("As a user on the \"Tools\" page, I dont want a pointless Oodle rating system", SourceLine=35)]
+        [TechTalk.SpecRun.ScenarioAttribute("As a user on the \"Tools\" page, I dont want a pointless Oodle rating system", SourceLine=42)]
         public virtual void AsAUserOnTheToolsPageIDontWantAPointlessOodleRatingSystem()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("As a user on the \"Tools\" page, I dont want a pointless Oodle rating system", ((string[])(null)));
-#line 36
+#line 43
 this.ScenarioSetup(scenarioInfo);
-#line 37
+#line 44
     testRunner.Given("I am a Oodle user and go to the tools page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 38
+#line 45
     testRunner.When("I look for a \"rate Oodle\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 39
+#line 46
  testRunner.Then("I wont find one and be confused about it", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("As a user on any page with the Oodle logo", SourceLine=42)]
+        [TechTalk.SpecRun.ScenarioAttribute("As a user on any page with the Oodle logo", SourceLine=49)]
         public virtual void AsAUserOnAnyPageWithTheOodleLogo()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("As a user on any page with the Oodle logo", ((string[])(null)));
-#line 43
+#line 50
 this.ScenarioSetup(scenarioInfo);
-#line 44
-    testRunner.Given("I click the Oodle Logo", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 45
-    testRunner.When("I click the logo", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 46
- testRunner.Then("I will be redireced to the new home page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [TechTalk.SpecRun.ScenarioAttribute("As a teacher trying to delete a class", SourceLine=50)]
-        public virtual void AsATeacherTryingToDeleteAClass()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("As a teacher trying to delete a class", ((string[])(null)));
 #line 51
-this.ScenarioSetup(scenarioInfo);
+    testRunner.Given("I click the Oodle Logo", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 52
-    testRunner.Given("I am a teacher about to delete a class", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.When("I click the logo", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 53
-    testRunner.When("I click delete class", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 54
- testRunner.Then("I want to have to double check that I do in fact want to delete the class", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("I will be redireced to the new home page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

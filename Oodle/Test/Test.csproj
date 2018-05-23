@@ -149,6 +149,8 @@
     <Compile Include="AcceptanceTests\KollsTests\KollEditClass.cs" />
     <Compile Include="AcceptanceTests\KollsTests\KollTestingIndexsTeacher.cs" />
     <Compile Include="AcceptanceTests\KollsTests\KollTestingNote.cs" />
+    <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\AboutPageContainsAboutOodleDevsSection.cs" />
+    <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\CaptchaNoClickShouldFailRegister.cs" />
     <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\ID447.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -174,6 +176,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ID473.feature</DependentUpon>
     </Compile>
+    <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\NewLandingPageExistsWhenYouLoginAndGetDirectedToItInsteadOfOldPage.cs" />
+    <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\OodleTestingPageOnUbuntuServerHasALoadingBar.cs" />
+    <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\TestingToolsNumericalInputGradeCaluclatorIsCorrect.cs" />
     <Compile Include="AcceptanceTests\Sams Tests\ID395.feature.cs" />
     <Compile Include="AcceptanceTests\Sams Tests\ID3951.feature.cs">
       <AutoGen>True</AutoGen>
