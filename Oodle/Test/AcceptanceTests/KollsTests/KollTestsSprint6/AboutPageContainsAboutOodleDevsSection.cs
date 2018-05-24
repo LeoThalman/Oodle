@@ -42,7 +42,7 @@ namespace SeleniumTests
         [Test]
         public void TheCaptchaShouldPassTest()
         {
-            driver.Navigate().GoToUrl("http://oodlelearning.azurewebsites.net/");
+            driver.Navigate().GoToUrl("https://oodlelearning.azurewebsites.net/");
             driver.FindElement(By.XPath("(//a[contains(text(),'Log in')])[2]")).Click();
             driver.FindElement(By.Id("UserName")).Click();
             driver.FindElement(By.Id("UserName")).Clear();

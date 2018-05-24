@@ -68,7 +68,7 @@ namespace SeleniumTests
             driver.FindElement(By.Id("quiz_StartTime")).SendKeys("05/19/2018 12:00:00 PM");
             driver.FindElement(By.Id("quiz_EndTime")).Click();
             driver.FindElement(By.Id("quiz_EndTime")).Clear();
-            driver.FindElement(By.Id("quiz_EndTime")).SendKeys("05/22/2018 11:55:00 PM");
+            driver.FindElement(By.Id("quiz_EndTime")).SendKeys("06/22/2018 11:55:00 PM");
             driver.FindElement(By.Id("quiz_GradeWeight")).Click();
             driver.FindElement(By.Id("quiz_GradeWeight")).Clear();
             driver.FindElement(By.Id("quiz_GradeWeight")).SendKeys("10");
@@ -135,7 +135,7 @@ namespace SeleniumTests
             driver.FindElement(By.Id("quiz_StartTime")).SendKeys("05/19/2018 12:00:00 PM");
             driver.FindElement(By.Id("quiz_EndTime")).Click();
             driver.FindElement(By.Id("quiz_EndTime")).Clear();
-            driver.FindElement(By.Id("quiz_EndTime")).SendKeys("05/22/2018 11:55:00 PM");
+            driver.FindElement(By.Id("quiz_EndTime")).SendKeys("06/22/2018 11:55:00 PM");
             driver.FindElement(By.Id("quiz_GradeWeight")).Click();
             driver.FindElement(By.Id("quiz_GradeWeight")).Clear();
             driver.FindElement(By.Id("quiz_GradeWeight")).SendKeys("10");
@@ -186,6 +186,7 @@ namespace SeleniumTests
             driver.FindElement(By.XPath("//a/div/div")).Click();
             builder = new Actions(driver);
             builder.MoveToElement(driver.FindElement(By.LinkText("Class Menu"))).Perform();
+            System.Threading.Thread.Sleep(500);
             driver.FindElement(By.LinkText("Quizzes")).Click();
             driver.FindElement(By.LinkText("Take Quiz")).Click();
             driver.FindElement(By.Id("StudentAnswers_0__AnswerNumber")).Click();
