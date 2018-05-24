@@ -15,16 +15,43 @@
             Welcome to your teacher homepage for: @Html.DisplayFor(Name => Model.cl.Name)
         </h3>
         <hr />
+        <script>
+            function deleteConfirm() {
+                alert('Are you sure you want to delete your Class? This cannot be undone? If yes please click "Confirm Delete" ');
+
+            }
+
+            $(document).ready(function () {
+                $("#deleteFinalClass").click(function () {
+                    $("#deleteConfirmClass").fadeOut("slow");
+                    $("#testClass").fadeIn("slow");
+                });
+            });
+
+        </script>
 
         <div class="testingURL" style="background-color:black;text-align:center">
             <a href="@Url.Action("Edit", "Teachers", new { ClassID = (Model.cl.ClassID)} )">
                 Edit Class
             </a>
-            <p style="display:inline;" id="black-text">----------------------</p>
 
-            <a href="@Url.Action("Delete", "Teachers", new { ClassID = (Model.cl.ClassID)})">
-                Delete Class
-            </a>
+            <div id="deleteConfirmClass">
+                <button id="deleteFinalClass" class="btn btn-danger" onclick="deleteConfirm()">Delete Class</button>
+            </div>
+
+            <div id="testClass" style="display:none">
+
+             
+
+                <div class="form-actions no-color">
+
+                    <a href="@Url.Action("Delete", "Teachers", new { ClassID = (Model.cl.ClassID)})">
+                        Delete Class
+                    </a>
+                </div>
+
+
+            </div>
 
         </div>
 
@@ -41,14 +68,14 @@
                 <div class="col-sm-4" id="teacherPage">
                     <h3 id="black-text"> Notifications </h3>
                     @foreach (var notif in Model.notifs)
-                    {
-                        <p id="black-text">
-                            @Html.DisplayFor(Notification => notif.Notification)
-                            <a href="@Url.Action("RemoveNotif", "Teachers", new { classID = (notif.ClassID), notifID = (notif.ClassNotificationID)} )">
-                                Remove Notification
-                            </a>
-                        </p>
-                    }
+                {
+                    <p id="black-text">
+                        @Html.DisplayFor(Notification => notif.Notification)
+                        <a href="@Url.Action("RemoveNotif", "Teachers", new { classID = (notif.ClassID), notifID = (notif.ClassNotificationID)} )">
+                            Remove Notification
+                        </a>
+                    </p>
+            }
                     <a href="@Url.Action("AddNotifToClass", "Teachers", new { ClassID = (Model.cl.ClassID)} )" id="black-text">
                         Add A Notification
                     </a>
@@ -59,19 +86,19 @@
                     <h4 id="black-text">Pending Students:</h4>
                     <div class="buttonReject">
                         @for (int i = 0; i < Model.users.Count(); i++)
-                        {
-                            var user = Model.users[i];
-                            @Html.DisplayFor(Name => user.UserName)<p style="display:inline;color:black">:</p>
-                            <a href="@Url.Action("Accept", "Teachers", new { ClassID = (Model.cl.ClassID), UserID = user.UsersID }, null)">
-                                Accept
-                            </a>
-                            <p style="display:inline">|</p>
-                            <a href="@Url.Action("Reject", "Teachers", new { ClassID = (Model.cl.ClassID), UserID = user.UsersID }, null)">
-                                Reject
-                            </a>
-                            <br />
+                    {
+                        var user = Model.users[i];
+                        @Html.DisplayFor(Name => user.UserName)<p style="display:inline;color:black">:</p>
+                        <a href="@Url.Action("Accept", "Teachers", new { ClassID = (Model.cl.ClassID), UserID = user.UsersID }, null)">
+                            Accept
+                        </a>
+                        <p style="display:inline">|</p>
+                        <a href="@Url.Action("Reject", "Teachers", new { ClassID = (Model.cl.ClassID), UserID = user.UsersID }, null)">
+                            Reject
+                        </a>
+                        <br />
 
-                        }
+                }
                     </div>
                 </div>
             </div>
@@ -85,8 +112,8 @@
 
                 <tr>
 
-                    <td><button class="btn btn-dark" id="upcomingBtn">Need Grading</button></td>
-                    <td  style="display: none"><button class="btn btn-dark" id="otherBtn">Somehing Else</button></td>
+                    <td><button class="btn btn-dark" id="upcomingBtn">Needs Grading</button></td>
+                    <td style="display: none"><button class="btn btn-dark" id="otherBtn">Somehing Else</button></td>
                     <td><button class="btn btn-dark" id="testBtn1">Notes</button></td>
                     <td><button class="btn btn-dark" id="testBtn2">Tasks Today</button></td>
                     <td><button class="btn btn-dark" id="infoBtn">About</button></td>

@@ -442,7 +442,21 @@ namespace Oodle.Controllers
             assi.Weight = int.Parse(weight);
 
             db.AddAssignment(assi);
+
             db.SaveChanges();
+
+
+            var gradable = new Grade()
+            {
+                ClassID = int.Parse(id),
+                DateApplied = DateTime.Parse(dueDate),
+                GradeWeight = int.Parse(weight),
+                AssignmentID = db.Assignments.Last().AssignmentID
+            };
+
+            db.AddGrade(gradable);
+            db.SaveChanges();
+
 
             var teacher = getTVM(classID);
             if (addNotif)
@@ -697,6 +711,8 @@ namespace Oodle.Controllers
             List<User> list = new List<User>();
             List<int> classGrades = new List<int>();
             teacher.perUser = new List<UserVMish>();
+            List<Grade> gradables = db.Grades.Where(g => g.ClassID == classID).ToList();
+
 
             foreach (var i in tmp)
             {
@@ -705,24 +721,66 @@ namespace Oodle.Controllers
                 var UserVMish = new UserVMish();
                 UserVMish.stat = new List<bool>();
                 UserVMish.Late = new List<TimeSpan>();
-                var submissions = db.Documents.Where(l => l.ClassID == classID && l.UserID == i.UsersID).ToList();
+                //var submissions = db.Documents.Where(l => l.ClassID == classID && l.UserID == i.UsersID).ToList();
+
 
                 int total = 0;
                 int divisor = 0;
-                foreach(var l in submissions)
-                {
 
-                    if (l.Grade != -1)
+                UserVMish.Grade = new List<Models.Grade>();
+
+                foreach(var l in gradables)
+                {
+                    Document d;
+                    StudentQuizze q;
+
+                    if (l.Assignment != null)
                     {
-                        var contribution = l.Assignment.Weight * l.Grade;
-                        total = contribution + total;
-                        divisor = l.Assignment.Weight + divisor;
+                        if (db.Documents.Where(k => k.GradeID == l.GradeID && k.UserID == i.UsersID).FirstOrDefault() != null)
+                        {
+                            d = db.Documents.Where(k => k.GradeID == l.GradeID && k.UserID == i.UsersID).FirstOrDefault();
+                            if (d.Grade != -1)
+                            {
+                                var contribution = l.Assignment.Weight * d.Grade;
+                                total = contribution + total;
+                                divisor = l.Assignment.Weight + divisor;
+                            }
+
+                            var submittedDate = d.Date;
+                            var dueDate = l.Assignment.DueDate.Value;
+
+                            Late(submittedDate, dueDate, UserVMish);
+                        }
+                        else if (DateTime.Compare(DateTime.Parse(l.DateApplied.ToString()), DateTime.Now) < 0)
+                        {
+                            total = total + 0;
+                            divisor = divisor + l.Assignment.Weight;
+                        }
                     }
 
-                    var submittedDate = l.Date.Value;
-                    var dueDate = l.Assignment.DueDate.Value;
+                    if (l.Quizze != null)
+                    {
+                        q = db.StudentQuizzes.Where(k => k.QuizID == l.QuizID && k.UserID == i.UsersID).FirstOrDefault();
 
-                    Late(submittedDate, dueDate, UserVMish);
+                        if (q != null)
+                        {
+                            int contribution = l.Quizze.GradeWeight * (q.TotalPoints / q.Quizze.TotalPoints ?? default(int));
+                            total = (contribution*100) + total;
+                            divisor = l.Quizze.GradeWeight + divisor;
+
+                            var submittedDate = q.Quizze.EndTime;
+                            var dueDate = l.Quizze.EndTime;
+
+                            Late(submittedDate, dueDate, UserVMish);
+                        }
+                        else if (DateTime.Compare(DateTime.Parse(l.DateApplied.ToString()), DateTime.Now) < 0)
+                        {
+                            total = total + (0);
+                            divisor = divisor + l.Quizze.GradeWeight;
+                        }
+                    }
+
+                    UserVMish.Grade.Add(l);
                 }
                 teacher.perUser.Add(UserVMish);
 
@@ -734,9 +792,12 @@ namespace Oodle.Controllers
                 {
                     classGrades.Add(0);
                 }
-            }
+            }//////
+
+            
 
             teacher.users = list;
+            teacher.StudentQuizze = db.StudentQuizzes.Where(i => db.Quizzes.Where(i2 => i2.ClassID == classID).Contains(i.Quizze)).ToList();
             teacher.documents = db.Documents.Where(i => i.ClassID == classID).ToList();
             teacher.classGrade = classGrades;
             teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).ToList();
@@ -811,6 +872,10 @@ namespace Oodle.Controllers
 
                 db.SetModified(Quiz);
                 db.SaveChanges();
+
+                //STILL MORE TO BE DONE HERE!
+
+
                 return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = Quiz.QuizID, ClassID = Quiz.ClassID });
             }
             else
@@ -879,17 +944,31 @@ namespace Oodle.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateQuiz([Bind(Include = "QuizName,ClassID,StartTime,EndTime,IsHidden")] Quizze Quiz)
+        public ActionResult CreateQuiz([Bind(Include = "QuizName,ClassID,StartTime,EndTime,IsHidden,GradeWeight")] Quizze Quiz)
         {
             if (test(Quiz.ClassID) != null)
             {
                 return test(Quiz.ClassID);
             }
+            /////////////////////////////////////////////////////
             TeacherVM teacher = getTVM(Quiz.ClassID);
             teacher.quiz = Quiz;
             if (AddQuizToDB(Quiz))
-                return RedirectToAction("QuizList", "Teachers", new { classId = Quiz.ClassID });
+            {
+                var gradable = new Grade()
+                {
+                    DateApplied = Quiz.EndTime,
+                    GradeWeight = Quiz.GradeWeight,
+                    ClassID = Quiz.ClassID,
+                    QuizID = db.Quizzes.Last().QuizID
+                };
 
+                db.AddGrade(gradable);
+                db.SaveChanges();
+
+
+                return RedirectToAction("QuizList", "Teachers", new { classId = Quiz.ClassID });
+            }
             else
             {
                 return View("CreateQuiz", "_TeacherLayout", teacher);

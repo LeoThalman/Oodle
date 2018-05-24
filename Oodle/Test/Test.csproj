@@ -149,6 +149,36 @@
     <Compile Include="AcceptanceTests\KollsTests\KollEditClass.cs" />
     <Compile Include="AcceptanceTests\KollsTests\KollTestingIndexsTeacher.cs" />
     <Compile Include="AcceptanceTests\KollsTests\KollTestingNote.cs" />
+    <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\AboutPageContainsAboutOodleDevsSection.cs" />
+    <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\CaptchaNoClickShouldFailRegister.cs" />
+    <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\ID447.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ID447.feature</DependentUpon>
+    </Compile>
+    <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\ID450.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ID450.feature</DependentUpon>
+    </Compile>
+    <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\ID451.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ID451.feature</DependentUpon>
+    </Compile>
+    <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\ID470.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ID470.feature</DependentUpon>
+    </Compile>
+    <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\ID473.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ID473.feature</DependentUpon>
+    </Compile>
+    <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\NewLandingPageExistsWhenYouLoginAndGetDirectedToItInsteadOfOldPage.cs" />
+    <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\OodleTestingPageOnUbuntuServerHasALoadingBar.cs" />
+    <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\TestingToolsNumericalInputGradeCaluclatorIsCorrect.cs" />
     <Compile Include="AcceptanceTests\Sams Tests\ID395.feature.cs" />
     <Compile Include="AcceptanceTests\Sams Tests\ID3951.feature.cs">
       <AutoGen>True</AutoGen>
@@ -195,6 +225,26 @@
     <None Include="AcceptanceTests\KollsTests\ID438.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ID438.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\KollsTests\KollTestsSprint6\ID447.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID447.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\KollsTests\KollTestsSprint6\ID450.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID450.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\KollsTests\KollTestsSprint6\ID451.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID451.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\KollsTests\KollTestsSprint6\ID470.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID470.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\KollsTests\KollTestsSprint6\ID473.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID473.feature.cs</LastGenOutput>
     </None>
     <None Include="AcceptanceTests\WillsTests\ID427.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

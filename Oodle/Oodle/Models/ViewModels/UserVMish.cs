@@ -12,5 +12,6 @@ namespace Oodle.Models.ViewModels
         public List<bool> stat { get; set; }
         public List<Document> submissions { get; set; }
         public List<Assignment> assi { get; set; }
+        public List<Grade> Grade { get; set; }
     }
 }

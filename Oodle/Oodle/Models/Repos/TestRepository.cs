@@ -24,6 +24,7 @@ namespace Oodle.Models.Repos
         public IEnumerable<Notes> Notes { get; }
         public IEnumerable<StudentQuizze> StudentQuizzes { get; }
         public IEnumerable<StudentAnswer> StudentAnswers { get; }
+        public IEnumerable<Grade> Grades { get; }
 
 
         //No database so no need to save
@@ -165,6 +166,16 @@ namespace Oodle.Models.Repos
 
         }
         public void DeleteAssignment(Assignment a)
+        {
+
+        }
+
+        public void RemoveGrade(Grade g)
+        {
+
+        }
+
+        public void AddGrade(Grade g)
         {
 
         }

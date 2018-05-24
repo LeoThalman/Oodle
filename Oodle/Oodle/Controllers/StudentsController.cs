@@ -258,14 +258,11 @@ namespace Oodle.Controllers
             var student = new TeacherVM(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault(), request);
 
             student.assignment = db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList();
-            Debug.WriteLine("test3");
-
 
             if (db.Documents.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID && i.UserID == studentID).ToList().Count() == 0)
             {
-                Debug.WriteLine("test");
-
                 var doc = new Document();
+                
                 doc.Name = Path.GetFileName(postedFile.FileName);
                 doc.ContentType = postedFile.ContentType;
                 doc.Data = bytes;
@@ -275,6 +272,7 @@ namespace Oodle.Controllers
                 doc.submitted = submitted;
                 doc.Grade = -1;
                 doc.Date = date;
+                doc.GradeID = db.Grades.Where(i => i.AssignmentID == assignmentID).FirstOrDefault().GradeID;
 
                 db.AddDocument(doc);
 
@@ -285,9 +283,6 @@ namespace Oodle.Controllers
             }
             else
             {
-                Debug.WriteLine("test2");
-
-
                 var change = db.Documents.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID && i.UserID == studentID).ToList();
                 change.ForEach(x => x.Name = Path.GetFileName(postedFile.FileName));
                 change.ForEach(x => x.ContentType = postedFile.ContentType);
@@ -296,7 +291,6 @@ namespace Oodle.Controllers
                 change.ForEach(x => x.AssignmentID = assignmentID);
                 change.ForEach(x => x.UserID = studentID);
                 change.ForEach(x => x.submitted = submitted);
-                change.ForEach(x => x.Grade = -1);
                 change.ForEach(x => x.Date = date);
 
                 db.SaveChanges();
@@ -354,9 +348,17 @@ namespace Oodle.Controllers
             teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).ToList();
             teacher.documents = db.Documents.Where(i => i.ClassID == classID && i.UserID == userId).ToList();
 
-            List<Assignment> list2 = teacher.assignment;
+            List<Grade> list2 = db.Grades.Where(g => g.ClassID == classID).ToList();
+
+
             List<Document> list = teacher.documents;
 
+            teacher.perUser = new List<UserVMish>() { new UserVMish()};
+
+            teacher.perUser.FirstOrDefault().Grade = db.Grades.Where(i => i.ClassID == classID).ToList();
+
+            teacher.StudentQuizze = db.StudentQuizzes.Where(i => db.Quizzes.Where(i2 => i2.ClassID == classID).Contains(i.Quizze)).ToList();
+            teacher.users = new List<Models.User>() { db.Users.Where(a => a.IdentityID == idid).FirstOrDefault() };
             teacher.classGrade = new List<int>();
             teacher.classGrade.Add(GradeHelper(list, list2));
 
@@ -364,35 +366,96 @@ namespace Oodle.Controllers
         }
 
         //This is the method I'm really testing.
-        public int GradeHelper(List<Document> list, List<Assignment> list2)
+        public int GradeHelper(List<Document> list, List<Grade> gradables)
         {
-            int total = 0;
-            int totalWeight = 0;
+            var UserVMish = new UserVMish();
+            UserVMish.stat = new List<bool>();
+            UserVMish.Late = new List<TimeSpan>();
+            //var submissions = db.Documents.Where(l => l.ClassID == classID && l.UserID == i.UsersID).ToList();
 
-            foreach (Assignment assi in list2)
+            int divisor = 0;
+            int total = 0;
+
+            UserVMish.Grade = new List<Models.Grade>();
+
+            foreach (var l in gradables)
             {
-                Document doc = list.Where(i => i.AssignmentID == assi.AssignmentID).FirstOrDefault();
-                if (doc != null)
+                Document d;
+                StudentQuizze q;
+
+                if (l.Assignment != null)
                 {
-                    if (doc.Grade != -1)
+                    d = db.Documents.Where(k => k.GradeID == l.GradeID).FirstOrDefault();
+
+                    if (d != null)
                     {
-                        total = total + (doc.Grade * doc.Assignment.Weight);
-                        totalWeight = totalWeight + doc.Assignment.Weight;
+                        if (d.Grade != -1)
+                        {
+                            var contribution = l.Assignment.Weight * d.Grade;
+                            total = contribution + total;
+                            divisor = l.Assignment.Weight + divisor;
+                        }
+
+                        var submittedDate = d.Date;
+                        var dueDate = l.Assignment.DueDate.Value;
+
+                        //Late(submittedDate, dueDate, UserVMish);
+                    }
+                    else if (DateTime.Compare(DateTime.Parse(l.DateApplied.ToString()), DateTime.Now) < 0)
+                    {
+                        total = total + 0;
+                        divisor = divisor + l.Assignment.Weight;
                     }
                 }
-                else if (DateTime.Compare(DateTime.Parse(assi.DueDate.ToString()), DateTime.Now) < 0)
+
+                if (l.Quizze != null)
                 {
-                    total = total + (0);
-                    totalWeight = totalWeight + assi.Weight;
+                    q = db.StudentQuizzes.Where(k => k.QuizID == l.QuizID).FirstOrDefault();
+
+                    if (q != null)
+                    {
+                        int contribution = l.Quizze.GradeWeight * (q.TotalPoints / q.Quizze.TotalPoints ?? default(int));
+                        total = (contribution * 100) + total;
+                        divisor = l.Quizze.GradeWeight + divisor;
+
+                        var submittedDate = q.Quizze.EndTime;
+                        var dueDate = l.Quizze.EndTime;
+
+                        //Late(submittedDate, dueDate, UserVMish);
+                    }
+                    else if (DateTime.Compare(DateTime.Parse(l.DateApplied.ToString()), DateTime.Now) < 0)
+                    {
+                        total = total + (0);
+                        divisor = divisor + l.Quizze.GradeWeight;
+                    }
                 }
             }
-            if (totalWeight == 0)
+            if (divisor == 0)
             {
                 return total = 0;
             }
             else
             {
-                return total = total / totalWeight;
+                return total = total / divisor;
+            }
+        }
+
+        public void Late(DateTime submittedDate, DateTime dueDate, UserVMish userVMish)
+        {
+            if (0 <= DateTime.Compare(submittedDate, dueDate))
+            {
+                userVMish.stat.Add(false);
+                userVMish.Late.Add(submittedDate.Subtract(dueDate));
+            }
+            else if (0 >= DateTime.Compare(submittedDate, dueDate))
+            {
+                userVMish.stat.Add(true);
+                userVMish.Late.Add(dueDate.Subtract(submittedDate));
+            }
+            else
+            {
+                userVMish.stat.Add(true);
+                userVMish.Late.Add(TimeSpan.MinValue);
             }
         }
 
@@ -408,6 +471,16 @@ namespace Oodle.Controllers
 
             TeacherVM teacher = FakeGradeHelper(classID, userId, Request.Form);
 
+
+            teacher.perUser = new List<UserVMish>() { new UserVMish() };
+
+            teacher.perUser.FirstOrDefault().Grade = db.Grades.Where(i => i.ClassID == classID).ToList();
+            teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).ToList();
+            teacher.documents = db.Documents.Where(i => i.ClassID == classID && i.UserID == userId).ToList();
+            teacher.StudentQuizze = db.StudentQuizzes.Where(i => db.Quizzes.Where(i2 => i2.ClassID == classID).Contains(i.Quizze)).ToList();
+            teacher.users = new List<Models.User>() { db.Users.Where(a => a.IdentityID == idid).FirstOrDefault() };
+
+
             return View("Grade", "_StudentLayout", teacher);
         }
 
@@ -415,11 +488,10 @@ namespace Oodle.Controllers
         public TeacherVM FakeGradeHelper(int classID, int userId, System.Collections.Specialized.NameValueCollection form)
         {
             var teacher = getTVM(classID);
+            List<Grade> list2 = db.Grades.Where(g => g.ClassID == classID).ToList();
 
-            teacher.assignment = db.Assignments.Where(j => j.ClassID == classID).ToList();
 
-            teacher.documents = db.Documents.Where(j => j.ClassID == classID && j.UserID == userId).ToList();
-            var assis = db.Assignments.Where(j => j.ClassID == classID).ToList();
+            var assis = db.Grades.Where(j => j.ClassID == classID).ToList();
 
             int i = 0;
             string i2 = "1";
@@ -433,9 +505,19 @@ namespace Oodle.Controllers
                 if (i2 != null)
                 {
                     int i3 = Int32.Parse(i2);
-                    fTotal = (i3 * assis[i].Weight) + fTotal;
-                    teacher.fClassGrade.Add(i3);
-                    fNumber = fNumber + assis[i].Weight;
+
+                    if (assis[i].AssignmentID != null)
+                    {
+                        fTotal = (i3 * assis[i].Assignment.Weight) + fTotal;
+                        teacher.fClassGrade.Add(i3);
+                        fNumber = fNumber + assis[i].Assignment.Weight;
+                    }
+                    else
+                    {
+                        fTotal = (i3 * assis[i].Quizze.GradeWeight) + fTotal;
+                        teacher.fClassGrade.Add(i3);
+                        fNumber = fNumber + assis[i].Quizze.GradeWeight;
+                    }
                 }
                 i++;
             }
@@ -450,7 +532,7 @@ namespace Oodle.Controllers
             }
 
             teacher.classGrade = new List<int>();
-            teacher.classGrade.Add(GradeHelper(teacher.documents, teacher.assignment));
+            teacher.classGrade.Add(GradeHelper(teacher.documents, list2));
 
             return teacher;
         }
@@ -621,6 +703,9 @@ namespace Oodle.Controllers
             var IdentityID = User.Identity.GetUserId();                
             StudentQuiz.UserID = db.Users.Where(a => a.IdentityID == IdentityID).FirstOrDefault().UsersID;
             StudentQuiz.CanReview = true;
+
+            StudentQuiz.GradeID = db.Grades.Where(i => i.QuizID == QuizID).FirstOrDefault().GradeID;
+
             db.AddStudentQuiz(StudentQuiz);
             db.SaveChanges();
             int PointTotal = 0;

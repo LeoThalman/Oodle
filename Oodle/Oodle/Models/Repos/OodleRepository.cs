@@ -83,6 +83,11 @@ namespace Oodle.Models.Repos
             get { return db.StudentAnswers; }
         }
 
+        public IEnumerable<Grade> Grades
+        {
+            get { return db.Grades; }
+        }
+
 
         //-----------------------Add and Remove Methods for the tables-------------------------------
         //Save Db Changes
@@ -199,7 +204,14 @@ namespace Oodle.Models.Repos
         {
             db.Documents.Remove(d);
         }
-
+        public void AddGrade(Grade g)
+        {
+            db.Grades.Add(g);
+        }
+        public void RemoveGrade(Grade g)
+        {
+            db.Grades.Remove(g);
+        }
         public void DeleteAssignment(Assignment a)
         {
             db.Assignments.Remove(a);

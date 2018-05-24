@@ -9,12 +9,6 @@ namespace Oodle.Models
     [Table("ClassNotification")]
     public partial class ClassNotification
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ClassNotification()
-        {
-            HiddenNotifications = new HashSet<HiddenNotification>();
-        }
-
         public int ClassNotificationID { get; set; }
 
         [Required]
@@ -26,8 +20,5 @@ namespace Oodle.Models
         public int ClassID { get; set; }
 
         public virtual Class Class { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<HiddenNotification> HiddenNotifications { get; set; }
     }
 }

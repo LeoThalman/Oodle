@@ -279,18 +279,18 @@ CREATE TABLE dbo.Notes
 
 
 -- Grades Table
-CREATE TABLE dbo.Grades
-(	
-	GradesID	INT IDENTITY (1,1) NOT NULL,
-	UsersID INT NOT NULL,
-	AssignmentID INT NOT NULL,
-	Grader NVARCHAR(64),
-	Comment NVARCHAR(256),
-	Grade	INT NOT NULL,
-	CONSTRAINT [PK_dbo.Grades] PRIMARY KEY CLUSTERED (GradesID ASC),
-	CONSTRAINT [FK_dbo.Grades_dbo.UserID] FOREIGN KEY ([UsersID]) REFERENCES [dbo].[Users] ([UsersID]),
-	CONSTRAINT [FK_dbo.Grades_dbo.AssignmentID] FOREIGN KEY ([AssignmentID]) REFERENCES [dbo].[Assignment] ([AssignmentID])
-);
+--CREATE TABLE dbo.Grades
+--(	
+--	GradesID	INT IDENTITY (1,1) NOT NULL,
+--	UsersID INT NOT NULL,
+--	AssignmentID INT NOT NULL,
+--	Grader NVARCHAR(64),
+--	Comment NVARCHAR(256),
+--	Grade	INT NOT NULL,
+--	CONSTRAINT [PK_dbo.Grades] PRIMARY KEY CLUSTERED (GradesID ASC),
+--	CONSTRAINT [FK_dbo.Grades_dbo.UserID] FOREIGN KEY ([UsersID]) REFERENCES [dbo].[Users] ([UsersID]),
+--	CONSTRAINT [FK_dbo.Grades_dbo.AssignmentID] FOREIGN KEY ([AssignmentID]) REFERENCES [dbo].[Assignment] ([AssignmentID])
+--);
 
 -- Questions Table
 CREATE TABLE dbo.Questions
@@ -305,8 +305,41 @@ CREATE TABLE dbo.Questions
 	CONSTRAINT [FK_dbo.Questions_dbo.AssignmentID] FOREIGN KEY ([AssignmentID]) REFERENCES [dbo].[Assignment] ([AssignmentID])
 );
 
+CREATE TABLE dbo.Quizzes(
+	QuizID INT IDENTITY(1,1) NOT NULL,
+	QuizName NVARCHAR(256) NOT NULL,
+	StartTime DateTime NOT NULL,
+	EndTime DateTime NOT NULL,
+	ClassID INT NOT NULL,
+	IsHidden BIT NOT NULL,
+	TotalPoints INT,
+	GradeWeight INT NOT NULL,
+	CONSTRAINT [PK_dbo.Quizzes] PRIMARY KEY CLUSTERED (QuizID ASC),
+	CONSTRAINT [FK_dbo.Quizzes_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
+	ON DELETE CASCADE
+);
+ 
+--Currently testing this table.
+CREATE TABLE Grades(
+	GradeID INT IDENTITY(1,1) NOT NULL,
+	ClassID INT NOT NULL,
+	Grade INT,
+	AssignmentID INT,
+	QuizID INT,
+	GradeWeight INT NOT NULL,
+	DateApplied DATETIME NOT NULL,
+	CONSTRAINT [PK_dbo.Grades] PRIMARY KEY CLUSTERED (GradeID ASC),
+	CONSTRAINT [FK_dbo.Grades_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID]),
+	CONSTRAINT [FK_dbo.Grades_dbo.QuizID] FOREIGN KEY ([QuizID]) REFERENCES [dbo].[Quizzes] (QuizID),
+	CONSTRAINT [FK_dbo.Grades_dbo.AssignmentID] FOREIGN KEY ([AssignmentID]) REFERENCES [dbo].[Assignment] (AssignmentID),
+);
+
 CREATE TABLE dbo.Documents(  
-    Id INT IDENTITY(1,1) NOT NULL,  
+    Id INT IDENTITY(1,1) NOT NULL,
+	----------------
+	GradeID INT NOT NULL,
+	CONSTRAINT [FK_dbo.Documents_dbo.GradeID] FOREIGN KEY ([GradeID]) REFERENCES [dbo].[Grades] ([GradeID]),
+	----------------
     Name NVARCHAR(250) NOT NULL,  
     ContentType NVARCHAR(250) NOT NULL,  
 	Data VARBINARY(MAX) NOT NULL,
@@ -322,19 +355,7 @@ CREATE TABLE dbo.Documents(
 	CONSTRAINT [FK_dbo.Documents_dbo.AssignmentID] FOREIGN KEY ([AssignmentID]) REFERENCES [dbo].[Assignment] ([AssignmentID])
 );
 
-CREATE TABLE dbo.Quizzes(
-	QuizID INT IDENTITY(1,1) NOT NULL,
-	QuizName NVARCHAR(256) NOT NULL,
-	StartTime DateTime NOT NULL,
-	EndTime DateTime NOT NULL,
-	ClassID INT NOT NULL,
-	IsHidden BIT NOT NULL,
-	TotalPoints INT,
-	CONSTRAINT [PK_dbo.Quizzes] PRIMARY KEY CLUSTERED (QuizID ASC),
-	CONSTRAINT [FK_dbo.Quizzes_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
-	ON DELETE CASCADE
-);
- 
+
 CREATE TABLE dbo.QuizQuestions(
 	QuestionID INT IDENTITY(1,1) NOT NULL,
 	QuizID INT NOT NULL,
@@ -362,6 +383,10 @@ Create TABLE MultChoiceAnswers(
 
 Create TABLE StudentQuizzes(
 	SQID INT IDENTITY(1,1) NOT NULL,
+	----------------
+	GradeID INT NOT NULL,
+	CONSTRAINT [FK_dbo.StudentQuizzes_dbo.GradeID] FOREIGN KEY ([GradeID]) REFERENCES [dbo].[Grades] ([GradeID]),
+	----------------
 	QuizID INT NOT NULL,
 	UserID INT NOT NULL,
 	TotalPoints INT NOT NULL,
@@ -381,9 +406,37 @@ Create TABLE StudentAnswers(
 	CONSTRAINT [FK_dbo.StudentAnswers_dbo.StudentQuizzes] FOREIGN KEY ([SQID]) REFERENCES [dbo].[StudentQuizzes] ([SQID])
 	ON DELETE CASCADE ON UPDATE CASCADE,
 	CONSTRAINT [FK_dbo.StudentAnswers_dbo.QuizQuestions] FOREIGN KEY ([QuestionID]) REFERENCES [dbo].[QuizQuestions] ([QuestionID])
-	
 );
   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 INSERT INTO [dbo].[AspNetUsers](
@@ -458,4 +511,18 @@ INSERT INTO [dbo].[AspNetUsers](
 	),
     (
 		'1', 'Homework 2','Do the odd numbered problems 17-33 at the end up chapter 6 of Aerodynamics and Fabrics.', '5/13/2018 8:30:00 PM', '5/20/2018 8:30:00 PM',  '1'
+	);
+
+	INSERT INTO dbo.Grades
+	(
+	ClassID,
+	AssignmentID,
+	GradeWeight,
+	DateApplied
+	)
+	VALUES (
+		'1', '1','1', '5/13/2018 8:30:00 PM'
+	),
+    (
+		'1', '2','1', '5/20/2018 8:30:00 PM'
 	);

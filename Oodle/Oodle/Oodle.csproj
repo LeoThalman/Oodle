@@ -71,6 +71,9 @@
     <Reference Include="Ninject.Web.Mvc, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.MVC5.3.2.1.0\lib\net45-full\Ninject.Web.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="reCAPTCHA.MVC, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\reCAPTCH.MVC.1.0.1\lib\net45\reCAPTCHA.MVC.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
@@ -343,6 +346,8 @@
     <Content Include="App_Data\UpScript.sql" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\img\cal.png" />
+    <Content Include="Content\img\class.jpg" />
     <Content Include="Content\img\codecamp.jpeg" />
     <Content Include="Content\img\duolingo.png" />
     <Content Include="Content\img\khan.png" />
@@ -359,7 +364,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="ApplicationInsights.config">
+    <Content Include="Views\ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -393,24 +398,9 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Account\ConfirmEmail.cshtml" />
-    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Account\ResetPassword.cshtml" />
-    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\SendCode.cshtml" />
-    <Content Include="Views\Account\VerifyCode.cshtml" />
-    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
-    <Content Include="Views\Manage\ChangePassword.cshtml" />
     <Content Include="Views\Manage\Index.cshtml" />
-    <Content Include="Views\Manage\ManageLogins.cshtml" />
-    <Content Include="Views\Manage\SetPassword.cshtml" />
-    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Class\Create.cshtml" />
@@ -438,7 +428,6 @@
     <Content Include="Views\Teachers\MakeGrade.cshtml" />
     <Content Include="Views\Teachers\ViewRoster.cshtml" />
     <Content Include="Views\Teachers\Assignment.cshtml" />
-    <Content Include="Views\Teachers\CreateTask.cshtml" />
     <Content Include="Views\Teachers\CreateQuiz.cshtml" />
     <Content Include="Views\Teachers\CreateSlack.cshtml" />
     <Content Include="Views\Teachers\Edit.cshtml" />
@@ -457,7 +446,6 @@
     <Content Include="Views\Teachers\Grades.cshtml" />
     <Content Include="Views\Home\Calendar.cshtml" />
     <Content Include="Views\Shared\_CalendarLayout.cshtml" />
-    <Content Include="Views\Teachers\CreateQuiz.cshtml" />
     <Content Include="Views\Teachers\QuizList.cshtml" />
     <Content Include="Views\Teachers\ViewQuiz.cshtml" />
     <Content Include="Views\Teachers\EditQuiz.cshtml" />
@@ -472,6 +460,7 @@
     <Content Include="Views\Teachers\RemoveQuiz.cshtml" />
     <Content Include="Views\Class\SortList.cshtml" />
     <Content Include="Views\Students\HideNotifs.cshtml" />
+    <Content Include="Views\Home\Landing.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -486,7 +475,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup />

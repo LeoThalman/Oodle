@@ -2,6 +2,8 @@
 @{
     ViewBag.Title = "Register";
 }
+@using reCAPTCHA.MVC
+
 
 <h2>@ViewBag.Title.</h2>
 
@@ -39,8 +41,15 @@
         <div class="col-md-10">
             @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
         </div>
+
     </div>
+    <div style="margin:auto">
+        @Html.Recaptcha("6LetL1kUAAAAACyJBONel8N7ME28W7MnZiJTIsWK")
+        @Html.ValidationMessage("ReCaptcha")
+    </div>
+
     <div class="form-group">
+    
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" class="btn btn-default" value="Register" />
         </div>

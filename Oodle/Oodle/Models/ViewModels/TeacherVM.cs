@@ -28,6 +28,7 @@ namespace Oodle.Models.ViewModels
         public List<Tasks> Tasks { get; set; }
         public List<Notes> Notes { get; set; }
         public List<UserVMish> perUser { get; set; }
+        public List<StudentQuizze> StudentQuizze { get; set; }
 
         public TeacherVM(Class classP, List<User> userP)
         {
