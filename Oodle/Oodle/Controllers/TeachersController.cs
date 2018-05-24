@@ -266,9 +266,14 @@ namespace Oodle.Controllers
             {
                 return test(classID);
             }
-
+            List<HiddenNotification> HiddenNotifs = db.HiddenNotifications.Where(h => h.ClassNotificationID == notifID).ToList();
             ClassNotification notif = db.ClassNotifications.Where(n => n.ClassID == classID
                                                     && n.ClassNotificationID == notifID).FirstOrDefault();
+            foreach(HiddenNotification h in HiddenNotifs)
+            {
+                db.RemoveHiddenNotif(h);
+            }
+            db.SaveChanges();
             db.RemoveNotif(notif);
             db.SaveChanges();
 

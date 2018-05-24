@@ -656,10 +656,10 @@ namespace Oodle.Controllers
             return View("HideNotifs", "_StudentLayout", student);
         }
 
-        public ActionResult SaveHideNotifs([Bind(Include = "Hidden, NotifID, ClassID")] List<HideNotifList> HideNotifs)
+        public ActionResult SaveHideNotifs([Bind(Include = "Hidden, NotifID, ClassID")] List<HideNotifList> HideNotifs, [Bind(Include = "ClassID")] Class cl)
         {
             if (HideNotifs == null || HideNotifs.Count == 0 )
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Students", new { classId = cl.ClassID});
             if (test(HideNotifs.First().ClassID) != null)
             {
                 return test(HideNotifs.First().ClassID);
