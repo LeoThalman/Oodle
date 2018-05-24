@@ -67,10 +67,10 @@ namespace Test.AcceptanceTests.KollsTests
             testRunner.CollectScenarioErrors();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("Index page should be available for a teacher", SourceLine=11)]
-        public virtual void IndexPageShouldBeAvailableForATeacher()
+        [TechTalk.SpecRun.ScenarioAttribute("Index page should be available for a teacher-", SourceLine=11)]
+        public virtual void IndexPageShouldBeAvailableForATeacher_()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Index page should be available for a teacher", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Index page should be available for a teacher-", ((string[])(null)));
 #line 12
 this.ScenarioSetup(scenarioInfo);
 #line 13
