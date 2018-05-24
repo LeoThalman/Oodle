@@ -234,8 +234,7 @@ CREATE TABLE dbo.HiddenNotification
 	CONSTRAINT [PK_dbo.HiddenNotification] PRIMARY KEY CLUSTERED (HiddenNotificationID ASC),
 	CONSTRAINT [FK_dbo.HiddenNotification_dbo.Class] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
 	ON DELETE CASCADE ON UPDATE CASCADE,
-	CONSTRAINT [FK_dbo.HiddenNotification_dbo.ClassNotification] FOREIGN KEY ([ClassNotificationID]) REFERENCES [dbo].[ClassNotification] ([ClassNotificationID])
-	ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT [FK_dbo.HiddenNotification_dbo.ClassNotification] FOREIGN KEY ([ClassNotificationID]) REFERENCES [dbo].[ClassNotification] ([ClassNotificationID]),
 	CONSTRAINT [FK_dbo.HiddenNotification_dbo.Users] FOREIGN KEY ([UsersID]) REFERENCES [dbo].[Users] ([UsersID])
 	ON DELETE CASCADE ON UPDATE CASCADE
 );

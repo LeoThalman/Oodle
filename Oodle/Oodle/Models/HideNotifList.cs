@@ -7,7 +7,9 @@ namespace Oodle.Models
 {
     public class HideNotifList
     {
-        public ClassNotification Notif { get; set; }
+        public int NotifID { get; set; }
         public Boolean Hidden { get; set; }
+        public int ClassID { get; set; }
+        public string Notification { get; set; }
     }
 }

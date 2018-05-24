@@ -12,6 +12,7 @@ DROP TABLE dbo.Grades;
 DROP TABLE dbo.Assignment;
 DROP TABLE dbo.UserRoleClass;
 DROP TABLE dbo.Role;
+DROP TABLE dbo.HiddenNotification;
 DROP TABLE dbo.ClassNotification;
 DROP TABLE dbo.MultChoiceAnswers;
 DROP TABLE dbo.QuizQuestions;
