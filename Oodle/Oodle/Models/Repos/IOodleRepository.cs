@@ -16,6 +16,7 @@ namespace Oodle.Models.Repos
         IEnumerable<UserRoleClass> UserRoleClasses { get; }
         IEnumerable<Class> Classes { get; }
         IEnumerable<ClassNotification> ClassNotifications { get; }
+        IEnumerable<HiddenNotification> HiddenNotifications { get; }
         IEnumerable<Assignment> Assignments { get; }
         IEnumerable<Document> Documents { get; }
         IEnumerable<Quizze> Quizzes { get; }
@@ -37,6 +38,8 @@ namespace Oodle.Models.Repos
         //Various Add and Remove functions for the tables
         void RemoveNotif(ClassNotification notif);
         void AddNotif(ClassNotification notif);
+        void AddHiddenNotif(HiddenNotification hnotif);
+        void RemoveHiddenNotif(HiddenNotification hnotif);
         void RemoveURC(UserRoleClass urc);
         void AddURC(UserRoleClass urc);
         void RemoveClass(Class c);

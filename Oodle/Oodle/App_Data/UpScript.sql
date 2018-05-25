@@ -220,12 +220,24 @@ CREATE TABLE dbo.ClassNotification
 	TimePosted DATETIME NOT NULL,
 	ClassID INT NOT NULL,
 	CONSTRAINT [PK_dbo.ClassNotification] PRIMARY KEY CLUSTERED (ClassNotificationID ASC),
-	CONSTRAINT [FK_dbo.ClassNotification_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
+	CONSTRAINT [FK_dbo.ClassNotification_dbo.Class] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
 	ON DELETE CASCADE
-	ON UPDATE CASCADE,
-
+	ON UPDATE CASCADE
 );
 
+CREATE TABLE dbo.HiddenNotification
+(
+	HiddenNotificationID INT IDENTITY (1,1) NOT NULL,
+	ClassNotificationID INT NOT NULL,
+	UsersID INT NOT NULL,
+	ClassID INT NOT NULL,
+	CONSTRAINT [PK_dbo.HiddenNotification] PRIMARY KEY CLUSTERED (HiddenNotificationID ASC),
+	CONSTRAINT [FK_dbo.HiddenNotification_dbo.Class] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
+	ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT [FK_dbo.HiddenNotification_dbo.ClassNotification] FOREIGN KEY ([ClassNotificationID]) REFERENCES [dbo].[ClassNotification] ([ClassNotificationID]),
+	CONSTRAINT [FK_dbo.HiddenNotification_dbo.Users] FOREIGN KEY ([UsersID]) REFERENCES [dbo].[Users] ([UsersID])
+	ON DELETE CASCADE ON UPDATE CASCADE
+);
 
 -- Assignment Table
 CREATE TABLE dbo.Assignment
@@ -239,7 +251,7 @@ CREATE TABLE dbo.Assignment
 	Weight INT NOT NULL,
 	CONSTRAINT [PK_dbo.Assignment] PRIMARY KEY CLUSTERED (AssignmentID ASC),
 	CONSTRAINT [FK_dbo.Assignment_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
-	ON DELETE CASCADE ON UPDATE CASCADE
+	ON DELETE CASCADE
 );
 
 -- Task Table
@@ -300,6 +312,7 @@ CREATE TABLE dbo.Quizzes(
 	ClassID INT NOT NULL,
 	IsHidden BIT NOT NULL,
 	TotalPoints INT,
+	CanReview BIT NOT NULL,
 	GradeWeight INT NOT NULL,
 	CONSTRAINT [PK_dbo.Quizzes] PRIMARY KEY CLUSTERED (QuizID ASC),
 	CONSTRAINT [FK_dbo.Quizzes_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
@@ -318,7 +331,9 @@ CREATE TABLE Grades(
 	CONSTRAINT [PK_dbo.Grades] PRIMARY KEY CLUSTERED (GradeID ASC),
 	CONSTRAINT [FK_dbo.Grades_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID]),
 	CONSTRAINT [FK_dbo.Grades_dbo.QuizID] FOREIGN KEY ([QuizID]) REFERENCES [dbo].[Quizzes] (QuizID),
-	CONSTRAINT [FK_dbo.Grades_dbo.AssignmentID] FOREIGN KEY ([AssignmentID]) REFERENCES [dbo].[Assignment] (AssignmentID),
+	CONSTRAINT [FK_dbo.Grades_dbo.AssignmentID] FOREIGN KEY ([AssignmentID]) REFERENCES [dbo].[Assignment] (AssignmentID)
+	ON DELETE CASCADE
+	
 );
 
 CREATE TABLE dbo.Documents(  
@@ -352,7 +367,6 @@ CREATE TABLE dbo.QuizQuestions(
 	CONSTRAINT [PK_dbo.QuizQuestions] PRIMARY KEY CLUSTERED (QuestionID ASC),
 	CONSTRAINT [FK_dbo.Questions_dbo.Quizzes] FOREIGN KEY ([QuizID]) REFERENCES [dbo].[Quizzes] ([QuizID])
 	ON DELETE CASCADE
-	ON UPDATE CASCADE,
 );
 
 Create TABLE MultChoiceAnswers(
@@ -365,7 +379,7 @@ Create TABLE MultChoiceAnswers(
 	CorrectAnswer INT NOT NULL,
 	CONSTRAINT [PK_dbo.MultChoiceAnswers] PRIMARY KEY CLUSTERED (AnswerID ASC),
 	CONSTRAINT [FK_dbo.MultChoiceAnswers_dbo.QuizQuestions] FOREIGN KEY ([QuestionID]) REFERENCES [dbo].[QuizQuestions] ([QuestionID])
-	ON DELETE CASCADE ON UPDATE CASCADE,
+	ON DELETE CASCADE,
 );
 
 Create TABLE StudentQuizzes(
@@ -380,7 +394,6 @@ Create TABLE StudentQuizzes(
 	CanReview BIT NOT NULL,
 	CONSTRAINT [PK_dbo.StudentQuizzes] PRIMARY KEY CLUSTERED (SQID ASC),
 	CONSTRAINT [FK_dbo.StudentQuizzes_dbo.Quizzes] FOREIGN KEY ([QuizID]) REFERENCES [dbo].[Quizzes] ([QuizID])
-	ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 Create TABLE StudentAnswers(
@@ -391,7 +404,7 @@ Create TABLE StudentAnswers(
 	StudentPoints INT NOT NULL,
 	CONSTRAINT [PK_dbo.StudentAnswers] PRIMARY KEY CLUSTERED (SQAID ASC),
 	CONSTRAINT [FK_dbo.StudentAnswers_dbo.StudentQuizzes] FOREIGN KEY ([SQID]) REFERENCES [dbo].[StudentQuizzes] ([SQID])
-	ON DELETE CASCADE ON UPDATE CASCADE,
+	ON DELETE CASCADE,
 	CONSTRAINT [FK_dbo.StudentAnswers_dbo.QuizQuestions] FOREIGN KEY ([QuestionID]) REFERENCES [dbo].[QuizQuestions] ([QuestionID])
 );
   
@@ -468,7 +481,7 @@ INSERT INTO [dbo].[AspNetUsers](
 	Subject
 	)
 	VALUES (
-		'2', 'The Effects of Wind on Skirts and Dresses', 'In this class we look at the effects on wind on clothing and how this impacts design. It is the first in a three class long series.', 'wind', 'art'
+		'2', 'The Effects of Wind on Skirts and Dresses', 'In this class we look at the effects on wind on clothing and how this impacts design. It is the first in a three class long series.', '%', 'art'
 	);
 
 	INSERT INTO dbo.UserRoleClass

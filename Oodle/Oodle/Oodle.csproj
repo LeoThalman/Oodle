@@ -306,6 +306,8 @@
     <Compile Include="Models\C__MigrationHistory.cs" />
     <Compile Include="Models\Document.cs" />
     <Compile Include="Models\Grade.cs" />
+    <Compile Include="Models\HiddenNotification.cs" />
+    <Compile Include="Models\HideNotifList.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Model1.cs" />
     <Compile Include="Models\Notes.cs" />
@@ -457,6 +459,7 @@
     <Content Include="Views\Students\TakeQuiz.cshtml" />
     <Content Include="Views\Teachers\RemoveQuiz.cshtml" />
     <Content Include="Views\Class\SortList.cshtml" />
+    <Content Include="Views\Students\HideNotifs.cshtml" />
     <Content Include="Views\Home\Landing.cshtml" />
   </ItemGroup>
   <ItemGroup>

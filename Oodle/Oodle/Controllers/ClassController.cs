@@ -311,7 +311,6 @@ namespace Oodle.Controllers
 
             //get the value of slackChoice
             Boolean slackOption = Convert.ToBoolean(Request.Form["slackChoice"].ToString());
-            Debug.WriteLine("Does user want a slack channel: " + slackOption);
 
             //slack channel name, if no channel/name is taken leave as "%"
             //otherwise gets renamed to the new slackchannel name

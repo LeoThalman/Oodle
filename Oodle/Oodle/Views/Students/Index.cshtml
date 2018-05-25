@@ -25,7 +25,7 @@
                     </p>
                 </div>
                 <div class="col-sm-6" id="teacherPage">
-                    <h2 style="color:black;font-size:24px;"> Notifications </h2>
+                    <h2 style="color:black;font-size:24px;"> Notifications </h2> @Html.ActionLink("Hide Notifications", "HideNotifs", "Students", new { ClassID = Model.cl.ClassID }, new { @class = "btn btn-primary btn-large" })
                     @foreach (var notif in Model.notifs)
                     {
 

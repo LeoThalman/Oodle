@@ -9,7 +9,7 @@ Feature: ID419 -- Teacher Index Page
     So that I can view some quick information about my students, assignments, and other upcoming information or
     So that I can have a better understanding of how to be most productive as a teacher and use the teacher features I have provided to me
 
-Scenario: Index page should be available for a teacher
+Scenario: Index page should be available for a teacher-
     Given I am visiting a class that I, the teacher, created
     When I visit the page
     Then the information should be about that specific classs
