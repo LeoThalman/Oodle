@@ -14,7 +14,11 @@
             <input type="hidden" name="classID" value="@Model.cl.ClassID" />
 
             <label for="description">Description of your Task:</label> <br />
-            <textarea name="description" placeholder="e.g., Please read chapter four and attach a word document of your answers to the questions at the end of the chapter." required></textarea>
+            <textarea name="description" maxlength="400" placeholder="e.g., Please read chapter four and attach a word document of your answers to the questions at the end of the chapter." required></textarea>
+
+            <br />
+            <label for="video">Video</label><br />
+            <input name="video" style="width:493px" value="" /><br />
 
             <br />
             <label for="startDate">Start Date</label><br />
@@ -30,3 +34,5 @@
         </div>
     </form>
 </div>
+
+

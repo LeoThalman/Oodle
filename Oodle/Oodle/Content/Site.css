@@ -411,7 +411,7 @@ color:black;
 
 .block {
     width: 460px;
-    height: 100px;
+    /*height: 100px;*/
     margin: 0 auto;
     font-family: 'Ubuntu', sans-serif;
 }
@@ -1058,3 +1058,47 @@ textarea {
     display: none;
 }
 
+
+
+/*Task movie css*/
+
+.video {
+    padding-left: 5px;
+    padding-right: 5px;
+    color: black;
+    text-align: center;
+    font-size: small;
+    margin: 0 auto;
+}
+
+.movieBox {
+    margin-left: auto;
+    margin-right: auto;
+    width: 450px;
+    height: 400px;
+}
+
+.dateLeft {
+    position: absolute;
+    margin-top: 20px;
+    /*bottom: 10px;*/
+    left: 10px;
+    text-align: left;
+    padding-left: 10px;
+    color: #17252A;
+    font-size: small;
+    height: 10px;
+}
+
+
+.dateRight {
+    /*position: absolute;*/
+    margin-top: 20px;
+    /*bottom: 10px;*/
+    right: 10px;
+    text-align: right;
+    padding-right: 10px;
+    color: #17252A;
+    font-size: small;
+    height: 10px;
+}
