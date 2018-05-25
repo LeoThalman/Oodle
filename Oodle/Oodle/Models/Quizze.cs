@@ -33,6 +33,8 @@ namespace Oodle.Models
 
         public bool IsHidden { get; set; }
 
+        public bool CanReview { get; set; }
+
         public int? TotalPoints { get; set; }
 
         public virtual Class Class { get; set; }

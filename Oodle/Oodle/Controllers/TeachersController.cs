@@ -987,7 +987,8 @@ namespace Oodle.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (CheckQuizTime(Quiz)) { 
+                    if (CheckQuizTime(Quiz)) {
+                    
                     db.AddQuiz(Quiz);
                     db.SaveChanges();
                     rtn = true;

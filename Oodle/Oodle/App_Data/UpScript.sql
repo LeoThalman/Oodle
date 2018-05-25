@@ -312,6 +312,7 @@ CREATE TABLE dbo.Quizzes(
 	ClassID INT NOT NULL,
 	IsHidden BIT NOT NULL,
 	TotalPoints INT,
+	CanReview BIT NOT NULL,
 	GradeWeight INT NOT NULL,
 	CONSTRAINT [PK_dbo.Quizzes] PRIMARY KEY CLUSTERED (QuizID ASC),
 	CONSTRAINT [FK_dbo.Quizzes_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
