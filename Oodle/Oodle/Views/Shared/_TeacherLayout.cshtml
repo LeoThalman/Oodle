@@ -43,6 +43,7 @@
                         <div class="dropDownDiv">
 
                             <span>@Html.ActionLink("Class Menu", "List", "Class", new { ClassID = Model.cl.ClassID }, new { @class = "dropDownButton" })</span>
+                            <span class="dropDownArrowRight">&#9654;</span> <span class="dropDownArrowDown">&#9661;</span>
 
                             <div class="dropDown-content">
                                 @Html.ActionLink("Home", "Index", "Teachers", new { ClassID = Model.cl.ClassID }, null)
@@ -50,7 +51,7 @@
                                 @Html.ActionLink("Grades", "GradeList", "Teachers", new { ClassID = Model.cl.ClassID }, null)
                                 @Html.ActionLink("Roster", "ViewRoster", "Teachers", new { ClassID = Model.cl.ClassID }, null)
                                 @Html.ActionLink("Tasks", "Tasks", "Teachers", new { ClassID = Model.cl.ClassID }, null)
-                          
+
                                 @Html.ActionLink("Quizzes", "QuizList", "Teachers", new { ClassID = Model.cl.ClassID }, null)
                             </div>
                         </div>

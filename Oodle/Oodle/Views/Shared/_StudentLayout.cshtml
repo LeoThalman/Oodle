@@ -47,6 +47,7 @@
                         <div class="dropDownDiv">
 
                             <span>@Html.ActionLink("Class Menu", "List", "Class", new { ClassID = Model.cl.ClassID }, new { @class = "dropDownButton" })</span>
+                            <span class="dropDownArrowRight">&#9654;</span> <span class="dropDownArrowDown">&#9661;</span>
 
                             <div class="dropDown-content">
                                 @Html.ActionLink("Home", "Index", "Students", new { ClassID = Model.cl.ClassID }, null)

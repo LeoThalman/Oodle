@@ -119,6 +119,7 @@ table {
 
 
 
+
 /* The sidebar menu */
 .sidenav {
     width: 20%; /* Set the width of the sidebar */
@@ -982,7 +983,7 @@ textarea {
 /*dropdown CSS */
 
 .dropDownButton {
-    display: block;
+    display: inline-block;
     margin: 0;
     padding: 15px;
     color: #999999;
@@ -1044,5 +1045,16 @@ textarea {
     text-decoration: none;
 }
 
+.dropDownDiv:hover .dropDownArrowRight {
+    display: none;
+    padding-right: 10px;
+}
 
+.dropDownDiv:hover .dropDownArrowDown {
+    display: inline-block;
+}
+
+.dropDownArrowDown {
+    display: none;
+}
 
