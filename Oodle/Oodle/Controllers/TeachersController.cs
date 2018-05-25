@@ -63,16 +63,6 @@ namespace Oodle.Controllers
             return View("index", "_TeacherLayout", teacher);
         }
 
-
-
-
-
-
-
-
-
-
-
         [HttpPost]
         [ActionName("Index")]
         public ActionResult IndexPost(int classID)
@@ -213,7 +203,6 @@ namespace Oodle.Controllers
                 return test(classID);
             }
 
-
             ViewBag.id = classID;
 
             var teacher = getTVM(classID);
@@ -221,17 +210,9 @@ namespace Oodle.Controllers
             return View("AddNotifToClass", "_TeacherLayout", teacher);
         }
 
-        public ActionResult SaveNotif()
+        public Boolean AddNotifToDB(string notif, int classID)
         {
-            ViewBag.RequestMethod = "POST";
-            string notif = Request.Form["notification"];
-            int classID = int.Parse(Request.Form["classID"]);
-
-            if (test(classID) != null)
-            {
-                return test(classID);
-            } 
-
+            Boolean rtn = false;
             Class hasSlack = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
 
 
@@ -242,8 +223,18 @@ namespace Oodle.Controllers
                     slack.SlackNotif(notif, hasSlack.SlackName);
                 }
                 AddNotification(notif, classID);
+                rtn = true;
             }
+            return rtn;
+        }
 
+        public ActionResult SaveNotif()
+        {
+            ViewBag.RequestMethod = "POST";
+            string notif = Request.Form["notification"];
+            int classID = int.Parse(Request.Form["classID"]);
+
+            AddNotifToDB(notif, classID);
 
             return RedirectToAction("Index", new { classId = classID });
         }
@@ -275,9 +266,14 @@ namespace Oodle.Controllers
             {
                 return test(classID);
             }
-
+            List<HiddenNotification> HiddenNotifs = db.HiddenNotifications.Where(h => h.ClassNotificationID == notifID).ToList();
             ClassNotification notif = db.ClassNotifications.Where(n => n.ClassID == classID
                                                     && n.ClassNotificationID == notifID).FirstOrDefault();
+            foreach(HiddenNotification h in HiddenNotifs)
+            {
+                db.RemoveHiddenNotif(h);
+            }
+            db.SaveChanges();
             db.RemoveNotif(notif);
             db.SaveChanges();
 
@@ -431,6 +427,7 @@ namespace Oodle.Controllers
             string startDate = Request.Form["startDate"];
             string dueDate = Request.Form["dueDate"];
             string weight = Request.Form["weight"];
+            Boolean addNotif = Convert.ToBoolean(Request.Form["addNotif"].ToString());
 
 
             int classID = int.Parse(id);
@@ -450,6 +447,7 @@ namespace Oodle.Controllers
             assi.Weight = int.Parse(weight);
 
             db.AddAssignment(assi);
+
             db.SaveChanges();
 
 
@@ -466,6 +464,11 @@ namespace Oodle.Controllers
 
 
             var teacher = getTVM(classID);
+            if (addNotif)
+            {
+                AddNotifToDB("A new assignment has been added. Name: " + assi.Name + ". Opens: " + assi.StartDate + ". Due: " + assi.DueDate , assi.ClassID );
+            }
+            
 
             return View("Assignment", "_TeacherLayout", teacher);
         }
@@ -984,7 +987,8 @@ namespace Oodle.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (CheckQuizTime(Quiz)) { 
+                    if (CheckQuizTime(Quiz)) {
+                    
                     db.AddQuiz(Quiz);
                     db.SaveChanges();
                     rtn = true;
@@ -1014,7 +1018,32 @@ namespace Oodle.Controllers
             return View("RemoveQuiz", "_TeacherLayout", teacher);
         }
 
-        
+        public Boolean RemoveQuizGrades(int QuizID, int ClassID)
+        {
+            Boolean rtn = true;
+
+            List<Grade> TempGrades = db.Grades.Where(g => g.QuizID == QuizID).ToList();
+            foreach(Grade g in TempGrades)
+            {
+                db.RemoveGrade(g);
+            }
+            db.SaveChanges();
+            return rtn;
+        }
+
+        public Boolean RemoveStudentQuizzes(int QuizID, int ClassID)
+        {
+            Boolean rtn = true;
+
+            List<StudentQuizze> TempQuizzes = db.StudentQuizzes.Where(q => q.QuizID == QuizID).ToList();
+            foreach (StudentQuizze q in TempQuizzes)
+            {
+                db.RemoveStudentQuiz(q);
+            }
+            db.SaveChanges();
+            return rtn;
+        }
+
         public ActionResult DeleteQuiz(int QuizID, int ClassID)
         {
             Quizze Quiz = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault();
@@ -1022,6 +1051,10 @@ namespace Oodle.Controllers
             {
                 return test(Quiz.ClassID);
             }
+            RemoveStudentQuizzes(QuizID, ClassID);
+            RemoveQuizGrades(QuizID, ClassID);
+            
+
             db.RemoveQuiz(Quiz);
             db.SaveChanges();
 
