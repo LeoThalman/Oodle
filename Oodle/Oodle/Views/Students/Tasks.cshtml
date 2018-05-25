@@ -14,33 +14,60 @@
 
 
 
-            <div>
-                    @foreach (var i in Model.Tasks)
-                    {
-                            if (i.ClassID == Model.cl.ClassID)
-                            {
-                                var tsk = i;
-                            <div class="block">
-                                <div class="classItem" style='@(DateTime.Now>tsk.DueDate ?"background-color:red":"")'>>
-                                    <div class="description">
-                                        @Html.DisplayFor(Desc => tsk.Description)
-                                    </div>
-                                    <div class="dateLeft" style="color:#17252A">
-                                        Start Date: @Html.DisplayFor(Desc => tsk.StartDate)
-                                    </div>
-                                    <div class="dateRight" style="color:#17252A">
-                                        Due Date: @Html.DisplayFor(Desc => tsk.DueDate)
-                                    </div>
-                                </div>
+       <div>
+            @foreach (var i in Model.Tasks)
+            {
+                if (i.ClassID == Model.cl.ClassID)
+                {
+                    var tsk = i;
+                    <div class="block" style="min-height: 296px; margin-bottom: 20px;">
+
+                        <div class="classItem" style='@(DateTime.Now > tsk.DueDate ? "background-color:red" : "")'>
+
+                            @{
+                                String tempVideo = "";
+                                String temp = tsk.Description;
+                                int startP = temp.IndexOf("v::") + 3;
+                                int endP = temp.IndexOf("::v") - startP;
+                                if (startP < 1 || endP < 1)
+                                {
+                                    tempVideo = "";
+                                }
+                                else
+                                {
+                                    tempVideo = temp.Substring(startP, endP);
+                                }
+
+                                String tempDesc = tsk.Description.Substring(startP + endP + 3);
+
+                            <div class="description">
+                                @tempDesc
                             </div>
+
                             <br />
                             <br />
+
+                            <div class="dateLeft" style="color:#17252A">
+                                Start Date: @Html.DisplayFor(Desc => tsk.StartDate)
+                            </div>
+
+                            <div class="dateRight" style="color:#17252A">
+                                Due Date: @Html.DisplayFor(Desc => tsk.DueDate)
+                            </div>
+
+
+                            <hr style='@(tempVideo.Equals("") ? "display:none;" : "display:block;")' />
+
+                            <div class="video" style='@(tempVideo.Equals("") ? "display:none;" : "display:block;")'>
+                                <iframe class="movieBox" src="@tempVideo" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                            </div>
                             }
 
-                    }
-            </div>
-
-
+                            <br />
+                        </div>
+                </div>
+                }
+             }
         </div>
     </div>
 </div>

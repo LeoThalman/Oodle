@@ -1204,6 +1204,9 @@ namespace Oodle.Controllers
             string id = Request.Form["classID"];
             string startDate = Request.Form["startDate"];
             string dueDate = Request.Form["dueDate"];
+            string vString = Request.Form["video"];
+
+            desc = "v::" + vString + "::v" + desc;
 
             int classID = int.Parse(id);
 
@@ -1252,10 +1255,6 @@ namespace Oodle.Controllers
 
         }
 
-
-        /*
-         * Method that pulls in data and then makes a decision to either delete those fields from the database, or change them.
-         */
         public ActionResult EditTaskAction()
         {
             ViewBag.RequestMethod = "POST";
@@ -1266,11 +1265,12 @@ namespace Oodle.Controllers
             string dueDate = Request.Form["dueDate"];
             string TaskID = Request.Form["TaskID"];
             string delItem = Request.Form["Delete"];
+            string vString = Request.Form["video"];
+
 
             int TasksID = int.Parse(TaskID);
             int classID = int.Parse(id);
 
-            //If delete is checked, delete task from database.
             if (delItem == "True")
             {
                 foreach (var x in db.Tasks.Where(i => i.TasksID == TasksID))
@@ -1279,11 +1279,9 @@ namespace Oodle.Controllers
                 }
 
             }
-
-            // save fields to selected database.
             else
             {
-
+                desc = "v::" + vString + "::v" + desc;
                 db.Tasks.Where(i => i.ClassID == classID && i.TasksID == TasksID).ToList().ForEach(x => x.Description = desc);
                 db.Tasks.Where(i => i.ClassID == classID && i.TasksID == TasksID).ToList().ForEach(x => x.StartDate = DateTime.Parse(startDate));
                 db.Tasks.Where(i => i.ClassID == classID && i.TasksID == TasksID).ToList().ForEach(x => x.DueDate = DateTime.Parse(dueDate));
