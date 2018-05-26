@@ -949,7 +949,7 @@ namespace Oodle.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateQuiz([Bind(Include = "QuizName,ClassID,StartTime,EndTime,IsHidden,GradeWeight")] Quizze Quiz)
+        public ActionResult CreateQuiz([Bind(Include = "QuizName,ClassID,StartTime,EndTime,IsHidden,GradeWeight,CanReview")] Quizze Quiz)
         {
             if (test(Quiz.ClassID) != null)
             {

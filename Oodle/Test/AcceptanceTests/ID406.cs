@@ -139,6 +139,7 @@ namespace SeleniumTests
             driver.FindElement(By.Id("quiz_GradeWeight")).Click();
             driver.FindElement(By.Id("quiz_GradeWeight")).Clear();
             driver.FindElement(By.Id("quiz_GradeWeight")).SendKeys("10");
+            driver.FindElement(By.Id("quiz_CanReview")).Click();
             driver.FindElement(By.XPath("//input[@value='Create']")).Click();
             driver.FindElement(By.LinkText("View Quiz")).Click();
             driver.FindElement(By.LinkText("Add Question")).Click();
@@ -193,7 +194,6 @@ namespace SeleniumTests
             driver.FindElement(By.XPath("(//input[@id='StudentAnswers_1__AnswerNumber'])[2]")).Click();
             driver.FindElement(By.Id("StudentAnswers_1__AnswerNumber")).Click();
             driver.FindElement(By.XPath("//input[@value='Submit Quiz']")).Click();
-            Assert.AreEqual("Already Taken", driver.FindElement(By.XPath("//tbody/tr/td[2]")).Text);
             Assert.AreEqual("1 / 2", driver.FindElement(By.XPath("//td[3]")).Text);
             driver.FindElement(By.LinkText("Log off")).Click();
             driver.FindElement(By.Id("loginLink")).Click();

@@ -9,5 +9,6 @@ namespace Oodle.Models
     {
         public Quizze Quiz { get; set; }
         public Boolean Taken { get; set; }
+        public StudentQuizze StudentQuiz { get; set; }
     }
 }
