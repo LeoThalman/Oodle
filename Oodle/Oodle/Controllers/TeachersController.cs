@@ -121,11 +121,6 @@ namespace Oodle.Controllers
 
 
 
-
-
-
-
-
         public ActionResult Accept(int classID, int userID)
         {
             if (test(classID) != null)
@@ -1196,7 +1191,7 @@ namespace Oodle.Controllers
         }
 
 
-        public ActionResult CreateTasksEntry()
+        public ActionResult CreateTasksEntry(HttpPostedFileBase postedFile)
         {
             ViewBag.RequestMethod = "POST";
 
@@ -1205,6 +1200,28 @@ namespace Oodle.Controllers
             string startDate = Request.Form["startDate"];
             string dueDate = Request.Form["dueDate"];
             string vString = Request.Form["video"];
+            
+            vString = vString.Replace("watch?v=", "embed/");
+            var tsk = new Tasks();
+
+            if (postedFile != null)
+            {
+                byte[] bytes;
+                using (BinaryReader br = new BinaryReader(postedFile.InputStream))
+                {
+                    bytes = br.ReadBytes(postedFile.ContentLength);
+
+
+                    tsk.ContentType = postedFile.ContentType;
+                    tsk.Data = bytes;
+                    tsk.Name = Path.GetFileName(postedFile.FileName);
+
+
+                }
+            }
+
+
+
 
             desc = "v::" + vString + "::v" + desc;
 
@@ -1214,7 +1231,6 @@ namespace Oodle.Controllers
             {
                 return test(classID);
             }
-            var tsk = new Tasks();
 
             tsk.TasksID = db.Tasks.Count() + 1;
             tsk.Description = desc;
@@ -1231,6 +1247,7 @@ namespace Oodle.Controllers
 
             return View("Tasks", "_TeacherLayout", teacher);
         }
+
 
         /*
          * Returns a view for editTasks
@@ -1255,7 +1272,7 @@ namespace Oodle.Controllers
 
         }
 
-        public ActionResult EditTaskAction()
+        public ActionResult EditTaskAction(HttpPostedFileBase postedFile)
         {
             ViewBag.RequestMethod = "POST";
 
@@ -1266,10 +1283,27 @@ namespace Oodle.Controllers
             string TaskID = Request.Form["TaskID"];
             string delItem = Request.Form["Delete"];
             string vString = Request.Form["video"];
+            vString = vString.Replace("watch?v=", "embed/");
 
 
             int TasksID = int.Parse(TaskID);
             int classID = int.Parse(id);
+
+            if (postedFile != null)
+            {
+                byte[] bytes;
+                using (BinaryReader br = new BinaryReader(postedFile.InputStream))
+                {
+                    bytes = br.ReadBytes(postedFile.ContentLength);
+
+                    db.Tasks.Where(i => i.ClassID == classID && i.TasksID == TasksID).ToList().ForEach(x => x.ContentType = postedFile.ContentType);
+                    db.Tasks.Where(i => i.ClassID == classID && i.TasksID == TasksID).ToList().ForEach(x => x.Data = bytes);
+                    db.Tasks.Where(i => i.ClassID == classID && i.TasksID == TasksID).ToList().ForEach(x => x.Name = Path.GetFileName(postedFile.FileName));
+                }
+            }
+
+
+
 
             if (delItem == "True")
             {
@@ -1306,6 +1340,36 @@ namespace Oodle.Controllers
             return View("Tasks", "_TeacherLayout", teacher);
 
         }
+
+
+        [HttpPost]
+        public FileResult DownloadTask(int? fileId)
+        {
+            byte[] bytes;
+            string fileName, contentType;
+            string constr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                using (SqlCommand cmd = new SqlCommand())
+                {
+                    cmd.CommandText = "SELECT Name, Data, ContentType FROM Tasks WHERE TasksID=@Id";
+                    cmd.Parameters.AddWithValue("@Id", fileId);
+                    cmd.Connection = con;
+                    con.Open();
+                    using (SqlDataReader sdr = cmd.ExecuteReader())
+                    {
+                        sdr.Read();
+                        bytes = (byte[])sdr["Data"];
+                        contentType = sdr["ContentType"].ToString();
+                        fileName = sdr["Name"].ToString();
+                    }
+                    con.Close();
+                }
+            }
+
+            return File(bytes, contentType, fileName);
+        }
+
     }
 }
 

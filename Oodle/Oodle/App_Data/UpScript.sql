@@ -259,6 +259,11 @@ CREATE TABLE dbo.Tasks
 (	
 	TasksID	INT IDENTITY (1,1) NOT NULL,
 	ClassID	INT NOT NULL,
+
+    Name NVARCHAR(250),  
+    ContentType NVARCHAR(250),  
+	Data VARBINARY(MAX),
+
 	Description NVARCHAR(512),
 	StartDate DATETIME,
 	DueDate DATETIME,

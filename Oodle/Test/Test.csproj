@@ -246,6 +246,14 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ID473.feature.cs</LastGenOutput>
     </None>
+    <None Include="AcceptanceTests\WillsTests\ID465.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID427.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\WillsTests\ID464.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID427.cs</LastGenOutput>
+    </None>
     <None Include="AcceptanceTests\WillsTests\ID427.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ID427.cs</LastGenOutput>
