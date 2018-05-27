@@ -94,9 +94,17 @@ function Calendar() {
     var row = null;
     var cell = null;
     var n = 0;
-
+    var weekStart = 0;
+    var weekEnd = 0;
+    var weekOffset = fday.getDay();
+    console.log(date.getDate());
     for (var w = 0; w < 6; w++) {
-        if ((w * 7) + 1 <= date.getDate() && ((w + 1) * 7) >= date.getDate()) {
+        weekStart = ((w * 7) + 1) - weekOffset;
+        weekEnd = ((w + 1) * 7) - weekOffset;
+        console.log("Week" + w + " First:" + weekStart);
+        console.log("Week" + w + " Last:" + weekEnd);
+        console.log(weekOffset);
+        if (weekStart <= date.getDate() && weekEnd >= date.getDate()) {
             row = $("<tr>", {
                 "class": "thisWeek"
             });

@@ -6,9 +6,9 @@
     <p>Click the Remove Notification button to confirm removing, otherwise click the back button to go back to your class page</p>
     <p>Notification To Remove: @Model.rNotif.Notification</p>
 
-    @Html.ActionLink("Back", "Index", "Teachers", new { ClassID = Model.rNotif.ClassID }, new { @class = "" })
+    @Html.ActionLink("Back", "Index", "Teachers", new { ClassID = Model.rNotif.ClassID }, new { @class = "btn btn-default" })
 
-    @Html.ActionLink("Remove Notification", "RemoveNotification", "Teachers", new { classID = Model.rNotif.ClassID, notifID = Model.rNotif.ClassNotificationID }, new { @class = "" })
+    @Html.ActionLink("Remove Notification", "RemoveNotification", "Teachers", new { classID = Model.rNotif.ClassID, notifID = Model.rNotif.ClassNotificationID }, new { @class = "btn btn-default" })
     <p></p>
 
 </div>

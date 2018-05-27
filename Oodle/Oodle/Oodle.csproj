@@ -312,6 +312,7 @@
     <Compile Include="Models\Model1.cs" />
     <Compile Include="Models\Notes.cs" />
     <Compile Include="Models\QuizListQuiz.cs" />
+    <Compile Include="Models\QuizReview.cs" />
     <Compile Include="Models\Repos\IOodleRepository.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MultChoiceAnswer.cs" />
@@ -461,6 +462,7 @@
     <Content Include="Views\Class\SortList.cshtml" />
     <Content Include="Views\Students\HideNotifs.cshtml" />
     <Content Include="Views\Home\Landing.cshtml" />
+    <Content Include="Views\Students\ReviewQuiz.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

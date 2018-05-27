@@ -1,0 +1,30 @@
+﻿@model Oodle.Models.ViewModels.StudentVM
+<div class="col-sm-6">
+
+    @{int QNum = 0; }
+    @foreach (var RQ in Model.ReviewQuestions)
+    {
+        { QNum = QNum + 1; }
+        <p>Question @QNum: @RQ.QuestionText</p>
+        <ul>
+            <li>Points: @RQ.StudentPoints / @RQ.Points</li>
+            <li>Your Answer: @RQ.StudentAnswer</li>
+            <li> Correct Answer: @RQ.CorrectAnswer</li>
+        </ul>
+        <ol>
+            <li>@RQ.Answer1</li>
+            @if (!@RQ.Answer2.IsEmpty())
+            {
+                <li>@RQ.Answer2</li>}
+            @if (!@RQ.Answer3.IsEmpty())
+            {
+                <li>@RQ.Answer3</li>}
+            @if (!@RQ.Answer4.IsEmpty())
+            {
+                <li>@RQ.Answer4</li>}
+        </ol>
+        <hr />
+    }
+    @Html.ActionLink("Back to Quizzes", "QuizList", "Students", new { ClassID = Model.cl.ClassID }, new { @class = "btn btn-primary btn-large" })
+</div>
+
