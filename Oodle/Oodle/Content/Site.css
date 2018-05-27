@@ -20,6 +20,11 @@ Lighter white: #FEFFFF
     height: 10px;
 }
 
+.btn, .btn-default {
+    color: #3AAFA9;
+    background-color: #17252A;
+}
+
 .whitebox {
     position: relative;
     background-color: white;
@@ -612,20 +617,6 @@ hr.style-four {
         padding-bottom:5%;
     }
 
-.removeNotif a{
-    box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    width: 100%;
-    padding: 3%;
-    margin-bottom:5%;
-    background: #17252A;
-    color: #DEF2F1;
-}
-
-.removeNotif a:Hover {
-    background: #3AAFA9;
-}
 
 /*---------------------------CALENDAR PAGE------------------------------------*/
 .calMonth {
@@ -633,8 +624,13 @@ hr.style-four {
     font-size:40px;
 }
 
+.calendar{
 
+}
 
+.calendar p{
+    color:black;
+}
 .today {
     background-color: #49e2ea;
 }

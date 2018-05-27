@@ -25,7 +25,7 @@
                     </p>
                 </div>
                 <div class="col-sm-6" id="teacherPage">
-                    <h2 style="color:black;font-size:24px;"> Notifications </h2> @Html.ActionLink("Hide Notifications", "HideNotifs", "Students", new { ClassID = Model.cl.ClassID }, new { @class = "btn btn-primary btn-large" })
+                    <h2 style="color:black;font-size:24px;"> Notifications </h2> @Html.ActionLink("Hide Notifications", "HideNotifs", "Students", new { ClassID = Model.cl.ClassID }, new { @class = "btn btn-default" })
                     @foreach (var notif in Model.notifs)
                     {
 
@@ -43,10 +43,10 @@
 
                 <tr>
 
-                    <td><button class="btn btn-dark" id="upcomingBtn">Upcoming Assignments</button></td>
-                    <td><button class="btn btn-dark" id="testBtn1">Your Notes</button></td>
-                    <td><button class="btn btn-dark" id="testBtn2">Tasks Today</button></td>
-                    <td><button class="btn btn-dark" id="infoBtn">About</button></td>
+                    <td><button class="btn btn-default" id="upcomingBtn">Upcoming Assignments</button></td>
+                    <td><button class="btn btn-default" id="testBtn1">Your Notes</button></td>
+                    <td><button class="btn btn-default" id="testBtn2">Tasks Today</button></td>
+                    <td><button class="btn btn-default" id="infoBtn">About</button></td>
 
                 </tr>
 

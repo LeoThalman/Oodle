@@ -1067,7 +1067,7 @@ namespace Oodle.Controllers
             if (Quiz.StartTime.CompareTo(Quiz.EndTime) < 0 )
                 rtn = true;
             else
-                ModelState.AddModelError("StartTime", "Start Time must be before End Time");
+                ModelState.AddModelError("Quiz.StartTime", "Start Time must be before End Time");
             return rtn;
         }
 
@@ -1094,6 +1094,7 @@ namespace Oodle.Controllers
                 return rtn;
             if (ModelState.IsValid &&  CheckCorrectAnswerNotNull(answer))
             {
+                answer = ShortenAnswer(answer);
                 db.AddQuestion(question);
                 db.SaveChanges();
                 answer.QuestionID = question.QuestionID;
@@ -1116,6 +1117,26 @@ namespace Oodle.Controllers
                 ModelState.AddModelError("answer.CorrectAnswer", "Corresponding answer field is empty, " +
                                         "Please fill it out or choose a new answer");
             return rtn;
+        }
+
+        public MultChoiceAnswer ShortenAnswer(MultChoiceAnswer answer)
+        {
+            if (!String.IsNullOrWhiteSpace(answer.Answer4) && String.IsNullOrWhiteSpace(answer.Answer3))
+            {
+                answer.Answer3 = answer.Answer4;
+                answer.Answer4 = null;
+                if (answer.CorrectAnswer == 4)
+                    answer.CorrectAnswer = 3;
+            }
+
+            if (!String.IsNullOrWhiteSpace(answer.Answer3) && String.IsNullOrWhiteSpace(answer.Answer2))
+            {
+                answer.Answer2 = answer.Answer3;
+                answer.Answer3 = null;
+                if (answer.CorrectAnswer == 3)
+                    answer.CorrectAnswer = 2;
+            }
+            return answer;
         }
 
         public ActionResult AddAnother([Bind(Include = "QuizID,Points,QuestionText")] QuizQuestion question,

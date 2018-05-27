@@ -3,24 +3,29 @@
 
     @using (Html.BeginForm("SaveHideNotifs", "Students"))
     {
-    <ul>
-        @Html.HiddenFor(Model => Model.cl.ClassID)
-        @for (int i = 0; i < Model.HideNotifs.Count; i++)
-         {
-        <li>
-            @Html.HiddenFor(Model => Model.HideNotifs[i].ClassID)
-            @Html.HiddenFor(Model => Model.HideNotifs[i].NotifID)
-            @Html.EditorFor(Model => Model.HideNotifs[i].Hidden)
-            @Html.ValidationMessageFor(Model => Model.HideNotifs[i].Hidden, "", new { @class = "text-danger" })
-            @Html.DisplayFor(Model => Model.HideNotifs[i].Notification)
-            @Html.LabelFor(Model => Model.HideNotifs[i].Hidden)
-        </li>
-         }
-    </ul>
+        <ul>
+            @Html.HiddenFor(Model => Model.cl.ClassID)
+            @for (int i = 0; i < Model.HideNotifs.Count; i++)
+            {
+                <li>
+                    @Html.HiddenFor(Model => Model.HideNotifs[i].ClassID)
+                    @Html.HiddenFor(Model => Model.HideNotifs[i].NotifID)
+                    @Html.EditorFor(Model => Model.HideNotifs[i].Hidden)
+                    @Html.ValidationMessageFor(Model => Model.HideNotifs[i].Hidden, "", new { @class = "text-danger" })
+                    @Html.DisplayFor(Model => Model.HideNotifs[i].Notification)
+                    @Html.LabelFor(Model => Model.HideNotifs[i].Hidden)
+                </li>
+            }
+        </ul>
+        
         <div class="form-group">
+
             <div class="col-md-offset-2 col-md-10">
+                @Html.ActionLink("Back To Home", "Index", "Students", new { ClassID = Model.cl.ClassID }, new { @class = "btn btn-default" })
                 <input type="submit" value="Save Notifications" class="btn btn-default" />
             </div>
         </div>
     }
+
+
 </div>
