@@ -778,7 +778,7 @@ namespace Oodle.Controllers
             User user = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault();
 
             StudentQuizze HasTaken = db.StudentQuizzes.Where(q => q.QuizID == Quiz.QuizID && q.UserID == user.UsersID).FirstOrDefault();
-            if(HasTaken == null)
+            if(HasTaken != null)
             {
                 return RedirectToAction("Index", "Class", new { classId = classID });
             }
