@@ -1106,14 +1106,13 @@ namespace Oodle.Controllers
             {
                 return test(teacher.quiz.ClassID);
             }
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && CheckCorrectAnswerNotNull(answer))
             {
+                answer = ShortenAnswer(answer);
                 db.SetModified(answer);
                 db.SetModified(question);
                 db.SaveChanges();
-
-                //STILL MORE TO BE DONE HERE!
-
+                SetPointTotal(question.QuizID);
 
                 return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = teacher.quiz.QuizID, ClassID = teacher.quiz.ClassID });
             }
@@ -1140,7 +1139,7 @@ namespace Oodle.Controllers
             return View("RemoveQuestion", "_TeacherLayout", teacher);
         }
 
-        public ActionResult DeleteQuestion(int QuestionID, int ClassID, int QuizID)
+        public ActionResult DeleteQuizQuestion(int QuestionID, int ClassID, int QuizID)
         {
             if(db.StudentQuizzes.Where(q=> q.QuizID == QuizID).FirstOrDefault() != null)
             {
@@ -1151,11 +1150,10 @@ namespace Oodle.Controllers
             {
                 return test(ClassID);
             }
-            if(db.StudentQuizzes.Where(q=> q.QuizID == QuizID).FirstOrDefault() == null)
-            {
+
                 db.RemoveQuestion(Question);
                 db.SaveChanges();
-            }
+
             return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = QuizID, ClassID = ClassID });
         }
 

@@ -8,7 +8,7 @@
 
     @Html.ActionLink("Back To Quiz", "ViewQuiz", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID }, new { @class = "btn btn-default" })
 
-    @Html.ActionLink("Delete Question", "DeleteQuestion", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID, Question = Model.question.QuestionID }, new { @class = "btn btn-default" })
+    @Html.ActionLink("Delete Question", "DeleteQuizQuestion", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID, QuestionID = Model.question.QuestionID }, new { @class = "btn btn-default" })
     <p></p>
 
 </div>
