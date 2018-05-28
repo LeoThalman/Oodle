@@ -7,7 +7,8 @@
 
 
 <div class="form-style-6">
-    <form method="post" action="CreateTasksEntry">
+    @using (Html.BeginForm("CreateTasksEntry", "Teachers", FormMethod.Post, new { name = "formT", enctype = "multipart/form-data" }))
+    {
         <div>
             <h1>Create a Task</h1>
 
@@ -18,8 +19,11 @@
 
             <br />
             <label for="video">Video</label><br />
-            <input name="video" style="width:493px" value="" /><br />
+            <input name="video" style="width:493px" value="" />
 
+            <br />
+            <label for="file">File</label><br />
+            <input type="file" name="postedFile"/>
             <br />
             <label for="startDate">Start Date</label><br />
             <input type="datetime" name="startDate" value="@DateTime.Now" required />
@@ -32,7 +36,7 @@
         <div>
             <input type="submit" name="submit" value="Create Task" />
         </div>
-    </form>
-</div>
+    }
+    </div>
 
 

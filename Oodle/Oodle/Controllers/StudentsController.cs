@@ -430,8 +430,10 @@ namespace Oodle.Controllers
 
                     if (q != null)
                     {
-                        int contribution = l.Quizze.GradeWeight * (q.TotalPoints / q.Quizze.TotalPoints ?? default(int));
-                        total = (contribution * 100) + total;
+                        //int contribution = (l.Quizze.GradeWeight * (q.TotalPoints / q.Quizze.TotalPoints) *100 )?? default(int);
+                        int contribution = (l.Quizze.GradeWeight * ((q.TotalPoints * 100) / q.Quizze.TotalPoints)) ?? default(int);
+
+                        total = (contribution) + total;
                         divisor = l.Quizze.GradeWeight + divisor;
 
                         var submittedDate = q.Quizze.EndTime;
@@ -485,7 +487,10 @@ namespace Oodle.Controllers
 
             int userId = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault().UsersID;
 
-            TeacherVM teacher = FakeGradeHelper(classID, userId, Request.Form);
+            var teacher = getTVM(classID);
+
+
+            teacher = FakeGradeHelper(classID, userId, Request.Form, teacher);
 
 
             teacher.perUser = new List<UserVMish>() { new UserVMish() };
@@ -501,9 +506,8 @@ namespace Oodle.Controllers
         }
 
 
-        public TeacherVM FakeGradeHelper(int classID, int userId, System.Collections.Specialized.NameValueCollection form)
+        public TeacherVM FakeGradeHelper(int classID, int userId, System.Collections.Specialized.NameValueCollection form, TeacherVM teacher)
         {
-            var teacher = getTVM(classID);
             List<Grade> list2 = db.Grades.Where(g => g.ClassID == classID).ToList();
 
 
@@ -829,6 +833,20 @@ namespace Oodle.Controllers
             return RedirectToAction("QuizList", "Students", new { classID = ClassID });
 
         }
+
+
+        [HttpPost]
+        public FileResult DownloadTask(int? fileId)
+        {
+            byte[] bytes;
+            string fileName, contentType;
+
+            var tmp = db.Tasks.Where(i => i.TasksID == fileId).FirstOrDefault();
+
+
+            return File(tmp.Data, tmp.ContentType, tmp.Name);
+        }
+
 
         public ActionResult ReviewQuiz(int StudentQuizID, int ClassID)
         {

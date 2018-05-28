@@ -36,7 +36,10 @@ namespace Oodle.Models.ViewModels
             cl = classP;
             users = userP;
         }
+        public TeacherVM()
+        {
 
+        }
         public TeacherVM(List<Class> classP, List<User> userP, List<UserRoleClass> rolesP)
         {
             classList = classP;

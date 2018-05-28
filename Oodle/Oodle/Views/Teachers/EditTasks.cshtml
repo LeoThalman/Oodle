@@ -9,10 +9,10 @@
 
 
 <div class="form-style-6">
-    <form id="form" method="post" action="EditTaskAction">
+    @using (Html.BeginForm("EditTaskAction", "Teachers", FormMethod.Post, new { name = "formT", enctype = "multipart/form-data" }))
+    {
         <div>
             <h1>Edit Your Task</h1>
-
 
             <input type="hidden" name="TaskID" value="@Model.Tasks.FirstOrDefault().TasksID" />
 
@@ -40,26 +40,30 @@
                 <label for="video">Video</label><br />
                 <input name="video" value="@tempVideo" /><br />
             }
-            <label for="startDate">Start Date</label>             <br />
 
+
+            <br />
+            <label for="file">File</label><br />
+            <input type="file" name="postedFile" style="text-align:center; width:auto; margin:auto;" value="@Model.Tasks.FirstOrDefault().Name" />
+
+
+
+            <label for="startDate">Start Date</label>             <br />
             <input type="datetime" name="startDate" value="@Model.Tasks.FirstOrDefault().StartDate" required />
             <br />
             <label for="dueDate">Due Date</label>            <br />
-
             <input type="datetime" name="dueDate" value="@Model.Tasks.FirstOrDefault().DueDate" required />
-
             <br />
             <br />
-
             <input type="checkbox" name="Delete" value="True"> Delete
 
         </div>
-        <div>
-            <input type="submit" name="submit" value="Update Task" />
-            <a href="#" document.getElementById('category').value='The Category' ; ">
+        <input type="submit" name="submit" value="Update Task" />
 
-        </div>
-    </form>
+    }
+    <div>
+        <a href="#" document.getElementById('category').value='The Category' ; ">
+    </div>
 </div>
 
 

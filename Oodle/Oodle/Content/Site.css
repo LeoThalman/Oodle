@@ -972,10 +972,6 @@ textarea {
 }
 
 
-
-
-
-
 /*dropdown CSS */
 
 .dropDownButton {
@@ -1000,7 +996,7 @@ textarea {
 
 .dropDownButton a:link, a:visited, a:link {
     text-decoration: none;
-    color: #999999;
+    color: #dddddd;
 }
 
 .dropDownButton:hover {

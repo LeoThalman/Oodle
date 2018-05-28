@@ -21,5 +21,15 @@ namespace Oodle.Models
         public DateTime? DueDate { get; set; }
 
         public virtual Class Class { get; set; }
+
+
+        [StringLength(250)]
+        public string Name { get; set; }
+
+        [StringLength(250)]
+        public string ContentType { get; set; }
+
+        public byte[] Data { get; set; }
+
     }
 }

@@ -64,6 +64,11 @@
                             }
 
                             <br />
+
+                            <a href="javascript:;" onclick="DownloadTask(@i.TasksID)">
+                                <h5> @i.Name</h5>
+                            </a>
+                            <br />                       
                         </div>
                 </div>
                 }
@@ -71,3 +76,20 @@
         </div>
     </div>
 </div>
+@using (Html.BeginForm("DownloadTask", "Students", FormMethod.Post))
+{
+    <input type="hidden" id="hfFileId" name="FileId" />
+    <input type="submit" id="btnDownload" value="Download" style="display:none" />
+}
+
+
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="./path/to/dropzone.js"></script>
+<script type="text/javascript">
+    function DownloadTask(fileId) {
+        $("#hfFileId").val(fileId);
+        $("#btnDownload")[0].click();
+    };
+</script>
