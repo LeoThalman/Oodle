@@ -1751,6 +1751,7 @@ fieldset[disabled] .form-control {
 
 textarea.form-control {
   height: auto;
+  float:left;
 }
 
 .form-group {
