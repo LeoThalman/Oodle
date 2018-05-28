@@ -91,7 +91,7 @@
     }
     
     <div>
-        @Html.ActionLink("Back to Quiz View", "ViewQuiz", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID }, null)
+        @Html.ActionLink("Back to Quiz View", "ViewQuiz", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID }, new { @class = "btn btn-default" })
     </div>
 </body>
 </html>
