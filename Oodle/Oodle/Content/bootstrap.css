@@ -1722,6 +1722,7 @@ input[type="number"]::-webkit-inner-spin-button {
   height: 34px;
   padding: 6px 12px;
   font-size: 14px;
+  float:left;
   line-height: 1.428571429;
   color: #555555;
   vertical-align: middle;
@@ -1761,6 +1762,7 @@ textarea.form-control {
   display: block;
   min-height: 20px;
   padding-left: 20px;
+  float:left;
   margin-top: 10px;
   margin-bottom: 10px;
   vertical-align: middle;

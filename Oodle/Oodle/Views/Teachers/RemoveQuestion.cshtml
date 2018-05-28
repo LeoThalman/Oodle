@@ -1,0 +1,14 @@
+﻿@model Oodle.Models.ViewModels.TeacherVM
+
+
+<div class="removeNotif">
+    <h1>Delete Question</h1>
+    <p>Click the Delete Question button to confirm deleting the Question, otherwise click the back button to the quiz page</p>
+    <p>Quiz To Remove: @Model.question.QuestionText</p>
+
+    @Html.ActionLink("Back To Quiz", "ViewQuiz", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID }, new { @class = "btn btn-default" })
+
+    @Html.ActionLink("Delete Question", "DeleteQuestion", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID, Question = Model.question.QuestionID }, new { @class = "btn btn-default" })
+    <p></p>
+
+</div>

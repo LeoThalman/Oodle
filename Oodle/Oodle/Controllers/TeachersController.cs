@@ -872,6 +872,8 @@ namespace Oodle.Controllers
             {
                 return test(Quiz.ClassID);
             }
+            TeacherVM teacher = getTVM(Quiz.ClassID);
+            teacher.quiz = Quiz;
             if (ModelState.IsValid && CheckQuizTime(Quiz))
             {
 
@@ -885,7 +887,7 @@ namespace Oodle.Controllers
             }
             else
             {
-                return RedirectToAction("EditQuiz", "Teachers", new {QuizID = Quiz.QuizID, ClassID = Quiz.ClassID });
+                return View("EditQuiz", "_TeacherLayout", teacher);
             }
         }
 
@@ -923,6 +925,14 @@ namespace Oodle.Controllers
                 teacher.quiz = quiz;
                 teacher.questionList = db.QuizQuestions.Where(q => q.QuizID == quiz.QuizID).ToList();
                 teacher.answerList = db.MultChoiceAnswers.Where(a => a.QuizQuestion.QuizID == QuizID).ToList();
+                if (db.StudentQuizzes.Where(q => q.QuizID == QuizID).FirstOrDefault() != null)
+                {
+                    teacher.Locked = true;
+                }
+                else
+                {
+                    teacher.Locked = false;
+                }
                 return View("ViewQuiz", "_TeacherLayout", teacher);
             }
                 return RedirectToAction("Index", "Class", new { classId = ClassID });
@@ -1059,6 +1069,94 @@ namespace Oodle.Controllers
             db.SaveChanges();
 
             return RedirectToAction("QuizList", "Teachers", new { ClassID = ClassID });
+        }
+
+        [HttpGet]
+        public ActionResult EditQuestion(int QuestionID, int ClassID, int QuizID)
+        {
+            if (db.StudentQuizzes.Where(q => q.QuizID == QuizID).FirstOrDefault() != null)
+            {
+                return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = QuizID, ClassID = ClassID });
+            }
+            if (test(ClassID) != null)
+            {
+                return test(ClassID);
+            }
+            TeacherVM teacher = getTVM(ClassID);
+            teacher.quiz = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault();
+            teacher.question = db.QuizQuestions.Where(q => q.QuestionID == QuestionID).FirstOrDefault();
+            teacher.answer = db.MultChoiceAnswers.Where(a => a.QuestionID == QuestionID).FirstOrDefault();
+            return View("EditQuestion", "_TeacherLayout", teacher);
+        }
+
+        [HttpPost]
+        public ActionResult EditQuestion(QuizQuestion question, MultChoiceAnswer answer)
+        {
+            if (db.StudentQuizzes.Where(q => q.QuizID == question.QuizID).FirstOrDefault() != null)
+            {
+                Quizze temp = db.Quizzes.Where(q => q.QuizID == question.QuizID).FirstOrDefault();
+                return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = question.QuizID, ClassID = temp.ClassID });
+            }
+            Quizze Quiz = db.Quizzes.Where(q => q.QuizID == question.QuizID).FirstOrDefault();
+            TeacherVM teacher = getTVM(Quiz.ClassID);
+            teacher.quiz = Quiz;
+            teacher.question = question;
+            teacher.answer = answer;
+            if (test(teacher.quiz.ClassID) != null)
+            {
+                return test(teacher.quiz.ClassID);
+            }
+            if (ModelState.IsValid)
+            {
+                db.SetModified(answer);
+                db.SetModified(question);
+                db.SaveChanges();
+
+                //STILL MORE TO BE DONE HERE!
+
+
+                return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = teacher.quiz.QuizID, ClassID = teacher.quiz.ClassID });
+            }
+            else
+            {
+                return View("EditQuestion", "_TeacherLayout", teacher);
+            }
+        }
+
+        public ActionResult RemoveQuestion(int QuestionID, int ClassID, int QuizID)
+        {
+            if (db.StudentQuizzes.Where(q => q.QuizID == QuizID).FirstOrDefault() != null)
+            {
+                return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = QuizID, ClassID = ClassID });
+            }
+            if (test(ClassID) != null)
+            {
+                return test(ClassID);
+            }
+            TeacherVM teacher = getTVM(ClassID);
+            teacher.quiz = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault();
+            teacher.question = db.QuizQuestions.Where(q => q.QuestionID == QuestionID).FirstOrDefault();
+
+            return View("RemoveQuestion", "_TeacherLayout", teacher);
+        }
+
+        public ActionResult DeleteQuestion(int QuestionID, int ClassID, int QuizID)
+        {
+            if(db.StudentQuizzes.Where(q=> q.QuizID == QuizID).FirstOrDefault() != null)
+            {
+                return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = QuizID, ClassID = ClassID });
+            }
+            QuizQuestion Question = db.QuizQuestions.Where(q => q.QuestionID == QuestionID).FirstOrDefault();
+            if (test(ClassID) != null)
+            {
+                return test(ClassID);
+            }
+            if(db.StudentQuizzes.Where(q=> q.QuizID == QuizID).FirstOrDefault() == null)
+            {
+                db.RemoveQuestion(Question);
+                db.SaveChanges();
+            }
+            return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = QuizID, ClassID = ClassID });
         }
 
         public Boolean CheckQuizTime (Quizze Quiz)

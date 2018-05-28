@@ -24,6 +24,9 @@ Lighter white: #FEFFFF
     color: #3AAFA9;
     background-color: #17252A;
 }
+.fleft {
+    float:left;
+}
 
 .whitebox {
     position: relative;
@@ -709,6 +712,7 @@ hr.style-four {
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         width: 100%;
+        float:left;
         padding: 3%;
         background: #17252A;
         color: #DEF2F1;

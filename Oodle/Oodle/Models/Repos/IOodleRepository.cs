@@ -46,6 +46,7 @@ namespace Oodle.Models.Repos
         void AddAssignment(Assignment a);
         void AddQuiz(Quizze q);
         void AddQuestion(QuizQuestion q);
+        void RemoveQuestion(QuizQuestion q);
         void AddAnswer(MultChoiceAnswer a);
         void AddTask(Tasks t);
         void RemoveTask(Tasks t);

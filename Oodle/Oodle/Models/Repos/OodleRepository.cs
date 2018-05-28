@@ -152,6 +152,11 @@ namespace Oodle.Models.Repos
             db.QuizQuestions.Add(q);
         }
 
+        public void RemoveQuestion(QuizQuestion q)
+        {
+            db.QuizQuestions.Remove(q);
+        }
+
         public void AddAnswer(MultChoiceAnswer a)
         {
             db.MultChoiceAnswers.Add(a);
