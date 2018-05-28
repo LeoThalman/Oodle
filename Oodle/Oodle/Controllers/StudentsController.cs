@@ -727,19 +727,27 @@ namespace Oodle.Controllers
             {
                 return test(classID);
             }
+            var idid = User.Identity.GetUserId();
+            User user = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault();
+
             StudentVM student = getSVM(classID);
             student.Quizzes = db.Quizzes.Where(q => q.ClassID == classID).ToList();
-            student.StudentQuizzes = db.StudentQuizzes.Where(q => q.Quizze.ClassID == classID).ToList();
+            student.StudentQuizzes = db.StudentQuizzes.Where(q => q.Quizze.ClassID == classID && q.UserID == user.UsersID).ToList();
             student.QuizListQuizzes = new List<QuizListQuiz>();
             QuizListQuiz temp = null;
+            StudentQuizze TQuiz = null;
             foreach (Quizze q in student.Quizzes)
             {
                 temp = new QuizListQuiz();
-                if(db.StudentQuizzes.Where(sq => sq.QuizID == q.QuizID).FirstOrDefault() != null)
+                TQuiz = db.StudentQuizzes.Where(sq => sq.QuizID == q.QuizID && sq.UserID == user.UsersID).FirstOrDefault();
+                if (TQuiz != null)
                 {
                     temp.Quiz = q;
                     temp.Taken = true;
+                    temp.StudentQuiz = TQuiz;
                     student.QuizListQuizzes.Add(temp);
+                    
+
                 }
                 else
                 {
@@ -747,7 +755,9 @@ namespace Oodle.Controllers
                     {
                         temp.Quiz = q;
                         temp.Taken = false;
+                        temp.StudentQuiz = new StudentQuizze();
                         student.QuizListQuizzes.Add(temp);
+                       
                     }
                 }
                 
@@ -758,11 +768,23 @@ namespace Oodle.Controllers
         [HttpGet]
         public ActionResult TakeQuiz(int QuizID)
         {
-
-            int classID = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault().ClassID;
+            Quizze Quiz = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault();
+            if(Quiz == null)
+            {
+                RedirectToAction("Index", "Home");
+            }
+            int classID = Quiz.ClassID;
             if (test(classID) != null)
             {
                 return test(classID);
+            }
+            var idid = User.Identity.GetUserId();
+            User user = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault();
+
+            StudentQuizze HasTaken = db.StudentQuizzes.Where(q => q.QuizID == Quiz.QuizID && q.UserID == user.UsersID).FirstOrDefault();
+            if(HasTaken != null)
+            {
+                return RedirectToAction("Index", "Class", new { classId = classID });
             }
             StudentVM student = getSVM(classID);
             student.StudentQuiz = new StudentQuizze();
@@ -823,6 +845,43 @@ namespace Oodle.Controllers
 
 
             return File(tmp.Data, tmp.ContentType, tmp.Name);
+        }
+
+
+        public ActionResult ReviewQuiz(int StudentQuizID, int ClassID)
+        {
+            if (test(ClassID) != null)
+            {
+                return test(ClassID);
+            }
+            StudentVM student = getSVM(ClassID);
+            StudentQuizze StudentQuiz = db.StudentQuizzes.Where(sq => sq.SQID == StudentQuizID).FirstOrDefault();
+            Quizze Quiz = db.Quizzes.Where(q => q.QuizID == StudentQuiz.QuizID).FirstOrDefault();
+            List<QuizQuestion> Questions = db.QuizQuestions.Where(q => q.QuizID == Quiz.QuizID).ToList();
+            student.ReviewQuestions = new List<QuizReview>();
+            MultChoiceAnswer Answer = null;
+            QuizReview ReviewQuestion = null;
+            StudentAnswer SAnswer = null;
+            foreach(QuizQuestion Q in Questions)
+            {
+                ReviewQuestion = new QuizReview();
+                ReviewQuestion.QuestionText = Q.QuestionText;
+                ReviewQuestion.Points = Q.Points;
+                ReviewQuestion.QuestionID = Q.QuestionID;
+                SAnswer = db.StudentAnswers.Where(sa => sa.QuestionID == Q.QuestionID && sa.SQID == StudentQuiz.SQID).FirstOrDefault();
+                Answer = db.MultChoiceAnswers.Where(a => a.QuestionID == Q.QuestionID).FirstOrDefault();
+                ReviewQuestion.StudentPoints = SAnswer.StudentPoints;
+                ReviewQuestion.StudentAnswer = SAnswer.AnswerNumber;
+                ReviewQuestion.Answer1 = Answer.Answer1;
+                ReviewQuestion.Answer2 = Answer.Answer2;
+                ReviewQuestion.Answer3 = Answer.Answer3;
+                ReviewQuestion.Answer4 = Answer.Answer4;
+                ReviewQuestion.CorrectAnswer = Answer.CorrectAnswer;
+                student.ReviewQuestions.Add(ReviewQuestion);
+            }
+
+
+            return View("ReviewQuiz", "_StudentLayout", student);
         }
     }
 }

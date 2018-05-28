@@ -46,9 +46,9 @@ namespace SeleniumTests
             driver.FindElement(By.XPath("(//a[contains(text(),'Log in')])[2]")).Click();
             driver.FindElement(By.Id("UserName")).Click();
             driver.FindElement(By.Id("UserName")).Clear();
-            driver.FindElement(By.Id("UserName")).SendKeys("koll");
+            driver.FindElement(By.Id("UserName")).SendKeys("teacher");
             driver.FindElement(By.Id("Password")).Clear();
-            driver.FindElement(By.Id("Password")).SendKeys("password");
+            driver.FindElement(By.Id("Password")).SendKeys("111111");
             driver.FindElement(By.XPath("//input[@value='Log in']")).Click();
             Assert.AreEqual("Learn about Oodle", driver.FindElement(By.XPath("//div[3]/div/a/h3")).Text);
             Assert.AreEqual("View Oodle Tools", driver.FindElement(By.XPath("//div[3]/div[2]/a/h3")).Text);

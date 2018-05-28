@@ -6,9 +6,9 @@
     <p>Click the Delete Quiz button to confirm deleting the quiz, otherwise click the back button to the quiz page</p>
     <p>Quiz To Remove: @Model.quiz.QuizName</p>
 
-    @Html.ActionLink("Back", "ViewQuiz", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID }, new { @class = "" })
+    @Html.ActionLink("Back To Quiz", "ViewQuiz", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID }, new { @class = "btn btn-default" })
 
-    @Html.ActionLink("Delete Quiz", "DeleteQuiz", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID }, new { @class = "" })
+    @Html.ActionLink("Delete Quiz", "DeleteQuiz", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID }, new { @class = "btn btn-default" })
     <p></p>
 
 </div>

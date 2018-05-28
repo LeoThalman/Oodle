@@ -21,20 +21,27 @@ namespace Oodle.Models
 
         [Required]
         [StringLength(256)]
+        [Display(Name = "Quiz Name")]
         public string QuizName { get; set; }
 
+        [Display(Name = "Start Time")]
         public DateTime StartTime { get; set; }
 
+        [Display(Name = "End Time")]
         public DateTime EndTime { get; set; }
 
         public int ClassID { get; set; }
 
+        [Display(Name = "Grade Weight")]
         public int GradeWeight { get; set; }
 
+        [Display(Name = "Hide from Students")]
         public bool IsHidden { get; set; }
 
+        [Display(Name = "Let Students Review")]
         public bool CanReview { get; set; }
 
+        [Display(Name = "Point Total For Quiz")]
         public int? TotalPoints { get; set; }
 
         public virtual Class Class { get; set; }
