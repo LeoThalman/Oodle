@@ -102,6 +102,12 @@ namespace Oodle.Models.Repos
             temp.Add(q);
             QuizQuestions = temp;
         }
+        public void RemoveQuestion(QuizQuestion q)
+        {
+            List<QuizQuestion> temp = QuizQuestions.ToList();
+            temp.Add(q);
+            QuizQuestions = temp;
+        }
 
         public void AddAnswer(MultChoiceAnswer a)
         {

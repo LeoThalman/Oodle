@@ -23,6 +23,7 @@ namespace Oodle.Models.ViewModels
         public Quizze quiz { get; set; }
         public QuizQuestion question { get; set; }
         public MultChoiceAnswer answer { get; set; }
+        public Boolean Locked { get; set; }
         public List<QuizQuestion> questionList { get; set; }
         public List<MultChoiceAnswer> answerList { get; set; }
         public List<Tasks> Tasks { get; set; }

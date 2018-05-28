@@ -463,6 +463,8 @@
     <Content Include="Views\Students\HideNotifs.cshtml" />
     <Content Include="Views\Home\Landing.cshtml" />
     <Content Include="Views\Students\ReviewQuiz.cshtml" />
+    <Content Include="Views\Teachers\RemoveQuestion.cshtml" />
+    <Content Include="Views\Teachers\EditQuestion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
