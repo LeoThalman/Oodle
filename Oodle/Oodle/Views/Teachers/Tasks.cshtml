@@ -34,9 +34,9 @@
 
                         String tempDesc = tsk.Description.Substring(startP + endP + 3);
 
-                        <h5 class="description">
+                        <div class="description">
                             @tempDesc
-                        </h5>
+                        </div>
 
                         <br />
                         <br />
@@ -52,18 +52,20 @@
 
                         <hr style='@(tempVideo.Equals("")?"display:none;" : "display:block;")' />
 
-                        <div class="video" style='@(tempVideo.Equals("")?"display:none;" : "display:block;")'>
+                        <div class="videoTask" style='@(tempVideo.Equals("")?"display:none;" : "display:block;")'>
                             <iframe class="movieBox" src="@tempVideo" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                         </div>
 
-
-
                         <br />
+
+
 
                         <a href="javascript:;" onclick="DownloadTask(@i.TasksID)">
                             <h5> @i.Name</h5>
                         </a>
                         <br />
+
+
 
 
                     }

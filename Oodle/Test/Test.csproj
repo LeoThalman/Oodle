@@ -208,6 +208,7 @@
     <Compile Include="AcceptanceTests\Sams Tests\SamSelenium\PBI397SamTestTeacherSidePastDueIsRed.cs" />
     <Compile Include="AcceptanceTests\WillsTests\CreateInvalidDate.cs" />
     <Compile Include="AcceptanceTests\WillsTests\ID428.cs" />
+    <Compile Include="AcceptanceTests\WillsTests\UploadingFileToTasks.cs" />
     <Compile Include="AcceptanceTests\WillsTests\NoFileMakesItGiveWarning.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="OodleUnitTests.cs" />
