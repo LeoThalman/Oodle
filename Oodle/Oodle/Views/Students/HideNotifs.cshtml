@@ -1,6 +1,7 @@
 ﻿@model Oodle.Models.ViewModels.StudentVM
-<div class="col-sm-6">
 
+<div class="col-sm-push-6">
+    <center><h2>Hide Notifications For @Model.cl.Name</h2></center>
     @using (Html.BeginForm("SaveHideNotifs", "Students"))
     {
         <ul>
@@ -17,15 +18,13 @@
                 </li>
             }
         </ul>
-        
+
         <div class="form-group">
 
-            <div class="col-md-offset-2 col-md-10">
+            <div class="col-md-push-10">
                 @Html.ActionLink("Back To Home", "Index", "Students", new { ClassID = Model.cl.ClassID }, new { @class = "btn btn-default" })
                 <input type="submit" value="Save Notifications" class="btn btn-default" />
             </div>
         </div>
     }
-
-
 </div>

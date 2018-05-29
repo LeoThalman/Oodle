@@ -639,6 +639,7 @@ namespace Oodle.Controllers
             List<HiddenNotification> HList = db.HiddenNotifications.Where(n => n.UsersID == UsersID && n.ClassID == ClassID).ToList();
             List<ClassNotification> ClassNotifs = db.ClassNotifications.Where(n => n.ClassID == ClassID).ToList();
             student.HideNotifs = new List<HideNotifList>();
+            student.cl = db.Classes.Where(c => c.ClassID == ClassID).FirstOrDefault();
             HideNotifList Temp = null;
             foreach(ClassNotification c in ClassNotifs)
             {
@@ -780,7 +781,7 @@ namespace Oodle.Controllers
             }
             var idid = User.Identity.GetUserId();
             User user = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault();
-
+            
             StudentQuizze HasTaken = db.StudentQuizzes.Where(q => q.QuizID == Quiz.QuizID && q.UserID == user.UsersID).FirstOrDefault();
             if(HasTaken != null)
             {
@@ -789,6 +790,7 @@ namespace Oodle.Controllers
             StudentVM student = getSVM(classID);
             student.StudentQuiz = new StudentQuizze();
             student.StudentQuiz.QuizID = QuizID;
+            student.Quiz = Quiz;
             student.questionList = db.QuizQuestions.Where(q => q.QuizID == QuizID).ToList();
             student.answerList = db.MultChoiceAnswers.Where(q => q.QuizQuestion.QuizID == QuizID).ToList();
             student.StudentAnswers = new List<StudentAnswer>();
@@ -862,6 +864,7 @@ namespace Oodle.Controllers
             MultChoiceAnswer Answer = null;
             QuizReview ReviewQuestion = null;
             StudentAnswer SAnswer = null;
+            student.Quiz = Quiz;
             foreach(QuizQuestion Q in Questions)
             {
                 ReviewQuestion = new QuizReview();
