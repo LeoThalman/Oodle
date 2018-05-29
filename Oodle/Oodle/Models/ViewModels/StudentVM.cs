@@ -16,6 +16,7 @@ namespace Oodle.Models.ViewModels
         public List<Tasks> Tasks { get; set; }
         public List<Notes> Notes { get; set; }
         public List<Quizze> Quizzes { get; set; }
+        public Quizze Quiz { get; set; }
         public List<StudentQuizze> StudentQuizzes { get; set; }
         public List<StudentAnswer> StudentAnswers { get; set; }
         public List<QuizListQuiz> QuizListQuizzes { get; set; }

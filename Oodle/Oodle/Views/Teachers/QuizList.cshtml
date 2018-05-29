@@ -5,7 +5,7 @@
         <thead>
             <tr>
                 <td>Quiz Name</td>
-                <td>@Html.ActionLink("Create A Quiz", "CreateQuiz", "Teachers", new { ClassID = Model.cl.ClassID }, null)</td>
+                <td class="QuizTableLink">@Html.ActionLink("Create A Quiz", "CreateQuiz", "Teachers", new { ClassID = Model.cl.ClassID }, null)</td>
             </tr>
         </thead>
         @foreach (var quiz in Model.quizzes)
@@ -14,7 +14,7 @@
                 <td>
                     @Html.DisplayFor(Notification => quiz.QuizName)
                 </td>
-                <td>
+                <td class="QuizTableLink">
                     @Html.ActionLink("View Quiz", "ViewQuiz", "Teachers", new { QuizID = quiz.QuizID, ClassID = quiz.ClassID }, null)
                 </td>
             </tr>

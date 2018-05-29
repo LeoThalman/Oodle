@@ -10,29 +10,34 @@
         </thead>
         @foreach (var Quiz in Model.QuizListQuizzes)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(Notification => Quiz.Quiz.QuizName)
-                </td>
-                <td>
-                    @*Add if statement to check if quiz has been taken, if so replace link with "Already Taken"*@
-                    @if (!(Quiz.Taken))
-                    {@Html.ActionLink("Take Quiz", "TakeQuiz", "Students", new { QuizID = Quiz.Quiz.QuizID, ClassID = Quiz.Quiz.ClassID }, null) }
+        <tr>
+            <td>
+                @Html.DisplayFor(Notification => Quiz.Quiz.QuizName)
+            </td>
+                @*Add if statement to check if quiz has been taken, if so replace link with "Already Taken"*@
+                @if (!(Quiz.Taken))
+        {
+        <td class="QuizTableLink">
+            @Html.ActionLink("Take Quiz", "TakeQuiz", "Students", new { QuizID = Quiz.Quiz.QuizID, ClassID = Quiz.Quiz.ClassID }, null)
+        </td>}
 
-                    @if (Quiz.Quiz.CanReview && Quiz.Taken){ 
-                            @Html.ActionLink("Review Quiz", "ReviewQuiz", "Students", new { StudentQuizID = Quiz.StudentQuiz.SQID, ClassID = Quiz.Quiz.ClassID }, null)
-                    }
-                    @if(!Quiz.Quiz.CanReview && Quiz.Taken){
-                        <text> Already Taken </text>
-                    }                     
-                </td>
-                <td>
-                    @if (Quiz.Taken)
-                    {@Quiz.StudentQuiz.TotalPoints <text>/</text> @Quiz.Quiz.TotalPoints } 
-                    else
-                    { <text>N/A</text> }
-                </td>
-            </tr>
+                @if (Quiz.Quiz.CanReview && Quiz.Taken)
+        {
+            <td class="QuizTableLink">
+                @Html.ActionLink("Review Quiz", "ReviewQuiz", "Students", new { StudentQuizID = Quiz.StudentQuiz.SQID, ClassID = Quiz.Quiz.ClassID }, null)
+            </td>
+}
+                @if (!Quiz.Quiz.CanReview && Quiz.Taken)
+        {
+            <td>Already Taken</td>
+                }
+            <td>
+                @if (Quiz.Taken)
+        {@Quiz.StudentQuiz.TotalPoints <text>/</text> @Quiz.Quiz.TotalPoints }
+else
+{ <text>N/A</text>}
+            </td>
+        </tr>
         }
     </table>
 </div>

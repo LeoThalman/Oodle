@@ -45,6 +45,12 @@ Lighter white: #FEFFFF
     width: 50px
 }
 
+/*-------Quiz CSS----------*/
+
+.QuizTableLink {
+    background-color: #17252A;
+}
+
 .QuizSide{
     text-align: left;
 }
