@@ -49,7 +49,7 @@ namespace SeleniumTests
             driver.FindElement(By.Id("loginLink")).Click();
             driver.FindElement(By.Id("UserName")).Click();
             driver.FindElement(By.Id("UserName")).Clear();
-            driver.FindElement(By.Id("UserName")).SendKeys("student");
+            driver.FindElement(By.Id("UserName")).SendKeys("YoungsterJoey");
             driver.FindElement(By.Id("Password")).Click();
             driver.FindElement(By.Id("Password")).Clear();
             driver.FindElement(By.Id("Password")).SendKeys("111111");

@@ -46,7 +46,7 @@ namespace SeleniumTests
             driver.FindElement(By.Id("loginLink")).Click();
             driver.FindElement(By.Id("UserName")).Click();
             driver.FindElement(By.Id("UserName")).Clear();
-            driver.FindElement(By.Id("UserName")).SendKeys("teacher");
+            driver.FindElement(By.Id("UserName")).SendKeys("ProfessorElm");
             driver.FindElement(By.Id("Password")).Clear();
             driver.FindElement(By.Id("Password")).SendKeys("111111");
             driver.FindElement(By.XPath("//input[@value='Log in']")).Click();
@@ -63,6 +63,14 @@ namespace SeleniumTests
             driver.FindElement(By.Name("name")).SendKeys("Edited Class");
             driver.FindElement(By.Name("submit")).Click();
             Assert.AreEqual("Welcome to your teacher homepage for: Edited Class", driver.FindElement(By.Id("black-text")).Text);
+            driver.FindElement(By.LinkText("Edit Class")).Click();
+            driver.FindElement(By.Name("name")).Click();
+            driver.FindElement(By.Name("name")).Click();
+            // ERROR: Caught exception [ERROR: Unsupported command [doubleClick | name=name | ]]
+            driver.FindElement(By.Name("name")).Clear();
+            driver.FindElement(By.Name("name")).SendKeys("The Effects of Wind on Skirts and Dresses");
+            driver.FindElement(By.Name("submit")).Click();
+            
             driver.FindElement(By.LinkText("Log off")).Click();
         }
         private bool IsElementPresent(By by)
