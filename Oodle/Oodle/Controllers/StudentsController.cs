@@ -376,13 +376,13 @@ namespace Oodle.Controllers
             teacher.StudentQuizze = db.StudentQuizzes.Where(i => db.Quizzes.Where(i2 => i2.ClassID == classID).Contains(i.Quizze)).ToList();
             teacher.users = new List<Models.User>() { db.Users.Where(a => a.IdentityID == idid).FirstOrDefault() };
             teacher.classGrade = new List<int>();
-            teacher.classGrade.Add(GradeHelper(list, list2));
+            teacher.classGrade.Add(GradeHelper(list, list2, userId));
 
             return View("Grade", "_StudentLayout", teacher);
         }
 
         //This is the method I'm really testing.
-        public int GradeHelper(List<Document> list, List<Grade> gradables)
+        public int GradeHelper(List<Document> list, List<Grade> gradables, int userID)
         {
             var UserVMish = new UserVMish();
             UserVMish.stat = new List<bool>();
@@ -401,7 +401,7 @@ namespace Oodle.Controllers
 
                 if (l.Assignment != null)
                 {
-                    d = db.Documents.Where(k => k.GradeID == l.GradeID).FirstOrDefault();
+                    d = db.Documents.Where(k => k.GradeID == l.GradeID && k.UserID == userID).FirstOrDefault();
 
                     if (d != null)
                     {
@@ -426,7 +426,7 @@ namespace Oodle.Controllers
 
                 if (l.Quizze != null)
                 {
-                    q = db.StudentQuizzes.Where(k => k.QuizID == l.QuizID).FirstOrDefault();
+                    q = db.StudentQuizzes.Where(k => k.QuizID == l.QuizID && k.UserID == userID).FirstOrDefault();
 
                     if (q != null)
                     {
