@@ -1,11 +1,15 @@
 ﻿@model Oodle.Models.ViewModels.StudentVM
 
 <div class="row fontClass col">
+    <h2>Quizzes for: @Model.cl.Name</h2>
     <table>
         <thead>
             <tr>
                 <td>Quiz Name</td>
-                <td> </td>
+                <td>Take/Review Quiz </td>
+                <td>Point Total</td>
+                <td>Start Time</td>
+                <td>End Time</td>
             </tr>
         </thead>
         @foreach (var Quiz in Model.QuizListQuizzes)
@@ -14,29 +18,31 @@
             <td>
                 @Html.DisplayFor(Notification => Quiz.Quiz.QuizName)
             </td>
-                @*Add if statement to check if quiz has been taken, if so replace link with "Already Taken"*@
-                @if (!(Quiz.Taken))
-        {
+            @*Add if statement to check if quiz has been taken, if so replace link with "Already Taken"*@
+            @if (!(Quiz.Taken))
+    {
         <td class="QuizTableLink">
             @Html.ActionLink("Take Quiz", "TakeQuiz", "Students", new { QuizID = Quiz.Quiz.QuizID, ClassID = Quiz.Quiz.ClassID }, null)
         </td>}
 
-                @if (Quiz.Quiz.CanReview && Quiz.Taken)
-        {
-            <td class="QuizTableLink">
-                @Html.ActionLink("Review Quiz", "ReviewQuiz", "Students", new { StudentQuizID = Quiz.StudentQuiz.SQID, ClassID = Quiz.Quiz.ClassID }, null)
-            </td>
+            @if (Quiz.Quiz.CanReview && Quiz.Taken)
+    {
+        <td class="QuizTableLink">
+            @Html.ActionLink("Review Quiz", "ReviewQuiz", "Students", new { StudentQuizID = Quiz.StudentQuiz.SQID, ClassID = Quiz.Quiz.ClassID }, null)
+        </td>
 }
-                @if (!Quiz.Quiz.CanReview && Quiz.Taken)
-        {
-            <td>Already Taken</td>
-                }
+            @if (!Quiz.Quiz.CanReview && Quiz.Taken)
+    {
+        <td>Can't Review</td>
+}
             <td>
                 @if (Quiz.Taken)
         {@Quiz.StudentQuiz.TotalPoints <text>/</text> @Quiz.Quiz.TotalPoints }
 else
 { <text>N/A</text>}
             </td>
+            <td>@Html.DisplayFor(Q => Quiz.Quiz.StartTime)</td>
+            <td>@Html.DisplayFor(Q => Quiz.Quiz.EndTime)</td>
         </tr>
         }
     </table>

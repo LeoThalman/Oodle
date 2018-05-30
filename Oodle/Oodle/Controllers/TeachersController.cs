@@ -1148,9 +1148,11 @@ namespace Oodle.Controllers
                 return test(ClassID);
             }
 
-                db.RemoveQuestion(Question);
-                db.SaveChanges();
 
+            db.RemoveQuestion(Question);
+            db.SaveChanges();
+
+            SetPointTotal(Question.QuizID);
             return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = QuizID, ClassID = ClassID });
         }
 

@@ -1,11 +1,14 @@
 ﻿@model Oodle.Models.ViewModels.TeacherVM
 
 <div class="row fontClass col">
+    <h2>Quizzes for: @Model.cl.Name</h2>
     <table>
         <thead>
             <tr>
                 <td>Quiz Name</td>
                 <td class="QuizTableLink">@Html.ActionLink("Create A Quiz", "CreateQuiz", "Teachers", new { ClassID = Model.cl.ClassID }, null)</td>
+                <td>Start Time</td>
+                <td>End Time</td>
             </tr>
         </thead>
         @foreach (var quiz in Model.quizzes)
@@ -17,6 +20,8 @@
                 <td class="QuizTableLink">
                     @Html.ActionLink("View Quiz", "ViewQuiz", "Teachers", new { QuizID = quiz.QuizID, ClassID = quiz.ClassID }, null)
                 </td>
+                <td>@Html.DisplayFor(Notification => quiz.StartTime)</td>
+                <td>@Html.DisplayFor(Notification => quiz.EndTime)</td>
             </tr>
         }
     </table>
