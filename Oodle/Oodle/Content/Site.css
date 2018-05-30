@@ -10,6 +10,12 @@ Darker white: #DEF2F1
 Lighter white: #FEFFFF
 */
 
+.float-left{
+    float:left;
+    padding-left:-10%;
+}
+
+
 /*Shrink Menu earlier*/
 
 @media (max-width: 1200px) {
