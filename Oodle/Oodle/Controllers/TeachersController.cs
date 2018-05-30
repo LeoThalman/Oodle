@@ -132,6 +132,8 @@ namespace Oodle.Controllers
             db.UserRoleClasses.Where(i => i.UsersID == userID & i.ClassID == classID).ToList().ForEach(x => x.RoleID = 2);
             db.SaveChanges();
 
+
+
             //get user and class
             User user = db.Users.Where(i => i.UsersID == userID).FirstOrDefault();
             Class c = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
@@ -702,6 +704,8 @@ namespace Oodle.Controllers
             db.Documents.Where(i => i.Id == documentID).ToList().ForEach(x => x.Grade = grade);
 
             db.SaveChanges();
+            //marker
+            return RedirectToAction("SubmissionView", "Teachers", new { ClassID = classID, assignmentID = assignmentID });
 
             return View("MakeGrade", "_TeacherLayout", teacher);
         }
