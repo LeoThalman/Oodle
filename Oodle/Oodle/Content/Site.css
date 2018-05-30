@@ -511,6 +511,9 @@ color:black;
     height: 30px;
     font-size: x-large;
     margin: 0 auto;
+    overflow: hidden;
+    white-space: nowrap; 
+    text-overflow: ellipsis;
 }
 
 .description {
