@@ -550,9 +550,11 @@ namespace Oodle.Controllers
             {
                 teacher.fakeTotal = fTotal / fNumber;
             }
+            var idid = User.Identity.GetUserId();
 
+            int userID = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault().UsersID;
             teacher.classGrade = new List<int>();
-            teacher.classGrade.Add(GradeHelper(teacher.documents, list2));
+            teacher.classGrade.Add(GradeHelper(teacher.documents, list2, userID));
 
             return teacher;
         }
