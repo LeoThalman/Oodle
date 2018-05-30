@@ -136,8 +136,10 @@ namespace Oodle.Controllers
             User user = db.Users.Where(i => i.UsersID == userID).FirstOrDefault();
             Class c = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
             //Send request to slack for user to join the group
-            //slack.JoinChannel(user.Email, c.Name);
-
+            if(slack.HasToken())
+            { 
+                slack.JoinChannel(user.Email, c.Name);
+            }
             return RedirectToAction("Index", new { classId = classID });
         }
 

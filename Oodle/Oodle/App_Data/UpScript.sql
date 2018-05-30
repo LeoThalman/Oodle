@@ -458,10 +458,10 @@ INSERT INTO [dbo].[AspNetUsers](
     [AccessFailedCount],
     [UserName])
 	VALUES (
-		'8e485440-f6bf-4398-8d76-af1a644908ee', 'student@student.com', 'False', 'AEalM6XUun+R+QMlhnwGFt5U5GeINLKsW+VLZlyqWUGBetC2dkk3zmPqHCzKL2YgBQ==', '73311d19-faa7-4d91-9ded-fad9a73b010e', NULL, 'False', 'False', NULL, 'True', 0, 'student'
+		'8e485440-f6bf-4398-8d76-af1a644908ee', 'leothalman@gmail.com', 'False', 'AEalM6XUun+R+QMlhnwGFt5U5GeINLKsW+VLZlyqWUGBetC2dkk3zmPqHCzKL2YgBQ==', '73311d19-faa7-4d91-9ded-fad9a73b010e', NULL, 'False', 'False', NULL, 'True', 0, 'YoungsterJoey'
 	),
 	(
-		'c4999e68-b230-4ba7-bb69-247819ad0e04', 'teacher@teacher.com', 'False', 'AE+0wyg/DRhnr6JXS5brN2xF7+lq3kW4BJc6RAPAP4mwDZn3Oj9WflOlthLHlWU7vQ==', 'a9231bd6-1e81-4b84-b7d4-a39b7576a93a', NULL, 'False', 'False', NULL, 'True', 0, 'teacher'
+		'c4999e68-b230-4ba7-bb69-247819ad0e04', 'kanisha.collynn@itis0k.org', 'False', 'AE+0wyg/DRhnr6JXS5brN2xF7+lq3kW4BJc6RAPAP4mwDZn3Oj9WflOlthLHlWU7vQ==', 'a9231bd6-1e81-4b84-b7d4-a39b7576a93a', NULL, 'False', 'False', NULL, 'True', 0, 'ProfessorElm'
 	);
 
 	INSERT INTO dbo.Users
@@ -471,10 +471,10 @@ INSERT INTO [dbo].[AspNetUsers](
 	UserName
 	)
 	VALUES (
-		'8e485440-f6bf-4398-8d76-af1a644908ee', 'student@student.com', 'student'
+		'8e485440-f6bf-4398-8d76-af1a644908ee', 'leothalman@gmail.com', 'YoungsterJoey'
 	),
 	(
-		'c4999e68-b230-4ba7-bb69-247819ad0e04', 'teacher@teacher.com', 'teacher'
+		'c4999e68-b230-4ba7-bb69-247819ad0e04', 'kanisha.collynn@itis0k.org', 'ProfessorElm'
 	);
 
 	INSERT INTO dbo.Class

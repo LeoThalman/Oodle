@@ -49,7 +49,7 @@ namespace SeleniumTests
             driver.FindElement(By.Id("loginLink")).Click();
             driver.FindElement(By.Id("UserName")).Click();
             driver.FindElement(By.Id("UserName")).Clear();
-            driver.FindElement(By.Id("UserName")).SendKeys("teacher");
+            driver.FindElement(By.Id("UserName")).SendKeys("ProfessorElm");
             driver.FindElement(By.Id("Password")).Click();
             driver.FindElement(By.Id("Password")).Clear();
             driver.FindElement(By.Id("Password")).SendKeys("111111");
@@ -71,7 +71,7 @@ namespace SeleniumTests
             driver.FindElement(By.Id("loginLink")).Click();
             driver.FindElement(By.Id("UserName")).Click();
             driver.FindElement(By.Id("UserName")).Clear();
-            driver.FindElement(By.Id("UserName")).SendKeys("student");
+            driver.FindElement(By.Id("UserName")).SendKeys("YoungsterJoey");
             driver.FindElement(By.XPath("//section[@id='loginForm']/form/div/div")).Click();
             driver.FindElement(By.Id("Password")).Click();
             driver.FindElement(By.Id("Password")).Clear();
@@ -80,12 +80,12 @@ namespace SeleniumTests
             driver.FindElement(By.LinkText("Classes")).Click();
             driver.FindElement(By.XPath("//a/div/div")).Click();
             driver.FindElement(By.LinkText("Hide Notifications")).Click();
-            Assert.AreEqual("Hide Notifications For Edited Class", driver.FindElement(By.XPath("//h2")).Text);
+            Assert.AreEqual("Hide Notifications For The Effects of Wind on Skirts and Dresses", driver.FindElement(By.XPath("//h2")).Text);
             driver.FindElement(By.LinkText("Log off")).Click();
             driver.FindElement(By.Id("loginLink")).Click();
             driver.FindElement(By.Id("UserName")).Click();
             driver.FindElement(By.Id("UserName")).Clear();
-            driver.FindElement(By.Id("UserName")).SendKeys("teacher");
+            driver.FindElement(By.Id("UserName")).SendKeys("ProfessorElm");
             driver.FindElement(By.Id("Password")).Click();
             driver.FindElement(By.Id("Password")).Clear();
             driver.FindElement(By.Id("Password")).SendKeys("111111");
@@ -107,7 +107,7 @@ namespace SeleniumTests
             driver.FindElement(By.Id("loginLink")).Click();
             driver.FindElement(By.Id("UserName")).Click();
             driver.FindElement(By.Id("UserName")).Clear();
-            driver.FindElement(By.Id("UserName")).SendKeys("teacher");
+            driver.FindElement(By.Id("UserName")).SendKeys("ProfessorElm");
             driver.FindElement(By.Id("Password")).Click();
             driver.FindElement(By.Id("Password")).Clear();
             driver.FindElement(By.Id("Password")).SendKeys("111111");
@@ -129,7 +129,7 @@ namespace SeleniumTests
             driver.FindElement(By.Id("loginLink")).Click();
             driver.FindElement(By.Id("UserName")).Click();
             driver.FindElement(By.Id("UserName")).Clear();
-            driver.FindElement(By.Id("UserName")).SendKeys("student");
+            driver.FindElement(By.Id("UserName")).SendKeys("YoungsterJoey");
             driver.FindElement(By.XPath("//section[@id='loginForm']/form/div/div")).Click();
             driver.FindElement(By.Id("Password")).Click();
             driver.FindElement(By.Id("Password")).Clear();
@@ -145,7 +145,7 @@ namespace SeleniumTests
             driver.FindElement(By.Id("loginLink")).Click();
             driver.FindElement(By.Id("UserName")).Click();
             driver.FindElement(By.Id("UserName")).Clear();
-            driver.FindElement(By.Id("UserName")).SendKeys("teacher");
+            driver.FindElement(By.Id("UserName")).SendKeys("ProfessorElm");
             driver.FindElement(By.Id("Password")).Click();
             driver.FindElement(By.Id("Password")).Clear();
             driver.FindElement(By.Id("Password")).SendKeys("111111");
@@ -166,7 +166,7 @@ namespace SeleniumTests
             driver.FindElement(By.Id("loginLink")).Click();
             driver.FindElement(By.Id("UserName")).Click();
             driver.FindElement(By.Id("UserName")).Clear();
-            driver.FindElement(By.Id("UserName")).SendKeys("teacher");
+            driver.FindElement(By.Id("UserName")).SendKeys("ProfessorElm");
             driver.FindElement(By.Id("Password")).Click();
             driver.FindElement(By.Id("Password")).Clear();
             driver.FindElement(By.Id("Password")).SendKeys("111111");
@@ -187,7 +187,7 @@ namespace SeleniumTests
             driver.FindElement(By.Id("loginLink")).Click();
             driver.FindElement(By.Id("UserName")).Click();
             driver.FindElement(By.Id("UserName")).Clear();
-            driver.FindElement(By.Id("UserName")).SendKeys("student");
+            driver.FindElement(By.Id("UserName")).SendKeys("YoungsterJoey");
             driver.FindElement(By.XPath("//section[@id='loginForm']/form/div/div")).Click();
             driver.FindElement(By.Id("Password")).Click();
             driver.FindElement(By.Id("Password")).Clear();
@@ -207,7 +207,7 @@ namespace SeleniumTests
             driver.FindElement(By.Id("loginLink")).Click();
             driver.FindElement(By.Id("UserName")).Click();
             driver.FindElement(By.Id("UserName")).Clear();
-            driver.FindElement(By.Id("UserName")).SendKeys("teacher");
+            driver.FindElement(By.Id("UserName")).SendKeys("ProfessorElm");
             driver.FindElement(By.Id("Password")).Click();
             driver.FindElement(By.Id("Password")).Clear();
             driver.FindElement(By.Id("Password")).SendKeys("111111");
