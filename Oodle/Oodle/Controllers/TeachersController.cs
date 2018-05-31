@@ -798,10 +798,10 @@ namespace Oodle.Controllers
                 }
             }//////
 
-            
+
 
             teacher.users = list;
-            teacher.StudentQuizze = db.StudentQuizzes.Where(i => db.Quizzes.Where(i2 => i2.ClassID == classID).Contains(i.Quizze)).ToList();
+            teacher.StudentQuizze = db.StudentQuizzes.ToList();
             teacher.documents = db.Documents.Where(i => i.ClassID == classID).ToList();
             teacher.classGrade = classGrades;
             teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).ToList();
