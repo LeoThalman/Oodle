@@ -28,14 +28,13 @@
         for (int i = 0; i < Model.documents.Count(); i++)
         {
             var file = Model.documents[i];
-            var user = Model.users[i];
+            var user = file.User;
             var classID = Model.cl.ClassID;
-            var documentID = Model.documents[i].Id;
             var assignmentID = Model.assignment.FirstOrDefault().AssignmentID;
             <tr>
                 <td>@user.UserName</td>
                 <td>@file.Name</td>
-                <td><a href="@Url.Action("Grade", "Teachers", new {classID = classID,documentID = documentID,assignmentID = assignmentID})" style="color:dimgrey"> Grade </a></td>
+                <td><a href="@Url.Action("Grade", "Teachers", new {classID = classID,documentID = file.Id,assignmentID = assignmentID})" style="color:dimgrey"> Grade </a></td>
                 <td><a href="javascript:;" onclick="DownloadFile(@file.Id)" style="color:dimgrey">Download</a></td>
             </tr>
         }

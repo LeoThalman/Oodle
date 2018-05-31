@@ -612,9 +612,9 @@ namespace Oodle.Controllers
 
             teacher.users = students;
 
-            return View(teacher);
+            return View("SubmissionView", "_TeacherLayout", teacher);
         }
-        
+
 
         [HttpPost]
         public FileResult DownloadFile(int? fileId)
@@ -706,8 +706,6 @@ namespace Oodle.Controllers
             db.SaveChanges();
             //marker
             return RedirectToAction("SubmissionView", "Teachers", new { ClassID = classID, assignmentID = assignmentID });
-
-            return View("MakeGrade", "_TeacherLayout", teacher);
         }
 
         public ActionResult GradeList(int classID)
