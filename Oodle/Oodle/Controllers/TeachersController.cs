@@ -816,15 +816,10 @@ namespace Oodle.Controllers
                 userVMish.stat.Add(false);
                 userVMish.Late.Add(submittedDate.Subtract(dueDate));
             }
-            else if (0 >= DateTime.Compare(submittedDate, dueDate))
-            {
-                userVMish.stat.Add(true);
-                userVMish.Late.Add(dueDate.Subtract(submittedDate));
-            }
             else
             {
                 userVMish.stat.Add(true);
-                userVMish.Late.Add(TimeSpan.MinValue);
+                userVMish.Late.Add(dueDate.Subtract(submittedDate));
             }
         }
 
