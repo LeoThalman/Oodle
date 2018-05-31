@@ -35,8 +35,8 @@
             <tr>
                 <td>@user.UserName</td>
                 <td>@file.Name</td>
-                <td><a href="@Url.Action("Grade", "Teachers", new {classID = classID,documentID = documentID,assignmentID = assignmentID})"> Grade </a></td>
-                <td><a href="javascript:;" onclick="DownloadFile(@file.Id)">Download</a></td>
+                <td><a href="@Url.Action("Grade", "Teachers", new {classID = classID,documentID = documentID,assignmentID = assignmentID})" style="color:dimgrey"> Grade </a></td>
+                <td><a href="javascript:;" onclick="DownloadFile(@file.Id)" style="color:dimgrey">Download</a></td>
             </tr>
         }
     }
