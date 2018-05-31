@@ -9,18 +9,190 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>ErrorPage</title>
+    <!--Jquery-->
+    <script src="jquery-3.3.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah|Ubuntu" rel="stylesheet">
+    <!-- Style sheets-->
+
+    <link rel="stylesheet" type="text/css" href="/Scripts/main.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Oodle</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
 
-    <br style="padding-bottom:70px;" />
-    <div class="jumbotron" style="border-radius:150px;">
-        <center>
-            <h2 id="pendingPage">You have clicked a link that is currently under development! Please try again soon!</h2>
-            <a href="https://www.khanacademy.org/" title="worker"><img src="~/Content/img/Under_construction_transparent.png" height="200" width="200" class="img-rounded" alt="Khan Academy"></a>
-            <p class="razorButtons">@Html.ActionLink("Back Home", "Index", "Home", new { @style = "color: #17252A" })</p>
 
-        </center>
+
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href='@Url.Action("Landing", "Home")'>
+                    <img src="~/Content/img/logo.png" class="img-center" height="45" width="90" />
+                </a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-left">
+                    <li>@Html.ActionLink("Home", "Landing", "Home")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Classes", "List", "Class")</li>
+                    <li>@Html.ActionLink("Tools", "Tools", "Home")</li>
+                    <li>@Html.ActionLink("Calendar", "Calendar", "Home")</li>
+                    <li><a href="https://oodle-dev.slack.com/" target="_blank">Slack</a></li>
+
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
     </div>
+
+
+
+
+    <style>
+        @@keyframes example {
+            0% {
+            }
+
+            20% {
+                -webkit-transform: rotate(360deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @@keyframes top {
+            0% {
+                top: 200px;
+            }
+
+            20% {
+                top: 200px;
+            }
+
+            100% {
+                top: 0px;
+            }
+        }
+        @@keyframes text {
+            0% {
+                top: -700px;
+                font-size:30px;
+            }
+
+            20% {
+                top: -700px;
+                font-size: 30px;
+            }
+
+            100% {
+                top: -850px;
+                font-size: 70px;
+            }
+        }
+        @@keyframes text2 {
+            0% {
+                top: -700px;
+                font-size: 1px;
+            }
+
+            20% {
+                top: -700px;
+                font-size: 1px;
+            }
+
+            100% {
+                top: -870px;
+                font-size: 30px;
+            }
+        }
+    </style>
+
+    <div style="
+        position: relative;">
+
+        <img src="~/Content/img/top.png" height="500" width="500"
+             style="  z-index: 1;
+            margin-left: auto;
+                    bottom: 0px;
+            display: block;
+              position: relative;
+                      -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
+        -webkit-animation-duration: 4s; /* Safari 4.0 - 8.0 */
+        animation-name: top;
+        animation-duration: 4s;
+            margin-right: auto;">
+
+
+
+        <img src="~/Content/img/middle.png" height="100" width="100"
+             style="margin-left: auto;
+        z-index: 2;
+        display: block;
+        position:relative;
+        margin-right: auto;
+        -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
+        -webkit-animation-duration: 4s; /* Safari 4.0 - 8.0 */
+        animation-name: example;
+        top: -100px;
+        animation-duration: 4s;
+        ">
+
+
+        <img src="~/Content/img/bottom.png" height="500" width="500"
+             style="  z-index: 1;
+            margin-left: auto;
+                    top: -400px;
+
+            display: block;
+              position: relative;
+            margin-right: auto;">
+
+        <h2 style="  z-index: 1;
+            margin-left: auto;
+                top: -850px;
+                font-size: 70px;
+                text-align:center;
+            display: block;
+            color:black;
+            font-family:
+            -webkit-animation-name: text; /* Safari 4.0 - 8.0 */
+            -webkit-animation-duration: 4s; /* Safari 4.0 - 8.0 */
+            animation-name: text;
+            position: relative;
+            margin-right: auto;">
+            404
+        </h2>
+        <h3 style="  z-index: 1;
+            margin-left: auto;
+                top: -870px;
+                font-size: 30px;
+                text-align:center;
+            display: block;
+            color:black;
+            -webkit-animation-name: text2; /* Safari 4.0 - 8.0 */
+            -webkit-animation-duration: 4s; /* Safari 4.0 - 8.0 */
+            animation-name: text2;
+            position: relative;
+            margin-right: auto;">
+            Oops, you aren't supposed to be here.
+        </h3>
+
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
 
 </body>
 </html>

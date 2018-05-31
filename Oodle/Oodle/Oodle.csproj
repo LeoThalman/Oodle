@@ -339,10 +339,13 @@
     <Compile Include="Utility\SlackManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\img\bottom.png" />
+    <Content Include="Content\img\middle.png" />
     <Content Include="App_Data\Oodle.mdf" />
     <Content Include="App_Data\Oodle_log.ldf">
       <DependentUpon>Oodle.mdf</DependentUpon>
     </Content>
+    <Content Include="Content\img\top.png" />
     <Content Include="App_Data\up.sql" />
     <Content Include="App_Data\DownScript.sql" />
     <Content Include="App_Data\UpScript.sql" />
