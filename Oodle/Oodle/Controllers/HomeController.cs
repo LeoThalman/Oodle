@@ -85,7 +85,15 @@ namespace Oodle.Controllers
 
         }
 
-       
+
+        public ActionResult ErrorPage()
+        {
+
+            return View();
+
+        }
+
+
 
 
         //can remove, was just using to test that testing works and it does
