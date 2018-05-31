@@ -373,7 +373,7 @@ namespace Oodle.Controllers
 
             teacher.perUser.FirstOrDefault().Grade = db.Grades.Where(i => i.ClassID == classID).ToList();
 
-            teacher.StudentQuizze = db.StudentQuizzes.Where(i => db.Quizzes.Where(i2 => i2.ClassID == classID).Contains(i.Quizze)).ToList();
+            teacher.StudentQuizze = db.StudentQuizzes.ToList();
             teacher.users = new List<Models.User>() { db.Users.Where(a => a.IdentityID == idid).FirstOrDefault() };
             teacher.classGrade = new List<int>();
             teacher.classGrade.Add(GradeHelper(list, list2, userId));
