@@ -1,0 +1,26 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ErrorPage</title>
+</head>
+<body>
+
+    <br style="padding-bottom:70px;" />
+    <div class="jumbotron" style="border-radius:150px;">
+        <center>
+            <h2 id="pendingPage">You have clicked a link that is currently under development! Please try again soon!</h2>
+            <a href="https://www.khanacademy.org/" title="worker"><img src="~/Content/img/Under_construction_transparent.png" height="200" width="200" class="img-rounded" alt="Khan Academy"></a>
+            <p class="razorButtons">@Html.ActionLink("Back Home", "Index", "Home", new { @style = "color: #17252A" })</p>
+
+        </center>
+    </div>
+
+</body>
+</html>
