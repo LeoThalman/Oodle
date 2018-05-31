@@ -140,7 +140,7 @@ namespace Oodle.Controllers
             //Send request to slack for user to join the group
             if (slack.HasToken() && !c.SlackName.Equals("%") && slack.IsOnSlack(user.Email))
             {
-                slack.JoinChannel(user.Email, c.Name);
+                slack.JoinChannel(user.Email, c.SlackName);
             }
             return RedirectToAction("Index", new { classId = classID });
         }
