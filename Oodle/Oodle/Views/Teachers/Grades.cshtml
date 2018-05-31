@@ -11,6 +11,8 @@
         <!-- fluid -->
         <div class="box-toggle">
             @if(true){
+                                            int i3 = 0;
+
                 var number = 0;
                 var t = 0;
                 foreach (var i in Model.users.ToList())
@@ -92,16 +94,16 @@
 
                                         var doc = Model.documents.Where(o => o.UserID == i.UsersID && o.AssignmentID == assi.AssignmentID).FirstOrDefault();
 
-
                                         var classID = Model.cl.ClassID;
-                                        if (doc != null) { 
+                                        if (doc != null) {
                                             var documentID = doc.Id;
                                             var assignmentID = doc.AssignmentID;
                                             var submittedDate = doc.Date;
                                             var dueDate = doc.Assignment.DueDate;
-                                            var late = test.Late[i2];
-                                            var stat = test.stat[i2];
-                                            
+                                            var late = Model.perUser[t].Late[i3];
+                                            var stat = Model.perUser[t].stat[i3];
+                                            i3++;
+
                                             <div class="contorol padded">
 
                                                 <div style="font-size:20px">@assi.Name</div>
@@ -116,7 +118,7 @@
                                                     {
                                                         @Html.DisplayFor(Grade => doc.Grade);
                                                     }
-                                                    %
+                                                    
                                                 </div>
                                     
 
@@ -174,7 +176,7 @@
                     </div>
 
                     number = number + 1;
-
+                    i3 = 0;
                     <hr />
 
                     t++;
