@@ -215,6 +215,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ID397.feature</DependentUpon>
     </Compile>
+    <Compile Include="AcceptanceTests\Sams Tests\ID466.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ID466.feature</DependentUpon>
+    </Compile>
+    <Compile Include="AcceptanceTests\Sams Tests\ID467.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ID467.feature</DependentUpon>
+    </Compile>
     <Compile Include="AcceptanceTests\Sams Tests\SamSelenium\PBI395SamTestTeacherSideRosterToSeeIfYouCanKickStudents.cs" />
     <Compile Include="AcceptanceTests\Sams Tests\SamSelenium\PBI396SamTestNavBarStudentSideTouchGrades.cs" />
     <Compile Include="AcceptanceTests\Sams Tests\SamSelenium\PBI396SamTestNavBarStudentSideTouchHome.cs" />
@@ -277,6 +287,14 @@
     <None Include="AcceptanceTests\LeosTests\ID455.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ID455.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\Sams Tests\ID466.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID466.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\Sams Tests\ID467.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID467.feature.cs</LastGenOutput>
     </None>
     <None Include="AcceptanceTests\WillsTests\ID465.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
