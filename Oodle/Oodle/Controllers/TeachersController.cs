@@ -86,7 +86,7 @@ namespace Oodle.Controllers
             }
 
 
-            System.Diagnostics.Debug.WriteLine(classes);
+           System.Diagnostics.Debug.WriteLine(classes);
 
 
             ViewBag.RequestMethod = "POST";
@@ -195,6 +195,11 @@ namespace Oodle.Controllers
             return RedirectToAction("Index", new { classId = classID });
         }
 
+        /// <summary>
+        /// Loads the add notification view
+        /// </summary>
+        /// <param name="classID">ID of Class</param>
+        /// <returns>The Add Notification View</returns>
         public ActionResult AddNotifToClass(int classID)
         {
             if (test(classID) != null)
@@ -209,6 +214,12 @@ namespace Oodle.Controllers
             return View("AddNotifToClass", "_TeacherLayout", teacher);
         }
 
+        /// <summary>
+        /// Adds the slack notification to the database and slack
+        /// </summary>
+        /// <param name="notif">notification text</param>
+        /// <param name="classID">ID of Class</param>
+        /// <returns>true if added to database successfully, false if not</returns>
         public Boolean AddNotifToDB(string notif, int classID)
         {
             Boolean rtn = false;
@@ -227,6 +238,10 @@ namespace Oodle.Controllers
             return rtn;
         }
 
+        /// <summary>
+        /// Gets the Notification data from the view, and saves it in the database
+        /// </summary>
+        /// <returns>Index page of class</returns>
         public ActionResult SaveNotif()
         {
             ViewBag.RequestMethod = "POST";
@@ -238,6 +253,12 @@ namespace Oodle.Controllers
             return RedirectToAction("Index", new { classId = classID });
         }
 
+        /// <summary>
+        /// Loads the Remove Notification View to verify removing Notification
+        /// </summary>
+        /// <param name="classID">ID of Class</param>
+        /// <param name="notifID">ID of Notification</param>
+        /// <returns>RemoveNotification View if successful, otherwise redirects to class index page</returns>
         public ActionResult RemoveNotif(int classID, int notifID)
         {
             if (test(classID) != null)
@@ -258,6 +279,12 @@ namespace Oodle.Controllers
             return View("RemoveNotif", "_TeacherLayout", teacher);
         }
 
+        /// <summary>
+        /// Remove the notification from the database
+        /// </summary>
+        /// <param name="classID">ID of Class</param>
+        /// <param name="notifID">ID of Notification</param>
+        /// <returns>The Index page for the class</returns>
         public ActionResult RemoveNotification(int classID, int notifID)
         {
             
@@ -268,7 +295,8 @@ namespace Oodle.Controllers
             List<HiddenNotification> HiddenNotifs = db.HiddenNotifications.Where(h => h.ClassNotificationID == notifID).ToList();
             ClassNotification notif = db.ClassNotifications.Where(n => n.ClassID == classID
                                                     && n.ClassNotificationID == notifID).FirstOrDefault();
-            foreach(HiddenNotification h in HiddenNotifs)
+            //remove any hidden notifications for this notifications
+            foreach (HiddenNotification h in HiddenNotifs)
             {
                 db.RemoveHiddenNotif(h);
             }
@@ -279,6 +307,11 @@ namespace Oodle.Controllers
             return RedirectToAction("Index", new { classId = classID });
         }
 
+        /// <summary>
+        /// Add Notification to the Database and to slack channel if available
+        /// </summary>
+        /// <param name="notif">text of notification</param>
+        /// <param name="classID">ID of Class to add notification to</param>
         private void AddNotification(string notif, int classID)
         {
             ClassNotification cNotif = new ClassNotification();
@@ -304,7 +337,7 @@ namespace Oodle.Controllers
                 db.RemoveURC(i);
             }
 
-            //classID = 1;
+            //If class has a slack channel, delete it
             if (!hasSlack.SlackName.Equals("%"))
             {
                 slack.DeleteChannel(hasSlack.SlackName);
@@ -823,6 +856,11 @@ namespace Oodle.Controllers
             }
         }
 
+        /// <summary>
+        /// Loads QuizList View, showing a list of all Quizzes for the class
+        /// </summary>
+        /// <param name="ClassID">ID of Class</param>
+        /// <returns>The QuizList View for the specified Class</returns>
         public ActionResult QuizList(int ClassID)
         {
             if (test(ClassID) != null)
@@ -834,7 +872,13 @@ namespace Oodle.Controllers
             teacher.quizzes = db.Quizzes.Where(i => i.ClassID == ClassID).ToList();
             return View("QuizList", "_TeacherLayout", teacher);
         }
-
+        
+        /// <summary>
+        /// Loads the Edit Quiz view, allowing teacher to Edit the Quiz
+        /// </summary>
+        /// <param name="QuizID">ID of Quiz to Edit</param>
+        /// <param name="ClassID">ID of class</param>
+        /// <returns>The EditQuiz View if successful, otherwise redirects to class index view</returns>
         [HttpGet]
         public ActionResult EditQuiz(int QuizID, int ClassID)
         {
@@ -859,6 +903,11 @@ namespace Oodle.Controllers
             }
         }
 
+        /// <summary>
+        /// Saves the edits for the quiz method
+        /// </summary>
+        /// <param name="Quiz">Edited Quiz</param>
+        /// <returns>The ViewQuiz View if saved successfully, otherwise reloads EditQuiz View</returns>
         [HttpPost]
         public ActionResult EditQuiz(Quizze Quiz)
         {
@@ -884,24 +933,41 @@ namespace Oodle.Controllers
                 return View("EditQuiz", "_TeacherLayout", teacher);
             }
         }
-
+        /// <summary>
+        /// Method for Testing Moq
+        /// </summary>
+        /// <returns>List of Answers</returns>
         public List<MultChoiceAnswer> TestMoq()
         {
             return db.MultChoiceAnswers.ToList();
         }
 
+        /// <summary>
+        /// Method for Testing Moq
+        /// </summary>
+        /// <returns>List of tasks</returns>
         public List<Tasks> TestMoqTasks()
         {
             return db.Tasks.ToList();
         }
 
+        /// <summary>
+        /// Method for Testing Moq
+        /// </summary>
+        /// <returns>List of notes</returns>
         public List<Notes> TestMoqNotes()
         {
             return db.Notes.ToList();
         }
 
 
-
+        /// <summary>
+        /// Loads the View Quiz View, Allowing teacher to access
+        /// more detailed information about the quiz
+        /// </summary>
+        /// <param name="QuizID">ID of Quiz</param>
+        /// <param name="ClassID">ID of Class</param>
+        /// <returns>The ViewQuiz View if successful, otherwise redirects to class index</returns>
         [HttpGet]
         public ActionResult ViewQuiz(int QuizID, int ClassID)
         {
@@ -933,6 +999,12 @@ namespace Oodle.Controllers
         }
 
 
+        /// <summary>
+        /// makes sure Quiz ClassID matches the ClassID that was passed in
+        /// </summary>
+        /// <param name="quiz">Quiz to check</param>
+        /// <param name="ClassID">ID of class to match to</param>
+        /// <returns>true if Class IDs match, false if not</returns>
         public Boolean CheckQuizClassID(Quizze quiz, int ClassID)
         {
             Boolean rtn = false;
@@ -941,6 +1013,11 @@ namespace Oodle.Controllers
             return rtn;
         }
 
+        /// <summary>
+        /// Loads the createQuiz View
+        /// </summary>
+        /// <param name="ClassID">ID Of Class</param>
+        /// <returns>The CreateQuiz View</returns>
         [HttpGet]
         public ActionResult CreateQuiz(int ClassID)
         {
@@ -952,6 +1029,12 @@ namespace Oodle.Controllers
             return View("CreateQuiz", "_TeacherLayout", teacher);
         }
 
+        /// <summary>
+        /// Gets the Quiz data from the View and 
+        /// checks to make sure it is correct before adding to the database
+        /// </summary>
+        /// <param name="Quiz">The Quiz Data</param>
+        /// <returns>The Quiz List view if successful, otherwise reloads the createquiz view</returns>
         [HttpPost]
         public ActionResult CreateQuiz([Bind(Include = "QuizName,ClassID,StartTime,EndTime,IsHidden,GradeWeight,CanReview")] Quizze Quiz)
         {
@@ -959,7 +1042,7 @@ namespace Oodle.Controllers
             {
                 return test(Quiz.ClassID);
             }
-            /////////////////////////////////////////////////////
+
             TeacherVM teacher = getTVM(Quiz.ClassID);
             teacher.quiz = Quiz;
             if (AddQuizToDB(Quiz))
@@ -984,6 +1067,11 @@ namespace Oodle.Controllers
             }
         }
 
+        /// <summary>
+        /// Adds the quiz to the Database
+        /// </summary>
+        /// <param name="Quiz">Quiz to add</param>
+        /// <returns>true if added successfully, false if any information was incorrect or Quiz is null</returns>
         public Boolean AddQuizToDB(Quizze Quiz)
         {
             Boolean rtn = false;
@@ -1002,6 +1090,12 @@ namespace Oodle.Controllers
             return rtn;
         }
 
+        /// <summary>
+        /// Loads the Delete Quiz view, to verify deleting the quiz
+        /// </summary>
+        /// <param name="ClassID">ID of Class</param>
+        /// <param name="QuizID">ID of Quiz to Delete</param>
+        /// <returns>The Delete Quiz View</returns>
         [HttpGet]
         public ActionResult RemoveQuiz(int ClassID, int QuizID)
         {
@@ -1022,6 +1116,12 @@ namespace Oodle.Controllers
             return View("RemoveQuiz", "_TeacherLayout", teacher);
         }
 
+        /// <summary>
+        /// Gets all Grade objects with a matching QuizID to QuizID and deletes them
+        /// </summary>
+        /// <param name="QuizID">ID of Quiz to match for Grade objects</param>
+        /// <param name="ClassID">ID of Class</param>
+        /// <returns>True if grades deleted successfully</returns>
         public Boolean RemoveQuizGrades(int QuizID, int ClassID)
         {
             Boolean rtn = true;
@@ -1035,6 +1135,13 @@ namespace Oodle.Controllers
             return rtn;
         }
 
+
+        /// <summary>
+        /// Gets all StudentQuizzes with a matching QuizID to QuizID and deletes them
+        /// </summary>
+        /// <param name="QuizID">ID of Quiz to match for StudentQuizzes</param>
+        /// <param name="ClassID">ID of Class</param>
+        /// <returns>True if quizzes deleted successfully</returns>
         public Boolean RemoveStudentQuizzes(int QuizID, int ClassID)
         {
             Boolean rtn = true;
@@ -1048,6 +1155,12 @@ namespace Oodle.Controllers
             return rtn;
         }
 
+        /// <summary>
+        /// Deletes the Quiz and loads the QuizList view
+        /// </summary>
+        /// <param name="QuizID">ID of Quiz</param>
+        /// <param name="ClassID">ID of Class</param>
+        /// <returns>The Quiz List View</returns>
         public ActionResult DeleteQuiz(int QuizID, int ClassID)
         {
             Quizze Quiz = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault();
@@ -1065,6 +1178,13 @@ namespace Oodle.Controllers
             return RedirectToAction("QuizList", "Teachers", new { ClassID = ClassID });
         }
 
+        /// <summary>
+        /// Loads the edit question view, allowing teacher to edit the fields
+        /// for both Question and Answer
+        /// </summary>
+        /// <param name="question">Question to edit</param>
+        /// <param name="answer">Answer to edit</param>
+        /// <returns>loads the edit question view</returns>
         [HttpGet]
         public ActionResult EditQuestion(int QuestionID, int ClassID, int QuizID)
         {
@@ -1083,6 +1203,12 @@ namespace Oodle.Controllers
             return View("EditQuestion", "_TeacherLayout", teacher);
         }
 
+        /// <summary>
+        /// Saves the edits for the Question and Answer objects.
+        /// </summary>
+        /// <param name="question">Edited Question</param>
+        /// <param name="answer">Edited Answer</param>
+        /// <returns>view quiz view if edits saved successfully, otherwise reloads edit question view</returns>
         [HttpPost]
         public ActionResult EditQuestion(QuizQuestion question, MultChoiceAnswer answer)
         {
@@ -1116,6 +1242,14 @@ namespace Oodle.Controllers
             }
         }
 
+        /// <summary>
+        /// Loads the Remove Question view to insure that teacher wants to
+        /// delete the quiz question
+        /// </summary>
+        /// <param name="QuestionID">ID of question to delete</param>
+        /// <param name="ClassID">ID of Class</param>
+        /// <param name="QuizID">ID of Quiz</param>
+        /// <returns></returns>
         public ActionResult RemoveQuestion(int QuestionID, int ClassID, int QuizID)
         {
             if (db.StudentQuizzes.Where(q => q.QuizID == QuizID).FirstOrDefault() != null)
@@ -1133,6 +1267,13 @@ namespace Oodle.Controllers
             return View("RemoveQuestion", "_TeacherLayout", teacher);
         }
 
+        /// <summary>
+        /// Deletes the question from the Quiz
+        /// </summary>
+        /// <param name="QuestionID">ID of question to delete</param>
+        /// <param name="ClassID">ID of Class</param>
+        /// <param name="QuizID">ID of Quiz</param>
+        /// <returns></returns>
         public ActionResult DeleteQuizQuestion(int QuestionID, int ClassID, int QuizID)
         {
             if(db.StudentQuizzes.Where(q=> q.QuizID == QuizID).FirstOrDefault() != null)
@@ -1153,6 +1294,12 @@ namespace Oodle.Controllers
             return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = QuizID, ClassID = ClassID });
         }
 
+        /// <summary>
+        /// Checks to make sure Quiz start and end times are 
+        /// correct. Start before end and end after start.
+        /// </summary>
+        /// <param name="Quiz">Quiz to check</param>
+        /// <returns>true if the time is correct, false if not</returns>
         public Boolean CheckQuizTime (Quizze Quiz)
         {
             Boolean rtn = false;
@@ -1163,6 +1310,12 @@ namespace Oodle.Controllers
             return rtn;
         }
 
+        /// <summary>
+        /// Load the AddQuestion view
+        /// </summary>
+        /// <param name="QuizID">ID of Quiz to add Question to</param>
+        /// <param name="ClassID">ID of Class for Quiz</param>
+        /// <returns>The Add Question View</returns>
         public ActionResult AddQuestion(int QuizID, int ClassID)
         {
             if (test(ClassID) != null)
@@ -1178,7 +1331,12 @@ namespace Oodle.Controllers
             return View("AddQuestion", "_TeacherLayout", teacher);
         }
 
-
+        /// <summary>
+        /// Adds the Question and Answer to the db
+        /// </summary>
+        /// <param name="question">Question to added</param>
+        /// <param name="answer">Answer to add</param>
+        /// <returns>returns true if added correctly, returns false if any information was incorrect</returns>
         public Boolean AddQuestionToDB(QuizQuestion question, MultChoiceAnswer answer)
         {
             Boolean rtn = false;
@@ -1197,6 +1355,11 @@ namespace Oodle.Controllers
             return rtn;
         }
 
+        /// <summary>
+        /// Checks to make sure that the corresponding Answer for CorrectAnswer is filled out
+        /// </summary>
+        /// <param name="a">answer to check</param>
+        /// <returns>true if correct answer is filled out, false if not</returns>
         public Boolean CheckCorrectAnswerNotNull(MultChoiceAnswer a)
         {
             Boolean rtn = false;
@@ -1210,7 +1373,13 @@ namespace Oodle.Controllers
                                         "Please fill it out or choose a new answer");
             return rtn;
         }
-
+        
+        /// <summary>
+        /// Concatenates answers, i.e. if only Answer1 and Answer4 will filled out
+        /// moves Answer4 to Answer2, and changes the correct answer appropriately.
+        /// </summary>
+        /// <param name="answer">The answer to concatenate</param>
+        /// <returns>The newly shortened answer</returns>
         public MultChoiceAnswer ShortenAnswer(MultChoiceAnswer answer)
         {
             if (!String.IsNullOrWhiteSpace(answer.Answer4) && String.IsNullOrWhiteSpace(answer.Answer3))
@@ -1231,6 +1400,15 @@ namespace Oodle.Controllers
             return answer;
         }
 
+        /// <summary>
+        /// Adds the question to the question table and the
+        /// answer to the answer table, returns the Add Question view with
+        /// the parameter data if anything was incorrect, otherwise returns the AddQuestion View
+        /// with empty fields, for another question
+        /// </summary>
+        /// <param name="question">Quiz Question to be added to the QuizQuestions table</param>
+        /// <param name="answer">Answer to be added to the MultchoiceAnswer table</param>
+        /// <returns>The AddQuestion View if successful, or the AddQuestion view with old data if any information was incorrect</returns>
         public ActionResult AddAnother([Bind(Include = "QuizID,Points,QuestionText")] QuizQuestion question,
                                        [Bind(Include = "Answer1,Answer2,Answer3,Answer4,CorrectAnswer")] MultChoiceAnswer answer)
         {
@@ -1255,6 +1433,15 @@ namespace Oodle.Controllers
             return View("AddQuestion", "_TeacherLayout", teacher);
         }
 
+        /// <summary>
+        /// Adds the question to the question table and the
+        /// answer to the answer table, returns the Add Question view
+        /// if any fields were filled out incorrectly, otherwise redirects to the view
+        /// quiz page
+        /// </summary>
+        /// <param name="question">Quiz Question to be added to the QuizQuestions table</param>
+        /// <param name="answer">Answer to be added to the MultchoiceAnswer table</param>
+        /// <returns>The View Quiz View if successful, or the AddQuestion view if any information was incorrect</returns>
         public ActionResult SaveQuestion([Bind(Include = "QuizID,Points,QuestionText")] QuizQuestion question,
                                        [Bind(Include = "Answer1,Answer2,Answer3,Answer4,CorrectAnswer")] MultChoiceAnswer answer)
         {
@@ -1278,6 +1465,12 @@ namespace Oodle.Controllers
             return View("AddQuestion", "_TeacherLayout", teacher);
         }
 
+        /// <summary>
+        /// Update the quiz with the new point total, called whenever
+        /// questions are added or edited.
+        /// </summary>
+        /// <param name="QuizID">ID of Quiz to update</param>
+        /// <returns>true if Quiz ID is valid and was successfully updated</returns>
         public Boolean SetPointTotal(int QuizID)
         {
             Boolean rtn = true;

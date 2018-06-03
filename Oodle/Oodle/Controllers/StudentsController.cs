@@ -162,7 +162,11 @@ namespace Oodle.Controllers
 
 
 
-
+        /// <summary>
+        /// Gets the teacher View model, with the information for the index page filled in
+        /// </summary>
+        /// <param name="classID">ID of Class</param>
+        /// <returns>The Teacher View Model</returns>
         public TeacherVM getTVM(int classID)
         {
             var urcL = db.UserRoleClasses.Where(i => i.RoleID == 3 && i.ClassID == classID);
@@ -577,7 +581,12 @@ namespace Oodle.Controllers
             return View("Index", "_StudentLayout", student);
 
         }
-
+        
+        /// <summary>
+        /// Gets the Student View Model
+        /// </summary>
+        /// <param name="classID">ID of Class</param>
+        /// <returns>Student View Model filled out with class information</returns>
         public StudentVM getSVM(int classID)
         {
             var urcL = db.UserRoleClasses.Where(i => i.RoleID == 3 && i.ClassID == classID);
@@ -605,6 +614,13 @@ namespace Oodle.Controllers
             return student;
         }
 
+        /// <summary>
+        /// Gets the List of notifications for the class, hiding any 
+        /// that are in the Hide Notifications Table
+        /// </summary>
+        /// <param name="UsersID">ID of the User</param>
+        /// <param name="classID">ID of Class</param>
+        /// <returns>A List of Class Notifications</returns>
         public List<ClassNotification> GetNotifs (int UsersID, int classID)
         {
             List<HiddenNotification> HiddenNotifs = db.HiddenNotifications.Where(n => n.UsersID == UsersID && n.ClassID == classID).ToList();
@@ -629,6 +645,12 @@ namespace Oodle.Controllers
             }
         }
 
+        /// <summary>
+        /// Loads the Hidden Notification View, allowing students to hide
+        /// notifications, so they don't display on the index page of the class
+        /// </summary>
+        /// <param name="ClassID">ID of class</param>
+        /// <returns>The Hide Notifications View</returns>
         public ActionResult HideNotifs(int ClassID)
         {
             if (test(ClassID) != null)
@@ -663,6 +685,13 @@ namespace Oodle.Controllers
             return View("HideNotifs", "_StudentLayout", student);
         }
 
+        /// <summary>
+        /// Gets the hidden notification information from the view, 
+        /// and alters the hidden notification table to match
+        /// </summary>
+        /// <param name="HideNotifs">List of hidden notifications</param>
+        /// <param name="cl">the class to check</param>
+        /// <returns>Class Index page for students</returns>
         public ActionResult SaveHideNotifs([Bind(Include = "Hidden, NotifID, ClassID")] List<HideNotifList> HideNotifs, [Bind(Include = "ClassID")] Class cl)
         {
             if (HideNotifs == null || HideNotifs.Count == 0 )
@@ -688,6 +717,13 @@ namespace Oodle.Controllers
             return RedirectToAction("Index", "Students", new { classId = HideNotifs.First().ClassID } );
         }
 
+
+        /// <summary>
+        /// Notification is marked as hidden, checks to make sure notification
+        /// is in hidden notification table, adds if necessary
+        /// </summary>
+        /// <param name="Notif">Notification to check</param>
+        /// <returns>true if successful</returns>
         public Boolean CheckHidden(ClassNotification Notif)
         {
             var idid = User.Identity.GetUserId();
@@ -707,6 +743,12 @@ namespace Oodle.Controllers
             return rtn;
         }
 
+        /// <summary>
+        /// notification is marked as not hidden, checks to make sure notification 
+        /// isn't in hidden notification table, removes if necessary
+        /// </summary>
+        /// <param name="Notif">Notification to check</param>
+        /// <returns>true if successful</returns>
         public Boolean CheckNotHidden(ClassNotification Notif)
         {
             var idid = User.Identity.GetUserId();
@@ -724,6 +766,11 @@ namespace Oodle.Controllers
             return rtn;
         }
 
+        /// <summary>
+        /// Loads the QuizList View, displaying all available quizzes for the student
+        /// </summary>
+        /// <param name="classID">ID of Class</param>
+        /// <returns>The QuizList View</returns>
         public ActionResult QuizList(int classID)
         {
             if (test(classID) != null)
@@ -768,6 +815,11 @@ namespace Oodle.Controllers
             return View("QuizList", "_StudentLayout", student);
         }
 
+        /// <summary>
+        /// Loads the TakeQuiz View, allowing students to take the related quiz
+        /// </summary>
+        /// <param name="QuizID">ID of Quiz to load</param>
+        /// <returns>TakeQuiz View if successful, otherwise redirects to home index if no quiz, or class index if already taken</returns>
         [HttpGet]
         public ActionResult TakeQuiz(int QuizID)
         {
@@ -800,6 +852,13 @@ namespace Oodle.Controllers
             return View("TakeQuiz", "_StudentLayout", student);
         }
 
+        /// <summary>
+        /// Saves the answers for the quiz to the Student Quiz database and
+        /// redirects to the QuizList View
+        /// </summary>
+        /// <param name="StudentAnswers">List of answers to save</param>
+        /// <param name="StudentQuiz">Quiz information for answers</param>
+        /// <returns>The QuizList View</returns>
         [HttpPost]
         public ActionResult AnswerQuiz([Bind(Include = "QuestionID,AnswerNumber")] List<StudentAnswer> StudentAnswers, 
                                        [Bind(Include = "QuizID")] StudentQuizze StudentQuiz)
@@ -851,7 +910,12 @@ namespace Oodle.Controllers
             return File(tmp.Data, tmp.ContentType, tmp.Name);
         }
 
-
+        /// <summary>
+        /// Loads The Review Quiz View, with the relevant Quiz Information
+        /// </summary>
+        /// <param name="StudentQuizID">ID of Student Quiz</param>
+        /// <param name="ClassID">ID of Class</param>
+        /// <returns>The Review Quiz View</returns>
         public ActionResult ReviewQuiz(int StudentQuizID, int ClassID)
         {
             if (test(ClassID) != null)
