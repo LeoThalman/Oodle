@@ -19,16 +19,31 @@ namespace Oodle.Utility
         private string SlackToken = System.Web.Configuration.WebConfigurationManager.AppSettings["SlackToken"];
         private string SlackBot = System.Web.Configuration.WebConfigurationManager.AppSettings["SlackBot"];
 
+        /// <summary>
+        /// Check if slack token is there
+        /// </summary>
+        /// <returns>Returns true if slack token exists, returns false if not</returns>
         public Boolean HasToken()
         {
             return (!(SlackToken == null));
         }
 
+        /// <summary>
+        /// checkis if bot token is there
+        /// </summary>
+        /// <returns>Returns true if bot token exists, returns false if not</returns>
         public Boolean HasBot()
         {
             return (!(SlackBot == null));
         }
 
+        /// <summary>
+        /// Gets the json response from slack for the requested method
+        /// </summary>
+        /// <param name="method">the method name for the slack api method</param>
+        /// <param name="parameters">the parameters for the slack api method</param>
+        /// <param name="isBot">true if the method needs to use the bot, i.e notifications</param>
+        /// <returns>Returns the json response from slack as a string</returns>
         private string GetData(string method, string parameters, Boolean isBot)
         {
             string token = SlackToken;
@@ -64,6 +79,11 @@ namespace Oodle.Utility
             return onSlack;
         }
 
+        /// <summary>
+        /// Converts the class or slack name into a valid slack channel name
+        /// </summary>
+        /// <param name="name">name to convert</param>
+        /// <returns>the validated slack channel name</returns>
         public string ValidateSlackName(string name)
         {
             if (name == null)
@@ -80,6 +100,13 @@ namespace Oodle.Utility
             return sName;
         }
 
+        /// <summary>
+        /// Takes the notification and slack channel name as a parameter and sends
+        /// the notification to slack to be posted in the requested channel
+        /// </summary>
+        /// <param name="notif">the notification to be posted</param>
+        /// <param name="sName">the channel to post the notification in</param>
+        /// <returns>true if posted in channel, false if not posted/channel doesn't exist</returns>
         public Boolean SlackNotif(string notif, string sName)
         {
             Boolean rtn = false;
@@ -95,6 +122,12 @@ namespace Oodle.Utility
             return rtn;
         }
 
+        /// <summary>
+        /// Pins the notification message in the channel
+        /// </summary>
+        /// <param name="time">the time  the message was posted</param>
+        /// <param name="channel">the channel the message was posted in</param>
+        /// <returns>slack's json response to pinning the message in the channel</returns>
         private string PinMessage(string time, string channel)
         {
             string slackData = GetData("pins.add", "&channel=" + channel + "&timestamp=" + time, true);
@@ -149,6 +182,10 @@ namespace Oodle.Utility
             string slackData = GetData("groups.invite", "&channel=" + cid + "&user=" + uid, false);
         }
 
+        /// <summary>
+        /// Adds the notification bot to the channel
+        /// </summary>
+        /// <param name="className">The class name to add the bot to</param>
         private void AddBot(string className)
         {
             String cid = GetChannelId(className);
@@ -156,6 +193,10 @@ namespace Oodle.Utility
             string slackData = GetData("groups.invite", "&channel=" + cid + "&user=" + uid, false);
         }
 
+        /// <summary>
+        /// Get the slack bot id
+        /// </summary>
+        /// <returns>the id for the slack bot</returns>
         private string GetSlackBotID()
         {
             string slackData = GetData("users.list", "", false);
@@ -215,6 +256,11 @@ namespace Oodle.Utility
             return id;
         }
 
+        /// <summary>
+        /// Checks if the class is currently archived
+        /// </summary>
+        /// <param name="className">Class name to check</param>
+        /// <returns>a channelID object with the channel ID if is archived, if not archived returns null</returns>
         private ChannelID IsArchived(string className)
         {
             ChannelID rtn = null;
@@ -230,6 +276,10 @@ namespace Oodle.Utility
             return rtn;
         }
 
+        /// <summary>
+        /// Get a list of archived channels for the slack workspace
+        /// </summary>
+        /// <returns>the list of all archived channels</returns>
         private List<ChannelID> GetArchivedChannels()
         {
             string slackData = GetData("groups.list", "", false);
@@ -248,6 +298,11 @@ namespace Oodle.Utility
             return groups;
         }
 
+        /// <summary>
+        /// Archives the channel in the slack workspace, will update to delete it if slack allows
+        /// that in the future.
+        /// </summary>
+        /// <param name="name">Channel name to be archived</param>
         public void DeleteChannel(string name)
         {
             string id = GetChannelId(name);

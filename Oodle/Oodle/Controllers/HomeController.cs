@@ -121,6 +121,11 @@ namespace Oodle.Controllers
             return "Evening";
         }
 
+        /// <summary>
+        /// Gets a list of classes that the user is a student in
+        /// </summary>
+        /// <param name="UserID">ID of User</param>
+        /// <returns>List of classes that the user is a student in</returns>
         public List<int> GetClassIDs(int UserID)
         {
             List<int> ClassIDList = new List<int>();
@@ -133,6 +138,12 @@ namespace Oodle.Controllers
             return ClassIDList;
         }
 
+        /// <summary>
+        /// Gets the current user ID and uses that to get a list of classes the user is a student in
+        /// then gets any assignment or quiz data for this month and puts it into a json object, to be passed
+        /// back to the Calendar View and displayed on the calendar
+        /// </summary>
+        /// <returns>A JsonResult object of all assignment and quiz names and dates for the current month for the user</returns>
         public JsonResult GetCalendarData()
         {
             var id = User.Identity.GetUserId();
@@ -178,6 +189,10 @@ namespace Oodle.Controllers
             return Json(CalData, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Loads the calendar view
+        /// </summary>
+        /// <returns>The Calendar View page</returns>
         public ActionResult Calendar()
         {
             return View("Calendar", "_CalendarLayout");
