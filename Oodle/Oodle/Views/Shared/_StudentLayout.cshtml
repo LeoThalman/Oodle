@@ -31,91 +31,23 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <img src="~/Content/img/logo.png" class="img-center" height="45" width="90" />
-
+                <a href='@Url.Action("Landing", "Home")'>
+                    <img src="~/Content/img/logo.png" class="img-center" height="45" width="90" />
+                </a>
             </div>
 
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                <ul class="nav navbar-nav navbar-left">
+                    <li>@Html.ActionLink("Home", "Landing", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>
 
-                         <style>
-
-                            /*****************************************************************************************************************/
-                            /***                                      Drop Down Menu CSS                                                   ***/
-                            /***                                                                                                           ***/
-                            /*****************************************************************************************************************/
-                            /* Cannot for the life of me make this work in the site.css. If anyone can, please do!*/
-                            .dropDownButton {
-                                display: block;
-                                margin: 0;
-                                padding: 15px;
-                                color: #999999;
-                                font-weight: 300;
-                                font-family: "Ubuntu", sans-serif;
-                                font-size: 20px;
-                                line-height: 20px;
-                            }
-
-                            .dropDownDiv {
-                                position: relative;
-                                display: inline-block;
-                                color: #999999;
-                                margin: 0;
-                                padding: 0;
-                            }
-
-
-                            .dropDownButton a:link, a:visited, a:link {
-                                text-decoration: none;
-                                color: #999999;
-                            }
-
-                            .dropDownButton:hover {
-                                background-color: #2B7A78;
-                                color: white;
-                                text-decoration: none;
-                            }
-
-
-                            .dropDownDiv:hover .dropDown-content {
-                                display: block;
-                                margin: 0, 15px, 15px, 15px;
-                            }
-
-
-
-                            .dropDown-content {
-                                display: none;
-                                margin: 0, 15px, 15px, 15px;
-                                text-align: center;
-                                position: absolute;
-                                background-color: #17252A;
-                                min-width: 130px;
-                                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-                                z-index: 1;
-                            }
-
-                                .dropDown-content a {
-                                    display: block;
-                                }
-
-                                    .dropDown-content a:hover {
-                                        background-color: #3AAFA9;
-                                        color: #FFFFFF;
-                                    }
-
-                            .dropDownLink a:hover, a:visited, a:link, a:active {
-                                text-decoration: none;
-                            }
-                        </style>
-   
+                       
 
                         <div class="dropDownDiv">
 
                             <span>@Html.ActionLink("Class Menu", "List", "Class", new { ClassID = Model.cl.ClassID }, new { @class = "dropDownButton" })</span>
+                            <span class="dropDownArrowRight">&#9654;</span> <span class="dropDownArrowDown">&#9661;</span>
 
                             <div class="dropDown-content">
                                 @Html.ActionLink("Home", "Index", "Students", new { ClassID = Model.cl.ClassID }, null)
@@ -128,7 +60,7 @@
                     </li>
                     <li>@Html.ActionLink("Tools", "Tools", "Home")</li>
                     <li>@Html.ActionLink("Calendar", "Calendar", "Home")</li>
-                    <li><a href="https://oodle-dev.slack.com/" target="_blank">Go to Slack</a></li>
+                    <li><a href="https://oodle-dev.slack.com/" target="_blank">Slack</a></li>
 
                 </ul>
                 @Html.Partial("_LoginPartial")

@@ -17,6 +17,8 @@ namespace Oodle.Models
         [Key]
         public int SQID { get; set; }
 
+        public int GradeID { get; set; }
+
         public int QuizID { get; set; }
 
         public int UserID { get; set; }
@@ -24,6 +26,8 @@ namespace Oodle.Models
         public int TotalPoints { get; set; }
 
         public bool CanReview { get; set; }
+
+        public virtual Grade Grade { get; set; }
 
         public virtual Quizze Quizze { get; set; }
 

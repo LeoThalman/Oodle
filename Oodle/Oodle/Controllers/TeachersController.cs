@@ -63,16 +63,6 @@ namespace Oodle.Controllers
             return View("index", "_TeacherLayout", teacher);
         }
 
-
-
-
-
-
-
-
-
-
-
         [HttpPost]
         [ActionName("Index")]
         public ActionResult IndexPost(int classID)
@@ -96,7 +86,7 @@ namespace Oodle.Controllers
             }
 
 
-            System.Diagnostics.Debug.WriteLine(classes);
+           System.Diagnostics.Debug.WriteLine(classes);
 
 
             ViewBag.RequestMethod = "POST";
@@ -131,11 +121,6 @@ namespace Oodle.Controllers
 
 
 
-
-
-
-
-
         public ActionResult Accept(int classID, int userID)
         {
             if (test(classID) != null)
@@ -147,12 +132,16 @@ namespace Oodle.Controllers
             db.UserRoleClasses.Where(i => i.UsersID == userID & i.ClassID == classID).ToList().ForEach(x => x.RoleID = 2);
             db.SaveChanges();
 
+
+
             //get user and class
             User user = db.Users.Where(i => i.UsersID == userID).FirstOrDefault();
             Class c = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
             //Send request to slack for user to join the group
-            //slack.JoinChannel(user.Email, c.Name);
-
+            if (slack.HasToken() && !c.SlackName.Equals("%") && slack.IsOnSlack(user.Email))
+            {
+                slack.JoinChannel(user.Email, c.SlackName);
+            }
             return RedirectToAction("Index", new { classId = classID });
         }
 
@@ -206,13 +195,17 @@ namespace Oodle.Controllers
             return RedirectToAction("Index", new { classId = classID });
         }
 
+        /// <summary>
+        /// Loads the add notification view
+        /// </summary>
+        /// <param name="classID">ID of Class</param>
+        /// <returns>The Add Notification View</returns>
         public ActionResult AddNotifToClass(int classID)
         {
             if (test(classID) != null)
             {
                 return test(classID);
             }
-
 
             ViewBag.id = classID;
 
@@ -221,17 +214,15 @@ namespace Oodle.Controllers
             return View("AddNotifToClass", "_TeacherLayout", teacher);
         }
 
-        public ActionResult SaveNotif()
+        /// <summary>
+        /// Adds the slack notification to the database and slack
+        /// </summary>
+        /// <param name="notif">notification text</param>
+        /// <param name="classID">ID of Class</param>
+        /// <returns>true if added to database successfully, false if not</returns>
+        public Boolean AddNotifToDB(string notif, int classID)
         {
-            ViewBag.RequestMethod = "POST";
-            string notif = Request.Form["notification"];
-            int classID = int.Parse(Request.Form["classID"]);
-
-            if (test(classID) != null)
-            {
-                return test(classID);
-            } 
-
+            Boolean rtn = false;
             Class hasSlack = db.Classes.Where(i => i.ClassID == classID).FirstOrDefault();
 
 
@@ -242,12 +233,32 @@ namespace Oodle.Controllers
                     slack.SlackNotif(notif, hasSlack.SlackName);
                 }
                 AddNotification(notif, classID);
+                rtn = true;
             }
+            return rtn;
+        }
 
+        /// <summary>
+        /// Gets the Notification data from the view, and saves it in the database
+        /// </summary>
+        /// <returns>Index page of class</returns>
+        public ActionResult SaveNotif()
+        {
+            ViewBag.RequestMethod = "POST";
+            string notif = Request.Form["notification"];
+            int classID = int.Parse(Request.Form["classID"]);
+
+            AddNotifToDB(notif, classID);
 
             return RedirectToAction("Index", new { classId = classID });
         }
 
+        /// <summary>
+        /// Loads the Remove Notification View to verify removing Notification
+        /// </summary>
+        /// <param name="classID">ID of Class</param>
+        /// <param name="notifID">ID of Notification</param>
+        /// <returns>RemoveNotification View if successful, otherwise redirects to class index page</returns>
         public ActionResult RemoveNotif(int classID, int notifID)
         {
             if (test(classID) != null)
@@ -268,6 +279,12 @@ namespace Oodle.Controllers
             return View("RemoveNotif", "_TeacherLayout", teacher);
         }
 
+        /// <summary>
+        /// Remove the notification from the database
+        /// </summary>
+        /// <param name="classID">ID of Class</param>
+        /// <param name="notifID">ID of Notification</param>
+        /// <returns>The Index page for the class</returns>
         public ActionResult RemoveNotification(int classID, int notifID)
         {
             
@@ -275,15 +292,26 @@ namespace Oodle.Controllers
             {
                 return test(classID);
             }
-
+            List<HiddenNotification> HiddenNotifs = db.HiddenNotifications.Where(h => h.ClassNotificationID == notifID).ToList();
             ClassNotification notif = db.ClassNotifications.Where(n => n.ClassID == classID
                                                     && n.ClassNotificationID == notifID).FirstOrDefault();
+            //remove any hidden notifications for this notifications
+            foreach (HiddenNotification h in HiddenNotifs)
+            {
+                db.RemoveHiddenNotif(h);
+            }
+            db.SaveChanges();
             db.RemoveNotif(notif);
             db.SaveChanges();
 
             return RedirectToAction("Index", new { classId = classID });
         }
 
+        /// <summary>
+        /// Add Notification to the Database and to slack channel if available
+        /// </summary>
+        /// <param name="notif">text of notification</param>
+        /// <param name="classID">ID of Class to add notification to</param>
         private void AddNotification(string notif, int classID)
         {
             ClassNotification cNotif = new ClassNotification();
@@ -309,7 +337,7 @@ namespace Oodle.Controllers
                 db.RemoveURC(i);
             }
 
-            //classID = 1;
+            //If class has a slack channel, delete it
             if (!hasSlack.SlackName.Equals("%"))
             {
                 slack.DeleteChannel(hasSlack.SlackName);
@@ -431,6 +459,7 @@ namespace Oodle.Controllers
             string startDate = Request.Form["startDate"];
             string dueDate = Request.Form["dueDate"];
             string weight = Request.Form["weight"];
+            Boolean addNotif = Convert.ToBoolean(Request.Form["addNotif"].ToString());
 
 
             int classID = int.Parse(id);
@@ -449,15 +478,29 @@ namespace Oodle.Controllers
             assi.DueDate = DateTime.Parse(dueDate);
             assi.Weight = int.Parse(weight);
 
-
-
-
-
-
             db.AddAssignment(assi);
+
             db.SaveChanges();
 
+
+            var gradable = new Grade()
+            {
+                ClassID = int.Parse(id),
+                DateApplied = DateTime.Parse(dueDate),
+                GradeWeight = int.Parse(weight),
+                AssignmentID = db.Assignments.Last().AssignmentID
+            };
+
+            db.AddGrade(gradable);
+            db.SaveChanges();
+
+
             var teacher = getTVM(classID);
+            if (addNotif)
+            {
+                AddNotifToDB("A new assignment has been added. Name: " + assi.Name + ". Opens: " + assi.StartDate + ". Due: " + assi.DueDate , assi.ClassID );
+            }
+            
 
             return View("Assignment", "_TeacherLayout", teacher);
         }
@@ -602,9 +645,9 @@ namespace Oodle.Controllers
 
             teacher.users = students;
 
-            return View(teacher);
+            return View("SubmissionView", "_TeacherLayout", teacher);
         }
-        
+
 
         [HttpPost]
         public FileResult DownloadFile(int? fileId)
@@ -694,8 +737,8 @@ namespace Oodle.Controllers
             db.Documents.Where(i => i.Id == documentID).ToList().ForEach(x => x.Grade = grade);
 
             db.SaveChanges();
-
-            return View("MakeGrade", "_TeacherLayout", teacher);
+            //marker
+            return RedirectToAction("SubmissionView", "Teachers", new { ClassID = classID, assignmentID = assignmentID });
         }
 
         public ActionResult GradeList(int classID)
@@ -705,6 +748,8 @@ namespace Oodle.Controllers
             List<User> list = new List<User>();
             List<int> classGrades = new List<int>();
             teacher.perUser = new List<UserVMish>();
+            List<Grade> gradables = db.Grades.Where(g => g.ClassID == classID).ToList();
+
 
             foreach (var i in tmp)
             {
@@ -713,24 +758,66 @@ namespace Oodle.Controllers
                 var UserVMish = new UserVMish();
                 UserVMish.stat = new List<bool>();
                 UserVMish.Late = new List<TimeSpan>();
-                var submissions = db.Documents.Where(l => l.ClassID == classID && l.UserID == i.UsersID).ToList();
+                //var submissions = db.Documents.Where(l => l.ClassID == classID && l.UserID == i.UsersID).ToList();
+
 
                 int total = 0;
                 int divisor = 0;
-                foreach(var l in submissions)
-                {
 
-                    if (l.Grade != -1)
+                UserVMish.Grade = new List<Models.Grade>();
+
+                foreach(var l in gradables)
+                {
+                    Document d;
+                    StudentQuizze q;
+
+                    if (l.Assignment != null)
                     {
-                        var contribution = l.Assignment.Weight * l.Grade;
-                        total = contribution + total;
-                        divisor = l.Assignment.Weight + divisor;
+                        if (db.Documents.Where(k => k.GradeID == l.GradeID && k.UserID == i.UsersID).FirstOrDefault() != null)
+                        {
+                            d = db.Documents.Where(k => k.GradeID == l.GradeID && k.UserID == i.UsersID).FirstOrDefault();
+                            if (d.Grade != -1)
+                            {
+                                var contribution = l.Assignment.Weight * d.Grade;
+                                total = contribution + total;
+                                divisor = l.Assignment.Weight + divisor;
+                            }
+
+                            var submittedDate = d.Date;
+                            var dueDate = l.Assignment.DueDate.Value;
+
+                            Late(submittedDate, dueDate, UserVMish);
+                        }
+                        else if (DateTime.Compare(DateTime.Parse(l.DateApplied.ToString()), DateTime.Now) < 0)
+                        {
+                            total = total + 0;
+                            divisor = divisor + l.Assignment.Weight;
+                        }
                     }
 
-                    var submittedDate = l.Date.Value;
-                    var dueDate = l.Assignment.DueDate.Value;
+                    if (l.Quizze != null)
+                    {
+                        q = db.StudentQuizzes.Where(k => k.QuizID == l.QuizID && k.UserID == i.UsersID).FirstOrDefault();
 
-                    Late(submittedDate, dueDate, UserVMish);
+                        if (q != null)
+                        {
+                            int contribution = l.Quizze.GradeWeight * (q.TotalPoints / q.Quizze.TotalPoints ?? default(int));
+                            total = (contribution*100) + total;
+                            divisor = l.Quizze.GradeWeight + divisor;
+
+                            var submittedDate = q.Quizze.EndTime;
+                            var dueDate = l.Quizze.EndTime;
+
+                            Late(submittedDate, dueDate, UserVMish);
+                        }
+                        else if (DateTime.Compare(DateTime.Parse(l.DateApplied.ToString()), DateTime.Now) < 0)
+                        {
+                            total = total + (0);
+                            divisor = divisor + l.Quizze.GradeWeight;
+                        }
+                    }
+
+                    UserVMish.Grade.Add(l);
                 }
                 teacher.perUser.Add(UserVMish);
 
@@ -742,9 +829,12 @@ namespace Oodle.Controllers
                 {
                     classGrades.Add(0);
                 }
-            }
+            }//////
+
+
 
             teacher.users = list;
+            teacher.StudentQuizze = db.StudentQuizzes.ToList();
             teacher.documents = db.Documents.Where(i => i.ClassID == classID).ToList();
             teacher.classGrade = classGrades;
             teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).ToList();
@@ -759,18 +849,18 @@ namespace Oodle.Controllers
                 userVMish.stat.Add(false);
                 userVMish.Late.Add(submittedDate.Subtract(dueDate));
             }
-            else if (0 >= DateTime.Compare(submittedDate, dueDate))
+            else
             {
                 userVMish.stat.Add(true);
                 userVMish.Late.Add(dueDate.Subtract(submittedDate));
             }
-            else
-            {
-                userVMish.stat.Add(true);
-                userVMish.Late.Add(TimeSpan.MinValue);
-            }
         }
 
+        /// <summary>
+        /// Loads QuizList View, showing a list of all Quizzes for the class
+        /// </summary>
+        /// <param name="ClassID">ID of Class</param>
+        /// <returns>The QuizList View for the specified Class</returns>
         public ActionResult QuizList(int ClassID)
         {
             if (test(ClassID) != null)
@@ -782,7 +872,13 @@ namespace Oodle.Controllers
             teacher.quizzes = db.Quizzes.Where(i => i.ClassID == ClassID).ToList();
             return View("QuizList", "_TeacherLayout", teacher);
         }
-
+        
+        /// <summary>
+        /// Loads the Edit Quiz view, allowing teacher to Edit the Quiz
+        /// </summary>
+        /// <param name="QuizID">ID of Quiz to Edit</param>
+        /// <param name="ClassID">ID of class</param>
+        /// <returns>The EditQuiz View if successful, otherwise redirects to class index view</returns>
         [HttpGet]
         public ActionResult EditQuiz(int QuizID, int ClassID)
         {
@@ -807,6 +903,11 @@ namespace Oodle.Controllers
             }
         }
 
+        /// <summary>
+        /// Saves the edits for the quiz method
+        /// </summary>
+        /// <param name="Quiz">Edited Quiz</param>
+        /// <returns>The ViewQuiz View if saved successfully, otherwise reloads EditQuiz View</returns>
         [HttpPost]
         public ActionResult EditQuiz(Quizze Quiz)
         {
@@ -814,36 +915,59 @@ namespace Oodle.Controllers
             {
                 return test(Quiz.ClassID);
             }
+            TeacherVM teacher = getTVM(Quiz.ClassID);
+            teacher.quiz = Quiz;
             if (ModelState.IsValid && CheckQuizTime(Quiz))
             {
 
                 db.SetModified(Quiz);
                 db.SaveChanges();
+
+                //STILL MORE TO BE DONE HERE!
+
+
                 return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = Quiz.QuizID, ClassID = Quiz.ClassID });
             }
             else
             {
-                return RedirectToAction("EditQuiz", "Teachers", new {QuizID = Quiz.QuizID, ClassID = Quiz.ClassID });
+                return View("EditQuiz", "_TeacherLayout", teacher);
             }
         }
-
+        /// <summary>
+        /// Method for Testing Moq
+        /// </summary>
+        /// <returns>List of Answers</returns>
         public List<MultChoiceAnswer> TestMoq()
         {
             return db.MultChoiceAnswers.ToList();
         }
 
+        /// <summary>
+        /// Method for Testing Moq
+        /// </summary>
+        /// <returns>List of tasks</returns>
         public List<Tasks> TestMoqTasks()
         {
             return db.Tasks.ToList();
         }
 
+        /// <summary>
+        /// Method for Testing Moq
+        /// </summary>
+        /// <returns>List of notes</returns>
         public List<Notes> TestMoqNotes()
         {
             return db.Notes.ToList();
         }
 
 
-
+        /// <summary>
+        /// Loads the View Quiz View, Allowing teacher to access
+        /// more detailed information about the quiz
+        /// </summary>
+        /// <param name="QuizID">ID of Quiz</param>
+        /// <param name="ClassID">ID of Class</param>
+        /// <returns>The ViewQuiz View if successful, otherwise redirects to class index</returns>
         [HttpGet]
         public ActionResult ViewQuiz(int QuizID, int ClassID)
         {
@@ -861,12 +985,26 @@ namespace Oodle.Controllers
                 teacher.quiz = quiz;
                 teacher.questionList = db.QuizQuestions.Where(q => q.QuizID == quiz.QuizID).ToList();
                 teacher.answerList = db.MultChoiceAnswers.Where(a => a.QuizQuestion.QuizID == QuizID).ToList();
+                if (db.StudentQuizzes.Where(q => q.QuizID == QuizID).FirstOrDefault() != null)
+                {
+                    teacher.Locked = true;
+                }
+                else
+                {
+                    teacher.Locked = false;
+                }
                 return View("ViewQuiz", "_TeacherLayout", teacher);
             }
                 return RedirectToAction("Index", "Class", new { classId = ClassID });
         }
 
 
+        /// <summary>
+        /// makes sure Quiz ClassID matches the ClassID that was passed in
+        /// </summary>
+        /// <param name="quiz">Quiz to check</param>
+        /// <param name="ClassID">ID of class to match to</param>
+        /// <returns>true if Class IDs match, false if not</returns>
         public Boolean CheckQuizClassID(Quizze quiz, int ClassID)
         {
             Boolean rtn = false;
@@ -875,6 +1013,11 @@ namespace Oodle.Controllers
             return rtn;
         }
 
+        /// <summary>
+        /// Loads the createQuiz View
+        /// </summary>
+        /// <param name="ClassID">ID Of Class</param>
+        /// <returns>The CreateQuiz View</returns>
         [HttpGet]
         public ActionResult CreateQuiz(int ClassID)
         {
@@ -886,24 +1029,49 @@ namespace Oodle.Controllers
             return View("CreateQuiz", "_TeacherLayout", teacher);
         }
 
+        /// <summary>
+        /// Gets the Quiz data from the View and 
+        /// checks to make sure it is correct before adding to the database
+        /// </summary>
+        /// <param name="Quiz">The Quiz Data</param>
+        /// <returns>The Quiz List view if successful, otherwise reloads the createquiz view</returns>
         [HttpPost]
-        public ActionResult CreateQuiz([Bind(Include = "QuizName,ClassID,StartTime,EndTime,IsHidden")] Quizze Quiz)
+        public ActionResult CreateQuiz([Bind(Include = "QuizName,ClassID,StartTime,EndTime,IsHidden,GradeWeight,CanReview")] Quizze Quiz)
         {
             if (test(Quiz.ClassID) != null)
             {
                 return test(Quiz.ClassID);
             }
+
             TeacherVM teacher = getTVM(Quiz.ClassID);
             teacher.quiz = Quiz;
             if (AddQuizToDB(Quiz))
-                return RedirectToAction("QuizList", "Teachers", new { classId = Quiz.ClassID });
+            {
+                var gradable = new Grade()
+                {
+                    DateApplied = Quiz.EndTime,
+                    GradeWeight = Quiz.GradeWeight,
+                    ClassID = Quiz.ClassID,
+                    QuizID = db.Quizzes.Last().QuizID
+                };
 
+                db.AddGrade(gradable);
+                db.SaveChanges();
+
+
+                return RedirectToAction("QuizList", "Teachers", new { classId = Quiz.ClassID });
+            }
             else
             {
                 return View("CreateQuiz", "_TeacherLayout", teacher);
             }
         }
 
+        /// <summary>
+        /// Adds the quiz to the Database
+        /// </summary>
+        /// <param name="Quiz">Quiz to add</param>
+        /// <returns>true if added successfully, false if any information was incorrect or Quiz is null</returns>
         public Boolean AddQuizToDB(Quizze Quiz)
         {
             Boolean rtn = false;
@@ -911,7 +1079,8 @@ namespace Oodle.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (CheckQuizTime(Quiz)) { 
+                    if (CheckQuizTime(Quiz)) {
+                    
                     db.AddQuiz(Quiz);
                     db.SaveChanges();
                     rtn = true;
@@ -921,6 +1090,12 @@ namespace Oodle.Controllers
             return rtn;
         }
 
+        /// <summary>
+        /// Loads the Delete Quiz view, to verify deleting the quiz
+        /// </summary>
+        /// <param name="ClassID">ID of Class</param>
+        /// <param name="QuizID">ID of Quiz to Delete</param>
+        /// <returns>The Delete Quiz View</returns>
         [HttpGet]
         public ActionResult RemoveQuiz(int ClassID, int QuizID)
         {
@@ -941,7 +1116,51 @@ namespace Oodle.Controllers
             return View("RemoveQuiz", "_TeacherLayout", teacher);
         }
 
-        
+        /// <summary>
+        /// Gets all Grade objects with a matching QuizID to QuizID and deletes them
+        /// </summary>
+        /// <param name="QuizID">ID of Quiz to match for Grade objects</param>
+        /// <param name="ClassID">ID of Class</param>
+        /// <returns>True if grades deleted successfully</returns>
+        public Boolean RemoveQuizGrades(int QuizID, int ClassID)
+        {
+            Boolean rtn = true;
+
+            List<Grade> TempGrades = db.Grades.Where(g => g.QuizID == QuizID).ToList();
+            foreach(Grade g in TempGrades)
+            {
+                db.RemoveGrade(g);
+            }
+            db.SaveChanges();
+            return rtn;
+        }
+
+
+        /// <summary>
+        /// Gets all StudentQuizzes with a matching QuizID to QuizID and deletes them
+        /// </summary>
+        /// <param name="QuizID">ID of Quiz to match for StudentQuizzes</param>
+        /// <param name="ClassID">ID of Class</param>
+        /// <returns>True if quizzes deleted successfully</returns>
+        public Boolean RemoveStudentQuizzes(int QuizID, int ClassID)
+        {
+            Boolean rtn = true;
+
+            List<StudentQuizze> TempQuizzes = db.StudentQuizzes.Where(q => q.QuizID == QuizID).ToList();
+            foreach (StudentQuizze q in TempQuizzes)
+            {
+                db.RemoveStudentQuiz(q);
+            }
+            db.SaveChanges();
+            return rtn;
+        }
+
+        /// <summary>
+        /// Deletes the Quiz and loads the QuizList view
+        /// </summary>
+        /// <param name="QuizID">ID of Quiz</param>
+        /// <param name="ClassID">ID of Class</param>
+        /// <returns>The Quiz List View</returns>
         public ActionResult DeleteQuiz(int QuizID, int ClassID)
         {
             Quizze Quiz = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault();
@@ -949,22 +1168,154 @@ namespace Oodle.Controllers
             {
                 return test(Quiz.ClassID);
             }
+            RemoveStudentQuizzes(QuizID, ClassID);
+            RemoveQuizGrades(QuizID, ClassID);
+            
+
             db.RemoveQuiz(Quiz);
             db.SaveChanges();
 
             return RedirectToAction("QuizList", "Teachers", new { ClassID = ClassID });
         }
 
+        /// <summary>
+        /// Loads the edit question view, allowing teacher to edit the fields
+        /// for both Question and Answer
+        /// </summary>
+        /// <param name="question">Question to edit</param>
+        /// <param name="answer">Answer to edit</param>
+        /// <returns>loads the edit question view</returns>
+        [HttpGet]
+        public ActionResult EditQuestion(int QuestionID, int ClassID, int QuizID)
+        {
+            if (db.StudentQuizzes.Where(q => q.QuizID == QuizID).FirstOrDefault() != null)
+            {
+                return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = QuizID, ClassID = ClassID });
+            }
+            if (test(ClassID) != null)
+            {
+                return test(ClassID);
+            }
+            TeacherVM teacher = getTVM(ClassID);
+            teacher.quiz = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault();
+            teacher.question = db.QuizQuestions.Where(q => q.QuestionID == QuestionID).FirstOrDefault();
+            teacher.answer = db.MultChoiceAnswers.Where(a => a.QuestionID == QuestionID).FirstOrDefault();
+            return View("EditQuestion", "_TeacherLayout", teacher);
+        }
+
+        /// <summary>
+        /// Saves the edits for the Question and Answer objects.
+        /// </summary>
+        /// <param name="question">Edited Question</param>
+        /// <param name="answer">Edited Answer</param>
+        /// <returns>view quiz view if edits saved successfully, otherwise reloads edit question view</returns>
+        [HttpPost]
+        public ActionResult EditQuestion(QuizQuestion question, MultChoiceAnswer answer)
+        {
+            if (db.StudentQuizzes.Where(q => q.QuizID == question.QuizID).FirstOrDefault() != null)
+            {
+                Quizze temp = db.Quizzes.Where(q => q.QuizID == question.QuizID).FirstOrDefault();
+                return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = question.QuizID, ClassID = temp.ClassID });
+            }
+            Quizze Quiz = db.Quizzes.Where(q => q.QuizID == question.QuizID).FirstOrDefault();
+            TeacherVM teacher = getTVM(Quiz.ClassID);
+            teacher.quiz = Quiz;
+            teacher.question = question;
+            teacher.answer = answer;
+            if (test(teacher.quiz.ClassID) != null)
+            {
+                return test(teacher.quiz.ClassID);
+            }
+            if (ModelState.IsValid && CheckCorrectAnswerNotNull(answer))
+            {
+                answer = ShortenAnswer(answer);
+                db.SetModified(answer);
+                db.SetModified(question);
+                db.SaveChanges();
+                SetPointTotal(question.QuizID);
+
+                return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = teacher.quiz.QuizID, ClassID = teacher.quiz.ClassID });
+            }
+            else
+            {
+                return View("EditQuestion", "_TeacherLayout", teacher);
+            }
+        }
+
+        /// <summary>
+        /// Loads the Remove Question view to insure that teacher wants to
+        /// delete the quiz question
+        /// </summary>
+        /// <param name="QuestionID">ID of question to delete</param>
+        /// <param name="ClassID">ID of Class</param>
+        /// <param name="QuizID">ID of Quiz</param>
+        /// <returns></returns>
+        public ActionResult RemoveQuestion(int QuestionID, int ClassID, int QuizID)
+        {
+            if (db.StudentQuizzes.Where(q => q.QuizID == QuizID).FirstOrDefault() != null)
+            {
+                return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = QuizID, ClassID = ClassID });
+            }
+            if (test(ClassID) != null)
+            {
+                return test(ClassID);
+            }
+            TeacherVM teacher = getTVM(ClassID);
+            teacher.quiz = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault();
+            teacher.question = db.QuizQuestions.Where(q => q.QuestionID == QuestionID).FirstOrDefault();
+
+            return View("RemoveQuestion", "_TeacherLayout", teacher);
+        }
+
+        /// <summary>
+        /// Deletes the question from the Quiz
+        /// </summary>
+        /// <param name="QuestionID">ID of question to delete</param>
+        /// <param name="ClassID">ID of Class</param>
+        /// <param name="QuizID">ID of Quiz</param>
+        /// <returns></returns>
+        public ActionResult DeleteQuizQuestion(int QuestionID, int ClassID, int QuizID)
+        {
+            if(db.StudentQuizzes.Where(q=> q.QuizID == QuizID).FirstOrDefault() != null)
+            {
+                return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = QuizID, ClassID = ClassID });
+            }
+            QuizQuestion Question = db.QuizQuestions.Where(q => q.QuestionID == QuestionID).FirstOrDefault();
+            if (test(ClassID) != null)
+            {
+                return test(ClassID);
+            }
+
+
+            db.RemoveQuestion(Question);
+            db.SaveChanges();
+
+            SetPointTotal(Question.QuizID);
+            return RedirectToAction("ViewQuiz", "Teachers", new { QuizID = QuizID, ClassID = ClassID });
+        }
+
+        /// <summary>
+        /// Checks to make sure Quiz start and end times are 
+        /// correct. Start before end and end after start.
+        /// </summary>
+        /// <param name="Quiz">Quiz to check</param>
+        /// <returns>true if the time is correct, false if not</returns>
         public Boolean CheckQuizTime (Quizze Quiz)
         {
             Boolean rtn = false;
             if (Quiz.StartTime.CompareTo(Quiz.EndTime) < 0 )
                 rtn = true;
             else
-                ModelState.AddModelError("StartTime", "Start Time must be before End Time");
+                ModelState.AddModelError("Quiz.StartTime", "Start Time must be before End Time");
             return rtn;
         }
 
+        /// <summary>
+        /// Load the AddQuestion view
+        /// </summary>
+        /// <param name="QuizID">ID of Quiz to add Question to</param>
+        /// <param name="ClassID">ID of Class for Quiz</param>
+        /// <returns>The Add Question View</returns>
         public ActionResult AddQuestion(int QuizID, int ClassID)
         {
             if (test(ClassID) != null)
@@ -980,7 +1331,12 @@ namespace Oodle.Controllers
             return View("AddQuestion", "_TeacherLayout", teacher);
         }
 
-
+        /// <summary>
+        /// Adds the Question and Answer to the db
+        /// </summary>
+        /// <param name="question">Question to added</param>
+        /// <param name="answer">Answer to add</param>
+        /// <returns>returns true if added correctly, returns false if any information was incorrect</returns>
         public Boolean AddQuestionToDB(QuizQuestion question, MultChoiceAnswer answer)
         {
             Boolean rtn = false;
@@ -988,6 +1344,7 @@ namespace Oodle.Controllers
                 return rtn;
             if (ModelState.IsValid &&  CheckCorrectAnswerNotNull(answer))
             {
+                answer = ShortenAnswer(answer);
                 db.AddQuestion(question);
                 db.SaveChanges();
                 answer.QuestionID = question.QuestionID;
@@ -998,6 +1355,11 @@ namespace Oodle.Controllers
             return rtn;
         }
 
+        /// <summary>
+        /// Checks to make sure that the corresponding Answer for CorrectAnswer is filled out
+        /// </summary>
+        /// <param name="a">answer to check</param>
+        /// <returns>true if correct answer is filled out, false if not</returns>
         public Boolean CheckCorrectAnswerNotNull(MultChoiceAnswer a)
         {
             Boolean rtn = false;
@@ -1011,7 +1373,42 @@ namespace Oodle.Controllers
                                         "Please fill it out or choose a new answer");
             return rtn;
         }
+        
+        /// <summary>
+        /// Concatenates answers, i.e. if only Answer1 and Answer4 will filled out
+        /// moves Answer4 to Answer2, and changes the correct answer appropriately.
+        /// </summary>
+        /// <param name="answer">The answer to concatenate</param>
+        /// <returns>The newly shortened answer</returns>
+        public MultChoiceAnswer ShortenAnswer(MultChoiceAnswer answer)
+        {
+            if (!String.IsNullOrWhiteSpace(answer.Answer4) && String.IsNullOrWhiteSpace(answer.Answer3))
+            {
+                answer.Answer3 = answer.Answer4;
+                answer.Answer4 = null;
+                if (answer.CorrectAnswer == 4)
+                    answer.CorrectAnswer = 3;
+            }
 
+            if (!String.IsNullOrWhiteSpace(answer.Answer3) && String.IsNullOrWhiteSpace(answer.Answer2))
+            {
+                answer.Answer2 = answer.Answer3;
+                answer.Answer3 = null;
+                if (answer.CorrectAnswer == 3)
+                    answer.CorrectAnswer = 2;
+            }
+            return answer;
+        }
+
+        /// <summary>
+        /// Adds the question to the question table and the
+        /// answer to the answer table, returns the Add Question view with
+        /// the parameter data if anything was incorrect, otherwise returns the AddQuestion View
+        /// with empty fields, for another question
+        /// </summary>
+        /// <param name="question">Quiz Question to be added to the QuizQuestions table</param>
+        /// <param name="answer">Answer to be added to the MultchoiceAnswer table</param>
+        /// <returns>The AddQuestion View if successful, or the AddQuestion view with old data if any information was incorrect</returns>
         public ActionResult AddAnother([Bind(Include = "QuizID,Points,QuestionText")] QuizQuestion question,
                                        [Bind(Include = "Answer1,Answer2,Answer3,Answer4,CorrectAnswer")] MultChoiceAnswer answer)
         {
@@ -1036,6 +1433,15 @@ namespace Oodle.Controllers
             return View("AddQuestion", "_TeacherLayout", teacher);
         }
 
+        /// <summary>
+        /// Adds the question to the question table and the
+        /// answer to the answer table, returns the Add Question view
+        /// if any fields were filled out incorrectly, otherwise redirects to the view
+        /// quiz page
+        /// </summary>
+        /// <param name="question">Quiz Question to be added to the QuizQuestions table</param>
+        /// <param name="answer">Answer to be added to the MultchoiceAnswer table</param>
+        /// <returns>The View Quiz View if successful, or the AddQuestion view if any information was incorrect</returns>
         public ActionResult SaveQuestion([Bind(Include = "QuizID,Points,QuestionText")] QuizQuestion question,
                                        [Bind(Include = "Answer1,Answer2,Answer3,Answer4,CorrectAnswer")] MultChoiceAnswer answer)
         {
@@ -1059,6 +1465,12 @@ namespace Oodle.Controllers
             return View("AddQuestion", "_TeacherLayout", teacher);
         }
 
+        /// <summary>
+        /// Update the quiz with the new point total, called whenever
+        /// questions are added or edited.
+        /// </summary>
+        /// <param name="QuizID">ID of Quiz to update</param>
+        /// <returns>true if Quiz ID is valid and was successfully updated</returns>
         public Boolean SetPointTotal(int QuizID)
         {
             Boolean rtn = true;
@@ -1090,7 +1502,7 @@ namespace Oodle.Controllers
         }
 
 
-        public ActionResult CreateTasksEntry()
+        public ActionResult CreateTasksEntry(HttpPostedFileBase postedFile)
         {
             ViewBag.RequestMethod = "POST";
 
@@ -1098,6 +1510,31 @@ namespace Oodle.Controllers
             string id = Request.Form["classID"];
             string startDate = Request.Form["startDate"];
             string dueDate = Request.Form["dueDate"];
+            string vString = Request.Form["video"];
+            
+            vString = vString.Replace("watch?v=", "embed/");
+            var tsk = new Tasks();
+
+            if (postedFile != null)
+            {
+                byte[] bytes;
+                using (BinaryReader br = new BinaryReader(postedFile.InputStream))
+                {
+                    bytes = br.ReadBytes(postedFile.ContentLength);
+
+
+                    tsk.ContentType = postedFile.ContentType;
+                    tsk.Data = bytes;
+                    tsk.Name = Path.GetFileName(postedFile.FileName);
+
+
+                }
+            }
+
+
+
+
+            desc = "v::" + vString + "::v" + desc;
 
             int classID = int.Parse(id);
 
@@ -1105,7 +1542,6 @@ namespace Oodle.Controllers
             {
                 return test(classID);
             }
-            var tsk = new Tasks();
 
             tsk.TasksID = db.Tasks.Count() + 1;
             tsk.Description = desc;
@@ -1122,6 +1558,7 @@ namespace Oodle.Controllers
 
             return View("Tasks", "_TeacherLayout", teacher);
         }
+
 
         /*
          * Returns a view for editTasks
@@ -1146,11 +1583,7 @@ namespace Oodle.Controllers
 
         }
 
-
-        /*
-         * Method that pulls in data and then makes a decision to either delete those fields from the database, or change them.
-         */
-        public ActionResult EditTaskAction()
+        public ActionResult EditTaskAction(HttpPostedFileBase postedFile)
         {
             ViewBag.RequestMethod = "POST";
 
@@ -1160,11 +1593,29 @@ namespace Oodle.Controllers
             string dueDate = Request.Form["dueDate"];
             string TaskID = Request.Form["TaskID"];
             string delItem = Request.Form["Delete"];
+            string vString = Request.Form["video"];
+            vString = vString.Replace("watch?v=", "embed/");
+
 
             int TasksID = int.Parse(TaskID);
             int classID = int.Parse(id);
 
-            //If delete is checked, delete task from database.
+            if (postedFile != null)
+            {
+                byte[] bytes;
+                using (BinaryReader br = new BinaryReader(postedFile.InputStream))
+                {
+                    bytes = br.ReadBytes(postedFile.ContentLength);
+
+                    db.Tasks.Where(i => i.ClassID == classID && i.TasksID == TasksID).ToList().ForEach(x => x.ContentType = postedFile.ContentType);
+                    db.Tasks.Where(i => i.ClassID == classID && i.TasksID == TasksID).ToList().ForEach(x => x.Data = bytes);
+                    db.Tasks.Where(i => i.ClassID == classID && i.TasksID == TasksID).ToList().ForEach(x => x.Name = Path.GetFileName(postedFile.FileName));
+                }
+            }
+
+
+
+
             if (delItem == "True")
             {
                 foreach (var x in db.Tasks.Where(i => i.TasksID == TasksID))
@@ -1173,11 +1624,9 @@ namespace Oodle.Controllers
                 }
 
             }
-
-            // save fields to selected database.
             else
             {
-
+                desc = "v::" + vString + "::v" + desc;
                 db.Tasks.Where(i => i.ClassID == classID && i.TasksID == TasksID).ToList().ForEach(x => x.Description = desc);
                 db.Tasks.Where(i => i.ClassID == classID && i.TasksID == TasksID).ToList().ForEach(x => x.StartDate = DateTime.Parse(startDate));
                 db.Tasks.Where(i => i.ClassID == classID && i.TasksID == TasksID).ToList().ForEach(x => x.DueDate = DateTime.Parse(dueDate));
@@ -1202,6 +1651,36 @@ namespace Oodle.Controllers
             return View("Tasks", "_TeacherLayout", teacher);
 
         }
+
+
+        [HttpPost]
+        public FileResult DownloadTask(int? fileId)
+        {
+            byte[] bytes;
+            string fileName, contentType;
+            string constr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                using (SqlCommand cmd = new SqlCommand())
+                {
+                    cmd.CommandText = "SELECT Name, Data, ContentType FROM Tasks WHERE TasksID=@Id";
+                    cmd.Parameters.AddWithValue("@Id", fileId);
+                    cmd.Connection = con;
+                    con.Open();
+                    using (SqlDataReader sdr = cmd.ExecuteReader())
+                    {
+                        sdr.Read();
+                        bytes = (byte[])sdr["Data"];
+                        contentType = sdr["ContentType"].ToString();
+                        fileName = sdr["Name"].ToString();
+                    }
+                    con.Close();
+                }
+            }
+
+            return File(bytes, contentType, fileName);
+        }
+
     }
 }
 

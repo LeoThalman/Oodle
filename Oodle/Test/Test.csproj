@@ -119,14 +119,32 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AcceptanceTests\ID406.cs" />
-    <Compile Include="AcceptanceTests\ID406.feature.cs">
+    <Compile Include="AcceptanceTests\LeosTests\ID141.feature.cs">
+      <DependentUpon>ID141.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="AcceptanceTests\LeosTests\ID246.feature.cs">
+      <DependentUpon>ID246.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="AcceptanceTests\LeosTests\ID246.cs" />
+    <Compile Include="AcceptanceTests\LeosTests\ID445.cs" />
+    <Compile Include="AcceptanceTests\LeosTests\ID141.cs" />
+    <Compile Include="AcceptanceTests\LeosTests\ID455.feature.cs">
+      <DependentUpon>ID455.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="AcceptanceTests\LeosTests\ID406.cs" />
+    <Compile Include="AcceptanceTests\LeosTests\ID406.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ID406.feature</DependentUpon>
     </Compile>
-    <Compile Include="AcceptanceTests\ID407.cs" />
-    <Compile Include="AcceptanceTests\ID407.feature.cs">
+    <Compile Include="AcceptanceTests\LeosTests\ID407.cs" />
+    <Compile Include="AcceptanceTests\LeosTests\ID407.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ID407.feature</DependentUpon>
@@ -149,6 +167,36 @@
     <Compile Include="AcceptanceTests\KollsTests\KollEditClass.cs" />
     <Compile Include="AcceptanceTests\KollsTests\KollTestingIndexsTeacher.cs" />
     <Compile Include="AcceptanceTests\KollsTests\KollTestingNote.cs" />
+    <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\AboutPageContainsAboutOodleDevsSection.cs" />
+    <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\CaptchaNoClickShouldFailRegister.cs" />
+    <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\ID447.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ID447.feature</DependentUpon>
+    </Compile>
+    <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\ID450.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ID450.feature</DependentUpon>
+    </Compile>
+    <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\ID451.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ID451.feature</DependentUpon>
+    </Compile>
+    <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\ID470.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ID470.feature</DependentUpon>
+    </Compile>
+    <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\ID473.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ID473.feature</DependentUpon>
+    </Compile>
+    <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\NewLandingPageExistsWhenYouLoginAndGetDirectedToItInsteadOfOldPage.cs" />
+    <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\OodleTestingPageOnUbuntuServerHasALoadingBar.cs" />
+    <Compile Include="AcceptanceTests\KollsTests\KollTestsSprint6\TestingToolsNumericalInputGradeCaluclatorIsCorrect.cs" />
     <Compile Include="AcceptanceTests\Sams Tests\ID395.feature.cs" />
     <Compile Include="AcceptanceTests\Sams Tests\ID3951.feature.cs">
       <AutoGen>True</AutoGen>
@@ -167,6 +215,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ID397.feature</DependentUpon>
     </Compile>
+    <Compile Include="AcceptanceTests\Sams Tests\ID466.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ID466.feature</DependentUpon>
+    </Compile>
+    <Compile Include="AcceptanceTests\Sams Tests\ID467.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ID467.feature</DependentUpon>
+    </Compile>
     <Compile Include="AcceptanceTests\Sams Tests\SamSelenium\PBI395SamTestTeacherSideRosterToSeeIfYouCanKickStudents.cs" />
     <Compile Include="AcceptanceTests\Sams Tests\SamSelenium\PBI396SamTestNavBarStudentSideTouchGrades.cs" />
     <Compile Include="AcceptanceTests\Sams Tests\SamSelenium\PBI396SamTestNavBarStudentSideTouchHome.cs" />
@@ -178,6 +236,8 @@
     <Compile Include="AcceptanceTests\Sams Tests\SamSelenium\PBI397SamTestTeacherSidePastDueIsRed.cs" />
     <Compile Include="AcceptanceTests\WillsTests\CreateInvalidDate.cs" />
     <Compile Include="AcceptanceTests\WillsTests\ID428.cs" />
+    <Compile Include="AcceptanceTests\WillsTests\quizGrade.cs" />
+    <Compile Include="AcceptanceTests\WillsTests\UploadingFileToTasks.cs" />
     <Compile Include="AcceptanceTests\WillsTests\NoFileMakesItGiveWarning.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="OodleUnitTests.cs" />
@@ -196,6 +256,54 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ID438.feature.cs</LastGenOutput>
     </None>
+    <None Include="AcceptanceTests\KollsTests\KollTestsSprint6\ID447.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID447.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\KollsTests\KollTestsSprint6\ID450.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID450.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\KollsTests\KollTestsSprint6\ID451.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID451.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\KollsTests\KollTestsSprint6\ID470.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID470.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\KollsTests\KollTestsSprint6\ID473.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID473.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\LeosTests\ID141.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID141.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\LeosTests\ID246.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID246.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\LeosTests\ID455.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID455.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\Sams Tests\ID466.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID466.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\Sams Tests\ID467.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID467.feature.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\WillsTests\ID465.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID427.cs</LastGenOutput>
+    </None>
+    <None Include="AcceptanceTests\WillsTests\ID464.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ID427.cs</LastGenOutput>
+    </None>
     <None Include="AcceptanceTests\WillsTests\ID427.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ID427.cs</LastGenOutput>
@@ -208,11 +316,11 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ID428.cs</LastGenOutput>
     </None>
-    <None Include="AcceptanceTests\ID406.feature">
+    <None Include="AcceptanceTests\LeosTests\ID406.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ID406.feature.cs</LastGenOutput>
     </None>
-    <None Include="AcceptanceTests\ID407.feature">
+    <None Include="AcceptanceTests\LeosTests\ID407.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ID407.feature.cs</LastGenOutput>
     </None>
@@ -255,9 +363,9 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\NUnit.3.10.1\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.3.10.1\build\NUnit.props'))" />
-    <Error Condition="!Exists('..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props'))" />
     <Error Condition="!Exists('..\packages\SpecFlow.2.3.0\build\SpecFlow.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SpecFlow.2.3.0\build\SpecFlow.targets'))" />
     <Error Condition="!Exists('..\packages\Selenium.Firefox.WebDriver.0.20.0\build\Selenium.Firefox.WebDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Selenium.Firefox.WebDriver.0.20.0\build\Selenium.Firefox.WebDriver.targets'))" />
+    <Error Condition="!Exists('..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props'))" />
   </Target>
   <Import Project="..\packages\SpecFlow.2.3.0\build\SpecFlow.targets" Condition="Exists('..\packages\SpecFlow.2.3.0\build\SpecFlow.targets')" />
   <Import Project="..\packages\Selenium.Firefox.WebDriver.0.20.0\build\Selenium.Firefox.WebDriver.targets" Condition="Exists('..\packages\Selenium.Firefox.WebDriver.0.20.0\build\Selenium.Firefox.WebDriver.targets')" />

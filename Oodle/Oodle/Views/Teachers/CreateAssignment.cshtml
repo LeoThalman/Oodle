@@ -27,6 +27,10 @@
             <br />
             <label for="dueDate">Due Date</label><br />
             <input type="datetime-local" name="dueDate" value="@DateTime.Now" required min="@DateTime.Now.ToString("dd-mm-yyyyThh:mm:ss")" />
+            <br />
+            <label for="addNotif">Notify students of this assignment?</label>
+            <input type="radio" name="addNotif" value="true">Yes
+            <input type="radio" name="addNotif" value="false" checked>No <br />
         </div>
         <div>
             <input type="submit" name="submit" value="Create Assignment" />

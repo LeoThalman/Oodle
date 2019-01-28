@@ -11,76 +11,175 @@
         <!-- fluid -->
         <div class="box-toggle">
             @if(true){
+                                            int i3 = 0;
+
                 var number = 0;
                 var t = 0;
                 foreach (var i in Model.users.ToList())
                 {
                     var test = Model.perUser[t];
-                    t++;
                     <div class="contorol">
 
-                        <h3>
+                        <h2 style="padding-left:40px">
                             @Html.DisplayFor(Name => i.UserName)
-                        </h3>
+                        </h2>
                         <span class="toggle-info pull-left">
                             <i class="fa fa-plus"></i>
                         </span>
                     </div>
                     <div class="content-box">
                         <div class="black">
-                            @for (int i2 = 0; i2 < Model.documents.Count(); i2++)
+                            @for (int i2 = 0; i2 < Model.perUser[t].Grade.Count(); i2++)
                             {
-                                if(Model.documents[i2] != null) { 
-                                    var doc = Model.documents[i2];
-                                    var classID = Model.cl.ClassID;
-                                    var documentID = doc.Id;
-                                    var assignmentID = doc.AssignmentID;
-                                    var submittedDate = doc.Date;
-                                    var dueDate = doc.Assignment.DueDate;
-                                    var late = test.Late[i2];
-                                    var stat = test.stat[i2];
+                                if(Model.perUser[t].Grade[i2] != null) {
+                                    if (Model.perUser[t].Grade[i2].Quizze != null)
+                                    {
+                                        var quiz = Model.perUser[t].Grade[i2].Quizze;
+
+                                        var quizName = quiz.QuizName;
+
+                                        var sQuiz = Model.StudentQuizze.Where(o => o.QuizID == quiz.QuizID && o.UserID == i.UsersID).FirstOrDefault();
+
+                                        if (sQuiz != null)
+                                        {
+                                            var classID = Model.cl.ClassID;
+                                            var dueDate = quiz.EndTime;
+
+                                            var grade = sQuiz.TotalPoints / quiz.TotalPoints;
+
+                                            <div class="contorol padded">
+
+                                                <div style="font-size:20px">@quiz.QuizName</div>
+
+                                                <div>
+                                                    @(grade * 100)%
+                                                </div>
+                                    
+                                                <div class="upperRight">
+                                                    Quiz
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            
+                                            <div class="contorol padded">
+
+                                                <div style="font-size:20px">@quiz.QuizName</div>
+
+                                                <div>
+                                                    No submission.
+                                                </div>
 
 
-                                    <div class="contorol padded">
+                                                <div class="dateRight2">
+                                                    Due @quiz.EndTime.ToString()
+                                                </div>
 
-                                        <div>@doc.Assignment.Name</div>
 
-                                        <a href="@Url.Action("Grade", "Teachers", new { classID = classID, documentID = documentID, assignmentID = assignmentID })"> Grade Assignment </a>
-                                        <div>
-                                            Current Grade: @if (doc.Grade == -1)
-                                            {
-                                                <div>Not yet graded.</div>
-                                            }
-                                            else
-                                            {
-                                                @Html.DisplayFor(Grade => doc.Grade);
-                                            }
-                                        </div>
+                                                <div class="upperRight">
+                                                    Quiz
+                                                </div>
+                                            </div>
+                                        }
+                                        <hr />
+
+
+                                    }
+                                    else
+                                    {
+                                        var assi = Model.perUser[t].Grade[i2].Assignment;
+
+                                        var assiName = assi.Name;
+
+                                        var doc = Model.documents.Where(o => o.UserID == i.UsersID && o.AssignmentID == assi.AssignmentID).FirstOrDefault();
+
+                                        var classID = Model.cl.ClassID;
+                                        if (doc != null) {
+                                            var documentID = doc.Id;
+                                            var assignmentID = doc.AssignmentID;
+                                            var submittedDate = doc.Date;
+                                            var dueDate = doc.Assignment.DueDate;
+                                            var late = test.Late[i3];
+                                            var stat = test.stat[i3];
+                                            i3++;
+
+                                            <div class="contorol padded">
+
+                                                <div style="font-size:20px">@assi.Name</div>
+
+                                                <a href="@Url.Action("Grade", "Teachers", new { classID = classID, documentID = documentID, assignmentID = assignmentID })"> Grade Assignment </a>
+                                                <div>
+                                                    Current Grade: @if (doc.Grade == -1)
+                                                    {
+                                                        <div>Not yet graded.</div>
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.DisplayFor(Grade => doc.Grade);
+                                                    }
+                                                    
+                                                </div>
                                     
 
-                                        @if(!stat) {
-                                            <div class="dateRight2 late">
-                                                Submitted @Html.DisplayFor(date => late.Days) days, @Html.DisplayFor(date => late.Hours) hours, and @Html.DisplayFor(date => late.Minutes) minutes late.
+                                                @if(!stat) {
+                                                    <div class="dateRight2 late">
+                                                        Submitted @Html.DisplayFor(date => late.Days) days, @Html.DisplayFor(date => late.Hours) hours, and @Html.DisplayFor(date => late.Minutes) minutes late.
+                                                    </div>
+                                                }
+                                                @if(stat) {
+                                                    <div class="dateRight2 early">
+                                                        Submitted @Html.DisplayFor(date => late.Days) days, @Html.DisplayFor(date => late.Hours) hours, and @Html.DisplayFor(date => late.Minutes) minutes early.
+                                                    </div>
+                                                }
+                                                                                    
+                                                <div class="upperRight">
+                                                    Assignment
+                                                </div>
                                             </div>
                                         }
-                                        @if(stat) {
-                                            <div class="dateRight2 early">
-                                                Submitted @Html.DisplayFor(date => late.Days) days, @Html.DisplayFor(date => late.Hours) hours, and @Html.DisplayFor(date => late.Minutes) minutes early.
+                                        else { 
+                                           
+                                            <div class="contorol padded">
+
+                                                <div style="font-size:20px">@assi.Name</div>
+                                                <div>
+                                                    No submission.
+                                                </div>
+
+                                                <div class="dateRight2">
+                                                    Due @assi.DueDate.ToString()
+                                                </div>
+
+                                                <div class="upperRight">
+                                                    Assignment
+                                                </div>
                                             </div>
                                         }
-                                    </div>
-                                    <hr />
+
+                                        <hr />
+
+
+                                    }
+
+
+                                    //var doc = Model.documents[i2];
+                                   
                                 }
                             }
+                            <div style="padding-left:10px">
+                                Total Grade:
+                                @(Model.classGrade[number])%
+                            </div>
+                            <br/>
                         </div>
                     </div>
-                    <div>
-                        Average on Graded Assignments Based off Weights:
-                        @Model.classGrade[number]
-                    </div>
-                    number = number + 1;
 
+                    number = number + 1;
+                    i3 = 0;
                     <hr />
+
+                    t++;
                 }
             }
         </div>

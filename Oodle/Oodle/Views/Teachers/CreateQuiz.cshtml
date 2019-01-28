@@ -2,59 +2,76 @@
 
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
-<div class="form-horizontal">
-    <h2>Create A Quiz for the class: @Model.cl.Name</h2>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(model => model.quiz.QuizName, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.quiz.QuizName, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.quiz.QuizName, "", new { @class = "text-danger" })
+
+    <div class="form-horizontal">
+        <h2>Create A Quiz for the class: @Model.cl.Name</h2>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.quiz.QuizName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.quiz.QuizName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.quiz.QuizName, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.quiz.StartTime, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.quiz.StartTime, new { htmlAttributes = new { @class = "form-control", placeholder = "MM/DD/YYYY HH:MM:SS AM" } })
-            @Html.ValidationMessageFor(model => model.quiz.StartTime, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.quiz.StartTime, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.quiz.StartTime, new { htmlAttributes = new { @class = "form-control", placeholder = "MM/DD/YYYY HH:MM:SS AM" } })
+                @Html.ValidationMessageFor(model => model.quiz.StartTime, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.quiz.EndTime, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.quiz.EndTime, new { htmlAttributes = new { @class = "form-control" , placeholder = "MM/DD/YYYY HH:MM:SS AM" } })
-            @Html.ValidationMessageFor(model => model.quiz.EndTime, "", new { @class = "text-danger" })
-
+        <div class="form-group">
+            @Html.LabelFor(model => model.quiz.GradeWeight, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.quiz.GradeWeight, new { htmlAttributes = new { @class = "form-control", placeholder = "0-100" } })
+                @Html.ValidationMessageFor(model => model.quiz.GradeWeight, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
-    <input type="hidden" name="quiz.ClassID" value=@Model.cl.ClassID required />
+        <div class="form-group">
+            @Html.LabelFor(model => model.quiz.EndTime, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.quiz.EndTime, new { htmlAttributes = new { @class = "form-control", placeholder = "MM/DD/YYYY HH:MM:SS AM" } })
+                @Html.ValidationMessageFor(model => model.quiz.EndTime, "", new { @class = "text-danger" })
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.quiz.IsHidden, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            <div class="checkbox">
-                @Html.EditorFor(model => model.quiz.IsHidden)
-                @Html.ValidationMessageFor(model => model.quiz.IsHidden, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <input type="hidden" name="quiz.ClassID" value=@Model.cl.ClassID required />
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.quiz.IsHidden, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.quiz.IsHidden)
+                    @Html.ValidationMessageFor(model => model.quiz.IsHidden, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.quiz.CanReview, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.quiz.CanReview)
+                    @Html.ValidationMessageFor(model => model.quiz.CanReview, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </div>
     </div>
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
-        </div>
-    </div>
-</div>
 }
-
+@Html.ActionLink("Back to Quiz List", "QuizList", "Teachers", new { ClassID = Model.cl.ClassID }, new { @class = "btn btn-default" })
 <div>
-    @Html.ActionLink("Back to Quiz List", "QuizList", "Teachers", new { ClassID = Model.cl.ClassID }, null)
+
 </div>

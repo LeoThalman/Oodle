@@ -23,18 +23,23 @@ namespace Oodle.Models.ViewModels
         public Quizze quiz { get; set; }
         public QuizQuestion question { get; set; }
         public MultChoiceAnswer answer { get; set; }
+        public Boolean Locked { get; set; }
         public List<QuizQuestion> questionList { get; set; }
         public List<MultChoiceAnswer> answerList { get; set; }
         public List<Tasks> Tasks { get; set; }
         public List<Notes> Notes { get; set; }
         public List<UserVMish> perUser { get; set; }
+        public List<StudentQuizze> StudentQuizze { get; set; }
 
         public TeacherVM(Class classP, List<User> userP)
         {
             cl = classP;
             users = userP;
         }
+        public TeacherVM()
+        {
 
+        }
         public TeacherVM(List<Class> classP, List<User> userP, List<UserRoleClass> rolesP)
         {
             classList = classP;

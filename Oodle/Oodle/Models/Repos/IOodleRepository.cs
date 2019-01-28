@@ -16,6 +16,7 @@ namespace Oodle.Models.Repos
         IEnumerable<UserRoleClass> UserRoleClasses { get; }
         IEnumerable<Class> Classes { get; }
         IEnumerable<ClassNotification> ClassNotifications { get; }
+        IEnumerable<HiddenNotification> HiddenNotifications { get; }
         IEnumerable<Assignment> Assignments { get; }
         IEnumerable<Document> Documents { get; }
         IEnumerable<Quizze> Quizzes { get; }
@@ -25,6 +26,7 @@ namespace Oodle.Models.Repos
         IEnumerable<Notes> Notes { get; }
         IEnumerable<StudentQuizze> StudentQuizzes { get; }
         IEnumerable<StudentAnswer> StudentAnswers { get; }
+        IEnumerable<Grade> Grades { get; }
 
 
 
@@ -36,12 +38,15 @@ namespace Oodle.Models.Repos
         //Various Add and Remove functions for the tables
         void RemoveNotif(ClassNotification notif);
         void AddNotif(ClassNotification notif);
+        void AddHiddenNotif(HiddenNotification hnotif);
+        void RemoveHiddenNotif(HiddenNotification hnotif);
         void RemoveURC(UserRoleClass urc);
         void AddURC(UserRoleClass urc);
         void RemoveClass(Class c);
         void AddAssignment(Assignment a);
         void AddQuiz(Quizze q);
         void AddQuestion(QuizQuestion q);
+        void RemoveQuestion(QuizQuestion q);
         void AddAnswer(MultChoiceAnswer a);
         void AddTask(Tasks t);
         void RemoveTask(Tasks t);
@@ -53,6 +58,10 @@ namespace Oodle.Models.Repos
         void RemoveQuiz(Quizze q);
         void AddDocument(Document t);
         void RemoveDocument(Document t);
+
+        void AddGrade(Grade t);
+        void RemoveGrade(Grade t);
+
         void DeleteAssignment(Assignment a);
     }
 }

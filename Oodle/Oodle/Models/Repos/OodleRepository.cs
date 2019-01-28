@@ -33,6 +33,11 @@ namespace Oodle.Models.Repos
             get { return db.ClassNotifications; }
         }
 
+        public IEnumerable<HiddenNotification> HiddenNotifications
+        {
+            get { return db.HiddenNotifications; }
+        }
+
         public IEnumerable<Assignment> Assignments
         {
             get { return db.Assignments; }
@@ -78,6 +83,11 @@ namespace Oodle.Models.Repos
             get { return db.StudentAnswers; }
         }
 
+        public IEnumerable<Grade> Grades
+        {
+            get { return db.Grades; }
+        }
+
 
         //-----------------------Add and Remove Methods for the tables-------------------------------
         //Save Db Changes
@@ -100,6 +110,17 @@ namespace Oodle.Models.Repos
         {
             db.ClassNotifications.Add(notif);
         }
+
+        public void AddHiddenNotif(HiddenNotification hnotif)
+        {
+            db.HiddenNotifications.Add(hnotif);
+        }
+
+        public void RemoveHiddenNotif(HiddenNotification hnotif)
+        {
+            db.HiddenNotifications.Remove(hnotif);
+        }
+
 
         public void RemoveURC(UserRoleClass urc)
         {
@@ -129,6 +150,11 @@ namespace Oodle.Models.Repos
         public void AddQuestion(QuizQuestion q)
         {
             db.QuizQuestions.Add(q);
+        }
+
+        public void RemoveQuestion(QuizQuestion q)
+        {
+            db.QuizQuestions.Remove(q);
         }
 
         public void AddAnswer(MultChoiceAnswer a)
@@ -183,7 +209,14 @@ namespace Oodle.Models.Repos
         {
             db.Documents.Remove(d);
         }
-
+        public void AddGrade(Grade g)
+        {
+            db.Grades.Add(g);
+        }
+        public void RemoveGrade(Grade g)
+        {
+            db.Grades.Remove(g);
+        }
         public void DeleteAssignment(Assignment a)
         {
             db.Assignments.Remove(a);

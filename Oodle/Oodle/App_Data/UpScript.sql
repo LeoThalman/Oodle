@@ -220,12 +220,24 @@ CREATE TABLE dbo.ClassNotification
 	TimePosted DATETIME NOT NULL,
 	ClassID INT NOT NULL,
 	CONSTRAINT [PK_dbo.ClassNotification] PRIMARY KEY CLUSTERED (ClassNotificationID ASC),
-	CONSTRAINT [FK_dbo.ClassNotification_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
+	CONSTRAINT [FK_dbo.ClassNotification_dbo.Class] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
 	ON DELETE CASCADE
-	ON UPDATE CASCADE,
-
+	ON UPDATE CASCADE
 );
 
+CREATE TABLE dbo.HiddenNotification
+(
+	HiddenNotificationID INT IDENTITY (1,1) NOT NULL,
+	ClassNotificationID INT NOT NULL,
+	UsersID INT NOT NULL,
+	ClassID INT NOT NULL,
+	CONSTRAINT [PK_dbo.HiddenNotification] PRIMARY KEY CLUSTERED (HiddenNotificationID ASC),
+	CONSTRAINT [FK_dbo.HiddenNotification_dbo.Class] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
+	ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT [FK_dbo.HiddenNotification_dbo.ClassNotification] FOREIGN KEY ([ClassNotificationID]) REFERENCES [dbo].[ClassNotification] ([ClassNotificationID]),
+	CONSTRAINT [FK_dbo.HiddenNotification_dbo.Users] FOREIGN KEY ([UsersID]) REFERENCES [dbo].[Users] ([UsersID])
+	ON DELETE CASCADE ON UPDATE CASCADE
+);
 
 -- Assignment Table
 CREATE TABLE dbo.Assignment
@@ -239,7 +251,7 @@ CREATE TABLE dbo.Assignment
 	Weight INT NOT NULL,
 	CONSTRAINT [PK_dbo.Assignment] PRIMARY KEY CLUSTERED (AssignmentID ASC),
 	CONSTRAINT [FK_dbo.Assignment_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
-	ON DELETE CASCADE ON UPDATE CASCADE
+	ON DELETE CASCADE
 );
 
 -- Task Table
@@ -247,6 +259,11 @@ CREATE TABLE dbo.Tasks
 (	
 	TasksID	INT IDENTITY (1,1) NOT NULL,
 	ClassID	INT NOT NULL,
+
+    Name NVARCHAR(250),  
+    ContentType NVARCHAR(250),  
+	Data VARBINARY(MAX),
+
 	Description NVARCHAR(512),
 	StartDate DATETIME,
 	DueDate DATETIME,
@@ -266,18 +283,18 @@ CREATE TABLE dbo.Notes
 
 
 -- Grades Table
-CREATE TABLE dbo.Grades
-(	
-	GradesID	INT IDENTITY (1,1) NOT NULL,
-	UsersID INT NOT NULL,
-	AssignmentID INT NOT NULL,
-	Grader NVARCHAR(64),
-	Comment NVARCHAR(256),
-	Grade	INT NOT NULL,
-	CONSTRAINT [PK_dbo.Grades] PRIMARY KEY CLUSTERED (GradesID ASC),
-	CONSTRAINT [FK_dbo.Grades_dbo.UserID] FOREIGN KEY ([UsersID]) REFERENCES [dbo].[Users] ([UsersID]),
-	CONSTRAINT [FK_dbo.Grades_dbo.AssignmentID] FOREIGN KEY ([AssignmentID]) REFERENCES [dbo].[Assignment] ([AssignmentID])
-);
+--CREATE TABLE dbo.Grades
+--(	
+--	GradesID	INT IDENTITY (1,1) NOT NULL,
+--	UsersID INT NOT NULL,
+--	AssignmentID INT NOT NULL,
+--	Grader NVARCHAR(64),
+--	Comment NVARCHAR(256),
+--	Grade	INT NOT NULL,
+--	CONSTRAINT [PK_dbo.Grades] PRIMARY KEY CLUSTERED (GradesID ASC),
+--	CONSTRAINT [FK_dbo.Grades_dbo.UserID] FOREIGN KEY ([UsersID]) REFERENCES [dbo].[Users] ([UsersID]),
+--	CONSTRAINT [FK_dbo.Grades_dbo.AssignmentID] FOREIGN KEY ([AssignmentID]) REFERENCES [dbo].[Assignment] ([AssignmentID])
+--);
 
 -- Questions Table
 CREATE TABLE dbo.Questions
@@ -292,8 +309,44 @@ CREATE TABLE dbo.Questions
 	CONSTRAINT [FK_dbo.Questions_dbo.AssignmentID] FOREIGN KEY ([AssignmentID]) REFERENCES [dbo].[Assignment] ([AssignmentID])
 );
 
+CREATE TABLE dbo.Quizzes(
+	QuizID INT IDENTITY(1,1) NOT NULL,
+	QuizName NVARCHAR(256) NOT NULL,
+	StartTime DateTime NOT NULL,
+	EndTime DateTime NOT NULL,
+	ClassID INT NOT NULL,
+	IsHidden BIT NOT NULL,
+	TotalPoints INT,
+	CanReview BIT NOT NULL,
+	GradeWeight INT NOT NULL,
+	CONSTRAINT [PK_dbo.Quizzes] PRIMARY KEY CLUSTERED (QuizID ASC),
+	CONSTRAINT [FK_dbo.Quizzes_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
+	ON DELETE CASCADE
+);
+ 
+--Currently testing this table.
+CREATE TABLE Grades(
+	GradeID INT IDENTITY(1,1) NOT NULL,
+	ClassID INT NOT NULL,
+	Grade INT,
+	AssignmentID INT,
+	QuizID INT,
+	GradeWeight INT NOT NULL,
+	DateApplied DATETIME NOT NULL,
+	CONSTRAINT [PK_dbo.Grades] PRIMARY KEY CLUSTERED (GradeID ASC),
+	CONSTRAINT [FK_dbo.Grades_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID]),
+	CONSTRAINT [FK_dbo.Grades_dbo.QuizID] FOREIGN KEY ([QuizID]) REFERENCES [dbo].[Quizzes] (QuizID),
+	CONSTRAINT [FK_dbo.Grades_dbo.AssignmentID] FOREIGN KEY ([AssignmentID]) REFERENCES [dbo].[Assignment] (AssignmentID)
+	ON DELETE CASCADE
+	
+);
+
 CREATE TABLE dbo.Documents(  
-    Id INT IDENTITY(1,1) NOT NULL,  
+    Id INT IDENTITY(1,1) NOT NULL,
+	----------------
+	GradeID INT NOT NULL,
+	CONSTRAINT [FK_dbo.Documents_dbo.GradeID] FOREIGN KEY ([GradeID]) REFERENCES [dbo].[Grades] ([GradeID]),
+	----------------
     Name NVARCHAR(250) NOT NULL,  
     ContentType NVARCHAR(250) NOT NULL,  
 	Data VARBINARY(MAX) NOT NULL,
@@ -309,19 +362,7 @@ CREATE TABLE dbo.Documents(
 	CONSTRAINT [FK_dbo.Documents_dbo.AssignmentID] FOREIGN KEY ([AssignmentID]) REFERENCES [dbo].[Assignment] ([AssignmentID])
 );
 
-CREATE TABLE dbo.Quizzes(
-	QuizID INT IDENTITY(1,1) NOT NULL,
-	QuizName NVARCHAR(256) NOT NULL,
-	StartTime DateTime NOT NULL,
-	EndTime DateTime NOT NULL,
-	ClassID INT NOT NULL,
-	IsHidden BIT NOT NULL,
-	TotalPoints INT,
-	CONSTRAINT [PK_dbo.Quizzes] PRIMARY KEY CLUSTERED (QuizID ASC),
-	CONSTRAINT [FK_dbo.Quizzes_dbo.ClassID] FOREIGN KEY ([ClassID]) REFERENCES [dbo].[Class] ([ClassID])
-	ON DELETE CASCADE
-);
- 
+
 CREATE TABLE dbo.QuizQuestions(
 	QuestionID INT IDENTITY(1,1) NOT NULL,
 	QuizID INT NOT NULL,
@@ -331,7 +372,6 @@ CREATE TABLE dbo.QuizQuestions(
 	CONSTRAINT [PK_dbo.QuizQuestions] PRIMARY KEY CLUSTERED (QuestionID ASC),
 	CONSTRAINT [FK_dbo.Questions_dbo.Quizzes] FOREIGN KEY ([QuizID]) REFERENCES [dbo].[Quizzes] ([QuizID])
 	ON DELETE CASCADE
-	ON UPDATE CASCADE,
 );
 
 Create TABLE MultChoiceAnswers(
@@ -344,18 +384,21 @@ Create TABLE MultChoiceAnswers(
 	CorrectAnswer INT NOT NULL,
 	CONSTRAINT [PK_dbo.MultChoiceAnswers] PRIMARY KEY CLUSTERED (AnswerID ASC),
 	CONSTRAINT [FK_dbo.MultChoiceAnswers_dbo.QuizQuestions] FOREIGN KEY ([QuestionID]) REFERENCES [dbo].[QuizQuestions] ([QuestionID])
-	ON DELETE CASCADE ON UPDATE CASCADE,
+	ON DELETE CASCADE,
 );
 
 Create TABLE StudentQuizzes(
 	SQID INT IDENTITY(1,1) NOT NULL,
+	----------------
+	GradeID INT NOT NULL,
+	CONSTRAINT [FK_dbo.StudentQuizzes_dbo.GradeID] FOREIGN KEY ([GradeID]) REFERENCES [dbo].[Grades] ([GradeID]),
+	----------------
 	QuizID INT NOT NULL,
 	UserID INT NOT NULL,
 	TotalPoints INT NOT NULL,
 	CanReview BIT NOT NULL,
 	CONSTRAINT [PK_dbo.StudentQuizzes] PRIMARY KEY CLUSTERED (SQID ASC),
 	CONSTRAINT [FK_dbo.StudentQuizzes_dbo.Quizzes] FOREIGN KEY ([QuizID]) REFERENCES [dbo].[Quizzes] ([QuizID])
-	ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 Create TABLE StudentAnswers(
@@ -366,11 +409,39 @@ Create TABLE StudentAnswers(
 	StudentPoints INT NOT NULL,
 	CONSTRAINT [PK_dbo.StudentAnswers] PRIMARY KEY CLUSTERED (SQAID ASC),
 	CONSTRAINT [FK_dbo.StudentAnswers_dbo.StudentQuizzes] FOREIGN KEY ([SQID]) REFERENCES [dbo].[StudentQuizzes] ([SQID])
-	ON DELETE CASCADE ON UPDATE CASCADE,
+	ON DELETE CASCADE,
 	CONSTRAINT [FK_dbo.StudentAnswers_dbo.QuizQuestions] FOREIGN KEY ([QuestionID]) REFERENCES [dbo].[QuizQuestions] ([QuestionID])
-	
 );
   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 INSERT INTO [dbo].[AspNetUsers](
@@ -387,10 +458,10 @@ INSERT INTO [dbo].[AspNetUsers](
     [AccessFailedCount],
     [UserName])
 	VALUES (
-		'8e485440-f6bf-4398-8d76-af1a644908ee', 'student@student.com', 'False', 'AEalM6XUun+R+QMlhnwGFt5U5GeINLKsW+VLZlyqWUGBetC2dkk3zmPqHCzKL2YgBQ==', '73311d19-faa7-4d91-9ded-fad9a73b010e', NULL, 'False', 'False', NULL, 'True', 0, 'student'
+		'8e485440-f6bf-4398-8d76-af1a644908ee', 'leothalman@gmail.com', 'False', 'AEalM6XUun+R+QMlhnwGFt5U5GeINLKsW+VLZlyqWUGBetC2dkk3zmPqHCzKL2YgBQ==', '73311d19-faa7-4d91-9ded-fad9a73b010e', NULL, 'False', 'False', NULL, 'True', 0, 'YoungsterJoey'
 	),
 	(
-		'c4999e68-b230-4ba7-bb69-247819ad0e04', 'teacher@teacher.com', 'False', 'AE+0wyg/DRhnr6JXS5brN2xF7+lq3kW4BJc6RAPAP4mwDZn3Oj9WflOlthLHlWU7vQ==', 'a9231bd6-1e81-4b84-b7d4-a39b7576a93a', NULL, 'False', 'False', NULL, 'True', 0, 'teacher'
+		'c4999e68-b230-4ba7-bb69-247819ad0e04', 'kanisha.collynn@itis0k.org', 'False', 'AE+0wyg/DRhnr6JXS5brN2xF7+lq3kW4BJc6RAPAP4mwDZn3Oj9WflOlthLHlWU7vQ==', 'a9231bd6-1e81-4b84-b7d4-a39b7576a93a', NULL, 'False', 'False', NULL, 'True', 0, 'ProfessorElm'
 	);
 
 	INSERT INTO dbo.Users
@@ -400,10 +471,10 @@ INSERT INTO [dbo].[AspNetUsers](
 	UserName
 	)
 	VALUES (
-		'8e485440-f6bf-4398-8d76-af1a644908ee', 'student@student.com', 'student'
+		'8e485440-f6bf-4398-8d76-af1a644908ee', 'leothalman@gmail.com', 'YoungsterJoey'
 	),
 	(
-		'c4999e68-b230-4ba7-bb69-247819ad0e04', 'teacher@teacher.com', 'teacher'
+		'c4999e68-b230-4ba7-bb69-247819ad0e04', 'kanisha.collynn@itis0k.org', 'ProfessorElm'
 	);
 
 	INSERT INTO dbo.Class
@@ -415,7 +486,7 @@ INSERT INTO [dbo].[AspNetUsers](
 	Subject
 	)
 	VALUES (
-		'2', 'The Effects of Wind on Skirts and Dresses', 'In this class we look at the effects on wind on clothing and how this impacts design. It is the first in a three class long series.', 'wind', 'art'
+		'2', 'The Effects of Wind on Skirts and Dresses', 'In this class we look at the effects on wind on clothing and how this impacts design. It is the first in a three class long series.', '%', 'art'
 	);
 
 	INSERT INTO dbo.UserRoleClass
@@ -445,4 +516,18 @@ INSERT INTO [dbo].[AspNetUsers](
 	),
     (
 		'1', 'Homework 2','Do the odd numbered problems 17-33 at the end up chapter 6 of Aerodynamics and Fabrics.', '5/13/2018 8:30:00 PM', '5/20/2018 8:30:00 PM',  '1'
+	);
+
+	INSERT INTO dbo.Grades
+	(
+	ClassID,
+	AssignmentID,
+	GradeWeight,
+	DateApplied
+	)
+	VALUES (
+		'1', '1','1', '5/13/2018 8:30:00 PM'
+	),
+    (
+		'1', '2','1', '5/20/2018 8:30:00 PM'
 	);

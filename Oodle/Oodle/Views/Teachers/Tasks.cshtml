@@ -1,11 +1,8 @@
-﻿
-@model Oodle.Models.ViewModels.TeacherVM
-
+﻿@model Oodle.Models.ViewModels.TeacherVM
 @{
     ViewBag.Title = "Tasks";
 }
 <center><h2>Tasks</h2></center>
-
 
 <center>
     <a class="buttonReject" href="@Url.Action("CreateTask", "Teachers", new { classID = Model.cl.ClassID } )">
@@ -13,32 +10,90 @@
     </a>
 </center>
 <br />
-
 <div>
     @foreach (var i in Model.Tasks)
     {
         if (i.ClassID == Model.cl.ClassID)
         {
             var tsk = i;
-            <div class="block">
-                <div class="classItem" style='@(DateTime.Now>tsk.DueDate ?"background-color:red":"")'>
-                    <div class="description">
-                        @Html.DisplayFor(Desc => tsk.Description)
-                    </div>
-                    <div class="dateLeft" style="color:#17252A">
-                        Start Date: @Html.DisplayFor(Desc => tsk.StartDate)
-                    </div>
-                    <div class="dateRight" style="color:#17252A">
-                        Due Date: @Html.DisplayFor(Desc => tsk.DueDate)
-                    </div>
+            <div class="block" style="min-height: 296px; margin-bottom: 20px;">
+                <div class="classItem" style='@(DateTime.Now > tsk.DueDate ? "background-color:red" : "")'>
+                    @{
+                        String tempVideo = "";
+                        String temp = tsk.Description;
+                        int startP = temp.IndexOf("v::") + 3;
+                        int endP = temp.IndexOf("::v") - startP;
+                        if (startP < 1 || endP < 1)
+                        {
+                            tempVideo = "";
+                        }
+                        else
+                        {
+                            tempVideo = temp.Substring(startP, endP);
+                        }
+
+                        String tempDesc = tsk.Description.Substring(startP + endP + 3);
+
+                        <div class="description" style="font-size:18px">
+                            @tempDesc
+                        </div>
+
+                        <br />
+                        <br />
+
+                        <div class="dateLeft" style="color:#17252A">
+                            Start Date: @Html.DisplayFor(Desc => tsk.StartDate)
+                        </div>
+
+                        <div class="dateRight" style="color:#17252A">
+                            Due Date: @Html.DisplayFor(Desc => tsk.DueDate)
+                        </div>
+
+
+                        <hr style='@(tempVideo.Equals("")?"display:none;" : "display:block;")' />
+
+                        <div class="videoTask" style='@(tempVideo.Equals("")?"display:none;" : "display:block;")'>
+                            <iframe class="movieBox" src="@tempVideo" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                        </div>
+
+                        <br />
+
+
+
+                        <a href="javascript:;" onclick="DownloadTask(@i.TasksID)" style="text-align:center">
+                            <h5> @i.Name</h5>
+                        </a>
+                        <br />
+
+
+
+
+                    }
                     <a href="@Url.Action("EditTasks", "Teachers", new { classID = Model.cl.ClassID, TasksID = tsk.TasksID })" class="edit">
                         Edit
                     </a>
                 </div>
+                <br />
+                <br />
             </div>
-            <br />
-            <br />
         }
 
     }
 </div>
+@using (Html.BeginForm("DownloadTask", "Teachers", FormMethod.Post))
+{
+    <input type="hidden" id="hfFileId" name="FileId" />
+    <input type="submit" id="btnDownload" value="Download" style="display:none" />
+}
+
+
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="./path/to/dropzone.js"></script>
+<script type="text/javascript">
+    function DownloadTask(fileId) {
+        $("#hfFileId").val(fileId);
+        $("#btnDownload")[0].click();
+    };
+</script>

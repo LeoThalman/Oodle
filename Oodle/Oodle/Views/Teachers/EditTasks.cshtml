@@ -9,41 +9,61 @@
 
 
 <div class="form-style-6">
-    <form id="form" method="post" action="EditTaskAction">
+    @using (Html.BeginForm("EditTaskAction", "Teachers", FormMethod.Post, new { name = "formT", enctype = "multipart/form-data" }))
+    {
         <div>
             <h1>Edit Your Task</h1>
-
 
             <input type="hidden" name="TaskID" value="@Model.Tasks.FirstOrDefault().TasksID" />
 
             <input type="hidden" name="classID" value="@Model.cl.ClassID" />
             <h2 id="Delete">Task ID: @Model.Tasks.FirstOrDefault().TasksID  </h2>
             <br />
+            @{
+                String tempVideo = "";
+                String temp = Model.Tasks.FirstOrDefault().Description.ToString();
+                int startP = temp.IndexOf("v::") + 3;
+                int endP = temp.IndexOf("::v") - startP;
+                if (startP < 1 || endP < 1)
+                {
+                    tempVideo = "";
+                }
+                else
+                {
+                    tempVideo = temp.Substring(startP, endP);
+                }
+                String tempDesc = temp.Substring(startP + endP + 3);
+
+                <label for="description">Description</label><br />
+                <textarea maxlength="400" name="description" required>@tempDesc</textarea><br />
+
+                <label for="video">Video</label><br />
+                <input name="video" value="@tempVideo" /><br />
+            }
 
 
-            <label for="description">Description</label><br />
-            <textarea name="description" required>@Model.Tasks.FirstOrDefault().Description</textarea><br />
+            <br />
+            <label for="file">File</label><br />
+            <input type="file" name="postedFile" style="text-align:center; width:auto; margin:auto;" value="@Model.Tasks.FirstOrDefault().Name" />
+
+
 
             <label for="startDate">Start Date</label>             <br />
-
             <input type="datetime" name="startDate" value="@Model.Tasks.FirstOrDefault().StartDate" required />
             <br />
             <label for="dueDate">Due Date</label>            <br />
-
             <input type="datetime" name="dueDate" value="@Model.Tasks.FirstOrDefault().DueDate" required />
-
             <br />
             <br />
-
             <input type="checkbox" name="Delete" value="True"> Delete
 
         </div>
-        <div>
-            <input type="submit" name="submit" value="Update Task" />
-            <a href="#"  document.getElementById('category').value = 'The Category'; ">
+        <input type="submit" name="submit" value="Update Task" />
 
-        </div>
-    </form>
+    }
+    <div>
+        <a href="#" document.getElementById('category').value='The Category' ; ">
+    </div>
 </div>
 
 

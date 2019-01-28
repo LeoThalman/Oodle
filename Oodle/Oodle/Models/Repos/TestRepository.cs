@@ -14,6 +14,7 @@ namespace Oodle.Models.Repos
         public IEnumerable<UserRoleClass> UserRoleClasses { get; }
         public IEnumerable<Class> Classes { get; }
         public IEnumerable<ClassNotification> ClassNotifications { get; }
+        public IEnumerable<HiddenNotification> HiddenNotifications { get; }
         public IEnumerable<Assignment> Assignments { get; }
         public IEnumerable<Document> Documents { get; set; }
         public IEnumerable<Quizze> Quizzes { get; set; }
@@ -23,6 +24,7 @@ namespace Oodle.Models.Repos
         public IEnumerable<Notes> Notes { get; }
         public IEnumerable<StudentQuizze> StudentQuizzes { get; }
         public IEnumerable<StudentAnswer> StudentAnswers { get; }
+        public IEnumerable<Grade> Grades { get; }
 
 
         //No database so no need to save
@@ -51,6 +53,16 @@ namespace Oodle.Models.Repos
         {
             List<ClassNotification> temp = ClassNotifications.ToList();
             temp.Add(notif);
+        }
+
+        public void AddHiddenNotif(HiddenNotification hnotif)
+        {
+
+        }
+
+        public void RemoveHiddenNotif(HiddenNotification hnotif)
+        {
+
         }
 
         public void RemoveURC(UserRoleClass urc)
@@ -85,6 +97,12 @@ namespace Oodle.Models.Repos
         }
 
         public void AddQuestion(QuizQuestion q)
+        {
+            List<QuizQuestion> temp = QuizQuestions.ToList();
+            temp.Add(q);
+            QuizQuestions = temp;
+        }
+        public void RemoveQuestion(QuizQuestion q)
         {
             List<QuizQuestion> temp = QuizQuestions.ToList();
             temp.Add(q);
@@ -154,6 +172,16 @@ namespace Oodle.Models.Repos
 
         }
         public void DeleteAssignment(Assignment a)
+        {
+
+        }
+
+        public void RemoveGrade(Grade g)
+        {
+
+        }
+
+        public void AddGrade(Grade g)
         {
 
         }

@@ -47,7 +47,7 @@ namespace SeleniumTests
             driver.FindElement(By.Id("loginLink")).Click();
             driver.FindElement(By.Id("UserName")).Click();
             driver.FindElement(By.Id("UserName")).Clear();
-            driver.FindElement(By.Id("UserName")).SendKeys("teacher");
+            driver.FindElement(By.Id("UserName")).SendKeys("ProfessorElm");
             driver.FindElement(By.Id("Password")).Clear();
             driver.FindElement(By.Id("Password")).SendKeys("111111");
             driver.FindElement(By.XPath("//input[@value='Log in']")).Click();
@@ -77,6 +77,8 @@ namespace SeleniumTests
             driver.FindElement(By.Name("dueDate")).SendKeys("2018-05-23T11:11");
             driver.FindElement(By.Name("submit")).Click();
             Assert.AreEqual("The due date must be after the start date.", CloseAlertAndGetItsText());
+            driver.FindElement(By.LinkText("Log off")).Click();
+
         }
         private bool IsElementPresent(By by)
         {

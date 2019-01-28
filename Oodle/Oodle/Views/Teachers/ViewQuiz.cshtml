@@ -2,10 +2,22 @@
 
 <div class="fontClass">
     <div class="col-lg-6 QuizSide">
-        @Html.ActionLink("Edit Quiz", "EditQuiz", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID }, new { @class = "btn btn-primary btn-large" })
-        @Html.ActionLink("Add Question", "AddQuestion", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID }, new { @class = "btn btn-primary btn-large" })
-        @Html.ActionLink("Delete Quiz", "RemoveQuiz", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID}, new { @class = "btn btn-primary btn-large"})
+        @if (Model.Locked)
+    {
+        @Html.ActionLink("Edit Quiz", "EditQuiz", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID }, new { @class = "btn btn-default" })
+        @Html.ActionLink("Delete Quiz", "RemoveQuiz", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID }, new { @class = "btn btn-default" })
+        <p>Quiz is Locked. Quizzes get locked when a student takes  the Quiz. If Locked no changes can be made to questions, and no new questions can be added.</p>
+}
+        @if (!Model.Locked)
+    {
+        @Html.ActionLink("Edit Quiz", "EditQuiz", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID }, new { @class = "btn btn-default" })
+        @Html.ActionLink("Add Question", "AddQuestion", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID }, new { @class = "btn btn-default" })
+        @Html.ActionLink("Delete Quiz", "RemoveQuiz", "Teachers", new { QuizID = Model.quiz.QuizID, ClassID = Model.quiz.ClassID }, new { @class = "btn btn-default" })
+}
 
+        <p>
+            Class: @Html.DisplayFor(Model => Model.cl.Name)
+        </p>
         <p>
             @Html.DisplayNameFor(Model => Model.quiz.QuizName):
             @Html.DisplayFor(Model => Model.quiz.QuizName)
@@ -21,9 +33,17 @@
     </div>
     
     <div class="col-sm-6 ViewQuiz">
+        @{int QNum = 0; }
         @foreach (var question in Model.questionList)
-    {
-        <p>Question @question.QuestionID: @question.QuestionText</p>
+        {
+        { QNum = QNum + 1; }
+
+        if (!Model.Locked)
+        {
+        @Html.ActionLink("Edit Question", "EditQuestion", "Teachers", new { QuestionID = question.QuestionID, QuizID = question.QuizID, ClassID = Model.quiz.ClassID }, new { @class = "btn btn-default" })
+        @Html.ActionLink("Delete Question", "RemoveQuestion", "Teachers", new { QuestionID = question.QuestionID, QuizID = question.QuizID, ClassID = Model.quiz.ClassID }, new { @class = "btn btn-default" })
+        }
+        <p>Question @QNum: @question.QuestionText</p>
         <p>Worth: @question.Points points</p>
         <p>Answers</p>
         <ul>

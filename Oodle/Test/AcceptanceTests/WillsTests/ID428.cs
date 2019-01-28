@@ -47,7 +47,7 @@ namespace SeleniumTests
             driver.FindElement(By.Id("loginLink")).Click();
             driver.FindElement(By.Id("UserName")).Click();
             driver.FindElement(By.Id("UserName")).Clear();
-            driver.FindElement(By.Id("UserName")).SendKeys("student");
+            driver.FindElement(By.Id("UserName")).SendKeys("YoungsterJoey");
             driver.FindElement(By.Id("Password")).Clear();
             driver.FindElement(By.Id("Password")).SendKeys("111111");
             driver.FindElement(By.XPath("//input[@value='Log in']")).Click();
@@ -60,7 +60,7 @@ namespace SeleniumTests
             driver.FindElement(By.XPath("//a/div/div[2]")).Click();
             //driver.FindElement(By.Name("postedFile")).Click();
             //driver.FindElement(By.Name("postedFile")).Clear();
-            driver.FindElement(By.Name("postedFile")).SendKeys("C:\\Users\\lego_\\Documents\\RepoPerson\\senior-project-group-proj\\Oodle\\Test\\AcceptanceTests\\WillsTests\\ID426.feature");
+            driver.FindElement(By.Name("postedFile")).SendKeys("C:\\Users\\pocke\\Desktop\\school-work\\cs46X\\cs461\\senior-project\\Oodle\\Test\\AcceptanceTests\\WillsTests\\ID426.feature");
             driver.FindElement(By.Id("btnUpload")).Click();
 
 
@@ -75,7 +75,7 @@ namespace SeleniumTests
             driver.FindElement(By.XPath("//a/div/div[2]")).Click();
             //driver.FindElement(By.Name("postedFile")).Click();
             //driver.FindElement(By.Name("postedFile")).Clear();
-            driver.FindElement(By.Name("postedFile")).SendKeys("C:\\Users\\lego_\\Documents\\RepoPerson\\senior-project-group-proj\\Oodle\\Test\\AcceptanceTests\\WillsTests\\ID427.feature");
+            driver.FindElement(By.Name("postedFile")).SendKeys("C:\\Users\\pocke\\Desktop\\school-work\\cs46X\\cs461\\senior-project\\Oodle\\Test\\AcceptanceTests\\WillsTests\\ID427.feature");
             driver.FindElement(By.Id("btnUpload")).Click();
 
 
@@ -88,6 +88,7 @@ namespace SeleniumTests
             driver.FindElement(By.LinkText("Assignments")).Click();
             driver.FindElement(By.XPath("//a/div/div[2]")).Click();
             Assert.AreEqual("ID427.feature", driver.FindElement(By.XPath("//h4")).Text);
+            driver.FindElement(By.LinkText("Log off")).Click();
         }
         private bool IsElementPresent(By by)
         {

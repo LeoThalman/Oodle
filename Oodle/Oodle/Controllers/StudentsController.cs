@@ -162,11 +162,18 @@ namespace Oodle.Controllers
 
 
 
-
+        /// <summary>
+        /// Gets the teacher View model, with the information for the index page filled in
+        /// </summary>
+        /// <param name="classID">ID of Class</param>
+        /// <returns>The Teacher View Model</returns>
         public TeacherVM getTVM(int classID)
         {
             var urcL = db.UserRoleClasses.Where(i => i.RoleID == 3 && i.ClassID == classID);
             var list = new List<int>();
+
+            var idid = User.Identity.GetUserId();
+            int StudentID = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault().UsersID;
 
             foreach (var i in urcL)
             {
@@ -179,6 +186,19 @@ namespace Oodle.Controllers
             teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).OrderBy(i => i.StartDate).ToList();
 
             teacher.notifs = db.ClassNotifications.Where(i => i.ClassID == classID).OrderBy(i => i.TimePosted).ToList();
+            List<ClassNotification> HiddenToRemove = new List<ClassNotification>();
+            foreach(ClassNotification c in teacher.notifs)
+            {
+                if(db.HiddenNotifications.Where(h=> h.ClassNotificationID == c.ClassNotificationID && h.UsersID == StudentID).FirstOrDefault() != null)
+                {
+                    HiddenToRemove.Add(c);
+                }
+            }
+            foreach(ClassNotification h in HiddenToRemove)
+            {
+                teacher.notifs.Remove(h);
+            }
+
             //adds tasks to Teacher VM
             teacher.Tasks = db.Tasks.ToList();
             //adds notes to teacher VM
@@ -258,14 +278,11 @@ namespace Oodle.Controllers
             var student = new TeacherVM(db.Classes.Where(i => i.ClassID == classID).FirstOrDefault(), request);
 
             student.assignment = db.Assignments.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID).ToList();
-            Debug.WriteLine("test3");
-
 
             if (db.Documents.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID && i.UserID == studentID).ToList().Count() == 0)
             {
-                Debug.WriteLine("test");
-
                 var doc = new Document();
+                
                 doc.Name = Path.GetFileName(postedFile.FileName);
                 doc.ContentType = postedFile.ContentType;
                 doc.Data = bytes;
@@ -275,6 +292,7 @@ namespace Oodle.Controllers
                 doc.submitted = submitted;
                 doc.Grade = -1;
                 doc.Date = date;
+                doc.GradeID = db.Grades.Where(i => i.AssignmentID == assignmentID).FirstOrDefault().GradeID;
 
                 db.AddDocument(doc);
 
@@ -285,9 +303,6 @@ namespace Oodle.Controllers
             }
             else
             {
-                Debug.WriteLine("test2");
-
-
                 var change = db.Documents.Where(i => i.ClassID == classID && i.AssignmentID == assignmentID && i.UserID == studentID).ToList();
                 change.ForEach(x => x.Name = Path.GetFileName(postedFile.FileName));
                 change.ForEach(x => x.ContentType = postedFile.ContentType);
@@ -296,7 +311,6 @@ namespace Oodle.Controllers
                 change.ForEach(x => x.AssignmentID = assignmentID);
                 change.ForEach(x => x.UserID = studentID);
                 change.ForEach(x => x.submitted = submitted);
-                change.ForEach(x => x.Grade = -1);
                 change.ForEach(x => x.Date = date);
 
                 db.SaveChanges();
@@ -354,45 +368,116 @@ namespace Oodle.Controllers
             teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).ToList();
             teacher.documents = db.Documents.Where(i => i.ClassID == classID && i.UserID == userId).ToList();
 
-            List<Assignment> list2 = teacher.assignment;
+            List<Grade> list2 = db.Grades.Where(g => g.ClassID == classID).ToList();
+
+
             List<Document> list = teacher.documents;
 
+            teacher.perUser = new List<UserVMish>() { new UserVMish()};
+
+            teacher.perUser.FirstOrDefault().Grade = db.Grades.Where(i => i.ClassID == classID).ToList();
+
+            teacher.StudentQuizze = db.StudentQuizzes.ToList();
+            teacher.users = new List<Models.User>() { db.Users.Where(a => a.IdentityID == idid).FirstOrDefault() };
             teacher.classGrade = new List<int>();
-            teacher.classGrade.Add(GradeHelper(list, list2));
+            teacher.classGrade.Add(GradeHelper(list, list2, userId));
 
             return View("Grade", "_StudentLayout", teacher);
         }
 
         //This is the method I'm really testing.
-        public int GradeHelper(List<Document> list, List<Assignment> list2)
+        public int GradeHelper(List<Document> list, List<Grade> gradables, int userID)
         {
-            int total = 0;
-            int totalWeight = 0;
+            var UserVMish = new UserVMish();
+            UserVMish.stat = new List<bool>();
+            UserVMish.Late = new List<TimeSpan>();
+            //var submissions = db.Documents.Where(l => l.ClassID == classID && l.UserID == i.UsersID).ToList();
 
-            foreach (Assignment assi in list2)
+            int divisor = 0;
+            int total = 0;
+
+            UserVMish.Grade = new List<Models.Grade>();
+
+            foreach (var l in gradables)
             {
-                Document doc = list.Where(i => i.AssignmentID == assi.AssignmentID).FirstOrDefault();
-                if (doc != null)
+                Document d;
+                StudentQuizze q;
+
+                if (l.Assignment != null)
                 {
-                    if (doc.Grade != -1)
+                    d = db.Documents.Where(k => k.GradeID == l.GradeID && k.UserID == userID).FirstOrDefault();
+
+                    if (d != null)
                     {
-                        total = total + (doc.Grade * doc.Assignment.Weight);
-                        totalWeight = totalWeight + doc.Assignment.Weight;
+                        if (d.Grade != -1)
+                        {
+                            var contribution = l.Assignment.Weight * d.Grade;
+                            total = contribution + total;
+                            divisor = l.Assignment.Weight + divisor;
+                        }
+
+                        var submittedDate = d.Date;
+                        var dueDate = l.Assignment.DueDate.Value;
+
+                        //Late(submittedDate, dueDate, UserVMish);
+                    }
+                    else if (DateTime.Compare(DateTime.Parse(l.DateApplied.ToString()), DateTime.Now) < 0)
+                    {
+                        total = total + 0;
+                        divisor = divisor + l.Assignment.Weight;
                     }
                 }
-                else if (DateTime.Compare(DateTime.Parse(assi.DueDate.ToString()), DateTime.Now) < 0)
+
+                if (l.Quizze != null)
                 {
-                    total = total + (0);
-                    totalWeight = totalWeight + assi.Weight;
+                    q = db.StudentQuizzes.Where(k => k.QuizID == l.QuizID && k.UserID == userID).FirstOrDefault();
+
+                    if (q != null)
+                    {
+                        //int contribution = (l.Quizze.GradeWeight * (q.TotalPoints / q.Quizze.TotalPoints) *100 )?? default(int);
+                        int contribution = (l.Quizze.GradeWeight * ((q.TotalPoints * 100) / q.Quizze.TotalPoints)) ?? default(int);
+
+                        total = (contribution) + total;
+                        divisor = l.Quizze.GradeWeight + divisor;
+
+                        var submittedDate = q.Quizze.EndTime;
+                        var dueDate = l.Quizze.EndTime;
+
+                        //Late(submittedDate, dueDate, UserVMish);
+                    }
+                    else if (DateTime.Compare(DateTime.Parse(l.DateApplied.ToString()), DateTime.Now) < 0)
+                    {
+                        total = total + (0);
+                        divisor = divisor + l.Quizze.GradeWeight;
+                    }
                 }
             }
-            if (totalWeight == 0)
+            if (divisor == 0)
             {
                 return total = 0;
             }
             else
             {
-                return total = total / totalWeight;
+                return total = total / divisor;
+            }
+        }
+
+        public void Late(DateTime submittedDate, DateTime dueDate, UserVMish userVMish)
+        {
+            if (0 <= DateTime.Compare(submittedDate, dueDate))
+            {
+                userVMish.stat.Add(false);
+                userVMish.Late.Add(submittedDate.Subtract(dueDate));
+            }
+            else if (0 >= DateTime.Compare(submittedDate, dueDate))
+            {
+                userVMish.stat.Add(true);
+                userVMish.Late.Add(dueDate.Subtract(submittedDate));
+            }
+            else
+            {
+                userVMish.stat.Add(true);
+                userVMish.Late.Add(TimeSpan.MinValue);
             }
         }
 
@@ -406,20 +491,31 @@ namespace Oodle.Controllers
 
             int userId = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault().UsersID;
 
-            TeacherVM teacher = FakeGradeHelper(classID, userId, Request.Form);
+            var teacher = getTVM(classID);
+
+
+            teacher = FakeGradeHelper(classID, userId, Request.Form, teacher);
+
+
+            teacher.perUser = new List<UserVMish>() { new UserVMish() };
+
+            teacher.perUser.FirstOrDefault().Grade = db.Grades.Where(i => i.ClassID == classID).ToList();
+            teacher.assignment = db.Assignments.Where(i => i.ClassID == classID).ToList();
+            teacher.documents = db.Documents.Where(i => i.ClassID == classID && i.UserID == userId).ToList();
+            teacher.StudentQuizze = db.StudentQuizzes.Where(i => db.Quizzes.Where(i2 => i2.ClassID == classID).Contains(i.Quizze)).ToList();
+            teacher.users = new List<Models.User>() { db.Users.Where(a => a.IdentityID == idid).FirstOrDefault() };
+
 
             return View("Grade", "_StudentLayout", teacher);
         }
 
 
-        public TeacherVM FakeGradeHelper(int classID, int userId, System.Collections.Specialized.NameValueCollection form)
+        public TeacherVM FakeGradeHelper(int classID, int userId, System.Collections.Specialized.NameValueCollection form, TeacherVM teacher)
         {
-            var teacher = getTVM(classID);
+            List<Grade> list2 = db.Grades.Where(g => g.ClassID == classID).ToList();
 
-            teacher.assignment = db.Assignments.Where(j => j.ClassID == classID).ToList();
 
-            teacher.documents = db.Documents.Where(j => j.ClassID == classID && j.UserID == userId).ToList();
-            var assis = db.Assignments.Where(j => j.ClassID == classID).ToList();
+            var assis = db.Grades.Where(j => j.ClassID == classID).ToList();
 
             int i = 0;
             string i2 = "1";
@@ -433,9 +529,19 @@ namespace Oodle.Controllers
                 if (i2 != null)
                 {
                     int i3 = Int32.Parse(i2);
-                    fTotal = (i3 * assis[i].Weight) + fTotal;
-                    teacher.fClassGrade.Add(i3);
-                    fNumber = fNumber + assis[i].Weight;
+
+                    if (assis[i].AssignmentID != null)
+                    {
+                        fTotal = (i3 * assis[i].Assignment.Weight) + fTotal;
+                        teacher.fClassGrade.Add(i3);
+                        fNumber = fNumber + assis[i].Assignment.Weight;
+                    }
+                    else
+                    {
+                        fTotal = (i3 * assis[i].Quizze.GradeWeight) + fTotal;
+                        teacher.fClassGrade.Add(i3);
+                        fNumber = fNumber + assis[i].Quizze.GradeWeight;
+                    }
                 }
                 i++;
             }
@@ -448,9 +554,11 @@ namespace Oodle.Controllers
             {
                 teacher.fakeTotal = fTotal / fNumber;
             }
+            var idid = User.Identity.GetUserId();
 
+            int userID = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault().UsersID;
             teacher.classGrade = new List<int>();
-            teacher.classGrade.Add(GradeHelper(teacher.documents, teacher.assignment));
+            teacher.classGrade.Add(GradeHelper(teacher.documents, list2, userID));
 
             return teacher;
         }
@@ -473,7 +581,12 @@ namespace Oodle.Controllers
             return View("Index", "_StudentLayout", student);
 
         }
-
+        
+        /// <summary>
+        /// Gets the Student View Model
+        /// </summary>
+        /// <param name="classID">ID of Class</param>
+        /// <returns>Student View Model filled out with class information</returns>
         public StudentVM getSVM(int classID)
         {
             var urcL = db.UserRoleClasses.Where(i => i.RoleID == 3 && i.ClassID == classID);
@@ -489,7 +602,10 @@ namespace Oodle.Controllers
 
             student.assignment = db.Assignments.Where(i => i.ClassID == classID).OrderBy(i => i.StartDate).ToList();
 
-            student.notifs = db.ClassNotifications.Where(i => i.ClassID == classID).OrderBy(i => i.TimePosted).ToList();
+            var id = User.Identity.GetUserId();
+            User user = db.Users.Where(a => a.IdentityID == id).FirstOrDefault();
+            student.notifs = GetNotifs(user.UsersID, classID);
+            //student.notifs = db.ClassNotifications.Where(i => i.ClassID == classID).OrderBy(i => i.TimePosted).ToList();
             //adds tasks to Teacher VM
             student.Tasks = db.Tasks.ToList();
             //adds notes to teacher VM
@@ -498,25 +614,190 @@ namespace Oodle.Controllers
             return student;
         }
 
+        /// <summary>
+        /// Gets the List of notifications for the class, hiding any 
+        /// that are in the Hide Notifications Table
+        /// </summary>
+        /// <param name="UsersID">ID of the User</param>
+        /// <param name="classID">ID of Class</param>
+        /// <returns>A List of Class Notifications</returns>
+        public List<ClassNotification> GetNotifs (int UsersID, int classID)
+        {
+            List<HiddenNotification> HiddenNotifs = db.HiddenNotifications.Where(n => n.UsersID == UsersID && n.ClassID == classID).ToList();
+            if (HiddenNotifs == null)
+            {
+                return db.ClassNotifications.Where(i => i.ClassID == classID).OrderBy(i => i.TimePosted).ToList();
+            }
+            else
+            {
+                List<ClassNotification> NotifList = db.ClassNotifications.Where(i => i.ClassID == classID).OrderBy(i => i.TimePosted).ToList();
+                ClassNotification Temp = null;
+                foreach (HiddenNotification h in HiddenNotifs)
+                {
+                    Temp = NotifList.FirstOrDefault(c => c.ClassNotificationID == h.ClassNotificationID);
+                    if(Temp != null)
+                    {
+                        NotifList.Remove(Temp);
+                        Temp = null;
+                    }
+                }
+                return NotifList;                
+            }
+        }
+
+        /// <summary>
+        /// Loads the Hidden Notification View, allowing students to hide
+        /// notifications, so they don't display on the index page of the class
+        /// </summary>
+        /// <param name="ClassID">ID of class</param>
+        /// <returns>The Hide Notifications View</returns>
+        public ActionResult HideNotifs(int ClassID)
+        {
+            if (test(ClassID) != null)
+            {
+                return test(ClassID);
+            }
+            var id = User.Identity.GetUserId();
+            int UsersID = db.Users.Where(a => a.IdentityID == id).FirstOrDefault().UsersID;
+            StudentVM student = getSVM(ClassID);
+            List<HiddenNotification> HList = db.HiddenNotifications.Where(n => n.UsersID == UsersID && n.ClassID == ClassID).ToList();
+            List<ClassNotification> ClassNotifs = db.ClassNotifications.Where(n => n.ClassID == ClassID).ToList();
+            student.HideNotifs = new List<HideNotifList>();
+            student.cl = db.Classes.Where(c => c.ClassID == ClassID).FirstOrDefault();
+            HideNotifList Temp = null;
+            foreach(ClassNotification c in ClassNotifs)
+            {
+                Temp = new HideNotifList();
+                Temp.NotifID = c.ClassNotificationID;
+                Temp.ClassID = c.ClassID;
+                Temp.Notification = c.Notification;
+                if(HList.Exists(h => h.ClassNotificationID == c.ClassNotificationID))
+                {
+                    Temp.Hidden = true;
+                }
+                else
+                {
+                    Temp.Hidden = false;
+                }
+                student.HideNotifs.Add(Temp);
+            }
+
+            return View("HideNotifs", "_StudentLayout", student);
+        }
+
+        /// <summary>
+        /// Gets the hidden notification information from the view, 
+        /// and alters the hidden notification table to match
+        /// </summary>
+        /// <param name="HideNotifs">List of hidden notifications</param>
+        /// <param name="cl">the class to check</param>
+        /// <returns>Class Index page for students</returns>
+        public ActionResult SaveHideNotifs([Bind(Include = "Hidden, NotifID, ClassID")] List<HideNotifList> HideNotifs, [Bind(Include = "ClassID")] Class cl)
+        {
+            if (HideNotifs == null || HideNotifs.Count == 0 )
+                return RedirectToAction("Index", "Students", new { classId = cl.ClassID});
+            if (test(HideNotifs.First().ClassID) != null)
+            {
+                return test(HideNotifs.First().ClassID);
+            }
+            ClassNotification TempNotif = null;
+            StudentVM Student = getSVM(HideNotifs.First().ClassID);
+            foreach (HideNotifList TempHidden in HideNotifs)
+            {
+                TempNotif = db.ClassNotifications.Where(c => c.ClassNotificationID == TempHidden.NotifID).FirstOrDefault();
+                if (TempHidden.Hidden)
+                {
+                    CheckHidden(TempNotif);
+                }
+                else
+                {
+                    CheckNotHidden(TempNotif);
+                }
+            }
+            return RedirectToAction("Index", "Students", new { classId = HideNotifs.First().ClassID } );
+        }
+
+
+        /// <summary>
+        /// Notification is marked as hidden, checks to make sure notification
+        /// is in hidden notification table, adds if necessary
+        /// </summary>
+        /// <param name="Notif">Notification to check</param>
+        /// <returns>true if successful</returns>
+        public Boolean CheckHidden(ClassNotification Notif)
+        {
+            var idid = User.Identity.GetUserId();
+            User user = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault();
+
+            Boolean rtn = true;
+            Boolean Hidden = db.HiddenNotifications.Where(h => h.ClassNotificationID == Notif.ClassNotificationID && h.UsersID == user.UsersID).FirstOrDefault() != null; 
+            if (!Hidden)
+            {
+                HiddenNotification HiddenTemp = new HiddenNotification();
+                HiddenTemp.ClassNotificationID = Notif.ClassNotificationID;
+                HiddenTemp.ClassID = Notif.ClassID;
+                HiddenTemp.UsersID = user.UsersID;
+                db.AddHiddenNotif(HiddenTemp);
+                db.SaveChanges();
+            }
+            return rtn;
+        }
+
+        /// <summary>
+        /// notification is marked as not hidden, checks to make sure notification 
+        /// isn't in hidden notification table, removes if necessary
+        /// </summary>
+        /// <param name="Notif">Notification to check</param>
+        /// <returns>true if successful</returns>
+        public Boolean CheckNotHidden(ClassNotification Notif)
+        {
+            var idid = User.Identity.GetUserId();
+            User user = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault();
+
+            Boolean rtn = true;
+            Boolean hidden = db.HiddenNotifications.Where(h => h.ClassNotificationID == Notif.ClassNotificationID && h.UsersID == user.UsersID).FirstOrDefault() != null;
+            if (hidden)
+            {
+                HiddenNotification HiddenTemp = db.HiddenNotifications.Where(h => h.ClassNotificationID == Notif.ClassNotificationID && h.UsersID == user.UsersID).FirstOrDefault();
+                db.RemoveHiddenNotif(HiddenTemp);
+                db.SaveChanges();
+
+            }
+            return rtn;
+        }
+
+        /// <summary>
+        /// Loads the QuizList View, displaying all available quizzes for the student
+        /// </summary>
+        /// <param name="classID">ID of Class</param>
+        /// <returns>The QuizList View</returns>
         public ActionResult QuizList(int classID)
         {
             if (test(classID) != null)
             {
                 return test(classID);
             }
+            var idid = User.Identity.GetUserId();
+            User user = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault();
+
             StudentVM student = getSVM(classID);
             student.Quizzes = db.Quizzes.Where(q => q.ClassID == classID).ToList();
-            student.StudentQuizzes = db.StudentQuizzes.Where(q => q.Quizze.ClassID == classID).ToList();
+            student.StudentQuizzes = db.StudentQuizzes.Where(q => q.Quizze.ClassID == classID && q.UserID == user.UsersID).ToList();
             student.QuizListQuizzes = new List<QuizListQuiz>();
             QuizListQuiz temp = null;
+            StudentQuizze TQuiz = null;
             foreach (Quizze q in student.Quizzes)
             {
                 temp = new QuizListQuiz();
-                if(db.StudentQuizzes.Where(sq => sq.QuizID == q.QuizID).FirstOrDefault() != null)
+                TQuiz = db.StudentQuizzes.Where(sq => sq.QuizID == q.QuizID && sq.UserID == user.UsersID).FirstOrDefault();
+                if (TQuiz != null)
                 {
                     temp.Quiz = q;
                     temp.Taken = true;
+                    temp.StudentQuiz = TQuiz;
                     student.QuizListQuizzes.Add(temp);
+                    
+
                 }
                 else
                 {
@@ -524,7 +805,9 @@ namespace Oodle.Controllers
                     {
                         temp.Quiz = q;
                         temp.Taken = false;
+                        temp.StudentQuiz = new StudentQuizze();
                         student.QuizListQuizzes.Add(temp);
+                       
                     }
                 }
                 
@@ -532,18 +815,36 @@ namespace Oodle.Controllers
             return View("QuizList", "_StudentLayout", student);
         }
 
+        /// <summary>
+        /// Loads the TakeQuiz View, allowing students to take the related quiz
+        /// </summary>
+        /// <param name="QuizID">ID of Quiz to load</param>
+        /// <returns>TakeQuiz View if successful, otherwise redirects to home index if no quiz, or class index if already taken</returns>
         [HttpGet]
         public ActionResult TakeQuiz(int QuizID)
         {
-
-            int classID = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault().ClassID;
+            Quizze Quiz = db.Quizzes.Where(q => q.QuizID == QuizID).FirstOrDefault();
+            if(Quiz == null)
+            {
+                RedirectToAction("Index", "Home");
+            }
+            int classID = Quiz.ClassID;
             if (test(classID) != null)
             {
                 return test(classID);
             }
+            var idid = User.Identity.GetUserId();
+            User user = db.Users.Where(a => a.IdentityID == idid).FirstOrDefault();
+            
+            StudentQuizze HasTaken = db.StudentQuizzes.Where(q => q.QuizID == Quiz.QuizID && q.UserID == user.UsersID).FirstOrDefault();
+            if(HasTaken != null)
+            {
+                return RedirectToAction("Index", "Class", new { classId = classID });
+            }
             StudentVM student = getSVM(classID);
             student.StudentQuiz = new StudentQuizze();
             student.StudentQuiz.QuizID = QuizID;
+            student.Quiz = Quiz;
             student.questionList = db.QuizQuestions.Where(q => q.QuizID == QuizID).ToList();
             student.answerList = db.MultChoiceAnswers.Where(q => q.QuizQuestion.QuizID == QuizID).ToList();
             student.StudentAnswers = new List<StudentAnswer>();
@@ -551,6 +852,13 @@ namespace Oodle.Controllers
             return View("TakeQuiz", "_StudentLayout", student);
         }
 
+        /// <summary>
+        /// Saves the answers for the quiz to the Student Quiz database and
+        /// redirects to the QuizList View
+        /// </summary>
+        /// <param name="StudentAnswers">List of answers to save</param>
+        /// <param name="StudentQuiz">Quiz information for answers</param>
+        /// <returns>The QuizList View</returns>
         [HttpPost]
         public ActionResult AnswerQuiz([Bind(Include = "QuestionID,AnswerNumber")] List<StudentAnswer> StudentAnswers, 
                                        [Bind(Include = "QuizID")] StudentQuizze StudentQuiz)
@@ -561,6 +869,9 @@ namespace Oodle.Controllers
             var IdentityID = User.Identity.GetUserId();                
             StudentQuiz.UserID = db.Users.Where(a => a.IdentityID == IdentityID).FirstOrDefault().UsersID;
             StudentQuiz.CanReview = true;
+
+            StudentQuiz.GradeID = db.Grades.Where(i => i.QuizID == QuizID).FirstOrDefault().GradeID;
+
             db.AddStudentQuiz(StudentQuiz);
             db.SaveChanges();
             int PointTotal = 0;
@@ -584,6 +895,62 @@ namespace Oodle.Controllers
             db.SaveChanges();
             return RedirectToAction("QuizList", "Students", new { classID = ClassID });
 
+        }
+
+
+        [HttpPost]
+        public FileResult DownloadTask(int? fileId)
+        {
+            byte[] bytes;
+            string fileName, contentType;
+
+            var tmp = db.Tasks.Where(i => i.TasksID == fileId).FirstOrDefault();
+
+
+            return File(tmp.Data, tmp.ContentType, tmp.Name);
+        }
+
+        /// <summary>
+        /// Loads The Review Quiz View, with the relevant Quiz Information
+        /// </summary>
+        /// <param name="StudentQuizID">ID of Student Quiz</param>
+        /// <param name="ClassID">ID of Class</param>
+        /// <returns>The Review Quiz View</returns>
+        public ActionResult ReviewQuiz(int StudentQuizID, int ClassID)
+        {
+            if (test(ClassID) != null)
+            {
+                return test(ClassID);
+            }
+            StudentVM student = getSVM(ClassID);
+            StudentQuizze StudentQuiz = db.StudentQuizzes.Where(sq => sq.SQID == StudentQuizID).FirstOrDefault();
+            Quizze Quiz = db.Quizzes.Where(q => q.QuizID == StudentQuiz.QuizID).FirstOrDefault();
+            List<QuizQuestion> Questions = db.QuizQuestions.Where(q => q.QuizID == Quiz.QuizID).ToList();
+            student.ReviewQuestions = new List<QuizReview>();
+            MultChoiceAnswer Answer = null;
+            QuizReview ReviewQuestion = null;
+            StudentAnswer SAnswer = null;
+            student.Quiz = Quiz;
+            foreach(QuizQuestion Q in Questions)
+            {
+                ReviewQuestion = new QuizReview();
+                ReviewQuestion.QuestionText = Q.QuestionText;
+                ReviewQuestion.Points = Q.Points;
+                ReviewQuestion.QuestionID = Q.QuestionID;
+                SAnswer = db.StudentAnswers.Where(sa => sa.QuestionID == Q.QuestionID && sa.SQID == StudentQuiz.SQID).FirstOrDefault();
+                Answer = db.MultChoiceAnswers.Where(a => a.QuestionID == Q.QuestionID).FirstOrDefault();
+                ReviewQuestion.StudentPoints = SAnswer.StudentPoints;
+                ReviewQuestion.StudentAnswer = SAnswer.AnswerNumber;
+                ReviewQuestion.Answer1 = Answer.Answer1;
+                ReviewQuestion.Answer2 = Answer.Answer2;
+                ReviewQuestion.Answer3 = Answer.Answer3;
+                ReviewQuestion.Answer4 = Answer.Answer4;
+                ReviewQuestion.CorrectAnswer = Answer.CorrectAnswer;
+                student.ReviewQuestions.Add(ReviewQuestion);
+            }
+
+
+            return View("ReviewQuiz", "_StudentLayout", student);
         }
     }
 }

@@ -11,9 +11,9 @@
 
 <div class="container">
     <div class="jumbotron">
-        <h3 style="color:black;text-align:center">
-            Welcome to your classes homepage for: @Html.DisplayFor(Name => Model.cl.Name)
-        </h3>
+        <h2 style="color:black;text-align:center">
+            @Html.DisplayFor(Name => Model.cl.Name)
+        </h2>
         <hr />
 
         <div class="container">
@@ -25,14 +25,14 @@
                     </p>
                 </div>
                 <div class="col-sm-6" id="teacherPage">
-                    <h2 style="color:black;font-size:24px;"> Notifications </h2>
+                    <h2 style="color:black;font-size:24px;"> Notifications </h2> @Html.ActionLink("Hide Notifications", "HideNotifs", "Students", new { ClassID = Model.cl.ClassID }, new { @class = "btn btn-default" })
                     @foreach (var notif in Model.notifs)
-                    {
+                {
 
-                        <p id="indexClass" style="color:black;font-size:24px;">
-                            @Html.DisplayFor(Notification => notif.Notification)
-                        </p>
-                    }
+                    <p id="indexClass" style="color:black;font-size:24px;">
+                        @Html.DisplayFor(Notification => notif.Notification)
+                    </p>
+            }
                 </div>
             </div>
         </div>
@@ -43,10 +43,10 @@
 
                 <tr>
 
-                    <td><button class="btn btn-dark" id="upcomingBtn">Upcoming Assignments</button></td>
-                    <td><button class="btn btn-dark" id="testBtn1">Your Notes</button></td>
-                    <td><button class="btn btn-dark" id="testBtn2">Tasks Today</button></td>
-                    <td><button class="btn btn-dark" id="infoBtn">About</button></td>
+                    <td><button class="btn btn-default" id="upcomingBtn">Upcoming Assignments</button></td>
+                    <td><button class="btn btn-default" id="testBtn1">Your Notes</button></td>
+                    <td><button class="btn btn-default" id="testBtn2">Tasks Today</button></td>
+                    <td><button class="btn btn-default" id="infoBtn">About</button></td>
 
                 </tr>
 
