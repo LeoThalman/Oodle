@@ -106,11 +106,11 @@ Our company song is Crazy Train, by Ozzy Osbourne.
 #### Leo Thalman
 
 > Leo Thalman is a software engineer for Blackwood Incorporated. He is proficient in a variety of 
-> programming languages such as Java, HTML, CSS, and Bootstrap. 
+> programming languages such as C#, Java, HTML, CSS, and Bootstrap. 
 > 
 > Leo served in the United States Army from 2011 to 2014 where he gained experience as a team leader and learned important communication skills.
 > 
-> Leo plans to graduate in Spring of 2018 with a Bachelors in Computer Science from Western Oregon University.
+> Leo plans to graduate in Winter of 2018 with a Bachelors in Computer Science from Western Oregon University.
 
 
 ### What Do We Stand For?
