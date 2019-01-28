@@ -110,7 +110,7 @@ Our company song is Crazy Train, by Ozzy Osbourne.
 > 
 > Leo served in the United States Army from 2011 to 2014 where he gained experience as a team leader and learned important communication skills.
 > 
-> Leo plans to graduate in Winter of 2018 with a Bachelors in Computer Science from Western Oregon University.
+> Leo plans to graduate in Spring of 2019 with a Bachelors in Computer Science from Western Oregon University.
 
 
 ### What Do We Stand For?
