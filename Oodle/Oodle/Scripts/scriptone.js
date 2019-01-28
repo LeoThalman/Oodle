@@ -141,21 +141,7 @@ function submit() {
 }
 
 
-/* Below inputs data from a "mygrades.txt" file */
 
-var myInputData = new XMLHttpRequest();
-myInputData.open("GET", "mygrades.txt");
-
-myInputData.onreadystatechange = function () {
-    if (myInputData.readyState == 4) {
-        if (myInputData.status == 200) {
-            console.log(myInputData.responseText);
-            parseData(myInputData.responseText);
-        }
-    }
-};
-
-myInputData.send();
 
 
 
